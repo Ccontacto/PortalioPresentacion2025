@@ -468,8 +468,26 @@ useEffect(() => {
       </div>
 
       {activePanel === 'social' ? (
-        <div id="header-panel-social" className="header-panel" role="menu" aria-label="Redes profesionales" ref={setPanelRef}>
-          <button type="button" className="header-panel-close" onClick={closeActivePanel} aria-label="Cerrar menú de redes">
+        <div
+          id="header-panel-social"
+          className="header-panel"
+          role="menu"
+          aria-label="Redes profesionales"
+          ref={setPanelRef}
+          style={{
+            background: 'var(--surface-panel)',
+            border: '3px solid var(--border-strong)',
+            borderRadius: '16px', // Using 16px for consistency with existing header-panel
+            boxShadow: 'var(--shadow-lg) var(--shadow-strong)',
+          }}
+        >
+          <button
+            type="button"
+            className="header-panel-close icon-btn" // Added icon-btn class
+            onClick={closeActivePanel}
+            aria-label="Cerrar menú de redes"
+            style={{ color: 'var(--error)' }} // Applied danger color
+          >
             <X size={24} aria-hidden="true" />
           </button>
           <ul>
@@ -514,8 +532,26 @@ useEffect(() => {
       ) : null}
 
       {activePanel === 'contact' ? (
-        <div id="header-panel-contact" className="header-panel" role="menu" aria-label="Opciones de contacto" ref={setPanelRef}>
-          <button type="button" className="header-panel-close" onClick={closeActivePanel} aria-label="Cerrar menú de contacto">
+        <div
+          id="header-panel-contact"
+          className="header-panel"
+          role="menu"
+          aria-label="Opciones de contacto"
+          ref={setPanelRef}
+          style={{
+            background: 'var(--surface-panel)',
+            border: '3px solid var(--border-strong)',
+            borderRadius: '16px',
+            boxShadow: 'var(--shadow-lg) var(--shadow-strong)',
+          }}
+        >
+          <button
+            type="button"
+            className="header-panel-close icon-btn"
+            onClick={closeActivePanel}
+            aria-label="Cerrar menú de contacto"
+            style={{ color: 'var(--error)' }}
+          >
             <X size={24} aria-hidden="true" />
           </button>
           <ul>
@@ -566,12 +602,19 @@ useEffect(() => {
           role="menu"
           aria-label="Preferencias rápidas"
           ref={setPanelRef}
+          style={{
+            background: 'var(--surface-panel)',
+            border: '3px solid var(--border-strong)',
+            borderRadius: '16px',
+            boxShadow: 'var(--shadow-lg) var(--shadow-strong)',
+          }}
         >
           <button
             type="button"
-            className="header-panel-close"
+            className="header-panel-close icon-btn"
             onClick={closeActivePanel}
             aria-label="Cerrar menú de preferencias"
+            style={{ color: 'var(--error)' }}
           >
             <X size={24} aria-hidden="true" />
           </button>
@@ -661,6 +704,12 @@ useEffect(() => {
               animate={{ y: shouldReduceMotion ? 0 : '0%' }}
               exit={{ y: shouldReduceMotion ? 0 : '100%' }}
               transition={shouldReduceMotion ? undefined : { type: 'spring', stiffness: 400, damping: 40 }}
+              style={{
+                background: 'var(--surface-card)',
+                border: '3px solid var(--border-strong)',
+                borderRadius: '24px',
+                boxShadow: 'var(--shadow-lg) var(--shadow-strong)',
+              }}
             >
               <div className="mobile-menu-header">
                 <h2 id="mobile-quick-actions-title" className="mobile-menu-title">
@@ -672,6 +721,7 @@ useEffect(() => {
                   onClick={() => dispatch({ type: 'closeMobileMenu' })}
                   aria-label="Cerrar menú"
                   data-focus-default
+                  style={{ color: 'var(--error)' }} // Applied danger color
                 >
                   <X size={24} aria-hidden="true" />
                 </button>

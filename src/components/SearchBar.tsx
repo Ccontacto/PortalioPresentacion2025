@@ -61,8 +61,14 @@ export default function SearchBar({ projectItems, onSearch }: SearchBarProps) {
             initial={{ opacity: 0, y: -20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -20, scale: 0.95 }}
-            transition={{ duration: 0.2 }}
-            className="w-full max-w-lg p-4 bg-white border border-black shadow-lg rounded-lg"
+            transition={{ duration: 0.15, ease: "easeOut" }} // Adjusted transition
+            className="w-full max-w-lg p-4"
+            style={{
+              background: 'var(--surface-card)',
+              border: '3px solid var(--border-strong)',
+              borderRadius: '24px', // Using 24px for card-like feel
+              boxShadow: 'var(--shadow-lg) var(--shadow-strong)',
+            }}
           >
             <div className="relative">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={24} />

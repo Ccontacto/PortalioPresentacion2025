@@ -314,6 +314,7 @@ export default function CommandPalette() {
       aria-modal="true"
       aria-labelledby="command-palette-title"
       aria-describedby="command-palette-description" // Added aria-describedby
+      style={{ background: 'rgba(15, 23, 42, 0.75)' }} // Slight transparency
     >
       <FocusTrap
         active
@@ -322,10 +323,20 @@ export default function CommandPalette() {
           clickOutsideDeactivates: true
         }}
       >
-        <div
+        <motion.div // Changed to motion.div for animation
           className="command-palette-panel"
           role="document"
           onClick={event => event.stopPropagation()}
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.95 }}
+          transition={{ duration: 0.15, ease: "easeOut" }}
+          style={{
+            background: 'var(--surface-card)',
+            border: '3px solid var(--border-strong)',
+            borderRadius: '24px',
+            boxShadow: 'var(--shadow-lg) var(--shadow-strong)',
+          }}
         >
           <div className="command-palette-header">
             <div>
@@ -338,9 +349,10 @@ export default function CommandPalette() {
             </div>
             <button
               type="button"
-              className="command-palette-close"
+              className="command-palette-close icon-btn" // Added icon-btn class
               onClick={closePalette}
               aria-label="Cerrar buscador"
+              style={{ color: 'var(--error)' }} // Applied danger color
             >
               <X size={24} aria-hidden="true" />
             </button>
@@ -419,7 +431,7 @@ export default function CommandPalette() {
             <span>Cmd ⌘ / Ctrl ⌃ + K</span>
             <span>para abrir • Esc para cerrar</span>
           </div>
-        </div>
+        </motion.div> // Changed to </motion.div>
       </FocusTrap>
     </div>
   );
