@@ -1,24 +1,67 @@
-# Nestjs specific
-/dist
-/node_modules
-/build
-/tmp
-
-# Logs
-logs
-*.log
+# --- Node, React, Tailwind ---
+node_modules/
+dist/
+build/
 npm-debug.log*
-pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-lerna-debug.log*
-
-# dotenv environment variable files
+package-lock.json
+.pnpm-debug.log*
 .env
-.env.development
-.env.test
-.env.production
+.env.*
 
-# temp directory
-.temp
-.tmp
+# --- Android ---
+*.apk
+*.aab
+/build/
+.gradle/
+local.properties
+.idea/
+
+# --- Swift, Xcode ---
+build/
+DerivedData/
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+xcuserdata/
+.xcodeproj/*
+!*.xcodeproj/project.pbxproj
+!*.xcodeproj/xcshareddata/
+!*.xcworkspace/contents.xcworkspacedata
+*.xcuserstate
+
+# --- Python/IA ---
+venv/
+__pycache__/
+*.py[cod]
+*.pyo
+.Python
+*.log
+*.sqlite3
+
+# --- Archivos temporales y de sistema ---
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Icon?
+.AppleDouble
+.LSOverride
+
+# --- Configuración de editor ---
+.vscode/
+.idea/
+*.sublime-*
+
+# --- Binarios y otros ---
+*.dll
+*.exe
+*.so
+*.o
+*.class
+
+# --- Otros no deseados ---
+.coverage
+.pytest_cache/
+
