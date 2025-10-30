@@ -412,6 +412,8 @@ useEffect(() => {
             <SearchBar
               projectItems={data.sections.projects.items}
               onSearch={handleHeaderSearch}
+              variant="icon"
+              triggerLabel="Abrir buscador de proyectos"
             />
           </div>
           <div className="header-actions desktop-only header-actions--primary">

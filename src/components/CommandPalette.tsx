@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import FocusTrap from 'focus-trap-react';
 import {
@@ -431,7 +432,7 @@ export default function CommandPalette() {
             <span>Cmd ⌘ / Ctrl ⌃ + K</span>
             <span>para abrir • Esc para cerrar</span>
           </div>
-        </motion.div> // Changed to </motion.div>
+        </motion.div>
       </FocusTrap>
     </div>
   );

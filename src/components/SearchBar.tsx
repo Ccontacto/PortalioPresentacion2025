@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { Search, X } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, type MouseEvent } from 'react';
 import type { ProjectItem } from '../types/portfolio';
 
 type ProjectTag = ProjectItem['tags'][number];
@@ -8,9 +8,16 @@ type ProjectTag = ProjectItem['tags'][number];
 interface SearchBarProps {
   projectItems: ProjectItem[];
   onSearch: (searchTerm: string) => void;
+  variant?: 'button' | 'icon';
+  triggerLabel?: string;
 }
 
-export default function SearchBar({ projectItems, onSearch }: SearchBarProps) {
+export default function SearchBar({
+  projectItems,
+  onSearch,
+  variant = 'button',
+  triggerLabel,
+}: SearchBarProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [isSearchActive, setIsSearchActive] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -30,9 +37,13 @@ export default function SearchBar({ projectItems, onSearch }: SearchBarProps) {
     );
   }, [searchTerm, allTags]);
 
+  const triggerText = triggerLabel ?? 'Filtrar proyectos';
+  const isIconVariant = variant === 'icon';
+
   const handleSearchTermChange = (value: string) => {
     setSearchTerm(value);
     onSearch(value);
+    setShowSuggestions(Boolean(value));
   };
 
   const handleTagClick = (tag: ProjectTag) => {
@@ -52,90 +63,109 @@ export default function SearchBar({ projectItems, onSearch }: SearchBarProps) {
     handleClearSearch();
   };
 
+  const handleSuggestionMouseDown = (
+    event: MouseEvent<HTMLButtonElement>,
+    tag: ProjectTag
+  ) => {
+    event.preventDefault();
+    handleTagClick(tag);
+  };
+
   return (
-    <div className="flex justify-center mb-8">
-      <AnimatePresence>
+    <div className={`search-bar ${isIconVariant ? 'search-bar--compact' : ''}`}>
+      <AnimatePresence initial={false}>
         {isSearchActive ? (
           <motion.div
             key="search-active"
-            initial={{ opacity: 0, y: -20, scale: 0.95 }}
+            initial={{ opacity: 0, y: -12, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -20, scale: 0.95 }}
-            transition={{ duration: 0.15, ease: "easeOut" }} // Adjusted transition
-            className="w-full max-w-lg p-4"
-            style={{
-              background: 'var(--surface-card)',
-              border: '3px solid var(--border-strong)',
-              borderRadius: '24px', // Using 24px for card-like feel
-              boxShadow: 'var(--shadow-lg) var(--shadow-strong)',
-            }}
+            exit={{ opacity: 0, y: -12, scale: 0.98 }}
+            transition={{ duration: 0.18, ease: 'easeOut' }}
+            className="search-panel"
           >
-            <div className="relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={24} />
+            <div className="search-panel__header">
+              <h3 className="search-panel__title">Filtrar proyectos</h3>
+              <button
+                type="button"
+                onClick={handleCloseSearch}
+                className="search-panel__close"
+                aria-label="Cerrar búsqueda"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <div className="search-panel__field">
+              <Search className="search-panel__icon" size={20} aria-hidden="true" />
               <input
-                type="text"
+                type="search"
                 placeholder="Buscar por tecnología..."
-                className="w-full pl-12 pr-4 py-3 border rounded-full bg-white dark:bg-gray-800 shadow-lg"
+                className="search-panel__input"
                 value={searchTerm}
-                onChange={(e) => handleSearchTermChange(e.target.value)}
-                onFocus={() => setShowSuggestions(true)}
-                onBlur={() => setTimeout(() => setShowSuggestions(false), 100)}
+                onChange={(event) => handleSearchTermChange(event.target.value)}
+                onFocus={() => setShowSuggestions(Boolean(searchTerm))}
+                onBlur={() => setTimeout(() => setShowSuggestions(false), 120)}
                 autoFocus
               />
               {searchTerm && (
                 <button
+                  type="button"
                   onClick={handleClearSearch}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                  className="search-panel__clear"
                   aria-label="Limpiar búsqueda"
                 >
-                  <X size={24} />
+                  <X size={16} />
                 </button>
               )}
+
               {showSuggestions && suggestedTags.length > 0 && (
-                <div className="absolute z-10 w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg mt-1 max-h-60 overflow-y-auto">
+                <ul className="search-panel__suggestions" role="listbox">
                   {suggestedTags.map(tag => (
-                    <button
-                      key={tag}
-                      onMouseDown={() => handleTagClick(tag)}
-                      className="block w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
-                    >
-                      {tag}
-                    </button>
+                    <li key={tag}>
+                      <button
+                        type="button"
+                        onMouseDown={(event) => handleSuggestionMouseDown(event, tag)}
+                        className="search-panel__suggestion"
+                      >
+                        {tag}
+                      </button>
+                    </li>
                   ))}
-                </div>
+                </ul>
               )}
             </div>
-            <div className="flex flex-wrap justify-center gap-2 mt-4">
+
+            <div
+              className="search-panel__tags"
+              role="list"
+              aria-label="Seleccionar tecnología para filtrar"
+            >
               {allTags.map(tag => (
                 <button
+                  type="button"
                   key={tag}
                   onClick={() => handleTagClick(tag)}
-                  className={`skill-badge ${searchTerm === tag ? 'bg-blue-500 text-white' : ''}`}
+                  className={`skill-badge search-panel__tag${
+                    searchTerm === tag ? ' search-panel__tag--active' : ''
+                  }`}
                 >
                   {tag}
                 </button>
               ))}
             </div>
-            <div className="flex justify-center mt-4">
-                              <button
-                                onClick={handleCloseSearch}
-                                className="text-sm flex items-center gap-2 p-2"
-                                aria-label="Cerrar búsqueda"
-                              >
-                                <X size={24} /> Cerrar
-                              </button>            </div>
           </motion.div>
         ) : (
           <motion.button
             key="search-inactive"
+            type="button"
             onClick={() => setIsSearchActive(true)}
-            className="bg-blue-500 text-white px-6 py-3 rounded-full flex items-center gap-2 shadow-lg"
-            aria-label="Filtrar proyectos"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            className={`search-trigger ${isIconVariant ? 'search-trigger--icon' : ''}`}
+            aria-label={isIconVariant ? triggerText : undefined}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.96 }}
           >
-            <Search size={24} />
-            Filtrar Proyectos
+            <Search size={22} aria-hidden="true" />
+            {isIconVariant ? <span className="sr-only">{triggerText}</span> : <span>{triggerText}</span>}
           </motion.button>
         )}
       </AnimatePresence>
