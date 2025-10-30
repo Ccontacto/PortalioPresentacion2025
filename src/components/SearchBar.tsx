@@ -1,174 +1,314 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { Search, X } from 'lucide-react';
-import { useMemo, useState, type MouseEvent } from 'react';
+import FocusTrap from 'focus-trap-react';
+import { Search, Sparkles, X } from 'lucide-react';
+import { createPortal } from 'react-dom';
+import { useCallback, useEffect, useId, useMemo, useRef, useState, type MouseEvent } from 'react';
 import type { ProjectItem } from '../types/portfolio';
+import { launchConfetti } from '../utils/confetti';
 
 type ProjectTag = ProjectItem['tags'][number];
 
 interface SearchBarProps {
   projectItems: ProjectItem[];
   onSearch: (searchTerm: string) => void;
+  resultCount?: number;
   variant?: 'button' | 'icon';
   triggerLabel?: string;
 }
 
+const DEBOUNCE_MS = 220;
+
 export default function SearchBar({
   projectItems,
   onSearch,
+  resultCount,
   variant = 'button',
-  triggerLabel,
+  triggerLabel
 }: SearchBarProps) {
   const [searchTerm, setSearchTerm] = useState('');
-  const [isSearchActive, setIsSearchActive] = useState(false);
-  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [confettiAvailable, setConfettiAvailable] = useState(true);
 
-  const allTags = useMemo(() => {
-    const tags = new Set<ProjectTag>();
-    projectItems.forEach((proj: ProjectItem) => {
-      proj.tags.forEach(tag => tags.add(tag));
+  const triggerRef = useRef<HTMLButtonElement | null>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const debounceRef = useRef<number | null>(null);
+  const mountedRef = useRef(false);
+
+  const titleId = useId();
+  const descriptionId = useId();
+  const panelId = useId();
+
+  const tagOccurrences = useMemo(() => {
+    const map = new Map<ProjectTag, number>();
+    projectItems.forEach(project => {
+      project.tags.forEach(tag => {
+        const value = map.get(tag) ?? 0;
+        map.set(tag, value + 1);
+      });
     });
-    return Array.from(tags);
+    return map;
   }, [projectItems]);
 
-  const suggestedTags = useMemo(() => {
-    if (!searchTerm) return [];
-    return allTags.filter(tag =>
-      tag.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  }, [searchTerm, allTags]);
+  const sortedTags = useMemo(() => {
+    return Array.from(tagOccurrences.entries())
+      .sort((a, b) => {
+        if (b[1] === a[1]) {
+          return a[0].localeCompare(b[0]);
+        }
+        return b[1] - a[1];
+      })
+      .map(([tag]) => tag);
+  }, [tagOccurrences]);
 
-  const triggerText = triggerLabel ?? 'Filtrar proyectos';
+  const suggestedTags = useMemo(() => sortedTags.slice(0, 3), [sortedTags]);
+
+  const filteredTags = useMemo(() => {
+    if (!searchTerm.trim()) {
+      return sortedTags;
+    }
+    const searchValue = searchTerm.trim().toLowerCase();
+    return sortedTags.filter(tag => tag.toLowerCase().includes(searchValue));
+  }, [searchTerm, sortedTags]);
+
+  const triggerText = triggerLabel ?? 'Abrir buscador de proyectos';
   const isIconVariant = variant === 'icon';
 
-  const handleSearchTermChange = (value: string) => {
-    setSearchTerm(value);
-    onSearch(value);
-    setShowSuggestions(Boolean(value));
-  };
+  useEffect(() => {
+    mountedRef.current = true;
+  }, []);
 
-  const handleTagClick = (tag: ProjectTag) => {
-    setSearchTerm(tag);
-    onSearch(tag);
-    setShowSuggestions(false);
-  };
+  useEffect(() => {
+    if (!isModalOpen) return undefined;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const focusTimer = window.setTimeout(() => {
+      inputRef.current?.focus();
+    }, 90);
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      window.clearTimeout(focusTimer);
+    };
+  }, [isModalOpen]);
 
-  const handleClearSearch = () => {
+  useEffect(() => {
+    if (debounceRef.current) {
+      window.clearTimeout(debounceRef.current);
+    }
+    debounceRef.current = window.setTimeout(() => {
+      onSearch(searchTerm.trim());
+    }, DEBOUNCE_MS);
+    return () => {
+      if (debounceRef.current) {
+        window.clearTimeout(debounceRef.current);
+      }
+    };
+  }, [searchTerm, onSearch]);
+
+  const handleCloseModal = useCallback(() => {
+    setIsModalOpen(false);
     setSearchTerm('');
     onSearch('');
-    setShowSuggestions(false);
+    setConfettiAvailable(true);
+    if (triggerRef.current) {
+      triggerRef.current.focus();
+    }
+  }, [onSearch]);
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+    setConfettiAvailable(true);
   };
 
-  const handleCloseSearch = () => {
-    setIsSearchActive(false);
-    handleClearSearch();
+  useEffect(() => {
+    if (!isModalOpen) return undefined;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        handleCloseModal();
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isModalOpen, handleCloseModal]);
+
+  const handleSearchInput = (value: string) => {
+    setSearchTerm(value);
   };
 
-  const handleSuggestionMouseDown = (
-    event: MouseEvent<HTMLButtonElement>,
-    tag: ProjectTag
-  ) => {
-    event.preventDefault();
-    handleTagClick(tag);
+  const handleSuggestionClick = (tag: ProjectTag, event?: MouseEvent<HTMLButtonElement>) => {
+    if (event) {
+      event.preventDefault();
+    }
+    setSearchTerm(tag);
+    onSearch(tag);
   };
 
-  return (
-    <div className={`search-bar ${isIconVariant ? 'search-bar--compact' : ''}`}>
-      <AnimatePresence initial={false}>
-        {isSearchActive ? (
+  const handleConfetti = () => {
+    if (!confettiAvailable) return;
+    launchConfetti();
+    setConfettiAvailable(false);
+  };
+
+  const renderModal = () => {
+    if (!mountedRef.current) return null;
+    return createPortal(
+      <AnimatePresence>
+        {isModalOpen ? (
           <motion.div
-            key="search-active"
-            initial={{ opacity: 0, y: -12, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -12, scale: 0.98 }}
-            transition={{ duration: 0.18, ease: 'easeOut' }}
-            className="search-panel"
+            className="search-modal"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2, ease: 'easeOut' }}
+            role="presentation"
           >
-            <div className="search-panel__header">
-              <h3 className="search-panel__title">Filtrar proyectos</h3>
-              <button
-                type="button"
-                onClick={handleCloseSearch}
-                className="search-panel__close"
-                aria-label="Cerrar búsqueda"
+            <div
+              className="search-modal__backdrop"
+              role="presentation"
+              aria-hidden="true"
+              onClick={handleCloseModal}
+            />
+            <FocusTrap
+              active
+              focusTrapOptions={{
+                initialFocus: () => inputRef.current ?? false,
+                escapeDeactivates: false,
+                allowOutsideClick: true,
+                clickOutsideDeactivates: false,
+                returnFocusOnDeactivate: false
+              }}
+            >
+              <motion.div
+                className="search-modal__panel"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby={titleId}
+                aria-describedby={descriptionId}
+                id={panelId}
+                initial={{ opacity: 0, scale: 0.96, y: 12 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.96, y: 12 }}
+                transition={{ duration: 0.22, ease: 'easeOut' }}
               >
-                <X size={18} />
-              </button>
-            </div>
+                <header className="search-modal__header">
+                  <div>
+                    <h3 id={titleId} className="search-modal__title">
+                      Filtrar proyectos
+                    </h3>
+                    <p id={descriptionId} className="search-modal__subtitle">
+                      Escribe una tecnología o selecciona una de las sugerencias.
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    className="search-modal__close"
+                    onClick={handleCloseModal}
+                    aria-label="Cerrar buscador"
+                  >
+                    <X size={20} aria-hidden="true" />
+                  </button>
+                </header>
 
-            <div className="search-panel__field">
-              <Search className="search-panel__icon" size={20} aria-hidden="true" />
-              <input
-                type="search"
-                placeholder="Buscar por tecnología..."
-                className="search-panel__input"
-                value={searchTerm}
-                onChange={(event) => handleSearchTermChange(event.target.value)}
-                onFocus={() => setShowSuggestions(Boolean(searchTerm))}
-                onBlur={() => setTimeout(() => setShowSuggestions(false), 120)}
-                autoFocus
-              />
-              {searchTerm && (
-                <button
-                  type="button"
-                  onClick={handleClearSearch}
-                  className="search-panel__clear"
-                  aria-label="Limpiar búsqueda"
-                >
-                  <X size={16} />
-                </button>
-              )}
+                <div className="search-modal__input-group">
+                  <Search size={20} aria-hidden="true" className="search-modal__input-icon" />
+                  <input
+                    ref={inputRef}
+                    type="search"
+                    value={searchTerm}
+                    onChange={(event) => handleSearchInput(event.target.value)}
+                    placeholder="Buscar por tecnología..."
+                    className="search-modal__input"
+                    autoCapitalize="none"
+                    autoComplete="off"
+                    spellCheck={false}
+                  />
+                  {searchTerm && (
+                    <button
+                      type="button"
+                      className="search-modal__clear"
+                      onClick={() => handleSearchInput('')}
+                      aria-label="Limpiar búsqueda"
+                    >
+                      <X size={16} aria-hidden="true" />
+                    </button>
+                  )}
+                </div>
 
-              {showSuggestions && suggestedTags.length > 0 && (
-                <ul className="search-panel__suggestions" role="listbox">
-                  {suggestedTags.map(tag => (
-                    <li key={tag}>
+                {suggestedTags.length > 0 && (
+                  <div className="search-modal__suggestions" aria-label="Sugerencias destacadas">
+                    {suggestedTags.map(tag => (
                       <button
+                        key={tag}
                         type="button"
-                        onMouseDown={(event) => handleSuggestionMouseDown(event, tag)}
-                        className="search-panel__suggestion"
+                        className="search-modal__chip"
+                        onMouseDown={(event) => event.preventDefault()}
+                        onClick={(event) => handleSuggestionClick(tag, event)}
                       >
                         {tag}
                       </button>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
+                    ))}
+                  </div>
+                )}
 
-            <div
-              className="search-panel__tags"
-              role="list"
-              aria-label="Seleccionar tecnología para filtrar"
-            >
-              {allTags.map(tag => (
-                <button
-                  type="button"
-                  key={tag}
-                  onClick={() => handleTagClick(tag)}
-                  className={`skill-badge search-panel__tag${
-                    searchTerm === tag ? ' search-panel__tag--active' : ''
-                  }`}
-                >
-                  {tag}
-                </button>
-              ))}
-            </div>
+                <div className="search-modal__tag-list" role="list">
+                  {filteredTags.length > 0 ? (
+                    filteredTags.map(tag => (
+                      <button
+                        type="button"
+                        key={tag}
+                        className={`search-modal__tag ${searchTerm.trim().toLowerCase() === tag.toLowerCase() ? 'search-modal__tag--active' : ''}`}
+                        onClick={(event) => handleSuggestionClick(tag, event)}
+                      >
+                        {tag}
+                      </button>
+                    ))
+                  ) : (
+                    <p className="search-modal__empty">Sin coincidencias. Ajusta la búsqueda o lanza confetti.</p>
+                  )}
+                </div>
+
+                {typeof resultCount === 'number' && resultCount === 0 && confettiAvailable && (
+                  <button
+                    type="button"
+                    className="search-modal__confetti"
+                    onClick={handleConfetti}
+                  >
+                    <Sparkles size={18} aria-hidden="true" />
+                    confetti
+                  </button>
+                )}
+              </motion.div>
+            </FocusTrap>
           </motion.div>
+        ) : null}
+      </AnimatePresence>,
+      document.body
+    );
+  };
+
+  return (
+    <div className={`search-bar ${isIconVariant ? 'search-bar--icon' : ''}`}>
+      <motion.button
+        ref={triggerRef}
+        type="button"
+        className={`search-trigger ${isIconVariant ? 'search-trigger--icon' : ''}`}
+        onClick={handleOpenModal}
+        aria-haspopup="dialog"
+        aria-expanded={isModalOpen}
+        aria-controls={isModalOpen ? panelId : undefined}
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.97 }}
+      >
+        <Search size={22} aria-hidden="true" />
+        {isIconVariant ? (
+          <span className="sr-only">{triggerText}</span>
         ) : (
-          <motion.button
-            key="search-inactive"
-            type="button"
-            onClick={() => setIsSearchActive(true)}
-            className={`search-trigger ${isIconVariant ? 'search-trigger--icon' : ''}`}
-            aria-label={isIconVariant ? triggerText : undefined}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.96 }}
-          >
-            <Search size={22} aria-hidden="true" />
-            {isIconVariant ? <span className="sr-only">{triggerText}</span> : <span>{triggerText}</span>}
-          </motion.button>
+          <span>{triggerText}</span>
         )}
-      </AnimatePresence>
+      </motion.button>
+      {renderModal()}
     </div>
   );
 }

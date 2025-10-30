@@ -39,6 +39,7 @@ export default function Projects() {
       <SearchBar
         projectItems={data.sections.projects.items}
         onSearch={setCurrentSearchTerm}
+        resultCount={filteredProjects.length}
       />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl">

@@ -13,9 +13,6 @@ export default function Hero() {
     .replace('Generative', '<span class="hero-intro__accent">Generative</span>')
     .replace('AI & iOS', '<span class="hero-intro__accent">AI &amp; iOS</span>');
 
-  const heroSubtitleHtml = t('subtitle')
-    .replace('AI-powered', '<span class="hero-intro__accent">AI-powered</span>');
-
   const heroDescriptionHtml = t('description')
     .replace('IA generativa', '<span class="hero-intro__gradient">IA generativa</span>')
     .replace('LLMs', '<span class="hero-intro__gradient">LLMs</span>')
@@ -39,7 +36,6 @@ export default function Hero() {
 
         <div className="hero-intro">
           <p className="hero-intro__title" dangerouslySetInnerHTML={{ __html: heroTitleHtml }} />
-          <p className="hero-intro__subtitle" dangerouslySetInnerHTML={{ __html: heroSubtitleHtml }} />
           <p className="hero-intro__tagline">{t('tagline')}</p>
           <p className="hero-intro__body" dangerouslySetInnerHTML={{ __html: heroDescriptionHtml }} />
         </div>
