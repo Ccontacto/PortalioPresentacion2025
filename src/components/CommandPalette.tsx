@@ -29,6 +29,7 @@ type CommandItem = {
   icon?: JSX.Element;
   keywords?: string[];
   description?: string;
+  predicate?: () => boolean; // Added predicate for conditional display
 };
 
 export default function CommandPalette() {
@@ -38,7 +39,19 @@ export default function CommandPalette() {
   const { showToast } = useToast();
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
+  const [debouncedQuery, setDebouncedQuery] = useState('');
+  const [activeIndex, setActiveIndex] = useState(0); // Added activeIndex state
   const ref = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedQuery(query);
+    }, 150); // Debounce for 150ms
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [query]);
 
   const closePalette = useCallback(() => setOpen(false), []);
 
@@ -47,7 +60,7 @@ export default function CommandPalette() {
       id: `nav-${navItem.id}`,
       label: navItem.label,
       group: 'Secciones',
-      icon: <Globe size={18} aria-hidden="true" />,
+      icon: <Globe size={24} aria-hidden="true" />,
       keywords: [navItem.id, navItem.label],
       action: () => {
         navigateTo(navItem.id);
@@ -60,7 +73,7 @@ export default function CommandPalette() {
         id: 'contact-email',
         label: `Email: ${data.email}`,
         group: 'Contacto',
-        icon: <Mail size={18} aria-hidden="true" />,
+        icon: <Mail size={24} aria-hidden="true" />,
         keywords: ['correo', 'contacto', 'mail'],
         action: () => {
           window.location.href = `mailto:${data.email}`;
@@ -71,7 +84,7 @@ export default function CommandPalette() {
         id: 'contact-copy-email',
         label: 'Copiar email',
         group: 'Contacto',
-        icon: <CopyIcon size={18} aria-hidden="true" />,
+        icon: <CopyIcon size={24} aria-hidden="true" />,
         keywords: ['clipboard', 'copiar', 'correo'],
         action: async () => {
           try {
@@ -87,7 +100,7 @@ export default function CommandPalette() {
           }
         }
       },
-      {
+      ...(data.whatsapp ? [{
         id: 'contact-whatsapp',
         label: 'WhatsApp',
         group: 'Contacto',
@@ -98,48 +111,49 @@ export default function CommandPalette() {
             `https://wa.me/${data.whatsapp}?text=${encodeURIComponent(
               'Hola José Carlos! Vi tu portfolio y me gustaría conversar.'
             )}`,
-            '_blank'
+            '_blank',
+            'noopener,noreferrer'
           );
           showToast(data.toasts.whatsapp_open, 'info');
           closePalette();
         }
-      }
+      }] : []),
     ];
 
     const socialItems: CommandItem[] = [
-      {
+      ...(data.social?.linkedin ? [{
         id: 'social-linkedin',
         label: 'LinkedIn',
         group: 'Redes',
-        icon: <Globe size={18} aria-hidden="true" />,
+        icon: <Globe size={24} aria-hidden="true" />,
         keywords: ['linkedin', 'networking'],
         action: () => {
-          window.open(data.social.linkedin, '_blank');
+          window.open(data.social.linkedin, '_blank', 'noopener,noreferrer');
           closePalette();
         }
-      },
-      {
+      }] : []),
+      ...(data.social?.github ? [{
         id: 'social-github',
         label: 'GitHub',
         group: 'Redes',
-        icon: <Github size={18} aria-hidden="true" />,
+        icon: <Github size={24} aria-hidden="true" />,
         keywords: ['repositorio', 'code'],
         action: () => {
-          window.open(data.social.github, '_blank');
+          window.open(data.social.github, '_blank', 'noopener,noreferrer');
           closePalette();
         }
-      },
-      {
+      }] : []),
+      ...(data.social?.portfolio ? [{
         id: 'social-portfolio',
         label: 'Portafolio externo',
         group: 'Redes',
-        icon: <Globe size={18} aria-hidden="true" />,
+        icon: <Globe size={24} aria-hidden="true" />,
         keywords: ['portfolio', 'sitio', 'web'],
         action: () => {
-          window.open(data.social.portfolio, '_blank');
+          window.open(data.social.portfolio, '_blank', 'noopener,noreferrer');
           closePalette();
         }
-      }
+      }] : []),
     ];
 
     const actionItems: CommandItem[] = [
@@ -147,7 +161,7 @@ export default function CommandPalette() {
         id: 'action-download-cv',
         label: 'Descargar CV (PDF)',
         group: 'Acciones',
-        icon: <Download size={18} aria-hidden="true" />,
+        icon: <Download size={24} aria-hidden="true" />,
         keywords: ['cv', 'curriculum', 'pdf'],
         action: () => {
           showToast('Generando CV...', 'info');
@@ -171,7 +185,7 @@ export default function CommandPalette() {
         id: 'pref-theme',
         label: theme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro',
         group: 'Preferencias',
-        icon: theme === 'dark' ? <Sun size={18} aria-hidden="true" /> : <Moon size={18} aria-hidden="true" />,
+        icon: theme === 'dark' ? <Sun size={24} aria-hidden="true" /> : <Moon size={24} aria-hidden="true" />,
         keywords: ['tema', 'theme', 'modo'],
         action: () => {
           toggleTheme();
@@ -182,7 +196,7 @@ export default function CommandPalette() {
         id: 'pref-language',
         label: currentLang === 'es' ? 'Cambiar a inglés' : 'Cambiar a español',
         group: 'Preferencias',
-        icon: <Languages size={18} aria-hidden="true" />,
+        icon: <Languages size={24} aria-hidden="true" />,
         keywords: ['idioma', 'language'],
         action: () => {
           toggleLanguage();
@@ -205,7 +219,7 @@ export default function CommandPalette() {
 
   const filtered = useMemo(
     () => {
-      const normalized = query.trim().toLowerCase();
+      const normalized = debouncedQuery.trim().toLowerCase();
       if (!normalized) return items;
       return items.filter(item => {
         const haystack = [
@@ -218,21 +232,37 @@ export default function CommandPalette() {
         return haystack.includes(normalized);
       });
     },
-    [items, query]
+    [items, debouncedQuery]
   );
 
   const grouped = useMemo(() => {
     const map = new Map<CommandGroup, CommandItem[]>();
-    for (const item of filtered) {
-      const existing = map.get(item.group);
-      if (existing) {
-        existing.push(item);
-      } else {
-        map.set(item.group, [item]);
-      }
+    for (const item of filtered) { // Fixed: Explicitly using 'filtered'
+      const bucket = map.get(item.group);
+      (bucket ? bucket : map.set(item.group, []).get(item.group))!.push(item);
     }
     return Array.from(map.entries());
   }, [filtered]);
+
+  const flat = useMemo(() => grouped.flatMap(([, arr]) => arr), [grouped]); // Removed eslint-disable-line
+
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent) => {
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        setActiveIndex(i => Math.min(i + 1, flat.length - 1));
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        setActiveIndex(i => Math.max(i - 1, 0));
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        if (flat[activeIndex]) {
+          flat[activeIndex].action();
+        }
+      }
+    },
+    [activeIndex, flat]
+  );
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -250,13 +280,18 @@ export default function CommandPalette() {
   }, []);
 
   useEffect(() => {
-    const open = () => setOpen(true);
-    const close = () => setOpen(false);
-    document.addEventListener('open-command-palette', open);
-    document.addEventListener('close-command-palette', close);
+    const openPalette = () => setOpen(true);
+    const closePaletteEvent = () => setOpen(false);
+    const handlePopState = () => setOpen(false); // Close palette on browser history change
+
+    document.addEventListener('open-command-palette', openPalette);
+    document.addEventListener('close-command-palette', closePaletteEvent);
+    window.addEventListener('popstate', handlePopState); // Listen for history changes
+
     return () => {
-      document.removeEventListener('open-command-palette', open);
-      document.removeEventListener('close-command-palette', close);
+      document.removeEventListener('open-command-palette', openPalette);
+      document.removeEventListener('close-command-palette', closePaletteEvent);
+      window.removeEventListener('popstate', handlePopState); // Clean up
     };
   }, []);
 
@@ -264,9 +299,9 @@ export default function CommandPalette() {
     if (open) {
       ref.current?.focus();
       setQuery('');
-    } else {
-      setQuery('');
+      setActiveIndex(0); // Reset active index when opening
     }
+    // Removed the else block with setQuery('');
   }, [open]);
 
   if (!open) return null;
@@ -278,6 +313,7 @@ export default function CommandPalette() {
       role="dialog"
       aria-modal="true"
       aria-labelledby="command-palette-title"
+      aria-describedby="command-palette-description" // Added aria-describedby
     >
       <FocusTrap
         active
@@ -306,12 +342,12 @@ export default function CommandPalette() {
               onClick={closePalette}
               aria-label="Cerrar buscador"
             >
-              <X size={20} aria-hidden="true" />
+              <X size={24} aria-hidden="true" />
             </button>
           </div>
 
           <div className="command-palette-search">
-            <Search size={18} aria-hidden="true" />
+            <Search size={24} aria-hidden="true" />
             <label htmlFor="command-palette-input" className="sr-only">
               Buscar secciones, redes o acciones
             </label>
@@ -325,21 +361,39 @@ export default function CommandPalette() {
               aria-describedby="command-palette-hint"
               aria-controls="command-palette-results"
               aria-autocomplete="list"
+              onKeyDown={handleKeyDown} // Added keyboard navigation
             />
           </div>
           <p id="command-palette-hint" className="command-palette-hint">
             Usa las flechas para navegar y Enter para seleccionar.
           </p>
 
-          <div className="command-palette-results" id="command-palette-results" role="listbox">
+          <div
+            className="command-palette-results"
+            id="command-palette-results"
+            role="listbox"
+            aria-activedescendant={flat.length > 0 ? flat[activeIndex]?.id : undefined} // Added aria-activedescendant
+            onKeyDown={handleKeyDown} // Added keyboard navigation
+            tabIndex={-1} // Make it focusable for keyboard events
+          >
             {grouped.length > 0 ? (
               grouped.map(([group, groupItems]) => (
                 <section key={group} className="command-palette-group">
                   <h3 className="command-palette-group-title">{group}</h3>
                   <ul className="command-palette-group-list">
-                    {groupItems.map(item => (
-                      <li key={item.id} role="option" aria-selected={false}>
-                        <button type="button" className="command-palette-item" onClick={item.action}>
+                    {groupItems.map((item, _idx) => (
+                      <li
+                        key={item.id}
+                        role="option"
+                        id={item.id}
+                        aria-selected={activeIndex === flat.indexOf(item)} // Mark active item
+                      >
+                        <button
+                          type="button"
+                          className={`command-palette-item ${activeIndex === flat.indexOf(item) ? 'is-active' : ''}`}
+                          onClick={item.action}
+                          tabIndex={-1} // Prevent button from being tabbed to directly
+                        >
                           <span className="command-palette-item-icon">{item.icon}</span>
                           <span className="command-palette-item-body">
                             <span className="command-palette-item-label">{item.label}</span>

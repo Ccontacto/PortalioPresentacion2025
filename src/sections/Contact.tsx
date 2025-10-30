@@ -40,7 +40,8 @@ export default function Contact() {
     setStatus('sending');
     window.open(
       `https://wa.me/${data.whatsapp}?text=${encodeURIComponent('Hola José Carlos!')}`,
-      '_blank'
+      '_blank',
+      'noopener,noreferrer'
     );
     showToast(data.toasts.whatsapp_open, 'info');
   };

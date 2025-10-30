@@ -3,7 +3,7 @@
 /* ========================================
    VARIABLES CSS MEJORADAS
    ======================================== */
-:root {
+:root{
   /* Unified token palette */
   --token-bg-dark: #0b0b0b;
   --token-card-dark: rgba(255, 255, 255, 0.05);
@@ -98,6 +98,10 @@
   --shadow-sm: 2px 2px 0;
   --shadow-md: 4px 4px 0;
   --shadow-lg: 6px 6px 0;
+
+  --border: var(--border-strong); /* Added */
+  --card: var(--surface-card); /* Added */
+  --font-ui: 'Manrope', system-ui, sans-serif; /* Added */
 }
 
 .dark {
@@ -1708,6 +1712,7 @@ p, span, small {
   box-shadow: 6px 6px 0 var(--shadow-strong-hover);
   background: linear-gradient(135deg, var(--gradient-brand-start), var(--gradient-brand-end));
   color: var(--text-on-brand);
+  text-shadow: 0 1px rgba(0,0,0,.25); /* Added for legibility */
 }
 
 .contact-cta {
@@ -1723,6 +1728,7 @@ p, span, small {
   background: var(--surface-panel);
   color: var(--text-strong);
   transition: transform 150ms ease, box-shadow 150ms ease, background-color 150ms ease, color 150ms ease;
+  text-shadow: 0 1px rgba(0,0,0,.25); /* Added for legibility */
 }
 
 .contact-cta svg {
@@ -2006,4 +2012,18 @@ p, span, small {
   0% { transform: scale(1); box-shadow: 6px 6px 0 var(--shadow-strong); }
   50% { transform: scale(1.08); box-shadow: 8px 8px 0 var(--shadow-strong-hover); }
   100% { transform: scale(1); box-shadow: 6px 6px 0 var(--shadow-strong); }
+}
+
+/* Command Palette Focus Visible */
+.command-palette-item:focus-visible,
+.command-palette-close:focus-visible,
+.header-search__trigger:focus-visible {
+  outline: 3px solid rgba(173, 216, 230, .9); /* azul-celeste */
+  outline-offset: 3px;
+}
+
+/* Command Palette Z-index */
+.command-palette-backdrop,
+.command-palette-panel {
+  z-index: 999;
 }
