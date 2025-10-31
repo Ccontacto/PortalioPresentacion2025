@@ -17,16 +17,13 @@ import {
   Languages,
   CheckCircle,
   TriangleAlert,
-  Handshake,
-  Search
+  Handshake
 } from 'lucide-react';
 import { WhatsappGlyph } from './icons/WhatsappGlyph';
 import { useTheme } from '../contexts/ThemeContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useToast } from '../contexts/ToastContext';
-import { useNavigation } from '../contexts/NavigationContext';
 import { generatePdf } from '../utils/pdfGenerator';
-import { useReducedMotion } from '../hooks/useReducedMotion';
 import type { AvailabilityKey } from '../types/portfolio';
 
 type AvailabilityState = AvailabilityKey;
@@ -96,11 +93,9 @@ const availabilityClassMap: Record<AvailabilityState, string> = {
 };
 
 export default function Header() {
-  const shouldReduceMotion = useReducedMotion();
   const { theme, toggleTheme } = useTheme();
   const { data, currentLang, toggleLanguage } = useLanguage();
   const { showToast } = useToast();
-  const { navigateTo } = useNavigation();
   const [
     { availability, mobileMenuOpen, confettiRemaining, activePanel },
     dispatch
@@ -230,12 +225,6 @@ export default function Header() {
   const handleConfettiClick = () => {
     launchConfetti();
   };
-
-  const handleOpenCommandPalette = () => {
-    document.dispatchEvent(new Event('open-command-palette'));
-  };
-
-
 
   useEffect(() => {
     window.localStorage.setItem('portfolio_availability', availability);
@@ -385,53 +374,6 @@ useEffect(() => {
 
   const overflowItems = overflowSections.flatMap(section => section.items);
 
-  const mobileSections = [
-    {
-      id: 'sections',
-      label: 'Secciones',
-      items: data.nav.map(item => ({
-        key: item.id,
-        label: item.label,
-        action: () => {
-          navigateTo(item.id);
-        }
-      }))
-    },
-    {
-      id: 'contact',
-      label: 'Contacto y redes',
-      items: [
-        { key: 'copy', label: data.tooltips.copy, icon: <Copy size={24} aria-hidden="true" />, action: copyEmail },
-        { key: 'linkedin', label: data.tooltips.linkedin, icon: <Linkedin size={24} aria-hidden="true" />, action: openLinkedIn },
-        { key: 'github', label: data.tooltips.github, icon: <Github size={24} aria-hidden="true" />, action: openGitHub },
-        { key: 'portfolio', label: 'Portafolio', icon: <Globe size={24} aria-hidden="true" />, action: openPortfolio }
-      ]
-    },
-    {
-      id: 'preferences',
-      label: 'Preferencias',
-      items: [
-        { key: 'availability', label: availabilityToggleLabel, action: handleToggleAvailability },
-        { key: 'language', label: languageToggleLabel, icon: <Languages size={24} aria-hidden="true" />, action: toggleLanguage },
-        {
-          key: 'theme',
-          label: themeToggleLabel,
-          icon: theme === 'dark' ? <Sun size={24} aria-hidden="true" /> : <Moon size={24} aria-hidden="true" />,
-          action: toggleTheme
-        },
-        { key: 'pdf', label: data.tooltips.pdf, icon: <Download size={24} aria-hidden="true" />, action: handlePdf },
-        { key: 'search', label: 'Buscar secciones', icon: <Search size={24} aria-hidden="true" />, action: handleOpenCommandPalette },
-        {
-          key: 'confetti',
-          label: confettiLabel,
-          icon: <Sparkles size={24} aria-hidden="true" />,
-          action: handleConfettiClick,
-          disabled: isConfettiOnCooldown
-        }
-      ]
-    }
-  ];
-
   return (
     <header className="header" role="banner">
       <div className="header-container" ref={headerContainerRef}>
@@ -452,22 +394,7 @@ useEffect(() => {
           </button>
         </div>
 
-        <nav className="header-navigation" role="navigation" aria-label="Buscador de acciones">
-          <div className="header-search desktop-only" role="search">
-            <motion.button
-              type="button"
-              className="search-trigger search-trigger--slim"
-              onClick={handleOpenCommandPalette}
-              aria-label="Abrir buscador de acciones"
-              aria-haspopup="dialog"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.97 }}
-            >
-              <Search size={20} aria-hidden="true" />
-              <span>Explorar acciones</span>
-            </motion.button>
-          </div>
-        </nav>
+        <nav className="header-navigation" aria-hidden="true" />
 
         <div className="header-controls">
           <span ref={liveRegionRef} className="sr-only" role="status" aria-live="polite"></span>
@@ -545,10 +472,10 @@ useEffect(() => {
 
       {mobileMenuOpen && (
         <div
-          className="mobile-menu-backdrop"
+          className="mobile-actions-backdrop"
           role="dialog"
           aria-modal="true"
-          aria-labelledby="mobile-quick-actions-title"
+          aria-labelledby="mobile-actions-title"
           onClick={event => {
             if (event.target === event.currentTarget) {
               dispatch({ type: 'closeMobileMenu' });
@@ -566,60 +493,45 @@ useEffect(() => {
             }}
           >
             <motion.div
-              className="mobile-menu-panel mx-auto"
+              className="mobile-actions-modal"
               id="mobile-quick-actions"
               ref={mobileMenuRef}
-              initial={{ y: '100%' }}
-              animate={{ y: shouldReduceMotion ? 0 : '0%' }}
-              exit={{ y: shouldReduceMotion ? 0 : '100%' }}
-              transition={shouldReduceMotion ? undefined : { type: 'spring', stiffness: 400, damping: 40 }}
-              style={{
-                background: 'var(--surface-card)',
-                border: '3px solid var(--border-strong)',
-                borderRadius: '24px',
-                boxShadow: 'var(--shadow-lg) var(--shadow-strong)',
-              }}
+              initial={{ opacity: 0, scale: 0.96, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.96, y: 20 }}
+              transition={{ duration: 0.2, ease: 'easeOut' }}
             >
-              <div className="mobile-menu-header">
-                <h2 id="mobile-quick-actions-title" className="mobile-menu-title">
-                  Acciones rápidas
-                </h2>
+              <header className="mobile-actions-modal__header">
+                <h2 id="mobile-actions-title">Acciones y accesos rápidos</h2>
                 <button
                   type="button"
-                  className="icon-btn mobile-menu-close"
+                  className="mobile-actions-modal__close"
                   onClick={() => dispatch({ type: 'closeMobileMenu' })}
                   aria-label="Cerrar menú"
                   data-focus-default
-                  style={{ color: 'var(--error)' }} // Applied danger color
                 >
-                  <X size={24} aria-hidden="true" />
+                  <X size={22} aria-hidden="true" />
                 </button>
+              </header>
+
+              <div className="mobile-actions-modal__content">
+                {overflowItems.map(item => (
+                  <button
+                    key={item.key}
+                    type="button"
+                    className="mobile-actions-modal__item"
+                    onClick={() => {
+                      item.action();
+                      dispatch({ type: 'closeMobileMenu' });
+                    }}
+                    disabled={item.disabled}
+                    aria-disabled={item.disabled ? 'true' : 'false'}
+                  >
+                    {item.icon ? <span className="mobile-actions-modal__icon">{item.icon}</span> : null}
+                    <span className="mobile-actions-modal__label">{item.label}</span>
+                  </button>
+                ))}
               </div>
-              {mobileSections.map(section => (
-                <div className="mobile-menu-section" key={section.id}>
-                  <p className="mobile-menu-label">{section.label}</p>
-                  <ul className="mobile-menu-list" role="menu">
-                    {section.items.map(item => (
-                      <li key={item.key}>
-                        <button
-                          type="button"
-                          className="mobile-menu-button"
-                          onClick={() => {
-                            item.action();
-                            dispatch({ type: 'closeMobileMenu' });
-                          }}
-                          role="menuitem"
-                          disabled={item.disabled}
-                          aria-disabled={item.disabled ? 'true' : 'false'}
-                        >
-                          {item.icon ? <span className="mobile-menu-icon">{item.icon}</span> : null}
-                          <span>{item.label}</span>
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
             </motion.div>
           </FocusTrap>
         </div>

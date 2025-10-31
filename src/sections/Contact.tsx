@@ -49,13 +49,16 @@ export default function Contact() {
   return (
     <>
       <section id="contact" className="page-section" aria-labelledby="contact-heading">
-        <div className="max-w-2xl text-center">
-          <h2 id="contact-heading" className="text-4xl font-bold mb-4">
-            {data.sections.contact.title}
-          </h2>
-          <p className="text-2xl sm:text-3xl font-black tracking-tight mb-10">
-            {data.sections.contact.subtitle}
-          </p>
+        <div className="contact-wrapper">
+          <header className="contact-hero">
+            <span className="contact-hero__eyebrow">Conectemos</span>
+            <h2 id="contact-heading" className="contact-hero__title">
+              {data.sections.contact.title}
+            </h2>
+            <p className="contact-hero__subtitle">
+              {data.sections.contact.subtitle}
+            </p>
+          </header>
 
           {/* MEJORA 5: aria-live para feedback de contacto */}
           <div
@@ -69,13 +72,13 @@ export default function Contact() {
             {status === 'error' && 'Error al enviar. Intenta de nuevo.'}
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-4 mb-12 justify-center">
+          <div className="contact-actions">
             <button
               onClick={openWhatsApp}
               className="contact-cta contact-cta--whatsapp"
               aria-label="Contactar por WhatsApp"
             >
-              <WhatsappGlyph className="h-7 w-7" aria-hidden="true" />
+              <WhatsappGlyph className="h-8 w-8" aria-hidden="true" />
               <span className="sr-only">WhatsApp</span>
             </button>
             <button
@@ -83,7 +86,7 @@ export default function Contact() {
               className="contact-cta contact-cta--email"
               aria-label="Contactar por Email"
             >
-              <Mail className="h-7 w-7" aria-hidden="true" />
+              <Mail className="h-8 w-8" aria-hidden="true" />
               <span className="sr-only">Email</span>
             </button>
             <button
@@ -91,46 +94,49 @@ export default function Contact() {
               className="contact-cta contact-cta--copy"
               aria-label="Copiar dirección de email"
             >
-              <Copy className="h-7 w-7" aria-hidden="true" />
+              <Copy className="h-8 w-8" aria-hidden="true" />
               <span className="sr-only">Copiar correo</span>
             </button>
           </div>
 
-          <div className="contact-card">
-            <h3 className="contact-card__title">
-              {data.name}
-            </h3>
-            <p className="contact-card__subtitle">IA &amp; App Solutions</p>
-            <div className="contact-card__item">
-              <span className="contact-card__label">Email</span>
-              <a href={`mailto:${data.email}`} className="contact-card__value">
-                {data.email}
-              </a>
-            </div>
-            {linkedinUrl ? (
-              <div className="contact-card__item">
-                <span className="contact-card__label">LinkedIn</span>
-                <a
-                  href={linkedinUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="contact-card__value"
-                >
-                  {linkedinLabel}
-                </a>
+          <section className="contact-info">
+            <header className="contact-info__header">
+              <h3 className="contact-info__title">{data.name}</h3>
+              <p className="contact-info__tagline">IA &amp; App Solutions</p>
+            </header>
+
+            <dl className="contact-info__list">
+              <div className="contact-info__row">
+                <dt>Email</dt>
+                <dd>
+                  <a href={`mailto:${data.email}`}>
+                    {data.email}
+                  </a>
+                </dd>
               </div>
-            ) : null}
-            <div className="contact-card__item">
-              <span className="contact-card__label">Ubicación</span>
-              <span className="contact-card__value">{data.location}</span>
-            </div>
-            <p className="contact-card__closing">
-              {data.sections.contact.closing}
-            </p>
-            <span className="contact-card__signature">
-              {data.sections.contact.signature}
-            </span>
-          </div>
+
+              {linkedinUrl ? (
+                <div className="contact-info__row">
+                  <dt>LinkedIn</dt>
+                  <dd>
+                    <a href={linkedinUrl} target="_blank" rel="noopener noreferrer">
+                      {linkedinLabel}
+                    </a>
+                  </dd>
+                </div>
+              ) : null}
+
+              <div className="contact-info__row">
+                <dt>Ubicación</dt>
+                <dd>{data.location}</dd>
+              </div>
+            </dl>
+
+            <footer className="contact-info__footer">
+              <p>{data.sections.contact.closing}</p>
+              <span>{data.sections.contact.signature}</span>
+            </footer>
+          </section>
         </div>
       </section>
 
