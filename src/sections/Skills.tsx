@@ -17,9 +17,15 @@ export default function Skills() {
 
   return (
     <section id="skills" className="page-section" aria-labelledby="skills-heading">
-      <h2 id="skills-heading" className="text-4xl font-bold mb-12 text-center">
-        {data.sections.skills.title}
-      </h2>
+      <header className="experience-header">
+        <span className="experience-header__eyebrow">Stack principal</span>
+        <h2 id="skills-heading" className="experience-header__title">
+          {data.sections.skills.title}
+        </h2>
+        <p className="experience-header__subtitle">
+          Herramientas y frameworks con los que construyo soluciones móviles e IA de forma integral.
+        </p>
+      </header>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl">
         {data.sections.skills.categories.map((cat: SkillCategory) => (

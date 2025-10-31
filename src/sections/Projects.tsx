@@ -31,9 +31,15 @@ export default function Projects() {
 
   return (
     <section id="projects" className="page-section" aria-labelledby="projects-heading">
-      <h2 id="projects-heading" className="text-4xl font-bold mb-8 text-center">
-        {data.sections.projects.title}
-      </h2>
+      <header className="experience-header">
+        <span className="experience-header__eyebrow">Casos reales</span>
+        <h2 id="projects-heading" className="experience-header__title">
+          {data.sections.projects.title}
+        </h2>
+        <p className="experience-header__subtitle">
+          Lanzamientos y prototipos donde combiné iOS, liderazgo técnico e IA aplicada.
+        </p>
+      </header>
 
       {/* Render the new SearchBar component */}
       <SearchBar
