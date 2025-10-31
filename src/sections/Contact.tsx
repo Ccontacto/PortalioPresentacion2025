@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { Copy, Mail } from 'lucide-react';
-import { WhatsappGlyph } from '../components/icons/WhatsappGlyph';
+import { Copy, Mail, MessageSquare } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useToast } from '../contexts/ToastContext';
 
@@ -78,7 +77,7 @@ export default function Contact() {
               className="contact-cta contact-cta--whatsapp"
               aria-label="Contactar por WhatsApp"
             >
-              <WhatsappGlyph className="h-8 w-8" aria-hidden="true" />
+              <MessageSquare className="h-8 w-8" aria-hidden="true" />
               <span className="sr-only">WhatsApp</span>
             </button>
             <button

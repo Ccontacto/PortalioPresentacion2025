@@ -10,7 +10,8 @@ import {
   Moon,
   Search,
   Sun,
-  X
+  X,
+  MessageSquare
 } from 'lucide-react';
 import { createPortal } from 'react-dom';
 import {
@@ -26,8 +27,8 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { useNavigation } from '../contexts/NavigationContext';
 import { useTheme } from '../contexts/ThemeContext';
 import { useToast } from '../contexts/ToastContext';
-import { generatePdf } from '../utils/pdfGenerator';
-import { WhatsappGlyph } from './icons/WhatsappGlyph';
+import { generateATSPdf } from '../utils/pdfGenerator.ats';
+import { generateNonATSPdf } from '../utils/pdfGenerator.nonAts';
 
 type CommandGroup = 'Secciones' | 'Redes' | 'Contacto' | 'Acciones' | 'Preferencias';
 
@@ -129,7 +130,7 @@ export default function CommandPalette() {
               id: 'contact-whatsapp',
               label: 'WhatsApp',
               group: 'Contacto',
-              icon: <WhatsappGlyph className="h-[22px] w-[22px]" aria-hidden="true" />,
+              icon: <MessageSquare className="h-[22px] w-[22px]" aria-hidden="true" />,
               keywords: ['whatsapp', 'mensaje', 'contacto'],
               action: () => {
                 window.open(
@@ -198,21 +199,42 @@ export default function CommandPalette() {
     const actionItems: CommandItem[] = [
       {
         id: 'action-download-cv',
-        label: 'Descargar CV (PDF)',
+        label: 'Descargar CV (ATS)',
         group: 'Acciones',
         icon: <Download size={22} aria-hidden="true" />,
-        keywords: ['cv', 'curriculum', 'pdf'],
+        keywords: ['cv', 'curriculum', 'pdf', 'ats'],
         action: () => {
-          showToast('Generando CV...', 'info');
-          generatePdf(data, (data.lang as 'es' | 'en') || 'es')
+          showToast('Generando CV (ATS)...', 'info');
+          generateATSPdf(data, (data.lang as 'es' | 'en') || 'es')
             .then(() => {
-              showToast('CV listo para descargar', 'success');
+              showToast('CV (ATS) listo para descargar', 'success');
             })
             .catch(error => {
               if (import.meta.env.DEV) {
-                console.error('CV generation failed', error);
+                console.error('ATS CV generation failed', error);
               }
-              showToast('No se pudo generar el CV. Inténtalo de nuevo.', 'error');
+              showToast('No se pudo generar el CV (ATS). Inténtalo de nuevo.', 'error');
+            });
+          closePalette();
+        }
+      },
+      {
+        id: 'action-download-cv-non-ats',
+        label: 'Descargar CV (Diseño)',
+        group: 'Acciones',
+        icon: <Download size={22} aria-hidden="true" />,
+        keywords: ['cv', 'curriculum', 'pdf', 'diseño'],
+        action: () => {
+          showToast('Generando CV (Diseño)...', 'info');
+          generateNonATSPdf(data)
+            .then(() => {
+              showToast('CV (Diseño) listo para descargar', 'success');
+            })
+            .catch(error => {
+              if (import.meta.env.DEV) {
+                console.error('Non-ATS CV generation failed', error);
+              }
+              showToast('No se pudo generar el CV (Diseño). Inténtalo de nuevo.', 'error');
             });
           closePalette();
         }
