@@ -17,20 +17,18 @@ import {
   Languages,
   CheckCircle,
   TriangleAlert,
-  Handshake,
-  Search
+  Handshake
 } from 'lucide-react';
 import { WhatsappGlyph } from './icons/WhatsappGlyph';
 import { useTheme } from '../contexts/ThemeContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useToast } from '../contexts/ToastContext';
-import { useNavigation } from '../contexts/NavigationContext';
 import { generatePdf } from '../utils/pdfGenerator';
-import { useReducedMotion } from '../hooks/useReducedMotion';
+import { useNavigation } from '../contexts/NavigationContext';
 import type { AvailabilityKey } from '../types/portfolio';
 
 type AvailabilityState = AvailabilityKey;
-type HeaderPanel = 'social' | 'contact' | 'preferences';
+type HeaderPanel = 'overflow';
 
 type HeaderState = {
   availability: AvailabilityState;
@@ -50,9 +48,9 @@ const availabilityCycle: AvailabilityState[] = ['available', 'listening', 'unava
 const CONFETTI_COOLDOWN_MS = 5000;
 const CONFETTI_TICK_MS = 200;
 const availabilityIconMap: Record<AvailabilityState, JSX.Element> = {
-  available: <CheckCircle size={18} aria-hidden="true" />,
-  listening: <Handshake size={18} aria-hidden="true" />,
-  unavailable: <TriangleAlert size={18} aria-hidden="true" />
+  available: <CheckCircle size={24} aria-hidden="true" />,
+  listening: <Handshake size={24} aria-hidden="true" />,
+  unavailable: <TriangleAlert size={24} aria-hidden="true" />
 };
 
 const getInitialHeaderState = (): HeaderState => {
@@ -96,7 +94,6 @@ const availabilityClassMap: Record<AvailabilityState, string> = {
 };
 
 export default function Header() {
-  const shouldReduceMotion = useReducedMotion();
   const { theme, toggleTheme } = useTheme();
   const { data, currentLang, toggleLanguage } = useLanguage();
   const { showToast } = useToast();
@@ -139,14 +136,15 @@ export default function Header() {
       `https://wa.me/${data.whatsapp}?text=${encodeURIComponent(
         'Hola José Carlos! Vi tu portfolio y me gustaría conversar.'
       )}`,
-      '_blank'
+      '_blank',
+      'noopener,noreferrer'
     );
     showToast(data.toasts.whatsapp_open, 'info');
   };
 
-  const openLinkedIn = () => window.open(data.social.linkedin, '_blank');
-  const openGitHub = () => window.open(data.social.github, '_blank');
-  const openPortfolio = () => window.open(data.social.portfolio, '_blank');
+  const openLinkedIn = () => window.open(data.social.linkedin, '_blank', 'noopener,noreferrer');
+  const openGitHub = () => window.open(data.social.github, '_blank', 'noopener,noreferrer');
+  const openPortfolio = () => window.open(data.social.portfolio, '_blank', 'noopener,noreferrer');
   const handlePdf = () => {
     showToast('Generando CV...', 'info');
     generatePdf(data, (data.lang as 'es' | 'en') || 'es')
@@ -228,10 +226,6 @@ export default function Header() {
 
   const handleConfettiClick = () => {
     launchConfetti();
-  };
-
-  const handleOpenCommandPalette = () => {
-    document.dispatchEvent(new Event('open-command-palette'));
   };
 
   useEffect(() => {
@@ -328,53 +322,79 @@ useEffect(() => {
   const confettiLabel = data.tooltips.celebrate;
   const isConfettiOnCooldown = confettiRemaining > 0;
 
-  const mobileSections = [
+  type QuickAction = {
+    key: string;
+    label: string;
+    icon?: JSX.Element;
+    action: () => void;
+    disabled?: boolean;
+    immediate?: boolean;
+  };
+
+  const navActions: QuickAction[] = data.nav.map(item => ({
+    key: `nav-${item.id}`,
+    label: item.label,
+    icon: <Globe size={22} aria-hidden="true" />,
+    action: () => navigateTo(item.id)
+  }));
+
+  const overflowSections = [
     {
-      id: 'sections',
-      label: 'Secciones',
-      items: data.nav.map(item => ({
-        key: item.id,
-        label: item.label,
-        action: () => {
-          navigateTo(item.id);
-        }
-      }))
+      id: 'social',
+      label: 'Redes profesionales',
+      items: [
+        { key: 'linkedin', label: 'LinkedIn', icon: <Linkedin size={22} aria-hidden="true" />, action: openLinkedIn, immediate: true },
+        { key: 'github', label: 'GitHub', icon: <Github size={22} aria-hidden="true" />, action: openGitHub, immediate: true },
+        { key: 'portfolio', label: 'Portafolio', icon: <Globe size={22} aria-hidden="true" />, action: openPortfolio, immediate: true }
+      ]
     },
     {
       id: 'contact',
-      label: 'Contacto y redes',
+      label: 'Contacto',
       items: [
-        { key: 'email', label: data.tooltips.email, icon: <Mail size={18} aria-hidden="true" />, action: openEmail },
-        { key: 'copy', label: data.tooltips.copy, icon: <Copy size={18} aria-hidden="true" />, action: copyEmail },
-        { key: 'whatsapp', label: 'WhatsApp', icon: <WhatsappGlyph className="h-[18px] w-[18px]" aria-hidden="true" />, action: openWhatsApp },
-        { key: 'linkedin', label: data.tooltips.linkedin, icon: <Linkedin size={18} aria-hidden="true" />, action: openLinkedIn },
-        { key: 'github', label: data.tooltips.github, icon: <Github size={18} aria-hidden="true" />, action: openGitHub },
-        { key: 'portfolio', label: 'Portafolio', icon: <Globe size={18} aria-hidden="true" />, action: openPortfolio }
+        { key: 'email', label: data.tooltips.email, icon: <Mail size={22} aria-hidden="true" />, action: openEmail, immediate: true },
+        { key: 'copy', label: data.tooltips.copy, icon: <Copy size={22} aria-hidden="true" />, action: copyEmail },
+        {
+          key: 'whatsapp',
+          label: 'WhatsApp',
+          icon: <WhatsappGlyph className="h-[22px] w-[22px]" aria-hidden="true" />,
+          action: openWhatsApp,
+          immediate: true
+        }
       ]
     },
     {
       id: 'preferences',
-      label: 'Preferencias',
+      label: 'Preferencias y extras',
       items: [
-        { key: 'availability', label: availabilityToggleLabel, action: handleToggleAvailability },
-        { key: 'language', label: languageToggleLabel, icon: <Languages size={18} aria-hidden="true" />, action: toggleLanguage },
-        {
-          key: 'theme',
-          label: themeToggleLabel,
-          icon: theme === 'dark' ? <Sun size={18} aria-hidden="true" /> : <Moon size={18} aria-hidden="true" />,
-          action: toggleTheme
-        },
-        { key: 'pdf', label: data.tooltips.pdf, icon: <Download size={18} aria-hidden="true" />, action: handlePdf },
-        { key: 'search', label: 'Buscar secciones', icon: <Search size={18} aria-hidden="true" />, action: handleOpenCommandPalette },
+        { key: 'pdf', label: data.tooltips.pdf, icon: <Download size={22} aria-hidden="true" />, action: handlePdf, immediate: true },
         {
           key: 'confetti',
           label: confettiLabel,
-          icon: <Sparkles size={18} aria-hidden="true" />,
+          icon: <Sparkles size={22} aria-hidden="true" />,
           action: handleConfettiClick,
           disabled: isConfettiOnCooldown
+        },
+        {
+          key: 'language',
+          label: languageToggleLabel,
+          icon: <Languages size={22} aria-hidden="true" />,
+          action: toggleLanguage
+        },
+        {
+          key: 'theme',
+          label: themeToggleLabel,
+          icon: theme === 'dark' ? <Sun size={22} aria-hidden="true" /> : <Moon size={22} aria-hidden="true" />,
+          action: toggleTheme
         }
       ]
     }
+  ];
+
+  const overflowItems = overflowSections.flatMap(section => section.items);
+  const mobileActionGroups = [
+    { id: 'nav', label: 'Secciones', items: navActions },
+    { id: 'actions', label: 'Acciones rápidas', items: overflowItems }
   ];
 
   return (
@@ -397,55 +417,23 @@ useEffect(() => {
           </button>
         </div>
 
-        <nav className="header-navigation" role="navigation" aria-label="Acciones rápidas y preferencias">
-          <div className="header-search desktop-only" role="search">
-            <button
-              type="button"
-              className="header-search__trigger"
-              onClick={handleOpenCommandPalette}
-              aria-label="Buscar secciones"
-            >
-              <Search size={18} aria-hidden="true" />
-              <span className="sr-only">Buscar secciones…</span>
-            </button>
-          </div>
+        <nav className="header-navigation" aria-hidden="true" />
+
+        <div className="header-controls">
+          <span ref={liveRegionRef} className="sr-only" role="status" aria-live="polite"></span>
           <div className="header-actions desktop-only header-actions--primary">
             <button
               className="icon-btn"
               aria-haspopup="true"
-              aria-expanded={activePanel === 'social'}
-              aria-controls="header-panel-social"
-              onClick={() => togglePanel('social')}
-              title="Mis redes"
-              aria-label="Mis redes"
+              aria-expanded={activePanel === 'overflow'}
+              aria-controls="header-panel-overflow"
+              onClick={() => togglePanel('overflow')}
+              title="Acciones rápidas"
+              aria-label="Abrir menú de acciones"
             >
-              <Linkedin size={18} aria-hidden="true" />
-            </button>
-            <button
-              className="icon-btn"
-              aria-haspopup="true"
-              aria-expanded={activePanel === 'contact'}
-              aria-controls="header-panel-contact"
-              onClick={() => togglePanel('contact')}
-              title="Contacto"
-              aria-label="Contacto"
-            >
-              <Mail size={18} aria-hidden="true" />
-            </button>
-            <button
-              className="icon-btn"
-              aria-haspopup="true"
-              aria-expanded={activePanel === 'preferences'}
-              aria-controls="header-panel-preferences"
-              onClick={() => togglePanel('preferences')}
-              title="Abrir preferencias"
-            >
-              <MoreHorizontal size={18} aria-hidden="true" />
+              <MoreHorizontal size={24} aria-hidden="true" />
             </button>
           </div>
-
-          <span ref={liveRegionRef} className="sr-only" role="status" aria-live="polite"></span>
-
           <button
             type="button"
             className="icon-btn mobile-only"
@@ -455,183 +443,62 @@ useEffect(() => {
             aria-controls="mobile-quick-actions"
             aria-label="Abrir menú de acciones rápidas"
           >
-            <MoreHorizontal size={20} aria-hidden="true" />
+            <MoreHorizontal size={24} aria-hidden="true" />
           </button>
-        </nav>
-
-        <div className="header-equalizer" aria-hidden="true" />
+        </div>
       </div>
 
-      {activePanel === 'social' ? (
-        <div id="header-panel-social" className="header-panel" role="menu" aria-label="Redes profesionales" ref={setPanelRef}>
-          <button type="button" className="header-panel-close" onClick={closeActivePanel} aria-label="Cerrar menú de redes">
-            <X size={18} aria-hidden="true" />
-          </button>
-          <ul>
-            <li>
-              <button
-                type="button"
-                onClick={() => {
-                  openLinkedIn();
-                  closeActivePanel();
-                }}
-              >
-                <Linkedin size={16} aria-hidden="true" />
-                LinkedIn
-              </button>
-            </li>
-            <li>
-              <button
-                type="button"
-                onClick={() => {
-                  openGitHub();
-                  closeActivePanel();
-                }}
-              >
-                <Github size={16} aria-hidden="true" />
-                GitHub
-              </button>
-            </li>
-            <li>
-              <button
-                type="button"
-                onClick={() => {
-                  openPortfolio();
-                  closeActivePanel();
-                }}
-              >
-                <Globe size={16} aria-hidden="true" />
-                Portafolio
-              </button>
-            </li>
-          </ul>
-        </div>
-      ) : null}
-
-      {activePanel === 'contact' ? (
-        <div id="header-panel-contact" className="header-panel" role="menu" aria-label="Opciones de contacto" ref={setPanelRef}>
-          <button type="button" className="header-panel-close" onClick={closeActivePanel} aria-label="Cerrar menú de contacto">
-            <X size={18} aria-hidden="true" />
-          </button>
-          <ul>
-            <li>
-              <button
-                type="button"
-                onClick={() => {
-                  openEmail();
-                  closeActivePanel();
-                }}
-              >
-                <Mail size={16} aria-hidden="true" />
-                {data.tooltips.email}
-              </button>
-            </li>
-            <li>
-              <button
-                type="button"
-                onClick={() => {
-                  copyEmail();
-                  closeActivePanel();
-                }}
-              >
-                <Copy size={16} aria-hidden="true" />
-                {data.tooltips.copy}
-              </button>
-            </li>
-            <li>
-              <button
-                type="button"
-                onClick={() => {
-                  openWhatsApp();
-                  closeActivePanel();
-                }}
-              >
-                <WhatsappGlyph className="h-4 w-4" aria-hidden="true" />
-                WhatsApp
-              </button>
-            </li>
-          </ul>
-        </div>
-      ) : null}
-
-      {activePanel === 'preferences' ? (
+      {activePanel === 'overflow' ? (
         <div
-          id="header-panel-preferences"
-          className="header-panel"
+          id="header-panel-overflow"
+          className="header-panel header-panel--overflow"
           role="menu"
-          aria-label="Preferencias rápidas"
+          aria-label="Acciones rápidas"
           ref={setPanelRef}
+          style={{
+            background: 'var(--surface-panel)',
+            border: '3px solid var(--border-strong)',
+            borderRadius: '16px',
+            boxShadow: 'var(--shadow-lg) var(--shadow-strong)',
+          }}
         >
           <button
             type="button"
-            className="header-panel-close"
+            className="header-panel-close icon-btn"
             onClick={closeActivePanel}
-            aria-label="Cerrar menú de preferencias"
+            aria-label="Cerrar menú de acciones"
+            style={{ color: 'var(--error)' }}
           >
-            <X size={18} aria-hidden="true" />
+            <X size={24} aria-hidden="true" />
           </button>
-          <ul>
-            <li>
+          <div className="header-panel-list" role="menu">
+            {overflowItems.map(item => (
               <button
+                key={item.key}
                 type="button"
                 onClick={() => {
-                  handlePdf();
+                  item.action();
                   closeActivePanel();
                 }}
+                className="header-panel-button"
+                role="menuitem"
+                disabled={item.disabled}
+                aria-disabled={item.disabled ? 'true' : 'false'}
               >
-                <Download size={16} aria-hidden="true" />
-                {data.tooltips.pdf}
+                {item.icon ? <span className="header-panel-button__icon">{item.icon}</span> : null}
+                <span className="header-panel-button__label">{item.label}</span>
               </button>
-            </li>
-            <li>
-              <button
-                type="button"
-                onClick={() => {
-                  handleConfettiClick();
-                  closeActivePanel();
-                }}
-                disabled={isConfettiOnCooldown}
-                aria-disabled={isConfettiOnCooldown ? 'true' : 'false'}
-                title={isConfettiOnCooldown ? 'Confetti disponible en unos segundos' : data.tooltips.celebrate}
-              >
-                <Sparkles size={16} aria-hidden="true" />
-                {data.tooltips.celebrate}
-              </button>
-            </li>
-            <li>
-              <button
-                type="button"
-                onClick={() => {
-                  toggleLanguage();
-                  closeActivePanel();
-                }}
-              >
-                <Languages size={16} aria-hidden="true" />
-                {languageToggleLabel}
-              </button>
-            </li>
-            <li>
-              <button
-                type="button"
-                onClick={() => {
-                  toggleTheme();
-                  closeActivePanel();
-                }}
-              >
-                {theme === 'dark' ? <Sun size={16} aria-hidden="true" /> : <Moon size={16} aria-hidden="true" />}
-                {themeToggleLabel}
-              </button>
-            </li>
-          </ul>
+            ))}
+          </div>
         </div>
       ) : null}
 
       {mobileMenuOpen && (
         <div
-          className="mobile-menu-backdrop"
+          className="mobile-actions-backdrop"
           role="dialog"
           aria-modal="true"
-          aria-labelledby="mobile-quick-actions-title"
+          aria-labelledby="mobile-actions-title"
           onClick={event => {
             if (event.target === event.currentTarget) {
               dispatch({ type: 'closeMobileMenu' });
@@ -649,53 +516,59 @@ useEffect(() => {
             }}
           >
             <motion.div
-              className="mobile-menu-panel mx-auto"
+              className="mobile-actions-modal"
               id="mobile-quick-actions"
               ref={mobileMenuRef}
-              initial={{ y: '100%' }}
-              animate={{ y: shouldReduceMotion ? 0 : '0%' }}
-              exit={{ y: shouldReduceMotion ? 0 : '100%' }}
-              transition={shouldReduceMotion ? undefined : { type: 'spring', stiffness: 400, damping: 40 }}
+              initial={{ opacity: 0, scale: 0.96, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.96, y: 20 }}
+              transition={{ duration: 0.2, ease: 'easeOut' }}
             >
-              <div className="mobile-menu-header">
-                <h2 id="mobile-quick-actions-title" className="mobile-menu-title">
-                  Acciones rápidas
-                </h2>
+              <header className="mobile-actions-modal__header">
+                <h2 id="mobile-actions-title">Acciones y accesos rápidos</h2>
                 <button
                   type="button"
-                  className="icon-btn mobile-menu-close"
+                  className="mobile-actions-modal__close"
                   onClick={() => dispatch({ type: 'closeMobileMenu' })}
                   aria-label="Cerrar menú"
                   data-focus-default
                 >
-                  <X size={20} aria-hidden="true" />
+                  <X size={22} aria-hidden="true" />
                 </button>
-              </div>
-              {mobileSections.map(section => (
-                <div className="mobile-menu-section" key={section.id}>
-                  <p className="mobile-menu-label">{section.label}</p>
-                  <ul className="mobile-menu-list" role="menu">
-                    {section.items.map(item => (
-                      <li key={item.key}>
+              </header>
+
+              <div className="mobile-actions-modal__content">
+                {mobileActionGroups.map(group => (
+                  <div className="mobile-actions-modal__group" key={group.id}>
+                    <p className="mobile-actions-modal__group-label">{group.label}</p>
+                    <div className="mobile-actions-modal__group-items">
+                      {group.items.map(item => (
                         <button
+                          key={item.key}
                           type="button"
-                          className="mobile-menu-button"
+                          className="mobile-actions-modal__item"
                           onClick={() => {
-                            item.action();
+                            if (item.immediate) {
+                              item.action();
+                              dispatch({ type: 'closeMobileMenu' });
+                              return;
+                            }
                             dispatch({ type: 'closeMobileMenu' });
+                            window.setTimeout(() => {
+                              item.action();
+                            }, 180);
                           }}
-                          role="menuitem"
                           disabled={item.disabled}
                           aria-disabled={item.disabled ? 'true' : 'false'}
                         >
-                          {item.icon ? <span className="mobile-menu-icon">{item.icon}</span> : null}
-                          <span>{item.label}</span>
+                          {item.icon ? <span className="mobile-actions-modal__icon">{item.icon}</span> : null}
+                          <span className="mobile-actions-modal__label">{item.label}</span>
                         </button>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </motion.div>
           </FocusTrap>
         </div>

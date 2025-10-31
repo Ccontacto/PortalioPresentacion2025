@@ -4,10 +4,10 @@ import { useToast } from '../contexts/ToastContext';
 import { Info, CheckCircle, XCircle, X } from 'lucide-react';
 
 const icons: Record<string, JSX.Element> = {
-  info: <Info size={20} aria-hidden="true" />,
-  success: <CheckCircle size={20} aria-hidden="true" />,
-  error: <XCircle size={20} aria-hidden="true" />,
-  warning: <Info size={20} aria-hidden="true" />
+  info: <Info size={24} aria-hidden="true" />,
+  success: <CheckCircle size={24} aria-hidden="true" />,
+  error: <XCircle size={24} aria-hidden="true" />,
+  warning: <Info size={24} aria-hidden="true" />
 };
 
 export default function ToastContainer() {
@@ -40,7 +40,7 @@ export default function ToastContainer() {
               className="p-1"
               aria-label="Cerrar notificación"
             >
-              <X size={18} aria-hidden="true" />
+              <X size={24} aria-hidden="true" />
             </button>
           </motion.div>
         ))}

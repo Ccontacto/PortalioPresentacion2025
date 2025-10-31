@@ -8,8 +8,10 @@ const BLOCK_SPACING = 4;
 const PAGE_MARGIN = 20;
 const SANITIZE_LIMIT = 500;
 
-const sanitizeText = (value: string, limit: number = SANITIZE_LIMIT): string =>
-  value.replace(/[<>"'&]/g, '').slice(0, limit).trim();
+const sanitizeText = (value: string | null | undefined, limit: number = SANITIZE_LIMIT): string => {
+  if (!value) return '';
+  return value.replace(/[<>"'&]/g, '').slice(0, limit).trim();
+};
 
 const TRANSLATIONS: Record<Lang, Record<string, string>> = {
   es: {
@@ -21,6 +23,10 @@ const TRANSLATIONS: Record<Lang, Record<string, string>> = {
 };
 
 export async function generatePdf(data: PortfolioData, lang: Lang = 'es') {
+  if (!data) {
+    throw new Error('Portfolio data is not available.');
+  }
+
   const doc = new jsPDF({ unit: 'mm', format: 'a4' });
   const pageWidth = doc.internal.pageSize.getWidth();
   const pageHeight = doc.internal.pageSize.getHeight();
