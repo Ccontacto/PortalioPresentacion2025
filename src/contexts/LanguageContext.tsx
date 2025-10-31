@@ -9,7 +9,7 @@ type LanguageContextValue = {
   data: Data;
   currentLang: Lang;
   toggleLanguage: () => void;
-  t: (key: string) => string;
+  t: (key: string, defaultValue?: string) => string;
 };
 
 const LanguageContext = createContext<LanguageContextValue | null>(null);
@@ -53,14 +53,14 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const t = useCallback(
-    (key: string) => {
+    (key: string, defaultValue?: string) => {
       const keys = key.split('.');
       let result: unknown = dict[currentLang];
       for (const k of keys) {
         if (isRecord(result) && k in result) {
           result = result[k];
         } else {
-          return key;
+          return defaultValue ?? key;
         }
       }
       return typeof result === 'string' ? result : key;

@@ -1,3 +1,5 @@
+import type { JSX } from 'react';
+
 import { AnimatePresence, motion } from 'framer-motion';
 import FocusTrap from 'focus-trap-react';
 import {
@@ -26,7 +28,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { useNavigation } from '../contexts/NavigationContext';
 import { useTheme } from '../contexts/ThemeContext';
 import { useToast } from '../contexts/ToastContext';
-import { generatePdf } from '../utils/pdfGenerator';
+// import { generatePdf } from '../utils/pdfGenerator';
 import { WhatsappGlyph } from './icons/WhatsappGlyph';
 
 type CommandGroup = 'Secciones' | 'Redes' | 'Contacto' | 'Acciones' | 'Preferencias';
@@ -128,7 +130,7 @@ export default function CommandPalette() {
             {
               id: 'contact-whatsapp',
               label: 'WhatsApp',
-              group: 'Contacto',
+              group: 'Contacto' as const,
               icon: <WhatsappGlyph className="h-[22px] w-[22px]" aria-hidden="true" />,
               keywords: ['whatsapp', 'mensaje', 'contacto'],
               action: () => {
@@ -153,7 +155,7 @@ export default function CommandPalette() {
             {
               id: 'social-linkedin',
               label: 'LinkedIn',
-              group: 'Redes',
+              group: 'Redes' as const,
               icon: <Globe size={22} aria-hidden="true" />,
               keywords: ['linkedin', 'networking'],
               action: () => {
@@ -168,7 +170,7 @@ export default function CommandPalette() {
             {
               id: 'social-github',
               label: 'GitHub',
-              group: 'Redes',
+              group: 'Redes' as const,
               icon: <Github size={22} aria-hidden="true" />,
               keywords: ['repositorio', 'code'],
               action: () => {
@@ -183,7 +185,7 @@ export default function CommandPalette() {
             {
               id: 'social-portfolio',
               label: 'Portafolio externo',
-              group: 'Redes',
+              group: 'Redes' as const,
               icon: <Globe size={22} aria-hidden="true" />,
               keywords: ['portfolio', 'sitio', 'web'],
               action: () => {
@@ -203,19 +205,23 @@ export default function CommandPalette() {
         icon: <Download size={22} aria-hidden="true" />,
         keywords: ['cv', 'curriculum', 'pdf'],
         action: () => {
-          showToast('Generando CV...', 'info');
-          generatePdf(data, (data.lang as 'es' | 'en') || 'es')
-            .then(() => {
-              showToast('CV listo para descargar', 'success');
-            })
-            .catch(error => {
-              if (import.meta.env.DEV) {
-                console.error('CV generation failed', error);
-              }
-              showToast('No se pudo generar el CV. Inténtalo de nuevo.', 'error');
-            });
+          showToast('La generación de CV no está disponible temporalmente.', 'info');
           closePalette();
         }
+        // action: () => {
+        //   showToast('Generando CV...', 'info');
+        //   generatePdf(data, (data.lang as 'es' | 'en') || 'es')
+        //     .then(() => {
+        //       showToast('CV listo para descargar', 'success');
+        //     })
+        //     .catch((error: any) => {
+        //       if (import.meta.env.DEV) {
+        //         console.error('CV generation failed', error);
+        //       }
+        //       showToast('No se pudo generar el CV. Inténtalo de nuevo.', 'error');
+        //     });
+        //   closePalette();
+        // }
       }
     ];
 
