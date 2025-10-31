@@ -24,6 +24,7 @@ import { useTheme } from '../contexts/ThemeContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useToast } from '../contexts/ToastContext';
 import { generatePdf } from '../utils/pdfGenerator';
+import { useNavigation } from '../contexts/NavigationContext';
 import type { AvailabilityKey } from '../types/portfolio';
 
 type AvailabilityState = AvailabilityKey;
@@ -96,6 +97,7 @@ export default function Header() {
   const { theme, toggleTheme } = useTheme();
   const { data, currentLang, toggleLanguage } = useLanguage();
   const { showToast } = useToast();
+  const { navigateTo } = useNavigation();
   const [
     { availability, mobileMenuOpen, confettiRemaining, activePanel },
     dispatch
@@ -320,27 +322,44 @@ useEffect(() => {
   const confettiLabel = data.tooltips.celebrate;
   const isConfettiOnCooldown = confettiRemaining > 0;
 
+  type QuickAction = {
+    key: string;
+    label: string;
+    icon?: JSX.Element;
+    action: () => void;
+    disabled?: boolean;
+    immediate?: boolean;
+  };
+
+  const navActions: QuickAction[] = data.nav.map(item => ({
+    key: `nav-${item.id}`,
+    label: item.label,
+    icon: <Globe size={22} aria-hidden="true" />,
+    action: () => navigateTo(item.id)
+  }));
+
   const overflowSections = [
     {
       id: 'social',
       label: 'Redes profesionales',
       items: [
-        { key: 'linkedin', label: 'LinkedIn', icon: <Linkedin size={22} aria-hidden="true" />, action: openLinkedIn },
-        { key: 'github', label: 'GitHub', icon: <Github size={22} aria-hidden="true" />, action: openGitHub },
-        { key: 'portfolio', label: 'Portafolio', icon: <Globe size={22} aria-hidden="true" />, action: openPortfolio }
+        { key: 'linkedin', label: 'LinkedIn', icon: <Linkedin size={22} aria-hidden="true" />, action: openLinkedIn, immediate: true },
+        { key: 'github', label: 'GitHub', icon: <Github size={22} aria-hidden="true" />, action: openGitHub, immediate: true },
+        { key: 'portfolio', label: 'Portafolio', icon: <Globe size={22} aria-hidden="true" />, action: openPortfolio, immediate: true }
       ]
     },
     {
       id: 'contact',
       label: 'Contacto',
       items: [
-        { key: 'email', label: data.tooltips.email, icon: <Mail size={22} aria-hidden="true" />, action: openEmail },
+        { key: 'email', label: data.tooltips.email, icon: <Mail size={22} aria-hidden="true" />, action: openEmail, immediate: true },
         { key: 'copy', label: data.tooltips.copy, icon: <Copy size={22} aria-hidden="true" />, action: copyEmail },
         {
           key: 'whatsapp',
           label: 'WhatsApp',
           icon: <WhatsappGlyph className="h-[22px] w-[22px]" aria-hidden="true" />,
-          action: openWhatsApp
+          action: openWhatsApp,
+          immediate: true
         }
       ]
     },
@@ -348,7 +367,7 @@ useEffect(() => {
       id: 'preferences',
       label: 'Preferencias y extras',
       items: [
-        { key: 'pdf', label: data.tooltips.pdf, icon: <Download size={22} aria-hidden="true" />, action: handlePdf },
+        { key: 'pdf', label: data.tooltips.pdf, icon: <Download size={22} aria-hidden="true" />, action: handlePdf, immediate: true },
         {
           key: 'confetti',
           label: confettiLabel,
@@ -373,6 +392,10 @@ useEffect(() => {
   ];
 
   const overflowItems = overflowSections.flatMap(section => section.items);
+  const mobileActionGroups = [
+    { id: 'nav', label: 'Secciones', items: navActions },
+    { id: 'actions', label: 'Acciones rápidas', items: overflowItems }
+  ];
 
   return (
     <header className="header" role="banner">
@@ -515,21 +538,35 @@ useEffect(() => {
               </header>
 
               <div className="mobile-actions-modal__content">
-                {overflowItems.map(item => (
-                  <button
-                    key={item.key}
-                    type="button"
-                    className="mobile-actions-modal__item"
-                    onClick={() => {
-                      item.action();
-                      dispatch({ type: 'closeMobileMenu' });
-                    }}
-                    disabled={item.disabled}
-                    aria-disabled={item.disabled ? 'true' : 'false'}
-                  >
-                    {item.icon ? <span className="mobile-actions-modal__icon">{item.icon}</span> : null}
-                    <span className="mobile-actions-modal__label">{item.label}</span>
-                  </button>
+                {mobileActionGroups.map(group => (
+                  <div className="mobile-actions-modal__group" key={group.id}>
+                    <p className="mobile-actions-modal__group-label">{group.label}</p>
+                    <div className="mobile-actions-modal__group-items">
+                      {group.items.map(item => (
+                        <button
+                          key={item.key}
+                          type="button"
+                          className="mobile-actions-modal__item"
+                          onClick={() => {
+                            if (item.immediate) {
+                              item.action();
+                              dispatch({ type: 'closeMobileMenu' });
+                              return;
+                            }
+                            dispatch({ type: 'closeMobileMenu' });
+                            window.setTimeout(() => {
+                              item.action();
+                            }, 180);
+                          }}
+                          disabled={item.disabled}
+                          aria-disabled={item.disabled ? 'true' : 'false'}
+                        >
+                          {item.icon ? <span className="mobile-actions-modal__icon">{item.icon}</span> : null}
+                          <span className="mobile-actions-modal__label">{item.label}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
                 ))}
               </div>
             </motion.div>

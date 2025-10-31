@@ -1,4 +1,4 @@
-import { useCallback, useRef, type JSX, type KeyboardEvent as ReactKeyboardEvent } from 'react';
+import { useCallback, useEffect, useRef, useState, type JSX, type KeyboardEvent as ReactKeyboardEvent } from 'react';
 import { motion } from 'framer-motion';
 import { Home, Briefcase, Code, Rocket, Mail } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -18,6 +18,8 @@ export default function Dock() {
   const { activePage, navigateTo } = useNavigation();
   const shouldReduceMotion = useReducedMotion();
   const buttonRefs = useRef<Array<HTMLButtonElement | null>>([]);
+  const [isDockVisible, setIsDockVisible] = useState(true);
+  const scrollTimeoutRef = useRef<number | null>(null);
 
   buttonRefs.current.length = data.nav.length;
 
@@ -43,6 +45,45 @@ export default function Dock() {
     buttons[targetIndex]?.focus();
   }, []);
 
+  useEffect(() => {
+    if (shouldReduceMotion) {
+      return undefined;
+    }
+
+    const handleScroll = () => {
+      const currentY = window.scrollY;
+
+      if (currentY < 80) {
+        setIsDockVisible(true);
+        if (scrollTimeoutRef.current) {
+          window.clearTimeout(scrollTimeoutRef.current);
+          scrollTimeoutRef.current = null;
+        }
+        return;
+      }
+
+      setIsDockVisible(prev => {
+        if (!prev) return prev;
+        return false;
+      });
+
+      if (scrollTimeoutRef.current) {
+        window.clearTimeout(scrollTimeoutRef.current);
+      }
+      scrollTimeoutRef.current = window.setTimeout(() => {
+        setIsDockVisible(true);
+      }, 1000);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (scrollTimeoutRef.current) {
+        window.clearTimeout(scrollTimeoutRef.current);
+      }
+    };
+  }, [shouldReduceMotion]);
+
   return (
     <div className="dock-container">
       {/* MEJORA 1: nav con role y aria-label */}
@@ -51,9 +92,26 @@ export default function Dock() {
         role="navigation"
         aria-label="Navegación principal del portfolio"
         onKeyDown={handleKeyNavigation}
-        initial={shouldReduceMotion ? undefined : { y: 100 }}
-        animate={shouldReduceMotion ? undefined : { y: 0 }}
-        transition={shouldReduceMotion ? undefined : { type: 'spring', delay: 0.5 }}
+        initial={shouldReduceMotion ? undefined : { y: 120, opacity: 0 }}
+        animate={
+          shouldReduceMotion
+            ? undefined
+            : {
+                y: isDockVisible ? 0 : 120,
+                opacity: isDockVisible ? 1 : 0
+              }
+        }
+        transition={
+          shouldReduceMotion
+            ? undefined
+            : {
+                type: 'spring',
+                stiffness: 260,
+                damping: 28,
+                delay: 0.3
+              }
+        }
+        style={{ pointerEvents: isDockVisible ? 'auto' : 'none' }}
       >
         {data.nav.map((item, index) => (
           <button

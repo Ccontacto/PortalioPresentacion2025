@@ -1236,6 +1236,32 @@ p, span, small {
   padding-right: 6px;
 }
 
+.mobile-actions-modal__group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mobile-actions-modal__group + .mobile-actions-modal__group {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 2px dashed rgba(15, 23, 42, 0.12);
+}
+
+.mobile-actions-modal__group-label {
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  opacity: 0.68;
+}
+
+.mobile-actions-modal__group-items {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
 .mobile-actions-modal__item {
   display: flex;
   align-items: center;
@@ -2315,7 +2341,13 @@ p, span, small {
   box-shadow: 6px 6px 0 var(--shadow-strong-hover);
   background: linear-gradient(135deg, var(--gradient-brand-start), var(--gradient-brand-end));
   color: var(--text-on-brand);
-  text-shadow: 0 1px rgba(0,0,0,.25); /* Added for legibility */
+  text-shadow: 0 1px rgba(0,0,0,.25);
+}
+
+.skill-badge svg {
+  width: 18px;
+  height: 18px;
+  color: currentColor;
 }
 
 .contact-wrapper {
