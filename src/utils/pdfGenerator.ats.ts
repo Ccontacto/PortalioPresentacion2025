@@ -22,7 +22,7 @@ const TRANSLATIONS: Record<Lang, Record<string, string>> = {
   }
 };
 
-export async function generatePdf(data: PortfolioData, lang: Lang = 'es') {
+export async function generateATSPdf(data: PortfolioData, lang: Lang = 'es') {
   if (!data) {
     throw new Error('Portfolio data is not available.');
   }

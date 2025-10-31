@@ -17,13 +17,14 @@ import {
   Languages,
   CheckCircle,
   TriangleAlert,
-  Handshake
+  Handshake,
+  MessageSquare
 } from 'lucide-react';
-import { WhatsappGlyph } from './icons/WhatsappGlyph';
 import { useTheme } from '../contexts/ThemeContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useToast } from '../contexts/ToastContext';
-import { generatePdf } from '../utils/pdfGenerator';
+import { generateATSPdf } from '../utils/pdfGenerator.ats';
+import { generateNonATSPdf } from '../utils/pdfGenerator.nonAts';
 import { useNavigation } from '../contexts/NavigationContext';
 import type { AvailabilityKey } from '../types/portfolio';
 
@@ -147,7 +148,7 @@ export default function Header() {
   const openPortfolio = () => window.open(data.social.portfolio, '_blank', 'noopener,noreferrer');
   const handlePdf = () => {
     showToast('Generando CV...', 'info');
-    generatePdf(data, (data.lang as 'es' | 'en') || 'es')
+    generateATSPdf(data, (data.lang as 'es' | 'en') || 'es')
       .then(() => {
         showToast('CV listo para descargar', 'success');
       })
@@ -156,6 +157,20 @@ export default function Header() {
           console.error('CV generation failed', error);
         }
         showToast('No se pudo generar el CV. Inténtalo de nuevo.', 'error');
+      });
+  };
+
+  const handleNonATSPdf = () => {
+    showToast('Generando CV de diseño...', 'info');
+    generateNonATSPdf(data)
+      .then(() => {
+        showToast('CV de diseño listo para descargar', 'success');
+      })
+      .catch(error => {
+        if (import.meta.env.DEV) {
+          console.error('CV generation failed', error);
+        }
+        showToast('No se pudo generar el CV de diseño. Inténtalo de nuevo.', 'error');
       });
   };
 
@@ -357,7 +372,7 @@ useEffect(() => {
         {
           key: 'whatsapp',
           label: 'WhatsApp',
-          icon: <WhatsappGlyph className="h-[22px] w-[22px]" aria-hidden="true" />,
+          icon: <MessageSquare size={22} aria-hidden="true" />,
           action: openWhatsApp,
           immediate: true
         }
@@ -367,7 +382,8 @@ useEffect(() => {
       id: 'preferences',
       label: 'Preferencias y extras',
       items: [
-        { key: 'pdf', label: data.tooltips.pdf, icon: <Download size={22} aria-hidden="true" />, action: handlePdf, immediate: true },
+        { key: 'pdf', label: `${data.tooltips.pdf} (ATS)`, icon: <Download size={22} aria-hidden="true" />, action: handlePdf, immediate: true },
+        { key: 'pdf-non-ats', label: `${data.tooltips.pdf} (Diseño)`, icon: <Download size={22} aria-hidden="true" />, action: handleNonATSPdf, immediate: true },
         {
           key: 'confetti',
           label: confettiLabel,
