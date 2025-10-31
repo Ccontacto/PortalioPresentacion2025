@@ -34,13 +34,14 @@ export function Button<T extends ElementType = 'button'>({
   const Component = as || 'button';
 
   return (
-    <motion.button
+    <motion.div
+      as={Component}
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
       className={`inline-flex items-center justify-center rounded-md font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-focus-ring ${variants[variant]} ${sizes[size]} ${className}`}
       {...props}
     >
       {children}
-    </motion.button>
+    </motion.div>
   );
 }
