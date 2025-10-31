@@ -1,11 +1,11 @@
 import { motion } from 'framer-motion';
 import { ExternalLink, Rocket } from 'lucide-react';
-import { useMemo, useState } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useReducedMotion } from '../hooks/useReducedMotion';
 import type { ProjectItem } from '../types/portfolio';
-import SearchBar from '../components/SearchBar'; // Import the new SearchBar component
 
-const isValidHttpUrl = (value: string): boolean => {
+const isValidHttpUrl = (value: string | undefined): value is string => {
+  if (!value) return false;
   try {
     const url = new URL(value);
     return url.protocol === 'http:' || url.protocol === 'https:';
@@ -14,79 +14,83 @@ const isValidHttpUrl = (value: string): boolean => {
   }
 };
 
-export default function Projects() {
-  const { data } = useLanguage();
-  const [currentSearchTerm, setCurrentSearchTerm] = useState(''); // New state to hold the search term from SearchBar
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+};
 
-  const filteredProjects = useMemo(() => {
-    if (!currentSearchTerm) {
-      return data.sections.projects.items;
-    }
-    return data.sections.projects.items.filter((proj: ProjectItem) =>
-      proj.tags.some(tag =>
-        tag.toLowerCase().includes(currentSearchTerm.toLowerCase())
-      )
-    );
-  }, [currentSearchTerm, data.sections.projects.items]);
+const itemVariants = {
+  hidden: { opacity: 0, scale: 0.95, y: 20 },
+  visible: { opacity: 1, scale: 1, y: 0 },
+};
+
+export default function Projects() {
+  const { data, t } = useLanguage();
+  const shouldReduceMotion = useReducedMotion();
 
   return (
     <section id="projects" className="page-section" aria-labelledby="projects-heading">
-      <header className="experience-header">
-        <span className="experience-header__eyebrow">Casos reales</span>
-        <h2 id="projects-heading" className="experience-header__title">
-          {data.sections.projects.title}
-        </h2>
-        <p className="experience-header__subtitle">
-          Lanzamientos y prototipos donde combiné iOS, liderazgo técnico e IA aplicada.
-        </p>
-      </header>
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <header className="text-center mb-16">
+          <h2 id="projects-heading" className="text-3xl md:text-4xl font-bold">
+            {t('projects.title', 'Proyectos Destacados')}
+          </h2>
+          <p className="mt-4 max-w-2xl mx-auto text-lg text-text-muted">
+            {t('projects.subtitle', 'Casos de estudio donde he aplicado mis habilidades para resolver problemas complejos.')}
+          </p>
+        </header>
 
-      {/* Render the new SearchBar component */}
-      <SearchBar
-        projectItems={data.sections.projects.items}
-        onSearch={setCurrentSearchTerm}
-        resultCount={filteredProjects.length}
-      />
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl">
-        {filteredProjects.map((proj: ProjectItem, index: number) => (
-          <motion.article
-            key={proj.id}
-            className="card"
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: index * 0.1 }}
-          >
-            <div className="project-thumb" aria-hidden="true">
-              <Rocket size={56} />
-            </div>
-            <h3 className="text-xl font-bold mb-3">{proj.title}</h3>
-            <p className="text-sm mb-4">{proj.description}</p>
-            <div className="flex flex-wrap gap-2 mb-4" role="list" aria-label="Tecnologías del proyecto">
-              {proj.tags.map(tag => (
-                <span
-                  key={tag}
-                  className="skill-badge"
-                  role="listitem"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-            {proj.link && isValidHttpUrl(proj.link) && (
-              <a
-                href={proj.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 text-sm font-bold hover:underline"
-              >
-                <ExternalLink size={24} aria-hidden="true" />
-                Ver proyecto
-              </a>
-            )}
-          </motion.article>
-        ))}
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto"
+          initial={shouldReduceMotion ? 'visible' : 'hidden'}
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.1 }}
+          variants={containerVariants}
+        >
+          {data.sections.projects.items.map((proj: ProjectItem) => (
+            <motion.article
+              key={proj.id}
+              className="bg-surface-raised rounded-lg border border-border-subtle overflow-hidden flex flex-col shadow-md"
+              variants={itemVariants}
+              whileHover={shouldReduceMotion ? {} : { y: -5 }}
+            >
+              <div className="bg-surface-alt h-40 flex items-center justify-center text-brand-primary">
+                <Rocket size={48} strokeWidth={1.5} />
+              </div>
+              <div className="p-6 flex flex-col flex-grow">
+                <h3 className="text-xl font-bold mb-2">{proj.title}</h3>
+                <p className="text-text-muted flex-grow">{proj.description}</p>
+                <div className="flex flex-wrap gap-2 my-4" role="list" aria-label="Tecnologías">
+                  {proj.tags.map(tag => (
+                    <span
+                      key={tag}
+                      className="px-3 py-1 text-xs font-medium rounded-pill bg-surface-alt text-text-muted"
+                      role="listitem"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                {isValidHttpUrl(proj.link) && (
+                  <a
+                    href={proj.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 text-sm font-semibold text-brand-primary hover:text-brand-hover transition-colors"
+                  >
+                    {t('projects.view', 'Ver proyecto')}
+                    <ExternalLink size={16} />
+                  </a>
+                )}
+              </div>
+            </motion.article>
+          ))}
+        </motion.div>
       </div>
     </section>
   );
