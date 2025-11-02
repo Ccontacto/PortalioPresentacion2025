@@ -1,12 +1,13 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/postcss';
+import autoprefixer from 'autoprefixer';
 
 export default defineConfig({
   plugins: [react()],
   css: {
     postcss: {
-      plugins: [tailwindcss()]
+      plugins: [tailwindcss(), autoprefixer()]
     }
   },
   build: {
@@ -42,6 +43,10 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: './vitest.setup.ts',
     clearMocks: true,
-    css: true
+    css: true,
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'html']
+    }
   }
 });

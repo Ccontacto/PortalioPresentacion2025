@@ -20,7 +20,8 @@ import {
   useMemo,
   useRef,
   useState,
-  type KeyboardEvent as ReactKeyboardEvent
+  type KeyboardEvent as ReactKeyboardEvent,
+  type ReactNode
 } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useNavigation } from '../contexts/NavigationContext';
@@ -29,14 +30,14 @@ import { useToast } from '../contexts/ToastContext';
 import { generatePdf } from '../utils/pdfGenerator';
 import { WhatsappGlyph } from './icons/WhatsappGlyph';
 
-type CommandGroup = 'Secciones' | 'Redes' | 'Contacto' | 'Acciones' | 'Preferencias';
+type CommandGroup = string;
 
 type CommandItem = {
   id: string;
   label: string;
   group: CommandGroup;
   action: () => void;
-  icon?: JSX.Element;
+  icon?: ReactNode;
   keywords?: string[];
   description?: string;
   predicate?: () => boolean;

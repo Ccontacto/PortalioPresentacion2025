@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, lazy, Suspense } from 'react';
 import { motion } from 'framer-motion';
 import { ToastProvider, useToast } from './contexts/ToastContext';
 import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
@@ -9,10 +9,10 @@ import { useReducedMotion } from './hooks/useReducedMotion';
 import Header from './components/Header';
 import Dock from './components/Dock';
 import ToastContainer from './components/ToastContainer';
-import ConfettiCanvas from './components/ConfettiCanvas';
 import LoadingScreen from './components/LoadingScreen';
 import PageProgress from './components/PageProgress';
-import CommandPalette from './components/CommandPalette';
+const ConfettiCanvas = lazy(() => import('./components/ConfettiCanvas'));
+const CommandPalette = lazy(() => import('./components/CommandPalette'));
 import PageIndicator from './components/PageIndicator';
 import SkipToContent from './components/SkipToContent';
 import Hero from './sections/Hero';
@@ -67,9 +67,13 @@ function AppContent() {
         </main>
         <Dock />
         <ToastContainer />
-        <ConfettiCanvas />
+        <Suspense fallback={null}>
+          <ConfettiCanvas />
+        </Suspense>
         <PageIndicator />
-        <CommandPalette />
+        <Suspense fallback={null}>
+          <CommandPalette />
+        </Suspense>
       </motion.div>
     </>
   );

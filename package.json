@@ -3,14 +3,18 @@
   "private": true,
   "version": "2.2.1",
   "type": "module",
+  "packageManager": "npm@10",
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
-    "dev": "node node_modules/vite/bin/vite.js --host 0.0.0.0 --port 5173",
-    "build": "node node_modules/typescript/bin/tsc && node node_modules/vite/bin/vite.js build",
-    "preview": "node node_modules/vite/bin/vite.js preview --host 0.0.0.0 --port 5176",
-    "lint": "node node_modules/eslint/bin/eslint.js . --report-unused-disable-directives --max-warnings 0",
-    "lint:fix": "node node_modules/eslint/bin/eslint.js . --fix",
-    "format": "node node_modules/prettier/bin/prettier.cjs --write .",
-    "test": "node node_modules/vitest/vitest.mjs"
+    "dev": "vite --host 0.0.0.0 --port 5173",
+    "build": "tsc && vite build",
+    "preview": "vite preview --host 0.0.0.0 --port 5176",
+    "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "test": "vitest"
   },
   "dependencies": {
     "focus-trap-react": "^10.3.1",
@@ -33,6 +37,8 @@
     "@vitejs/plugin-react": "^5.1.0",
     "autoprefixer": "^10.4.21",
     "eslint": "^9.38.0",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-jsx-a11y": "^6.10.0",
     "eslint-plugin-react": "^7.34.2",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.7",

@@ -3,6 +3,8 @@ const tsPlugin = require('@typescript-eslint/eslint-plugin');
 const tsParser = require('@typescript-eslint/parser');
 const reactPlugin = require('eslint-plugin-react');
 const reactHooks = require('eslint-plugin-react-hooks');
+const jsxA11y = require('eslint-plugin-jsx-a11y');
+const importPlugin = require('eslint-plugin-import');
 const reactRefresh = require('eslint-plugin-react-refresh');
 const globals = require('globals');
 
@@ -26,7 +28,9 @@ module.exports = [
       '@typescript-eslint': tsPlugin,
       react: reactPlugin,
       'react-hooks': reactHooks,
-      'react-refresh': reactRefresh
+      'react-refresh': reactRefresh,
+      'jsx-a11y': jsxA11y,
+      import: importPlugin
     },
     settings: {
       react: { version: 'detect' }
@@ -34,11 +38,20 @@ module.exports = [
     rules: {
       ...tsPlugin.configs.recommended.rules,
       ...reactPlugin.configs.recommended.rules,
+      ...(jsxA11y.configs && jsxA11y.configs.recommended ? jsxA11y.configs.recommended.rules : {}),
       'react/jsx-uses-react': 'off',
       'react/react-in-jsx-scope': 'off',
       'react-refresh/only-export-components': 'off',
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'error',
+      'import/order': [
+        'warn',
+        {
+          groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index', 'object', 'type'],
+          'newlines-between': 'always',
+          alphabetize: { order: 'asc', caseInsensitive: true }
+        }
+      ],
       '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
       'no-undef': 'off'
     }
@@ -53,17 +66,28 @@ module.exports = [
     plugins: {
       react: reactPlugin,
       'react-hooks': reactHooks,
-      'react-refresh': reactRefresh
+      'react-refresh': reactRefresh,
+      'jsx-a11y': jsxA11y,
+      import: importPlugin
     },
     settings: {
       react: { version: 'detect' }
     },
     rules: {
       ...reactPlugin.configs.recommended.rules,
+      ...(jsxA11y.configs && jsxA11y.configs.recommended ? jsxA11y.configs.recommended.rules : {}),
       'react/jsx-uses-react': 'off',
       'react/react-in-jsx-scope': 'off',
       'react-hooks/rules-of-hooks': 'error',
-      'react-hooks/exhaustive-deps': 'error'
+      'react-hooks/exhaustive-deps': 'error',
+      'import/order': [
+        'warn',
+        {
+          groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index', 'object'],
+          'newlines-between': 'always',
+          alphabetize: { order: 'asc', caseInsensitive: true }
+        }
+      ]
     }
   },
   {
