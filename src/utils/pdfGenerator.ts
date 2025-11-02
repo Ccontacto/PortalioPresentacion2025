@@ -1,4 +1,3 @@
-import { jsPDF } from 'jspdf';
 import type { PortfolioData, ExperienceJob, SkillCategory } from '../types/portfolio';
 type Lang = 'es' | 'en';
 
@@ -21,6 +20,7 @@ const TRANSLATIONS: Record<Lang, Record<string, string>> = {
 };
 
 export async function generatePdf(data: PortfolioData, lang: Lang = 'es') {
+  const { jsPDF } = await import('jspdf');
   const doc = new jsPDF({ unit: 'mm', format: 'a4' });
   const pageWidth = doc.internal.pageSize.getWidth();
   const pageHeight = doc.internal.pageSize.getHeight();
