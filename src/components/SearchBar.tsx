@@ -203,7 +203,7 @@ export default function SearchBar({
                   </div>
                   <button
                     type="button"
-                    className="search-modal__close"
+                    className="search-modal__close hit-44"
                     onClick={handleCloseModal}
                     aria-label="Cerrar buscador"
                   >
@@ -227,7 +227,7 @@ export default function SearchBar({
                   {searchTerm && (
                     <button
                       type="button"
-                      className="search-modal__clear"
+                      className="search-modal__clear hit-44"
                       onClick={() => handleSearchInput('')}
                       aria-label="Limpiar búsqueda"
                     >
@@ -293,7 +293,7 @@ export default function SearchBar({
       <motion.button
         ref={triggerRef}
         type="button"
-        className={`search-trigger ${isIconVariant ? 'search-trigger--icon' : ''}`}
+        className={`search-trigger hit-44 ${isIconVariant ? 'search-trigger--icon' : ''}`}
         onClick={handleOpenModal}
         aria-haspopup="dialog"
         aria-expanded={isModalOpen}

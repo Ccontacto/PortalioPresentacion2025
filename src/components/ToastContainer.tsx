@@ -37,7 +37,7 @@ export default function ToastContainer() {
             <span className="flex-1">{toast.message}</span>
             <button
               onClick={() => removeToast(toast.id)}
-              className="p-1"
+              className="hit-44"
               aria-label="Cerrar notificación"
             >
               <X size={24} aria-hidden="true" />

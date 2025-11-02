@@ -428,7 +428,7 @@ export default function CommandPalette() {
                 </div>
                 <button
                   type="button"
-                  className="search-modal__close"
+                  className="search-modal__close hit-44"
                   onClick={closePalette}
                   aria-label="Cerrar buscador de acciones"
                 >
@@ -455,10 +455,10 @@ export default function CommandPalette() {
                     filteredItems[activeIndex] ? `command-option-${filteredItems[activeIndex].id}` : undefined
                   }
                 />
-                {query ? (
+                  {query ? (
                   <button
                     type="button"
-                    className="search-modal__clear"
+                    className="search-modal__clear hit-44"
                     onClick={() => setQuery('')}
                     aria-label="Limpiar búsqueda"
                   >

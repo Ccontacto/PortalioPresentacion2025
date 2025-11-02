@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   css: {
     postcss: {
-      plugins: [tailwind],
+      plugins: [tailwind()],
     },
   },
   build: {
@@ -21,7 +21,11 @@ export default defineConfig({
     }
   },
   optimizeDeps: {
-    include: ['framer-motion', 'lucide-react']
+    include: ['framer-motion'],
+    exclude: ['lucide-react']
+  },
+  resolve: {
+    dedupe: ['react', 'react-dom']
   },
   test: {
     environment: 'jsdom',

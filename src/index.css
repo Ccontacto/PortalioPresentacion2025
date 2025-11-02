@@ -146,6 +146,15 @@
   .border-default { border-color: var(--color-semantic-border-default); }
   .ring-focus { --tw-ring-color: var(--color-semantic-focus-outline); }
 
+  /* Hit target mínimo recomendado por WCAG */
+  .hit-44 {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
   /* Alias para clases semánticas existentes en el markup */
   .text-text-primary { color: var(--color-text-primary); }
   .text-text-muted { color: var(--color-text-muted); }

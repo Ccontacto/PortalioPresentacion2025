@@ -480,7 +480,7 @@ useEffect(() => {
         >
           <button
             type="button"
-            className="header-panel-close icon-btn"
+            className="header-panel-close icon-btn hit-44"
             onClick={closeActivePanel}
             aria-label="Cerrar menú de acciones"
             style={{ color: 'var(--error)' }}
@@ -544,7 +544,7 @@ useEffect(() => {
                 <h2 id="mobile-actions-title">Acciones y accesos rápidos</h2>
                 <button
                   type="button"
-                  className="mobile-actions-modal__close"
+                  className="mobile-actions-modal__close hit-44"
                   onClick={() => dispatch({ type: 'closeMobileMenu' })}
                   aria-label="Cerrar menú"
                   data-focus-default

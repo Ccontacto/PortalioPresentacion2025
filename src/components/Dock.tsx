@@ -116,7 +116,7 @@ export default function Dock() {
         {data.nav.map((item, index) => (
           <button
             key={item.id}
-            className={`dock-item ${activePage === item.id ? 'active' : ''}`}
+            className={`dock-item hit-44 ${activePage === item.id ? 'active' : ''}`}
             onClick={() => navigateTo(item.id)}
             ref={node => {
               buttonRefs.current[index] = node;
