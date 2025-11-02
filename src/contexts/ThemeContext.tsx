@@ -42,9 +42,9 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     // Aplicar la clase o atributo correspondiente al tema actual
     if (theme === 'dark') {
       root.classList.add('dark');
-    } else if (theme === 'high-contrast') {
-      root.setAttribute('data-theme', 'high-contrast');
     }
+    // Siempre exponer data-theme para los estilos basados en atributos
+    root.setAttribute('data-theme', theme);
 
     // Guardar la preferencia en localStorage
     if (typeof window !== 'undefined') {

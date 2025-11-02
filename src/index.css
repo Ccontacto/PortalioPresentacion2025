@@ -62,22 +62,28 @@
   }
 
   body {
-    @apply bg-surface-base text-text-primary antialiased;
-    font-family: theme('fontFamily.sans');
+    background-color: var(--color-surface-base);
+    color: var(--color-text-primary);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-family: Inter, sans-serif;
     transition-property: background-color, color;
-    transition-duration: theme('transitionDuration.base');
+    transition-duration: 200ms;
   }
 
   /* Estilos base para headings */
   h1, h2, h3, h4, h5, h6 {
-    @apply font-heading font-bold text-text-primary;
+    font-family: Montserrat, sans-serif;
+    font-weight: 700;
+    color: var(--color-text-primary);
   }
   
   /* =======================================================================
      MEJORA DE ACCESIBILIDAD: ESTADO DE FOCO VISIBLE
      ======================================================================= */
   :focus-visible {
-    @apply outline-none ring-2 ring-offset-2 ring-focus-ring ring-offset-surface-base;
+    outline: none;
+    box-shadow: 0 0 0 2px var(--color-semantic-focus-outline);
   }
 
   /* =======================================================================
@@ -89,7 +95,7 @@
   }
 
   .text-gradient {
-    @apply bg-gradient-to-r from-brand-primary to-state-info;
+    background-image: linear-gradient(to right, var(--color-brand-primary), var(--color-state-info));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -97,85 +103,60 @@
   }
 }
 
-@theme {
-  /* =======================================================================
-   TOKENS DE DISEÑO SEMÁNTICOS (Basado en DTCG)
-   ======================================================================= */
-  colors: {
-    /* --- Grupo: Texto --- */
-    'text-primary': 'var(--color-text-primary)',
-    'text-muted': 'var(--color-text-muted)',
-    'text-inverse': 'var(--color-text-inverse)',
+/* === TOKENS FLAT (válidos para PostCSS) === */
+:root {
+  /* ajusta estos valores a tus tokens reales si quieres */
+  --color-semantic-text-default: #1a1a1a;
+  --color-semantic-text-muted: #525252;
+  --color-semantic-bg-default: #f7f7f7;
+  --color-semantic-bg-elevated: #f2f2f2;
+  --color-semantic-border-default: #d1d1d1;
+  --color-semantic-focus-outline: #3b82f6;
+}
 
-    /* --- Grupo: Superficie (Backgrounds) --- */
-    'surface-base': 'var(--color-surface-base)',
-    'surface-alt': 'var(--color-surface-alt)',
-    'surface-raised': 'var(--color-surface-raised)',
+/* Modos por data-theme (runtime, sin rebuild) */
+:root[data-theme="dark"] {
+  --color-semantic-text-default: #f7f7f7;
+  --color-semantic-text-muted: #a3a3a3;
+  --color-semantic-bg-default: #0a0a0a;
+  --color-semantic-bg-elevated: #0e0e0e;
+  --color-semantic-border-default: #3f3f3f;
+}
+:root[data-theme="high-contrast"] {
+  --color-semantic-text-default: #ffffff;
+  --color-semantic-text-muted: #e5e5e5;
+  --color-semantic-bg-default: #000000;
+  --color-semantic-bg-elevated: #0e0e0e;
+  --color-semantic-border-default: #ffffff;
+}
+:root[data-theme="outdoor"] {
+  --color-semantic-text-default: #000000;
+  --color-semantic-text-muted: #3f3f3f;
+  --color-semantic-bg-default: #ffffff;
+  --color-semantic-bg-elevated: #f2f2f2;
+  --color-semantic-border-default: #a3a3a3;
+}
 
-    /* --- Grupo: Marca (Brand) --- */
-    'brand-primary': 'var(--color-brand-primary)',
-    'brand-hover': 'var(--color-brand-hover)',
-    'brand-active': 'var(--color-brand-active)',
+/* Utilidades semánticas mínimas (siguen tus clases actuales) */
+@layer utilities {
+  .text-default { color: var(--color-semantic-text-default); }
+  .text-muted { color: var(--color-semantic-text-muted); }
+  .bg-default { background-color: var(--color-semantic-bg-default); }
+  .bg-elevated { background-color: var(--color-semantic-bg-elevated); }
+  .border-default { border-color: var(--color-semantic-border-default); }
+  .ring-focus { --tw-ring-color: var(--color-semantic-focus-outline); }
 
-    /* --- Grupo: Estado (State) --- */
-    'state-success': 'var(--color-state-success)',
-    'state-warning': 'var(--color-state-warning)',
-    'state-danger': 'var(--color-state-danger)',
-    'state-info': 'var(--color-state-info)',
+  /* Alias para clases semánticas existentes en el markup */
+  .text-text-primary { color: var(--color-text-primary); }
+  .text-text-muted { color: var(--color-text-muted); }
+  .text-text-inverse { color: var(--color-text-inverse); }
+  .text-brand-primary { color: var(--color-brand-primary); }
 
-    /* --- Grupo: Borde (Border) --- */
-    'border-default': 'var(--color-border-default)',
-    'border-subtle': 'var(--color-border-subtle)',
+  .bg-surface-base { background-color: var(--color-surface-base); }
+  .bg-surface-alt { background-color: var(--color-surface-alt); }
+  .bg-surface-raised { background-color: var(--color-surface-raised); }
+  .bg-brand-primary\/10 { background-color: color-mix(in srgb, transparent 90%, var(--color-brand-primary) 10%); }
 
-    /* --- Grupo: Foco (Focus) --- */
-    'focus-ring': 'var(--color-focus-ring)',
-  },
-  fontFamily: {
-    /* --- Grupo: Tipografía --- */
-    sans: 'Inter, sans-serif',
-    heading: 'Montserrat, sans-serif',
-  },
-  fontSize: {
-    'xs': '0.75rem',
-    'sm': '0.875rem',
-    'base': '1rem',
-    'lg': '1.125rem',
-    'xl': '1.25rem',
-    '2xl': '1.5rem',
-    '3xl': '1.875rem',
-    '4xl': '2.25rem',
-    '5xl': '3rem',
-  },
-  fontWeight: {
-    regular: '400',
-    medium: '500',
-    semibold: '600',
-    bold: '700',
-    extrabold: '800',
-  },
-  borderRadius: {
-    /* --- Grupo: Radio --- */
-    'sm': '0.25rem',
-    'md': '0.5rem',
-    'lg': '0.75rem',
-    'xl': '1rem',
-    'pill': '9999px',
-  },
-  boxShadow: {
-    /* --- Grupo: Sombra --- */
-    'sm': '0 1px 2px 0 rgb(0 0 0 / 0.05)',
-    'md': '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
-    'lg': '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
-  },
-  transitionDuration: {
-    /* --- Grupo: Movimiento --- */
-    fast: '120ms',
-    base: '200ms',
-    slow: '320ms',
-  },
-  transitionTimingFunction: {
-    /* --- Grupo: Movimiento --- */
-    out: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-    'in-out': 'cubic-bezier(0.4, 0, 0.2, 1)',
-  }
+  .border-border-default { border-color: var(--color-border-default); }
+  .border-border-subtle { border-color: var(--color-border-subtle); }
 }

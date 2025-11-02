@@ -1,4 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion';
+import type { JSX } from 'react';
 import FocusTrap from 'focus-trap-react';
 import {
   Copy as CopyIcon,
@@ -83,7 +84,7 @@ export default function CommandPalette() {
     const navItems: CommandItem[] = data.nav.map(navItem => ({
       id: `nav-${navItem.id}`,
       label: navItem.label,
-      group: 'Secciones',
+      group: 'Secciones' as CommandGroup,
       icon: <Globe size={22} aria-hidden="true" />,
       keywords: [navItem.id, navItem.label],
       action: () => {
@@ -96,7 +97,7 @@ export default function CommandPalette() {
       {
         id: 'contact-email',
         label: `Email: ${data.email}`,
-        group: 'Contacto',
+        group: 'Contacto' as CommandGroup,
         icon: <Mail size={22} aria-hidden="true" />,
         keywords: ['correo', 'contacto', 'mail'],
         action: () => {
@@ -107,7 +108,7 @@ export default function CommandPalette() {
       {
         id: 'contact-copy-email',
         label: 'Copiar email',
-        group: 'Contacto',
+        group: 'Contacto' as CommandGroup,
         icon: <CopyIcon size={22} aria-hidden="true" />,
         keywords: ['clipboard', 'copiar', 'correo'],
         action: async () => {
@@ -129,7 +130,7 @@ export default function CommandPalette() {
             {
               id: 'contact-whatsapp',
               label: 'WhatsApp',
-              group: 'Contacto',
+              group: 'Contacto' as CommandGroup,
               icon: <MessageSquare className="h-[22px] w-[22px]" aria-hidden="true" />,
               keywords: ['whatsapp', 'mensaje', 'contacto'],
               action: () => {
@@ -154,7 +155,7 @@ export default function CommandPalette() {
             {
               id: 'social-linkedin',
               label: 'LinkedIn',
-              group: 'Redes',
+              group: 'Redes' as CommandGroup,
               icon: <Globe size={22} aria-hidden="true" />,
               keywords: ['linkedin', 'networking'],
               action: () => {
@@ -169,7 +170,7 @@ export default function CommandPalette() {
             {
               id: 'social-github',
               label: 'GitHub',
-              group: 'Redes',
+              group: 'Redes' as CommandGroup,
               icon: <Github size={22} aria-hidden="true" />,
               keywords: ['repositorio', 'code'],
               action: () => {
@@ -184,7 +185,7 @@ export default function CommandPalette() {
             {
               id: 'social-portfolio',
               label: 'Portafolio externo',
-              group: 'Redes',
+              group: 'Redes' as CommandGroup,
               icon: <Globe size={22} aria-hidden="true" />,
               keywords: ['portfolio', 'sitio', 'web'],
               action: () => {
@@ -200,7 +201,7 @@ export default function CommandPalette() {
       {
         id: 'action-download-cv',
         label: 'Descargar CV (ATS)',
-        group: 'Acciones',
+        group: 'Acciones' as CommandGroup,
         icon: <Download size={22} aria-hidden="true" />,
         keywords: ['cv', 'curriculum', 'pdf', 'ats'],
         action: () => {
@@ -221,7 +222,7 @@ export default function CommandPalette() {
       {
         id: 'action-download-cv-non-ats',
         label: 'Descargar CV (Diseño)',
-        group: 'Acciones',
+        group: 'Acciones' as CommandGroup,
         icon: <Download size={22} aria-hidden="true" />,
         keywords: ['cv', 'curriculum', 'pdf', 'diseño'],
         action: () => {
@@ -245,7 +246,7 @@ export default function CommandPalette() {
       {
         id: 'pref-theme',
         label: theme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro',
-        group: 'Preferencias',
+        group: 'Preferencias' as CommandGroup,
         icon: theme === 'dark' ? <Sun size={22} aria-hidden="true" /> : <Moon size={22} aria-hidden="true" />,
         keywords: ['tema', 'theme', 'modo'],
         action: () => {
@@ -256,7 +257,7 @@ export default function CommandPalette() {
       {
         id: 'pref-language',
         label: currentLang === 'es' ? 'Cambiar a inglés' : 'Cambiar a español',
-        group: 'Preferencias',
+        group: 'Preferencias' as CommandGroup,
         icon: <Languages size={22} aria-hidden="true" />,
         keywords: ['idioma', 'language'],
         action: () => {

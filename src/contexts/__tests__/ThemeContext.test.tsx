@@ -7,7 +7,7 @@ describe('ThemeProvider', () => {
     vi.unstubAllGlobals();
   });
 
-  it('toggles between light and dark themes', () => {
+  it('cycles themes: light → dark → high-contrast → light', () => {
     const listeners: Array<(event: MediaQueryListEvent) => void> = [];
     const matchMediaMock = vi.fn().mockImplementation(() => ({
       matches: false,
@@ -34,6 +34,12 @@ describe('ThemeProvider', () => {
     });
 
     expect(result.current.theme).toBe('dark');
+
+    act(() => {
+      result.current.toggleTheme();
+    });
+
+    expect(result.current.theme).toBe('high-contrast');
 
     act(() => {
       result.current.toggleTheme();

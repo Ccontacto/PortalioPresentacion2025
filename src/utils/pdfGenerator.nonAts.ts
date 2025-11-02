@@ -21,7 +21,7 @@ export async function generateNonATSPdf(data: PortfolioData) {
   });
 
   const pdfWidth = pdf.internal.pageSize.getWidth();
-  const pdfHeight = pdf.internal.pageSize.getHeight();
+  // const pdfHeight = pdf.internal.pageSize.getHeight();
   const canvasWidth = canvas.width;
   const canvasHeight = canvas.height;
   const ratio = canvasWidth / canvasHeight;

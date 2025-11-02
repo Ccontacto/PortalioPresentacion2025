@@ -1,19 +1,17 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import tailwindcss from 'tailwindcss';
-import autoprefixer from 'autoprefixer';
+import tailwind from '@tailwindcss/postcss';
 
 export default defineConfig({
   plugins: [react()],
-  // Integración de la configuración de PostCSS
   css: {
     postcss: {
-      plugins: [tailwindcss, autoprefixer],
+      plugins: [tailwind],
     },
   },
   build: {
     sourcemap: false,
-    target: 'es222',
+    target: 'es2022',
     rollupOptions: {
       output: {
         manualChunks: {
