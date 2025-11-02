@@ -8,7 +8,7 @@ import { ThemeProvider } from '../contexts/ThemeContext';
 import { NavigationProvider } from '../contexts/NavigationContext';
 
 describe('Header', () => {
-  it('should render without errors', () => {
+  it('should render header and actions without errors', () => {
     render(
       <ToastProvider>
         <LanguageProvider>
@@ -20,6 +20,9 @@ describe('Header', () => {
         </LanguageProvider>
       </ToastProvider>
     );
-    expect(screen.getByText('JC')).toBeInTheDocument();
+    // Header landmark exists
+    expect(screen.getByRole('banner')).toBeInTheDocument();
+    // Mobile quick actions button is present (unique label)
+    expect(screen.getByLabelText('Abrir menú de acciones rápidas')).toBeInTheDocument();
   });
 });
