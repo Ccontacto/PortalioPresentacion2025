@@ -22,15 +22,7 @@ export default defineConfig({
     }
   },
   optimizeDeps: {
-    // Avoid prebundling modules that can cause sourcemap or CJS interop issues
-    exclude: [
-      'lucide-react',
-      'core-js',
-      'canvg',
-      'jspdf',
-      'html2canvas',
-      'dompurify'
-    ],
+    exclude: ['jspdf'],
     esbuildOptions: {
       sourcemap: false,
       legalComments: 'none'

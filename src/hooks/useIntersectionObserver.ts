@@ -7,13 +7,12 @@ export function useIntersectionObserver<T extends HTMLElement>(
   const ref = useRef<T | null>(null);
   const [isIntersecting, setIntersecting] = useState(false);
   const root = options?.root ?? null;
-  const rootMargin = options?.rootMargin ?? undefined;
-  const thresholdValue = options?.threshold;
-  const thresholdKey = useMemo(() => {
-    if (Array.isArray(thresholdValue)) return thresholdValue.join(',');
-    if (typeof thresholdValue === 'number') return thresholdValue.toString();
-    return '';
-  }, [thresholdValue]);
+  const serializedOptions = useMemo(() => {
+    return JSON.stringify({
+      rootMargin: options?.rootMargin ?? null,
+      threshold: options?.threshold ?? null
+    });
+  }, [options?.rootMargin, options?.threshold]);
 
   useEffect(() => {
     if (typeof window === 'undefined' || typeof IntersectionObserver === 'undefined') {
@@ -22,18 +21,26 @@ export function useIntersectionObserver<T extends HTMLElement>(
     const element = ref.current;
     if (!element) return;
 
+    const parsed = JSON.parse(serializedOptions) as {
+      rootMargin: string | null;
+      threshold: number | number[] | null;
+    };
+
     const observer = new IntersectionObserver(
-      ([entry]) => setIntersecting(entry.isIntersecting),
+      entries => {
+        const entry = entries[0];
+        setIntersecting(entry?.isIntersecting ?? false);
+      },
       {
         root,
-        rootMargin,
-        threshold: Array.isArray(thresholdValue) ? thresholdValue : thresholdValue ?? undefined
+        rootMargin: parsed.rootMargin ?? undefined,
+        threshold: parsed.threshold ?? undefined
       }
     );
 
     observer.observe(element);
     return () => observer.disconnect();
-  }, [root, rootMargin, thresholdKey, thresholdValue]);
+  }, [root, serializedOptions]);
 
   return [ref as RefObject<T>, isIntersecting];
 }

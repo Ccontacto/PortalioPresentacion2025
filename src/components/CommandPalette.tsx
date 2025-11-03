@@ -27,8 +27,9 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { useNavigation } from '../contexts/NavigationContext';
 import { useTheme } from '../contexts/ThemeContext';
 import { useToast } from '../contexts/ToastContext';
-import { generatePdf } from '../utils/pdfGenerator';
 import { WhatsappGlyph } from './icons/WhatsappGlyph';
+import { useBodyScrollLock } from '../hooks/useBodyScrollLock';
+import { useCvDownload } from '../hooks/useCvDownload';
 
 type CommandGroup = string;
 
@@ -50,6 +51,7 @@ export default function CommandPalette() {
   const { navigateTo } = useNavigation();
   const { theme, toggleTheme } = useTheme();
   const { showToast } = useToast();
+  const downloadCv = useCvDownload();
 
   const [mounted, setMounted] = useState(false);
   const [open, setOpen] = useState(false);
@@ -67,6 +69,8 @@ export default function CommandPalette() {
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  useBodyScrollLock(open);
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -204,17 +208,9 @@ export default function CommandPalette() {
         icon: <Download size={22} aria-hidden="true" />,
         keywords: ['cv', 'curriculum', 'pdf'],
         action: () => {
-          showToast('Generando CV...', 'info');
-          generatePdf(data, (data.lang as 'es' | 'en') || 'es')
-            .then(() => {
-              showToast('CV listo para descargar', 'success');
-            })
-            .catch(error => {
-              if (import.meta.env.DEV) {
-                console.error('CV generation failed', error);
-              }
-              showToast('No se pudo generar el CV. Inténtalo de nuevo.', 'error');
-            });
+          downloadCv({ data }).catch(() => {
+            /* errores ya reportados en el hook */
+          });
           closePalette();
         }
       }

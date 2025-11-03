@@ -5,6 +5,7 @@ import { createPortal } from 'react-dom';
 import { useCallback, useEffect, useId, useMemo, useRef, useState, type MouseEvent } from 'react';
 import type { ProjectItem } from '../types/portfolio';
 import { launchConfetti } from '../utils/confetti';
+import { useBodyScrollLock } from '../hooks/useBodyScrollLock';
 
 type ProjectTag = ProjectItem['tags'][number];
 
@@ -77,15 +78,14 @@ export default function SearchBar({
     mountedRef.current = true;
   }, []);
 
+  useBodyScrollLock(isModalOpen);
+
   useEffect(() => {
     if (!isModalOpen) return undefined;
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
     const focusTimer = window.setTimeout(() => {
       inputRef.current?.focus();
     }, 90);
     return () => {
-      document.body.style.overflow = prevOverflow;
       window.clearTimeout(focusTimer);
     };
   }, [isModalOpen]);

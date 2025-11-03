@@ -72,24 +72,23 @@ export default function ConfettiCanvas() {
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      particlesRef.current = particlesRef.current.filter(particle => {
-        const next = { ...particle };
-        next.vy += 0.12;
-        next.x += next.vx;
-        next.y += next.vy;
-        next.life -= 1;
+      const particles = particlesRef.current;
+      for (let index = particles.length - 1; index >= 0; index -= 1) {
+        const particle = particles[index];
+        particle.vy += 0.12;
+        particle.x += particle.vx;
+        particle.y += particle.vy;
+        particle.life -= 1;
 
-        ctx.fillStyle = next.color;
-        ctx.fillRect(next.x, next.y, next.size, next.size);
+        ctx.fillStyle = particle.color;
+        ctx.fillRect(particle.x, particle.y, particle.size, particle.size);
 
-        if (next.life > 0 && next.y < canvas.height) {
-          Object.assign(particle, next);
-          return true;
+        if (particle.life <= 0 || particle.y >= canvas.height) {
+          particles.splice(index, 1);
         }
-        return false;
-      });
+      }
 
-      if (particlesRef.current.length > 0) {
+      if (particles.length > 0) {
         animationFrameRef.current = window.requestAnimationFrame(step);
       } else {
         ctx.clearRect(0, 0, canvas.width, canvas.height);

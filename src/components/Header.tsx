@@ -1,7 +1,5 @@
-import { useEffect, useReducer, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useReducer, useRef } from 'react';
 import type { JSX } from 'react';
-import { motion } from 'framer-motion';
-import FocusTrap from 'focus-trap-react';
 import {
   Sun,
   Moon,
@@ -13,7 +11,6 @@ import {
   Github,
   Globe,
   MoreHorizontal,
-  X,
   Languages,
   CheckCircle,
   TriangleAlert,
@@ -23,17 +20,20 @@ import { WhatsappGlyph } from './icons/WhatsappGlyph';
 import { useTheme } from '../contexts/ThemeContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useToast } from '../contexts/ToastContext';
-import { generatePdf } from '../utils/pdfGenerator';
 import { useNavigation } from '../contexts/NavigationContext';
-import type { AvailabilityKey } from '../types/portfolio';
+import { useBodyScrollLock } from '../hooks/useBodyScrollLock';
+import { useConfettiCooldown } from '../hooks/useConfettiCooldown';
+import { useCvDownload } from '../hooks/useCvDownload';
+import { AvailabilityBadge } from './header/AvailabilityBadge';
+import { OverflowPanel } from './header/OverflowPanel';
+import { MobileActionsModal } from './header/MobileActionsModal';
+import type { AvailabilityState, QuickAction, QuickActionGroup } from './header/types';
 
-type AvailabilityState = AvailabilityKey;
 type HeaderPanel = 'overflow';
 
 type HeaderState = {
   availability: AvailabilityState;
   mobileMenuOpen: boolean;
-  confettiRemaining: number;
   activePanel: HeaderPanel | null;
 };
 
@@ -41,7 +41,6 @@ type HeaderAction =
   | { type: 'setAvailability'; payload: AvailabilityState }
   | { type: 'openMobileMenu' }
   | { type: 'closeMobileMenu' }
-  | { type: 'setConfetti'; payload: number }
   | { type: 'setPanel'; payload: HeaderPanel | null };
 
 const availabilityCycle: AvailabilityState[] = ['available', 'listening', 'unavailable'];
@@ -65,7 +64,6 @@ const getInitialHeaderState = (): HeaderState => {
   return {
     availability,
     mobileMenuOpen: false,
-    confettiRemaining: 0,
     activePanel: null
   };
 };
@@ -78,8 +76,6 @@ const headerReducer = (state: HeaderState, action: HeaderAction): HeaderState =>
       return { ...state, mobileMenuOpen: true };
     case 'closeMobileMenu':
       return { ...state, mobileMenuOpen: false, activePanel: null };
-    case 'setConfetti':
-      return { ...state, confettiRemaining: action.payload };
     case 'setPanel':
       return { ...state, activePanel: action.payload };
     default:
@@ -98,20 +94,26 @@ export default function Header() {
   const { data, currentLang, toggleLanguage } = useLanguage();
   const { showToast } = useToast();
   const { navigateTo } = useNavigation();
-  const [
-    { availability, mobileMenuOpen, confettiRemaining, activePanel },
-    dispatch
-  ] = useReducer(headerReducer, undefined, getInitialHeaderState);
+  const [{ availability, mobileMenuOpen, activePanel }, dispatch] = useReducer(
+    headerReducer,
+    undefined,
+    getInitialHeaderState
+  );
 
   const headerContainerRef = useRef<HTMLDivElement | null>(null);
   const brandRef = useRef<HTMLDivElement | null>(null);
   const panelRef = useRef<HTMLDivElement | null>(null);
   const mobileMenuRef = useRef<HTMLDivElement | null>(null);
-  const lastConfettiRef = useRef(0);
-  const confettiTimerRef = useRef<number | null>(null);
   const liveRegionRef = useRef<HTMLSpanElement | null>(null);
 
-  const copyEmail = async () => {
+  const {
+    remaining: confettiRemaining,
+    isOnCooldown: isConfettiOnCooldown,
+    tryLaunch: tryLaunchConfetti
+  } = useConfettiCooldown({ cooldownMs: CONFETTI_COOLDOWN_MS, tickMs: CONFETTI_TICK_MS });
+  const downloadCv = useCvDownload();
+
+  const copyEmail = useCallback(async () => {
     if (!navigator.clipboard) {
       showToast(data.toasts.email_copy_error, 'error');
       return;
@@ -125,13 +127,13 @@ export default function Header() {
       }
       showToast(data.toasts.email_copy_error, 'error');
     }
-  };
+  }, [data.email, data.toasts.email_copy_error, data.toasts.email_copy_success, showToast]);
 
-  const openEmail = () => {
+  const openEmail = useCallback(() => {
     window.location.href = `mailto:${data.email}`;
-  };
+  }, [data.email]);
 
-  const openWhatsApp = () => {
+  const openWhatsApp = useCallback(() => {
     window.open(
       `https://wa.me/${data.whatsapp}?text=${encodeURIComponent(
         'Hola José Carlos! Vi tu portfolio y me gustaría conversar.'
@@ -140,26 +142,25 @@ export default function Header() {
       'noopener,noreferrer'
     );
     showToast(data.toasts.whatsapp_open, 'info');
-  };
+  }, [data.toasts.whatsapp_open, data.whatsapp, showToast]);
 
-  const openLinkedIn = () => window.open(data.social.linkedin, '_blank', 'noopener,noreferrer');
-  const openGitHub = () => window.open(data.social.github, '_blank', 'noopener,noreferrer');
-  const openPortfolio = () => window.open(data.social.portfolio, '_blank', 'noopener,noreferrer');
-  const handlePdf = () => {
-    showToast('Generando CV...', 'info');
-    generatePdf(data, (data.lang as 'es' | 'en') || 'es')
-      .then(() => {
-        showToast('CV listo para descargar', 'success');
-      })
-      .catch(error => {
-        if (import.meta.env.DEV) {
-          console.error('CV generation failed', error);
-        }
-        showToast('No se pudo generar el CV. Inténtalo de nuevo.', 'error');
-      });
-  };
+  const openLinkedIn = useCallback(() => {
+    window.open(data.social.linkedin, '_blank', 'noopener,noreferrer');
+  }, [data.social.linkedin]);
 
-  const handleToggleAvailability = () => {
+  const openGitHub = useCallback(() => {
+    window.open(data.social.github, '_blank', 'noopener,noreferrer');
+  }, [data.social.github]);
+
+  const openPortfolio = useCallback(() => {
+    window.open(data.social.portfolio, '_blank', 'noopener,noreferrer');
+  }, [data.social.portfolio]);
+
+  const handlePdf = useCallback(() => {
+    downloadCv({ data });
+  }, [data, downloadCv]);
+
+  const handleToggleAvailability = useCallback(() => {
     const currentIndex = availabilityCycle.indexOf(availability);
     const next = availabilityCycle[(currentIndex + 1) % availabilityCycle.length];
     const toastKeyMap: Record<AvailabilityState, keyof typeof data.toasts | undefined> = {
@@ -178,7 +179,7 @@ export default function Header() {
       showToast(message, toastTypeMap[next]);
     }
     dispatch({ type: 'setAvailability', payload: next });
-  };
+  }, [availability, data.toasts, dispatch, showToast]);
 
   const setPanelRef = (node: HTMLDivElement | null) => {
     panelRef.current = node;
@@ -190,43 +191,20 @@ export default function Header() {
 
   const closeActivePanel = () => dispatch({ type: 'setPanel', payload: null });
 
-  const startConfettiCooldown = () => {
-    lastConfettiRef.current = Date.now();
-    dispatch({ type: 'setConfetti', payload: CONFETTI_COOLDOWN_MS });
-    if (confettiTimerRef.current) {
-      window.clearInterval(confettiTimerRef.current);
-    }
-    confettiTimerRef.current = window.setInterval(() => {
-      const remaining = Math.max(0, lastConfettiRef.current + CONFETTI_COOLDOWN_MS - Date.now());
-      dispatch({ type: 'setConfetti', payload: remaining });
-    }, CONFETTI_TICK_MS);
-  };
-
-  const launchConfetti = () => {
-    const now = Date.now();
-    const remaining = lastConfettiRef.current + CONFETTI_COOLDOWN_MS - now;
-    if (remaining > 0) {
-      const seconds = Math.ceil(remaining / 1000);
+  const handleConfettiClick = useCallback(() => {
+    const result = tryLaunchConfetti();
+    if (!result.launched) {
+      const seconds = Math.ceil(result.remaining / 1000);
       showToast(`Confetti disponible en ${seconds}s`, 'warning');
-      dispatch({ type: 'setConfetti', payload: remaining });
-      if (!confettiTimerRef.current) {
-        startConfettiCooldown();
-      }
       if (liveRegionRef.current) {
         liveRegionRef.current.textContent = `Confetti disponible en ${seconds} segundos`;
       }
       return;
     }
-    document.dispatchEvent(new Event('launch'));
-    startConfettiCooldown();
     if (liveRegionRef.current) {
       liveRegionRef.current.textContent = 'Confetti lanzado. Espera 5 segundos para volver a celebrar.';
     }
-  };
-
-  const handleConfettiClick = () => {
-    launchConfetti();
-  };
+  }, [showToast, tryLaunchConfetti]);
 
   useEffect(() => {
     window.localStorage.setItem('portfolio_availability', availability);
@@ -240,28 +218,6 @@ export default function Header() {
       liveRegionRef.current.textContent = 'Confetti disponible para lanzar.';
     }
   }, [confettiRemaining]);
-
-  useEffect(() => {
-    if (confettiRemaining <= 0 && confettiTimerRef.current) {
-      window.clearInterval(confettiTimerRef.current);
-      confettiTimerRef.current = null;
-    }
-    return () => {
-      if (confettiRemaining <= 0 && confettiTimerRef.current) {
-        window.clearInterval(confettiTimerRef.current);
-        confettiTimerRef.current = null;
-      }
-    };
-  }, [confettiRemaining]);
-
-  useEffect(() => {
-    return () => {
-      if (confettiTimerRef.current) {
-        window.clearInterval(confettiTimerRef.current);
-        confettiTimerRef.current = null;
-      }
-    };
-  }, []);
 
   useEffect(() => {
     const updateBrandWidth = () => {
@@ -293,14 +249,7 @@ export default function Header() {
     };
   }, []);
 
-useEffect(() => {
-  if (!mobileMenuOpen) return undefined;
-  const previousOverflow = document.body.style.overflow;
-  document.body.style.overflow = 'hidden';
-  return () => {
-    document.body.style.overflow = previousOverflow;
-  };
-}, [mobileMenuOpen]);
+  useBodyScrollLock(mobileMenuOpen);
 
   useEffect(() => {
     if (!activePanel || !panelRef.current) return undefined;
@@ -320,101 +269,115 @@ useEffect(() => {
   const languageToggleLabel = currentLang === 'es' ? 'Switch to English' : 'Cambiar a español';
   const themeToggleLabel = theme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro';
   const confettiLabel = data.tooltips.celebrate;
-  const isConfettiOnCooldown = confettiRemaining > 0;
 
-  type QuickAction = {
-    key: string;
-    label: string;
-    icon?: JSX.Element;
-    action: () => void;
-    disabled?: boolean;
-    immediate?: boolean;
-  };
+  const navActions = useMemo<QuickAction[]>(
+    () =>
+      data.nav.map(item => ({
+        key: `nav-${item.id}`,
+        label: item.label,
+        icon: <Globe size={22} aria-hidden="true" />,
+        action: () => navigateTo(item.id)
+      })),
+    [data.nav, navigateTo]
+  );
 
-  const navActions: QuickAction[] = data.nav.map(item => ({
-    key: `nav-${item.id}`,
-    label: item.label,
-    icon: <Globe size={22} aria-hidden="true" />,
-    action: () => navigateTo(item.id)
-  }));
+  const overflowSections = useMemo<QuickActionGroup[]>(
+    () => [
+      {
+        id: 'social',
+        label: 'Redes profesionales',
+        items: [
+          { key: 'linkedin', label: 'LinkedIn', icon: <Linkedin size={22} aria-hidden="true" />, action: openLinkedIn, immediate: true },
+          { key: 'github', label: 'GitHub', icon: <Github size={22} aria-hidden="true" />, action: openGitHub, immediate: true },
+          { key: 'portfolio', label: 'Portafolio', icon: <Globe size={22} aria-hidden="true" />, action: openPortfolio, immediate: true }
+        ]
+      },
+      {
+        id: 'contact',
+        label: 'Contacto',
+        items: [
+          { key: 'email', label: data.tooltips.email, icon: <Mail size={22} aria-hidden="true" />, action: openEmail, immediate: true },
+          { key: 'copy', label: data.tooltips.copy, icon: <Copy size={22} aria-hidden="true" />, action: copyEmail },
+          {
+            key: 'whatsapp',
+            label: 'WhatsApp',
+            icon: <WhatsappGlyph className="h-[22px] w-[22px]" aria-hidden="true" />,
+            action: openWhatsApp,
+            immediate: true
+          }
+        ]
+      },
+      {
+        id: 'preferences',
+        label: 'Preferencias y extras',
+        items: [
+          { key: 'pdf', label: data.tooltips.pdf, icon: <Download size={22} aria-hidden="true" />, action: handlePdf, immediate: true },
+          {
+            key: 'confetti',
+            label: confettiLabel,
+            icon: <Sparkles size={22} aria-hidden="true" />,
+            action: handleConfettiClick,
+            disabled: isConfettiOnCooldown
+          },
+          {
+            key: 'language',
+            label: languageToggleLabel,
+            icon: <Languages size={22} aria-hidden="true" />,
+            action: toggleLanguage
+          },
+          {
+            key: 'theme',
+            label: themeToggleLabel,
+            icon: theme === 'dark' ? <Sun size={22} aria-hidden="true" /> : <Moon size={22} aria-hidden="true" />,
+            action: toggleTheme
+          }
+        ]
+      }
+    ],
+    [
+      copyEmail,
+      data.tooltips.copy,
+      data.tooltips.email,
+      data.tooltips.pdf,
+      handleConfettiClick,
+      handlePdf,
+      isConfettiOnCooldown,
+      languageToggleLabel,
+      openEmail,
+      openGitHub,
+      openLinkedIn,
+      openPortfolio,
+      openWhatsApp,
+      theme,
+      themeToggleLabel,
+      toggleLanguage,
+      toggleTheme,
+      confettiLabel
+    ]
+  );
 
-  const overflowSections = [
-    {
-      id: 'social',
-      label: 'Redes profesionales',
-      items: [
-        { key: 'linkedin', label: 'LinkedIn', icon: <Linkedin size={22} aria-hidden="true" />, action: openLinkedIn, immediate: true },
-        { key: 'github', label: 'GitHub', icon: <Github size={22} aria-hidden="true" />, action: openGitHub, immediate: true },
-        { key: 'portfolio', label: 'Portafolio', icon: <Globe size={22} aria-hidden="true" />, action: openPortfolio, immediate: true }
-      ]
-    },
-    {
-      id: 'contact',
-      label: 'Contacto',
-      items: [
-        { key: 'email', label: data.tooltips.email, icon: <Mail size={22} aria-hidden="true" />, action: openEmail, immediate: true },
-        { key: 'copy', label: data.tooltips.copy, icon: <Copy size={22} aria-hidden="true" />, action: copyEmail },
-        {
-          key: 'whatsapp',
-          label: 'WhatsApp',
-          icon: <WhatsappGlyph className="h-[22px] w-[22px]" aria-hidden="true" />,
-          action: openWhatsApp,
-          immediate: true
-        }
-      ]
-    },
-    {
-      id: 'preferences',
-      label: 'Preferencias y extras',
-      items: [
-        { key: 'pdf', label: data.tooltips.pdf, icon: <Download size={22} aria-hidden="true" />, action: handlePdf, immediate: true },
-        {
-          key: 'confetti',
-          label: confettiLabel,
-          icon: <Sparkles size={22} aria-hidden="true" />,
-          action: handleConfettiClick,
-          disabled: isConfettiOnCooldown
-        },
-        {
-          key: 'language',
-          label: languageToggleLabel,
-          icon: <Languages size={22} aria-hidden="true" />,
-          action: toggleLanguage
-        },
-        {
-          key: 'theme',
-          label: themeToggleLabel,
-          icon: theme === 'dark' ? <Sun size={22} aria-hidden="true" /> : <Moon size={22} aria-hidden="true" />,
-          action: toggleTheme
-        }
-      ]
-    }
-  ];
+  const overflowItems = useMemo(() => overflowSections.flatMap(section => section.items), [overflowSections]);
 
-  const overflowItems = overflowSections.flatMap(section => section.items);
-  const mobileActionGroups = [
-    { id: 'nav', label: 'Secciones', items: navActions },
-    { id: 'actions', label: 'Acciones rápidas', items: overflowItems }
-  ];
+  const mobileActionGroups = useMemo<QuickActionGroup[]>(
+    () => [
+      { id: 'nav', label: 'Secciones', items: navActions },
+      { id: 'actions', label: 'Acciones rápidas', items: overflowItems }
+    ],
+    [navActions, overflowItems]
+  );
 
   return (
     <header className="header" role="banner">
       <div className="header-container" ref={headerContainerRef}>
         <div className="header-brand flex items-start" ref={brandRef}>
-          <button
-            type="button"
-            className={`availability-badge ${availabilityClassMap[availability]}`}
-            onClick={handleToggleAvailability}
-            aria-label={availabilityToggleLabel}
-          >
-            <span className="availability-indicator" aria-hidden="true"></span>
-            <span className="availability-icon" aria-hidden="true">
-              {availabilityIconMap[availability]}
-            </span>
-            <span className="availability-label" aria-live="polite">
-              {availabilityLabel}
-            </span>
-          </button>
+          <AvailabilityBadge
+            availability={availability}
+            badgeClass={availabilityClassMap[availability]}
+            icon={availabilityIconMap[availability]}
+            label={availabilityLabel}
+            toggleLabel={availabilityToggleLabel}
+            onToggle={handleToggleAvailability}
+          />
         </div>
 
         <nav className="header-navigation" aria-hidden="true" />
@@ -449,130 +412,15 @@ useEffect(() => {
       </div>
 
       {activePanel === 'overflow' ? (
-        <div
-          id="header-panel-overflow"
-          className="header-panel header-panel--overflow"
-          role="menu"
-          aria-label="Acciones rápidas"
-          ref={setPanelRef}
-          style={{
-            background: 'var(--surface-panel)',
-            border: '3px solid var(--border-strong)',
-            borderRadius: '16px',
-            boxShadow: 'var(--shadow-lg) var(--shadow-strong)',
-          }}
-        >
-          <button
-            type="button"
-            className="header-panel-close icon-btn"
-            onClick={closeActivePanel}
-            aria-label="Cerrar menú de acciones"
-            style={{ color: 'var(--error)' }}
-          >
-            <X size={24} aria-hidden="true" />
-          </button>
-          <div className="header-panel-list" role="menu">
-            {overflowItems.map(item => (
-              <button
-                key={item.key}
-                type="button"
-                onClick={() => {
-                  item.action();
-                  closeActivePanel();
-                }}
-                className="header-panel-button"
-                role="menuitem"
-                disabled={item.disabled}
-                aria-disabled={item.disabled ? 'true' : 'false'}
-              >
-                {item.icon ? <span className="header-panel-button__icon">{item.icon}</span> : null}
-                <span className="header-panel-button__label">{item.label}</span>
-              </button>
-            ))}
-          </div>
-        </div>
+        <OverflowPanel items={overflowItems} onClose={closeActivePanel} panelRef={setPanelRef} />
       ) : null}
 
-      {mobileMenuOpen && (
-        <div
-          className="mobile-actions-backdrop"
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="mobile-actions-title"
-          onClick={event => {
-            if (event.target === event.currentTarget) {
-              dispatch({ type: 'closeMobileMenu' });
-            }
-          }}
-        >
-          <FocusTrap
-            active={mobileMenuOpen}
-            focusTrapOptions={{
-              allowOutsideClick: true,
-              clickOutsideDeactivates: true,
-              initialFocus: () =>
-                mobileMenuRef.current?.querySelector('[data-focus-default]') ?? mobileMenuRef.current ?? undefined,
-              onDeactivate: () => dispatch({ type: 'closeMobileMenu' })
-            }}
-          >
-            <motion.div
-              className="mobile-actions-modal"
-              id="mobile-quick-actions"
-              ref={mobileMenuRef}
-              initial={{ opacity: 0, scale: 0.96, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.96, y: 20 }}
-              transition={{ duration: 0.2, ease: 'easeOut' }}
-            >
-              <header className="mobile-actions-modal__header">
-                <h2 id="mobile-actions-title">Acciones y accesos rápidos</h2>
-                <button
-                  type="button"
-                  className="mobile-actions-modal__close"
-                  onClick={() => dispatch({ type: 'closeMobileMenu' })}
-                  aria-label="Cerrar menú"
-                  data-focus-default
-                >
-                  <X size={22} aria-hidden="true" />
-                </button>
-              </header>
-
-              <div className="mobile-actions-modal__content">
-                {mobileActionGroups.map(group => (
-                  <div className="mobile-actions-modal__group" key={group.id}>
-                    <p className="mobile-actions-modal__group-label">{group.label}</p>
-                    <div className="mobile-actions-modal__group-items">
-                      {group.items.map(item => (
-                        <button
-                          key={item.key}
-                          type="button"
-                          className="mobile-actions-modal__item"
-                          onClick={() => {
-                            if (item.immediate) {
-                              item.action();
-                              dispatch({ type: 'closeMobileMenu' });
-                              return;
-                            }
-                            dispatch({ type: 'closeMobileMenu' });
-                            window.setTimeout(() => {
-                              item.action();
-                            }, 180);
-                          }}
-                          disabled={item.disabled}
-                          aria-disabled={item.disabled ? 'true' : 'false'}
-                        >
-                          {item.icon ? <span className="mobile-actions-modal__icon">{item.icon}</span> : null}
-                          <span className="mobile-actions-modal__label">{item.label}</span>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-          </FocusTrap>
-        </div>
-      )}
+      <MobileActionsModal
+        open={mobileMenuOpen}
+        groups={mobileActionGroups}
+        onClose={() => dispatch({ type: 'closeMobileMenu' })}
+        menuRef={mobileMenuRef}
+      />
     </header>
   );
 }
