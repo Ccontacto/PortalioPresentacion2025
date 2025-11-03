@@ -16,7 +16,7 @@
     "format": "prettier --write .",
     "tsc": "tsc --noEmit",
     "test": "vitest",
-    "test:ci": "vitest run --reporter=dot",
+    "test:ci": "vitest run --reporter=dot --coverage",
     "check:ci": "npm run test:ci && npm run build"
   },
   "dependencies": {
@@ -37,6 +37,7 @@
     "@typescript-eslint/eslint-plugin": "^8.46.2",
     "@typescript-eslint/parser": "^8.46.2",
     "@vitejs/plugin-react": "^5.1.0",
+    "@vitest/coverage-v8": "^4.0.6",
     "autoprefixer": "^10.4.21",
     "eslint": "^9.38.0",
     "eslint-plugin-import": "^2.31.0",

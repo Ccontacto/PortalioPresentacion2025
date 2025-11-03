@@ -5,7 +5,6 @@ build/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-package-lock.json
 .pnpm-debug.log*
 .env
 .env.*
@@ -63,5 +62,5 @@ Icon?
 
 # --- Otros no deseados ---
 .coverage
+coverage/
 .pytest_cache/
-
