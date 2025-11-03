@@ -11,7 +11,7 @@ type ConfettiParticle = {
 };
 
 const COLORS = ['#FFB7DD', '#A0E7E5', '#B5EAD7', '#39FF14', '#FFF3B0'];
-const BASE_PARTICLE_COUNT = 420;
+const BASE_PARTICLE_COUNT = 360;
 
 export default function ConfettiCanvas() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);

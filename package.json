@@ -20,10 +20,10 @@
     "check:ci": "npm run test:ci && npm run build"
   },
   "dependencies": {
-    "focus-trap-react": "^10.3.1",
+    "focus-trap-react": "^11.0.4",
     "framer-motion": "^12.23.24",
     "jspdf": "^3.0.3",
-    "lucide-react": "^0.548.0",
+    "lucide-react": "^0.552.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
   },

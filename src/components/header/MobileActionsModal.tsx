@@ -1,6 +1,6 @@
 import type { RefObject } from 'react';
 import { motion } from 'framer-motion';
-import FocusTrap from 'focus-trap-react';
+import { FocusTrap } from 'focus-trap-react';
 import { X } from 'lucide-react';
 import type { QuickActionGroup } from './types';
 

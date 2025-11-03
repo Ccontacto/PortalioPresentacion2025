@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import FocusTrap from 'focus-trap-react';
+import { FocusTrap } from 'focus-trap-react';
 import {
   Copy as CopyIcon,
   Download,

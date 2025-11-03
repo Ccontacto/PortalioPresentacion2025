@@ -38,7 +38,13 @@ export default defineConfig({
     css: true,
     coverage: {
       provider: 'v8',
-      reporter: ['text', 'html']
+      reporter: ['text', 'html'],
+      thresholds: {
+        statements: 65,
+        branches: 40,
+        functions: 55,
+        lines: 65
+      }
     }
   }
 });

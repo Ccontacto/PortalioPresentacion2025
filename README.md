@@ -16,6 +16,7 @@ Portfolio React + Vite listo para desarrollo local, testing y despliegue en Clou
 - `npm run check:ci`: `npm run test:ci && npm run build` para pipelines.
 - `npm run lint` / `npm run lint:fix`: reglas ESLint.
 - `npm run format`: Prettier a todo el repo.
+- `npm run check:ci`: flujo completo usado en CI (lint + tests con cobertura + build).
 
 ## Notas Tailwind v4
 - `src/index.css` usa `@theme` solo con variables planas y custom props.
@@ -33,6 +34,14 @@ Portfolio React + Vite listo para desarrollo local, testing y despliegue en Clou
    - Build command: `npm run build`
    - Output directory: `dist`
 3. (Opcional) CLI Wrangler: `npx wrangler pages deploy dist --project-name <tu-proyecto>`.
+
+## CI/CD
+- [![CI](https://github.com/Ccontacto/PortalioPresentacion2025/actions/workflows/ci.yml/badge.svg)](https://github.com/Ccontacto/PortalioPresentacion2025/actions/workflows/ci.yml) ejecuta `npm ci`, lint, tests con cobertura (`vitest --coverage`) y build en cada push/PR.
+- [![Deploy (Cloudflare Pages)](https://github.com/Ccontacto/PortalioPresentacion2025/actions/workflows/deploy-cloudflare-pages.yml/badge.svg)](https://github.com/Ccontacto/PortalioPresentacion2025/actions/workflows/deploy-cloudflare-pages.yml) publica automáticamente a Cloudflare Pages tras un build exitoso en `main`.
+- Las acciones cachean dependencias vía `package-lock.json`; si cambias dependencias, recuerda commitear el lockfile para mantener instalaciones deterministas.
+- Para reproducir el pipeline localmente ejecuta `npm run lint && npm run check:ci`.
+- El job de CI adjunta un artefacto `coverage-report`. Descárgalo desde la run más reciente para revisar el HTML detallado de cobertura.
+- Sitio publicado: [https://portalio-presentacion-2025.pages.dev](https://portalio-presentacion-2025.pages.dev) (actualizado después de cada merge en `main`).
 
 ## Flujo Git recomendado
 1. `git status`

@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import FocusTrap from 'focus-trap-react';
+import { FocusTrap } from 'focus-trap-react';
 import { Search, Sparkles, X } from 'lucide-react';
 import { createPortal } from 'react-dom';
 import { useCallback, useEffect, useId, useMemo, useRef, useState, type MouseEvent } from 'react';
