@@ -1,9 +1,18 @@
 import { FocusTrap } from 'focus-trap-react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Search, Sparkles, X } from 'lucide-react';
-import { useCallback, useEffect, useId, useMemo, useRef, useState, type MouseEvent } from 'react';
+import { ArrowRight, Eraser, Search, Sparkles, X } from 'lucide-react';
+import {
+  useCallback,
+  useEffect,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+  type MouseEvent
+} from 'react';
 import { createPortal } from 'react-dom';
 
+import { useNavigation } from '../contexts/NavigationContext';
 import { useBodyScrollLock } from '../hooks/useBodyScrollLock';
 import { launchConfetti } from '../utils/confetti';
 
@@ -41,6 +50,7 @@ export default function SearchBar({
   const titleId = useId();
   const descriptionId = useId();
   const panelId = useId();
+  const { navigateTo } = useNavigation();
 
   const tagOccurrences = useMemo(() => {
     const map = new Map<ProjectTag, number>();
@@ -84,7 +94,7 @@ export default function SearchBar({
   useBodyScrollLock(isModalOpen);
 
   useEffect(() => {
-    if (!isModalOpen) return undefined;
+    if (!isModalOpen || typeof window === 'undefined') return undefined;
     const focusTimer = window.setTimeout(() => {
       inputRef.current?.focus();
     }, 90);
@@ -94,6 +104,10 @@ export default function SearchBar({
   }, [isModalOpen]);
 
   useEffect(() => {
+    if (typeof window === 'undefined') {
+      onSearch(searchTerm.trim());
+      return;
+    }
     if (debounceRef.current) {
       window.clearTimeout(debounceRef.current);
     }
@@ -107,15 +121,20 @@ export default function SearchBar({
     };
   }, [searchTerm, onSearch]);
 
-  const handleCloseModal = useCallback(() => {
-    setIsModalOpen(false);
-    setSearchTerm('');
-    onSearch('');
-    setConfettiAvailable(true);
-    if (triggerRef.current) {
-      triggerRef.current.focus();
-    }
-  }, [onSearch]);
+  const handleCloseModal = useCallback(
+    (options?: { resetSearch?: boolean }) => {
+      setIsModalOpen(false);
+      if (options?.resetSearch !== false) {
+        setSearchTerm('');
+        onSearch('');
+      }
+      setConfettiAvailable(true);
+      if (triggerRef.current) {
+        triggerRef.current.focus();
+      }
+    },
+    [onSearch]
+  );
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -123,6 +142,7 @@ export default function SearchBar({
   };
 
   useEffect(() => {
+    if (typeof document === 'undefined') return;
     if (!isModalOpen) return undefined;
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -154,6 +174,16 @@ export default function SearchBar({
     setConfettiAvailable(false);
   };
 
+  const handleNavigateProjects = () => {
+    handleCloseModal({ resetSearch: false });
+    const runNavigation = () => navigateTo('projects');
+    if (typeof window === 'undefined') {
+      runNavigation();
+      return;
+    }
+    window.setTimeout(runNavigation, 120);
+  };
+
   const renderModal = () => {
     if (!mountedRef.current) return null;
     return createPortal(
@@ -171,7 +201,7 @@ export default function SearchBar({
               className="search-modal__backdrop"
               role="presentation"
               aria-hidden="true"
-              onClick={handleCloseModal}
+              onClick={() => handleCloseModal()}
             />
             <FocusTrap
               active
@@ -207,7 +237,7 @@ export default function SearchBar({
                   <button
                     type="button"
                     className="search-modal__close"
-                    onClick={handleCloseModal}
+                    onClick={() => handleCloseModal()}
                     aria-label="Cerrar buscador"
                   >
                     <X size={20} aria-hidden="true" />
@@ -234,7 +264,7 @@ export default function SearchBar({
                       onClick={() => handleSearchInput('')}
                       aria-label="Limpiar búsqueda"
                     >
-                      <X size={16} aria-hidden="true" />
+                      <Eraser size={16} aria-hidden="true" />
                     </button>
                   )}
                 </div>
@@ -270,6 +300,17 @@ export default function SearchBar({
                   ) : (
                     <p className="search-modal__empty">Sin coincidencias. Ajusta la búsqueda o lanza confetti.</p>
                   )}
+                </div>
+
+                <div className="search-modal__actions">
+                  <button
+                    type="button"
+                    className="search-modal__apply"
+                    onClick={handleNavigateProjects}
+                  >
+                    <ArrowRight size={18} aria-hidden="true" />
+                    Ver proyectos
+                  </button>
                 </div>
 
                 {typeof resultCount === 'number' && resultCount === 0 && confettiAvailable && (

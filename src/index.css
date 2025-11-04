@@ -156,6 +156,67 @@
   --availability-unavailable-text: var(--token-text-dark);
 }
 
+html.retro-mode {
+  --surface-primary: #07040f;
+  --surface-card: rgba(12, 18, 36, 0.96);
+  --surface-panel: rgba(10, 15, 32, 0.9);
+  --text-strong: #71ffb2;
+  --text-inverse: #0a0c1a;
+  --text-cta: #0a0c1a;
+  --logo-text: #71ffb2;
+  --text-on-brand: #0a0c1a;
+  --border-strong: #71ffb2;
+  --border-muted: rgba(113, 255, 178, 0.3);
+  --shadow-strong: #00ff9c;
+  --shadow-soft: rgba(0, 255, 156, 0.35);
+  --shadow-strong-hover: #00c6ff;
+  --gradient-brand-start: #00c6ff;
+  --gradient-brand-end: #ff00e5;
+  --gradient-hero-start: rgba(0, 198, 255, 0.22);
+  --gradient-hero-end: rgba(255, 0, 229, 0.22);
+  --gradient-close-start: rgba(0, 198, 255, 0.18);
+  --gradient-close-end: rgba(255, 0, 229, 0.18);
+  --toast-info-bg: rgba(0, 198, 255, 0.28);
+  --toast-success-bg: rgba(113, 255, 178, 0.28);
+  --toast-error-bg: rgba(255, 0, 229, 0.28);
+  cursor: crosshair;
+}
+
+html.retro-mode body {
+  font-family: 'Courier New', monospace;
+  background: radial-gradient(circle at 20% 20%, rgba(0, 255, 156, 0.08), transparent 40%),
+    radial-gradient(circle at 80% 30%, rgba(0, 198, 255, 0.1), transparent 45%),
+    #040209;
+  color: var(--text-strong);
+  text-shadow: 0 0 6px rgba(0, 255, 156, 0.45);
+}
+
+html.retro-mode .card,
+html.retro-mode .header-panel,
+html.retro-mode .search-modal__panel,
+html.retro-mode .command-modal__option,
+html.retro-mode .mobile-actions-modal,
+html.retro-mode .toast {
+  background: rgba(4, 8, 18, 0.95);
+  box-shadow: 10px 10px 0 rgba(0, 255, 156, 0.55);
+}
+
+html.retro-mode .availability-badge,
+html.retro-mode .dock,
+html.retro-mode .search-trigger,
+html.retro-mode .search-modal__tag,
+html.retro-mode .command-modal__option,
+html.retro-mode .mobile-actions-modal__item {
+  box-shadow: 8px 8px 0 rgba(0, 255, 156, 0.55);
+}
+
+html.retro-mode .hero-intro__accent,
+html.retro-mode .hero-intro__gradient,
+html.retro-mode .skill-badge,
+html.retro-mode .contact-cta {
+  filter: hue-rotate(45deg) saturate(130%);
+}
+
 
 /* ========================================
    BASE STYLES
@@ -918,6 +979,35 @@ p, span, small {
   background: linear-gradient(135deg, var(--gradient-brand-start), var(--gradient-brand-end));
   color: var(--text-on-brand);
   box-shadow: 10px 10px 0 var(--shadow-strong-hover);
+}
+
+.search-modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+
+.search-modal__apply {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px;
+  border-radius: 18px;
+  border: 3px solid var(--border-strong);
+  background: linear-gradient(135deg, var(--gradient-brand-start), var(--gradient-brand-end));
+  color: var(--text-on-brand);
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 8px 8px 0 var(--shadow-strong);
+  transition: transform 150ms ease, box-shadow 150ms ease, filter 150ms ease;
+}
+
+.search-modal__apply:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 10px 10px 0 var(--shadow-strong-hover);
+  filter: saturate(1.2);
 }
 
 .search-modal__empty {

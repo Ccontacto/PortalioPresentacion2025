@@ -93,7 +93,12 @@ const availabilityClassMap: Record<AvailabilityState, string> = {
   unavailable: 'availability-unavailable'
 };
 
-export default function Header() {
+type HeaderProps = {
+  retroModeEnabled?: boolean;
+  onExitRetroMode?: () => void;
+};
+
+export default function Header({ retroModeEnabled = false, onExitRetroMode }: HeaderProps = {}) {
   const { theme, toggleTheme } = useTheme();
   const { data, currentLang, toggleLanguage } = useLanguage();
   const { toasts } = data;
@@ -287,8 +292,42 @@ export default function Header() {
   );
 
   const overflowSections = useMemo<QuickActionGroup[]>(
-    () => [
-      {
+    () => {
+      const preferenceItems: QuickAction[] = [
+        { key: 'pdf', label: data.tooltips.pdf, icon: <Download size={22} aria-hidden="true" />, action: handlePdf, immediate: true },
+        {
+          key: 'confetti',
+          label: confettiLabel,
+          icon: <Sparkles size={22} aria-hidden="true" />,
+          action: handleConfettiClick,
+          disabled: isConfettiOnCooldown
+        },
+        {
+          key: 'language',
+          label: languageToggleLabel,
+          icon: <Languages size={22} aria-hidden="true" />,
+          action: toggleLanguage
+        },
+        {
+          key: 'theme',
+          label: themeToggleLabel,
+          icon: theme === 'dark' ? <Sun size={22} aria-hidden="true" /> : <Moon size={22} aria-hidden="true" />,
+          action: toggleTheme
+        }
+      ];
+
+      if (retroModeEnabled && onExitRetroMode) {
+        preferenceItems.unshift({
+          key: 'retro-exit',
+          label: 'Salir de modo retro',
+          icon: <Sparkles size={22} aria-hidden="true" />,
+          action: onExitRetroMode,
+          immediate: true
+        });
+      }
+
+      return [
+        {
         id: 'social',
         label: 'Redes profesionales',
         items: [
@@ -315,30 +354,10 @@ export default function Header() {
       {
         id: 'preferences',
         label: 'Preferencias y extras',
-        items: [
-          { key: 'pdf', label: data.tooltips.pdf, icon: <Download size={22} aria-hidden="true" />, action: handlePdf, immediate: true },
-          {
-            key: 'confetti',
-            label: confettiLabel,
-            icon: <Sparkles size={22} aria-hidden="true" />,
-            action: handleConfettiClick,
-            disabled: isConfettiOnCooldown
-          },
-          {
-            key: 'language',
-            label: languageToggleLabel,
-            icon: <Languages size={22} aria-hidden="true" />,
-            action: toggleLanguage
-          },
-          {
-            key: 'theme',
-            label: themeToggleLabel,
-            icon: theme === 'dark' ? <Sun size={22} aria-hidden="true" /> : <Moon size={22} aria-hidden="true" />,
-            action: toggleTheme
-          }
-        ]
+        items: preferenceItems
       }
-    ],
+      ];
+    },
     [
       copyEmail,
       data.tooltips.copy,
@@ -353,6 +372,8 @@ export default function Header() {
       openLinkedIn,
       openPortfolio,
       openWhatsApp,
+      onExitRetroMode,
+      retroModeEnabled,
       theme,
       themeToggleLabel,
       toggleLanguage,

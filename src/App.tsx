@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { useEffect, useMemo, lazy, Suspense } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, lazy, Suspense } from 'react';
 
 import Dock from './components/Dock';
 import Header from './components/Header';
@@ -13,6 +13,7 @@ import { NavigationProvider } from './contexts/NavigationContext';
 import { ThemeProvider, useTheme } from './contexts/ThemeContext';
 import { ToastProvider, useToast } from './contexts/ToastContext';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
+import { useKonamiCode } from './hooks/useKonamiCode';
 import { useReducedMotion } from './hooks/useReducedMotion';
 const ConfettiCanvas = lazy(() => import('./components/ConfettiCanvas'));
 const CommandPalette = lazy(() => import('./components/CommandPalette'));
@@ -27,6 +28,8 @@ function AppContent() {
   const { data, toggleLanguage } = useLanguage();
   const { theme, toggleTheme } = useTheme();
   const shouldReduceMotion = useReducedMotion();
+  const [retroMode, setRetroMode] = useState(false);
+  const retroAnnouncedRef = useRef(false);
 
   const keyboardShortcuts = useMemo(
     () => [
@@ -37,6 +40,34 @@ function AppContent() {
   );
 
   useKeyboardShortcuts(keyboardShortcuts);
+
+  const toggleRetroMode = useCallback(() => {
+    setRetroMode(prev => !prev);
+  }, []);
+
+  const exitRetroMode = useCallback(() => {
+    setRetroMode(false);
+  }, []);
+
+  useKonamiCode(toggleRetroMode);
+
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+    document.documentElement.classList.toggle('retro-mode', retroMode);
+  }, [retroMode]);
+
+  useEffect(() => {
+    if (!retroAnnouncedRef.current) {
+      retroAnnouncedRef.current = true;
+      if (!retroMode) return;
+    }
+    showToast(
+      retroMode
+        ? 'Modo retro activado. Bienvenido al futuro en 8 bits.'
+        : 'Modo retro desactivado. Volviendo al presente.',
+      retroMode ? 'success' : 'info'
+    );
+  }, [retroMode, showToast]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -57,7 +88,7 @@ function AppContent() {
       >
         <PageProgress />
         <SkipToContent />
-        <Header />
+        <Header retroModeEnabled={retroMode} onExitRetroMode={exitRetroMode} />
         {/* MEJORA 1: main con role explícito y aria-label */}
         <main className="main-content" id="main-content" role="main" aria-label="Contenido principal">
           <Hero />
