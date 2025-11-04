@@ -16,7 +16,6 @@ import {
 } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useReducer, useRef } from 'react';
 
-
 import { useLanguage } from '../contexts/LanguageContext';
 import { useNavigation } from '../contexts/NavigationContext';
 import { useTheme } from '../contexts/ThemeContext';
@@ -24,6 +23,7 @@ import { useToast } from '../contexts/ToastContext';
 import { useBodyScrollLock } from '../hooks/useBodyScrollLock';
 import { useConfettiCooldown } from '../hooks/useConfettiCooldown';
 import { useCvDownload } from '../hooks/useCvDownload';
+import { KONAMI_ENABLE_MESSAGE, KONAMI_DISABLE_MESSAGE } from '../constants/konami';
 
 import { AvailabilityBadge } from './header/AvailabilityBadge';
 import { MobileActionsModal } from './header/MobileActionsModal';
@@ -93,13 +93,8 @@ const availabilityClassMap: Record<AvailabilityState, string> = {
   unavailable: 'availability-unavailable'
 };
 
-type HeaderProps = {
-  retroModeEnabled?: boolean;
-  onExitRetroMode?: () => void;
-};
-
-export default function Header({ retroModeEnabled = false, onExitRetroMode }: HeaderProps = {}) {
-  const { theme, toggleTheme } = useTheme();
+export default function Header() {
+  const { baseTheme, toggleTheme, isKonami, activateKonami, deactivateKonami } = useTheme();
   const { data, currentLang, toggleLanguage } = useLanguage();
   const { toasts } = data;
   const { showToast } = useToast();
@@ -277,8 +272,18 @@ export default function Header({ retroModeEnabled = false, onExitRetroMode }: He
   const availabilityLabel = data.availability?.status?.[availability] ?? availability;
   const availabilityToggleLabel = data.availability?.toggle?.[availability] ?? 'Cambiar disponibilidad';
   const languageToggleLabel = currentLang === 'es' ? 'Switch to English' : 'Cambiar a español';
-  const themeToggleLabel = theme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro';
+  const themeToggleLabel = baseTheme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro';
   const confettiLabel = data.tooltips.celebrate;
+
+  const handleKonamiToggle = useCallback(() => {
+    if (isKonami) {
+      deactivateKonami();
+      showToast(KONAMI_DISABLE_MESSAGE, 'info');
+      return;
+    }
+    activateKonami();
+    showToast(KONAMI_ENABLE_MESSAGE, 'success');
+  }, [activateKonami, deactivateKonami, isKonami, showToast]);
 
   const navActions = useMemo<QuickAction[]>(
     () =>
@@ -291,8 +296,8 @@ export default function Header({ retroModeEnabled = false, onExitRetroMode }: He
     [data.nav, navigateTo]
   );
 
-  const preferenceItems = useMemo<QuickAction[]>(() => {
-    const baseItems: QuickAction[] = [
+  const preferenceItems = useMemo<QuickAction[]>(
+    () => [
       { key: 'pdf', label: data.tooltips.pdf, icon: <Download size={22} aria-hidden="true" />, action: handlePdf, immediate: true },
       {
         key: 'confetti',
@@ -300,6 +305,13 @@ export default function Header({ retroModeEnabled = false, onExitRetroMode }: He
         icon: <Sparkles size={22} aria-hidden="true" />,
         action: handleConfettiClick,
         disabled: isConfettiOnCooldown
+      },
+      {
+        key: 'konami',
+        label: isKonami ? 'Salir de modo Konami' : 'Activar modo Konami',
+        icon: <Sparkles size={22} aria-hidden="true" />,
+        action: handleKonamiToggle,
+        immediate: true
       },
       {
         key: 'language',
@@ -310,39 +322,25 @@ export default function Header({ retroModeEnabled = false, onExitRetroMode }: He
       {
         key: 'theme',
         label: themeToggleLabel,
-        icon: theme === 'dark' ? <Sun size={22} aria-hidden="true" /> : <Moon size={22} aria-hidden="true" />,
+        icon: baseTheme === 'dark' ? <Sun size={22} aria-hidden="true" /> : <Moon size={22} aria-hidden="true" />,
         action: toggleTheme
       }
-    ];
-
-    if (retroModeEnabled && onExitRetroMode) {
-      return [
-        {
-          key: 'retro-exit',
-          label: 'Salir de modo retro',
-          icon: <Sparkles size={22} aria-hidden="true" />,
-          action: onExitRetroMode,
-          immediate: true
-        },
-        ...baseItems
-      ];
-    }
-
-    return baseItems;
-  }, [
-    confettiLabel,
-    data.tooltips.pdf,
-    isConfettiOnCooldown,
-    languageToggleLabel,
-    onExitRetroMode,
-    retroModeEnabled,
-    theme,
-    themeToggleLabel,
-    toggleLanguage,
-    toggleTheme,
-    handleConfettiClick,
-    handlePdf
-  ]);
+    ],
+    [
+      baseTheme,
+      confettiLabel,
+      data.tooltips.pdf,
+      handleConfettiClick,
+      handleKonamiToggle,
+      handlePdf,
+      isConfettiOnCooldown,
+      isKonami,
+      languageToggleLabel,
+      themeToggleLabel,
+      toggleLanguage,
+      toggleTheme
+    ]
+  );
 
   const overflowSections = useMemo<QuickActionGroup[]>(
     () => [
@@ -380,23 +378,12 @@ export default function Header({ retroModeEnabled = false, onExitRetroMode }: He
       copyEmail,
       data.tooltips.copy,
       data.tooltips.email,
-      data.tooltips.pdf,
-      handleConfettiClick,
-      handlePdf,
-      isConfettiOnCooldown,
-      languageToggleLabel,
       openEmail,
       openGitHub,
       openLinkedIn,
       openPortfolio,
       openWhatsApp,
-      onExitRetroMode,
-      retroModeEnabled,
-      theme,
-      themeToggleLabel,
-      toggleLanguage,
-      toggleTheme,
-      confettiLabel
+      preferenceItems
     ]
   );
 

@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { useCallback, useEffect, useMemo, useRef, useState, lazy, Suspense } from 'react';
+import { useCallback, useEffect, useMemo, useRef, lazy, Suspense } from 'react';
 
 import Dock from './components/Dock';
 import Header from './components/Header';
@@ -15,6 +15,7 @@ import { ToastProvider, useToast } from './contexts/ToastContext';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
 import { useKonamiCode } from './hooks/useKonamiCode';
 import { useReducedMotion } from './hooks/useReducedMotion';
+import { KONAMI_ENABLE_MESSAGE, KONAMI_DISABLE_MESSAGE } from './constants/konami';
 const ConfettiCanvas = lazy(() => import('./components/ConfettiCanvas'));
 const CommandPalette = lazy(() => import('./components/CommandPalette'));
 import Contact from './sections/Contact';
@@ -26,10 +27,9 @@ import Skills from './sections/Skills';
 function AppContent() {
   const { showToast } = useToast();
   const { data, toggleLanguage } = useLanguage();
-  const { theme, toggleTheme } = useTheme();
+  const { toggleTheme, isKonami, activateKonami, deactivateKonami } = useTheme();
   const shouldReduceMotion = useReducedMotion();
-  const [retroMode, setRetroMode] = useState(false);
-  const retroAnnouncedRef = useRef(false);
+  const konamiAnnouncementRef = useRef(true);
 
   const keyboardShortcuts = useMemo(
     () => [
@@ -41,33 +41,27 @@ function AppContent() {
 
   useKeyboardShortcuts(keyboardShortcuts);
 
-  const toggleRetroMode = useCallback(() => {
-    setRetroMode(prev => !prev);
-  }, []);
-
-  const exitRetroMode = useCallback(() => {
-    setRetroMode(false);
-  }, []);
-
-  useKonamiCode(toggleRetroMode);
-
-  useEffect(() => {
-    if (typeof document === 'undefined') return;
-    document.documentElement.classList.toggle('retro-mode', retroMode);
-  }, [retroMode]);
-
-  useEffect(() => {
-    if (!retroAnnouncedRef.current) {
-      retroAnnouncedRef.current = true;
-      if (!retroMode) return;
+  const toggleKonamiMode = useCallback(() => {
+    if (isKonami) {
+      deactivateKonami();
+      showToast(KONAMI_DISABLE_MESSAGE, 'info');
+      return;
     }
-    showToast(
-      retroMode
-        ? 'Modo retro activado. Bienvenido al futuro en 8 bits.'
-        : 'Modo retro desactivado. Volviendo al presente.',
-      retroMode ? 'success' : 'info'
-    );
-  }, [retroMode, showToast]);
+    activateKonami();
+    showToast(KONAMI_ENABLE_MESSAGE, 'success');
+  }, [activateKonami, deactivateKonami, isKonami, showToast]);
+
+  useKonamiCode(toggleKonamiMode);
+
+  useEffect(() => {
+    if (!konamiAnnouncementRef.current) {
+      return;
+    }
+    konamiAnnouncementRef.current = false;
+    if (isKonami) {
+      showToast(KONAMI_ENABLE_MESSAGE, 'success');
+    }
+  }, [isKonami, showToast]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -84,11 +78,10 @@ function AppContent() {
       <motion.div
         initial={shouldReduceMotion ? undefined : { opacity: 0 }}
         animate={shouldReduceMotion ? undefined : { opacity: 1 }}
-        className={theme === 'dark' ? 'dark' : ''}
       >
         <PageProgress />
         <SkipToContent />
-        <Header retroModeEnabled={retroMode} onExitRetroMode={exitRetroMode} />
+        <Header />
         {/* MEJORA 1: main con role explícito y aria-label */}
         <main className="main-content" id="main-content" role="main" aria-label="Contenido principal">
           <Hero />

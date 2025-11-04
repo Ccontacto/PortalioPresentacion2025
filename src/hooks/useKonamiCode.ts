@@ -15,6 +15,17 @@ const KONAMI_SEQUENCE = [
 
 const toKey = (value: string) => value.toLowerCase();
 
+const shouldIgnoreEvent = (event: KeyboardEvent) => {
+  const target = event.target as HTMLElement | null;
+  if (!target) return false;
+  if (typeof target.tagName !== 'string') {
+    return false;
+  }
+  if (target.isContentEditable) return true;
+  const tag = target.tagName.toLowerCase();
+  return tag === 'input' || tag === 'textarea' || tag === 'select';
+};
+
 export function useKonamiCode(callback: () => void) {
   const positionRef = useRef(0);
   const callbackRef = useRef(callback);
@@ -25,6 +36,15 @@ export function useKonamiCode(callback: () => void) {
 
   useEffect(() => {
     const handler = (event: KeyboardEvent) => {
+      if (shouldIgnoreEvent(event)) {
+        return;
+      }
+
+      if (event.key === 'Escape') {
+        positionRef.current = 0;
+        return;
+      }
+
       const key = toKey(event.key);
       const expected = toKey(KONAMI_SEQUENCE[positionRef.current]);
 
