@@ -127,6 +127,7 @@ export default function Dock() {
             // MEJORA 3: aria-label explícito
             aria-label={item.label}
             title={item.label}
+            data-retro-sfx
           >
             {icons[item.id] || <Home size={24} aria-hidden="true" />}
           </button>

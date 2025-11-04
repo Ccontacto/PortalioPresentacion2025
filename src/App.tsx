@@ -6,6 +6,7 @@ import Header from './components/Header';
 import LoadingScreen from './components/LoadingScreen';
 import PageIndicator from './components/PageIndicator';
 import PageProgress from './components/PageProgress';
+import { RetroModeBanner } from './components/RetroModeBanner';
 import SkipToContent from './components/SkipToContent';
 import ToastContainer from './components/ToastContainer';
 import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
@@ -29,7 +30,7 @@ function AppContent() {
   const { theme, toggleTheme } = useTheme();
   const shouldReduceMotion = useReducedMotion();
   const [retroMode, setRetroMode] = useState(false);
-  const retroAnnouncedRef = useRef(false);
+  const previousRetroRef = useRef(false);
 
   const keyboardShortcuts = useMemo(
     () => [
@@ -57,17 +58,24 @@ function AppContent() {
   }, [retroMode]);
 
   useEffect(() => {
-    if (!retroAnnouncedRef.current) {
-      retroAnnouncedRef.current = true;
-      if (!retroMode) return;
+    const activatedMessage =
+      data.toasts.retro_enabled ??
+      (data.lang === 'en'
+        ? 'Retro mode enabled. Welcome to the 8-bit future.'
+        : 'Modo retro activado. Bienvenido al futuro en 8 bits.');
+    const disabledMessage =
+      data.toasts.retro_disabled ??
+      (data.lang === 'en'
+        ? 'Retro mode disabled. Back to the present.'
+        : 'Modo retro desactivado. Volviendo al presente.');
+
+    if (retroMode && !previousRetroRef.current) {
+      showToast(activatedMessage, 'success');
+    } else if (!retroMode && previousRetroRef.current) {
+      showToast(disabledMessage, 'info');
     }
-    showToast(
-      retroMode
-        ? 'Modo retro activado. Bienvenido al futuro en 8 bits.'
-        : 'Modo retro desactivado. Volviendo al presente.',
-      retroMode ? 'success' : 'info'
-    );
-  }, [retroMode, showToast]);
+    previousRetroRef.current = retroMode;
+  }, [retroMode, data.lang, data.toasts.retro_enabled, data.toasts.retro_disabled, showToast]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -89,6 +97,7 @@ function AppContent() {
         <PageProgress />
         <SkipToContent />
         <Header retroModeEnabled={retroMode} onExitRetroMode={exitRetroMode} />
+        {retroMode ? <RetroModeBanner onExitRetro={exitRetroMode} /> : null}
         {/* MEJORA 1: main con role explícito y aria-label */}
         <main className="main-content" id="main-content" role="main" aria-label="Contenido principal">
           <Hero />

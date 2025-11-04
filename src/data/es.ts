@@ -115,7 +115,7 @@ export const es = {
         }
       ]
     },
-    contact: {
+  contact: {
       title: 'Contacto',
       subtitle: '¿Tienes un proyecto? Hablemos.',
       closing: 'Abierto a proyectos de IA e iOS.',
@@ -140,6 +140,13 @@ export const es = {
     whatsapp_open: 'Abriendo WhatsApp...',
     availability_available: 'Estado actualizado: disponible',
     availability_listening: 'Estado actualizado: escuchando propuestas',
-    availability_unavailable: 'Estado actualizado: no disponible'
+    availability_unavailable: 'Estado actualizado: no disponible',
+    retro_enabled: 'Modo retro activado. Bienvenido al futuro en 8 bits.',
+    retro_disabled: 'Modo retro desactivado. Volviendo al presente.'
+  },
+  ui: {
+    viewProjects: 'Ver proyectos',
+    retroExit: 'Salir de modo retro',
+    retroActiveLabel: 'Modo retro activo'
   }
 };

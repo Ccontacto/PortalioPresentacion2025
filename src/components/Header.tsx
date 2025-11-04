@@ -316,22 +316,24 @@ export default function Header({ retroModeEnabled = false, onExitRetroMode }: He
     ];
 
     if (retroModeEnabled && onExitRetroMode) {
-      return [
+      const result = [
         {
           key: 'retro-exit',
-          label: 'Salir de modo retro',
+          label: data.ui.retroExit,
           icon: <Sparkles size={22} aria-hidden="true" />,
           action: onExitRetroMode,
           immediate: true
         },
         ...baseItems
       ];
+      return result;
     }
 
     return baseItems;
   }, [
     confettiLabel,
     data.tooltips.pdf,
+    data.ui.retroExit,
     isConfettiOnCooldown,
     languageToggleLabel,
     onExitRetroMode,
@@ -380,23 +382,12 @@ export default function Header({ retroModeEnabled = false, onExitRetroMode }: He
       copyEmail,
       data.tooltips.copy,
       data.tooltips.email,
-      data.tooltips.pdf,
-      handleConfettiClick,
-      handlePdf,
-      isConfettiOnCooldown,
-      languageToggleLabel,
       openEmail,
       openGitHub,
       openLinkedIn,
       openPortfolio,
       openWhatsApp,
-      onExitRetroMode,
-      retroModeEnabled,
-      theme,
-      themeToggleLabel,
-      toggleLanguage,
-      toggleTheme,
-      confettiLabel
+      preferenceItems
     ]
   );
 
@@ -431,17 +422,18 @@ export default function Header({ retroModeEnabled = false, onExitRetroMode }: He
           <div className="header-actions desktop-only header-actions--primary">
             <button
               className="icon-btn"
-              aria-haspopup="true"
-              aria-expanded={activePanel === 'overflow'}
-              aria-controls="header-panel-overflow"
-              onClick={() => togglePanel('overflow')}
-              title="Acciones rápidas"
-              aria-label="Abrir menú de acciones"
-            >
-              <MoreHorizontal size={24} aria-hidden="true" />
-            </button>
-          </div>
-          <button
+            aria-haspopup="true"
+            aria-expanded={activePanel === 'overflow'}
+            aria-controls="header-panel-overflow"
+            onClick={() => togglePanel('overflow')}
+            title="Acciones rápidas"
+            aria-label="Abrir menú de acciones"
+            data-retro-sfx
+          >
+            <MoreHorizontal size={24} aria-hidden="true" />
+          </button>
+        </div>
+        <button
             type="button"
             className="icon-btn mobile-only"
             onClick={() => dispatch({ type: 'openMobileMenu' })}
@@ -449,6 +441,7 @@ export default function Header({ retroModeEnabled = false, onExitRetroMode }: He
             aria-expanded={mobileMenuOpen}
             aria-controls="mobile-quick-actions"
             aria-label="Abrir menú de acciones rápidas"
+            data-retro-sfx
           >
             <MoreHorizontal size={24} aria-hidden="true" />
           </button>

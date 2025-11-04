@@ -45,6 +45,7 @@ export function OverflowPanel({ items, onClose, panelRef }: Props) {
             role="menuitem"
             disabled={item.disabled}
             aria-disabled={item.disabled ? 'true' : 'false'}
+            data-retro-sfx
           >
             {item.icon ? <span className="header-panel-button__icon">{item.icon}</span> : null}
             <span className="header-panel-button__label">{item.label}</span>

@@ -70,6 +70,12 @@ export interface PortfolioTooltips {
   theme: string;
 }
 
+export interface PortfolioUiStrings {
+  viewProjects: string;
+  retroExit: string;
+  retroActiveLabel: string;
+}
+
 export interface PortfolioToasts {
   welcome?: string;
   email_copy_success: string;
@@ -78,6 +84,8 @@ export interface PortfolioToasts {
   availability_available: string;
   availability_listening: string;
   availability_unavailable: string;
+  retro_enabled?: string;
+  retro_disabled?: string;
 }
 
 export interface PortfolioData {
@@ -106,4 +114,5 @@ export interface PortfolioData {
   sections: PortfolioSections;
   tooltips: PortfolioTooltips;
   toasts: PortfolioToasts;
+  ui: PortfolioUiStrings;
 }

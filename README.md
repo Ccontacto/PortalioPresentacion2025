@@ -53,3 +53,26 @@ Portfolio React + Vite listo para desarrollo local, testing y despliegue en Clou
 - Tests (`npm run test:ci`): ✅
 - Build (`npm run build`): ✅
 - caché Vite limpia (`rm -rf node_modules/.vite` antes de `npm run dev` si cambias bundling).
+
+## Setup rápido (Git + Cloudflare)
+
+1. Configura las variables de entorno con tus credenciales:
+   ```bash
+   export GIT_USER_NAME="Tu Nombre"
+   export GIT_USER_EMAIL="contacto@yosoymx.com"
+   export CLOUDFLARE_ACCOUNT_ID="<tu-account-id>"
+   export CLOUDFLARE_API_TOKEN="<tu-api-token>"
+   export CLOUDFLARE_PROJECT="portalio-presentacion-2025"
+   ```
+2. Inicializa la configuración de Git en el repo:
+   ```bash
+   npm run setup:git
+   ```
+3. Despliega manualmente a Cloudflare Pages cuando quieras:
+   ```bash
+   npm run deploy:cf
+   ```
+
+> **Nota:** el script de deploy ejecuta `npm run build` y usa `wrangler` bajo el capó. Si no deseas exportar los secretos en la terminal, puedes ejecutarlo así: `CLOUDFLARE_API_TOKEN=... npm run deploy:cf`.
+
+Para ejecución continua, los workflows de GitHub Actions ya están listos; sólo asegúrate de registrar los secretos `CLOUDFLARE_API_TOKEN` y `CLOUDFLARE_ACCOUNT_ID` en el repositorio.

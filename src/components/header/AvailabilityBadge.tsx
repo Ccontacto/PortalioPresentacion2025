@@ -25,6 +25,7 @@ export function AvailabilityBadge({
       onClick={onToggle}
       aria-label={toggleLabel}
       data-availability={availability}
+      data-retro-sfx
     >
       <span className="availability-indicator" aria-hidden="true"></span>
       <span className="availability-icon" aria-hidden="true">
