@@ -1,8 +1,9 @@
-import type { RefObject } from 'react';
-import { motion } from 'framer-motion';
 import { FocusTrap } from 'focus-trap-react';
+import { motion } from 'framer-motion';
 import { X } from 'lucide-react';
+
 import type { QuickActionGroup } from './types';
+import type { RefObject } from 'react';
 
 type Props = {
   open: boolean;
@@ -17,14 +18,6 @@ export function MobileActionsModal({ open, groups, onClose, menuRef }: Props) {
   return (
     <div
       className="mobile-actions-backdrop"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="mobile-actions-title"
-      onClick={event => {
-        if (event.target === event.currentTarget) {
-          onClose();
-        }
-      }}
     >
       <FocusTrap
         active={open}
@@ -40,6 +33,9 @@ export function MobileActionsModal({ open, groups, onClose, menuRef }: Props) {
           className="mobile-actions-modal"
           id="mobile-quick-actions"
           ref={menuRef}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="mobile-actions-title"
           initial={{ opacity: 0, scale: 0.96, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.96, y: 20 }}

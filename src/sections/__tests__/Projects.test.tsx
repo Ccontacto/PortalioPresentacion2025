@@ -1,8 +1,10 @@
 import { render, screen, within } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
-import Projects from '../Projects';
+
 import { NavigationProvider } from '../../contexts/NavigationContext';
 import { ThemeProvider } from '../../contexts/ThemeContext';
+import Projects from '../Projects';
+
 import '@testing-library/jest-dom/vitest';
 import type { ProjectItem } from '../../types/portfolio';
 

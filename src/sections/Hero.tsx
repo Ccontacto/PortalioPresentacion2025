@@ -1,7 +1,9 @@
 import { motion } from 'framer-motion';
+
 import { useLanguage } from '../contexts/LanguageContext';
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
 import { useReducedMotion } from '../hooks/useReducedMotion';
+
 import type { Stat } from '../types/portfolio';
 
 export default function Hero() {

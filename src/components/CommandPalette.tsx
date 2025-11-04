@@ -1,5 +1,5 @@
-import { AnimatePresence, motion } from 'framer-motion';
 import { FocusTrap } from 'focus-trap-react';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
   Copy as CopyIcon,
   Download,
@@ -12,7 +12,6 @@ import {
   Sun,
   X
 } from 'lucide-react';
-import { createPortal } from 'react-dom';
 import {
   useCallback,
   useEffect,
@@ -23,13 +22,16 @@ import {
   type KeyboardEvent as ReactKeyboardEvent,
   type ReactNode
 } from 'react';
+import { createPortal } from 'react-dom';
+
 import { useLanguage } from '../contexts/LanguageContext';
 import { useNavigation } from '../contexts/NavigationContext';
 import { useTheme } from '../contexts/ThemeContext';
 import { useToast } from '../contexts/ToastContext';
-import { WhatsappGlyph } from './icons/WhatsappGlyph';
 import { useBodyScrollLock } from '../hooks/useBodyScrollLock';
 import { useCvDownload } from '../hooks/useCvDownload';
+
+import { WhatsappGlyph } from './icons/WhatsappGlyph';
 
 type CommandGroup = string;
 
@@ -242,7 +244,7 @@ export default function CommandPalette() {
     ];
 
     return [...navItems, ...contactItems, ...socialItems, ...actionItems, ...preferenceItems];
-  }, [closePalette, currentLang, data, navigateTo, showToast, theme, toggleLanguage, toggleTheme]);
+  }, [closePalette, currentLang, data, downloadCv, navigateTo, showToast, theme, toggleLanguage, toggleTheme]);
 
   const availableItems = useMemo(
     () => items.filter(item => !item.predicate || item.predicate()),

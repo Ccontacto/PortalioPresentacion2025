@@ -1,5 +1,3 @@
-import { useCallback, useEffect, useMemo, useReducer, useRef } from 'react';
-import type { JSX } from 'react';
 import {
   Sun,
   Moon,
@@ -16,18 +14,24 @@ import {
   TriangleAlert,
   Handshake
 } from 'lucide-react';
-import { WhatsappGlyph } from './icons/WhatsappGlyph';
-import { useTheme } from '../contexts/ThemeContext';
+import { useCallback, useEffect, useMemo, useReducer, useRef } from 'react';
+
+
 import { useLanguage } from '../contexts/LanguageContext';
-import { useToast } from '../contexts/ToastContext';
 import { useNavigation } from '../contexts/NavigationContext';
+import { useTheme } from '../contexts/ThemeContext';
+import { useToast } from '../contexts/ToastContext';
 import { useBodyScrollLock } from '../hooks/useBodyScrollLock';
 import { useConfettiCooldown } from '../hooks/useConfettiCooldown';
 import { useCvDownload } from '../hooks/useCvDownload';
+
 import { AvailabilityBadge } from './header/AvailabilityBadge';
-import { OverflowPanel } from './header/OverflowPanel';
 import { MobileActionsModal } from './header/MobileActionsModal';
+import { OverflowPanel } from './header/OverflowPanel';
+import { WhatsappGlyph } from './icons/WhatsappGlyph';
+
 import type { AvailabilityState, QuickAction, QuickActionGroup } from './header/types';
+import type { JSX } from 'react';
 
 type HeaderPanel = 'overflow';
 
@@ -92,6 +96,7 @@ const availabilityClassMap: Record<AvailabilityState, string> = {
 export default function Header() {
   const { theme, toggleTheme } = useTheme();
   const { data, currentLang, toggleLanguage } = useLanguage();
+  const { toasts } = data;
   const { showToast } = useToast();
   const { navigateTo } = useNavigation();
   const [{ availability, mobileMenuOpen, activePanel }, dispatch] = useReducer(
@@ -163,7 +168,7 @@ export default function Header() {
   const handleToggleAvailability = useCallback(() => {
     const currentIndex = availabilityCycle.indexOf(availability);
     const next = availabilityCycle[(currentIndex + 1) % availabilityCycle.length];
-    const toastKeyMap: Record<AvailabilityState, keyof typeof data.toasts | undefined> = {
+    const toastKeyMap: Record<AvailabilityState, keyof typeof toasts | undefined> = {
       available: 'availability_available',
       listening: 'availability_listening',
       unavailable: 'availability_unavailable'
@@ -174,12 +179,12 @@ export default function Header() {
       unavailable: 'warning'
     };
     const toastKey = toastKeyMap[next];
-    const message = toastKey ? data.toasts?.[toastKey] : null;
+    const message = toastKey ? toasts?.[toastKey] : null;
     if (message) {
       showToast(message, toastTypeMap[next]);
     }
     dispatch({ type: 'setAvailability', payload: next });
-  }, [availability, data.toasts, dispatch, showToast]);
+  }, [availability, dispatch, showToast, toasts]);
 
   const setPanelRef = (node: HTMLDivElement | null) => {
     panelRef.current = node;

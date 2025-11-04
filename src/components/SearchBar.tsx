@@ -1,11 +1,14 @@
-import { AnimatePresence, motion } from 'framer-motion';
 import { FocusTrap } from 'focus-trap-react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { Search, Sparkles, X } from 'lucide-react';
-import { createPortal } from 'react-dom';
 import { useCallback, useEffect, useId, useMemo, useRef, useState, type MouseEvent } from 'react';
-import type { ProjectItem } from '../types/portfolio';
-import { launchConfetti } from '../utils/confetti';
+import { createPortal } from 'react-dom';
+
 import { useBodyScrollLock } from '../hooks/useBodyScrollLock';
+import { launchConfetti } from '../utils/confetti';
+
+import type { ProjectItem } from '../types/portfolio';
+
 
 type ProjectTag = ProjectItem['tags'][number];
 

@@ -1,6 +1,7 @@
 import { renderHook } from '@testing-library/react';
 import { fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
+
 import { useKeyboardShortcuts } from '../useKeyboardShortcuts';
 
 describe('useKeyboardShortcuts Hook', () => {

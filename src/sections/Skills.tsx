@@ -1,8 +1,10 @@
-import type { ReactElement } from 'react';
 import { motion } from 'framer-motion';
 import { Smartphone, Bot, Cloud, Cpu } from 'lucide-react';
+
 import { useLanguage } from '../contexts/LanguageContext';
+
 import type { SkillCategory } from '../types/portfolio';
+import type { ReactElement } from 'react';
 
 type SkillItem = SkillCategory['items'][number];
 

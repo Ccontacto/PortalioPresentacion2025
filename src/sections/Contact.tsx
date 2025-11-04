@@ -1,5 +1,6 @@
-import { useState } from 'react';
 import { Copy, Mail } from 'lucide-react';
+import { useState } from 'react';
+
 import { WhatsappGlyph } from '../components/icons/WhatsappGlyph';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useToast } from '../contexts/ToastContext';

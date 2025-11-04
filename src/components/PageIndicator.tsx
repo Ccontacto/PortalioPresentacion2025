@@ -1,5 +1,5 @@
-import { useNavigation } from '../contexts/NavigationContext';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useNavigation } from '../contexts/NavigationContext';
 
 export default function PageIndicator() {
   const { activePage } = useNavigation();

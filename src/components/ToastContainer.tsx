@@ -1,7 +1,9 @@
-import type { JSX } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useToast } from '../contexts/ToastContext';
 import { Info, CheckCircle, XCircle, X } from 'lucide-react';
+
+import { useToast } from '../contexts/ToastContext';
+
+import type { JSX } from 'react';
 
 const icons: Record<string, JSX.Element> = {
   info: <Info size={24} aria-hidden="true" />,

@@ -1,8 +1,9 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
-import Dock from '../Dock';
+
 import { NavigationProvider } from '../../contexts/NavigationContext';
 import { ThemeProvider } from '../../contexts/ThemeContext';
+import Dock from '../Dock';
 import '@testing-library/jest-dom/vitest';
 
 // Mock the language data

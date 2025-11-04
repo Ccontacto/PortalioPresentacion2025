@@ -1,25 +1,26 @@
-import { useEffect, useMemo, lazy, Suspense } from 'react';
 import { motion } from 'framer-motion';
-import { ToastProvider, useToast } from './contexts/ToastContext';
+import { useEffect, useMemo, lazy, Suspense } from 'react';
+
+import Dock from './components/Dock';
+import Header from './components/Header';
+import LoadingScreen from './components/LoadingScreen';
+import PageIndicator from './components/PageIndicator';
+import PageProgress from './components/PageProgress';
+import SkipToContent from './components/SkipToContent';
+import ToastContainer from './components/ToastContainer';
 import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
-import { ThemeProvider, useTheme } from './contexts/ThemeContext';
 import { NavigationProvider } from './contexts/NavigationContext';
+import { ThemeProvider, useTheme } from './contexts/ThemeContext';
+import { ToastProvider, useToast } from './contexts/ToastContext';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
 import { useReducedMotion } from './hooks/useReducedMotion';
-import Header from './components/Header';
-import Dock from './components/Dock';
-import ToastContainer from './components/ToastContainer';
-import LoadingScreen from './components/LoadingScreen';
-import PageProgress from './components/PageProgress';
 const ConfettiCanvas = lazy(() => import('./components/ConfettiCanvas'));
 const CommandPalette = lazy(() => import('./components/CommandPalette'));
-import PageIndicator from './components/PageIndicator';
-import SkipToContent from './components/SkipToContent';
-import Hero from './sections/Hero';
-import Experience from './sections/Experience';
-import Skills from './sections/Skills';
-import Projects from './sections/Projects';
 import Contact from './sections/Contact';
+import Experience from './sections/Experience';
+import Hero from './sections/Hero';
+import Projects from './sections/Projects';
+import Skills from './sections/Skills';
 
 function AppContent() {
   const { showToast } = useToast();

@@ -1,4 +1,5 @@
 import { X } from 'lucide-react';
+
 import type { QuickAction } from './types';
 
 type Props = {

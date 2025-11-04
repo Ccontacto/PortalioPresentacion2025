@@ -1,5 +1,5 @@
-import type { JSX } from 'react';
 import type { AvailabilityKey } from '../../types/portfolio';
+import type { JSX } from 'react';
 
 export type AvailabilityState = AvailabilityKey;
 

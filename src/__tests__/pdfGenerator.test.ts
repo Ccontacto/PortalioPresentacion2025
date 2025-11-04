@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { generatePdf } from '../utils/pdfGenerator';
+
 import { es } from '../data/es';
+import { generatePdf } from '../utils/pdfGenerator';
 
 describe('pdfGenerator', () => {
   it('should run without errors', async () => {

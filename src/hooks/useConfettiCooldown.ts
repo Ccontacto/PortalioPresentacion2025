@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+
 import { launchConfetti } from '../utils/confetti';
 
 type Options = {

@@ -1,5 +1,5 @@
-import type { jsPDF as JsPdfInstance } from 'jspdf';
 import type { PortfolioData, ExperienceJob, SkillCategory, ProjectItem, Stat } from '../types/portfolio';
+import type { jsPDF as JsPdfInstance } from 'jspdf';
 
 type Lang = 'es' | 'en';
 

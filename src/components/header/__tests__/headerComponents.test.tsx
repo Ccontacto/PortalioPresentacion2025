@@ -1,26 +1,33 @@
-import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
+import { describe, expect, it, vi, beforeEach } from 'vitest';
+
 import { AvailabilityBadge } from '../AvailabilityBadge';
-import { OverflowPanel } from '../OverflowPanel';
 import { MobileActionsModal } from '../MobileActionsModal';
+import { OverflowPanel } from '../OverflowPanel';
+
 import type { QuickAction, QuickActionGroup } from '../types';
 
 vi.mock('focus-trap-react', () => ({
   FocusTrap: ({ children }: { children: React.ReactNode }) => <>{children}</>
 }));
 
-vi.mock('framer-motion', () => ({
-  motion: {
-    div: React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-      ({ children, ...rest }, ref) => (
-        <div ref={ref} {...rest}>
-          {children}
-        </div>
-      )
+vi.mock('framer-motion', () => {
+  const MockMotionDiv = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+    ({ children, ...rest }, ref) => (
+      <div ref={ref} {...rest}>
+        {children}
+      </div>
     )
-  }
-}));
+  );
+  MockMotionDiv.displayName = 'MockMotionDiv';
+
+  return {
+    motion: {
+      div: MockMotionDiv
+    }
+  };
+});
 
 describe('AvailabilityBadge', () => {
   it('renders availability info and toggles on click', () => {

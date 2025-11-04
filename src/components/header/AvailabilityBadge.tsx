@@ -1,5 +1,5 @@
-import type { JSX } from 'react';
 import type { AvailabilityState } from './types';
+import type { JSX } from 'react';
 
 type Props = {
   availability: AvailabilityState;

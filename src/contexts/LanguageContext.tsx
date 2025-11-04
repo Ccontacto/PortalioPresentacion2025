@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
-import { es } from '../data/es';
+
 import { en } from '../data/en';
+import { es } from '../data/es';
 
 type Data = typeof es;
 type Lang = 'es' | 'en';

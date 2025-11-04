@@ -1,9 +1,11 @@
 import { motion } from 'framer-motion';
 import { ExternalLink, Rocket } from 'lucide-react';
 import { useMemo, useState } from 'react';
-import { useLanguage } from '../contexts/LanguageContext';
-import type { ProjectItem } from '../types/portfolio';
+
 import SearchBar from '../components/SearchBar'; // Import the new SearchBar component
+import { useLanguage } from '../contexts/LanguageContext';
+
+import type { ProjectItem } from '../types/portfolio';
 
 const isValidHttpUrl = (value: string): boolean => {
   try {

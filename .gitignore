@@ -64,3 +64,6 @@ Icon?
 .coverage
 coverage/
 .pytest_cache/
+MCP-Dev/*
+MCP-DEV/
+MCP-DEV/.env

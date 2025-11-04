@@ -91,6 +91,6 @@ module.exports = [
     }
   },
   {
-    ignores: ['dist']
+    ignores: ['dist', 'coverage', 'node_modules']
   }
 ];

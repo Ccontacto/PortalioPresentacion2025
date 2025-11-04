@@ -1,5 +1,7 @@
 import { motion } from 'framer-motion';
+
 import { useLanguage } from '../contexts/LanguageContext';
+
 import type { ExperienceJob } from '../types/portfolio';
 
 type JobTag = ExperienceJob['tags'][number];
