@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom/vitest';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 
 import Header from '../components/Header';
@@ -28,7 +28,7 @@ describe('Header', () => {
   });
 });
 
-it('should display retro exit action when retro mode is active', () => {
+it('should display retro exit action when retro mode is active', async () => {
   const onExitRetro = vi.fn();
   render(
     <ToastProvider>
@@ -42,8 +42,16 @@ it('should display retro exit action when retro mode is active', () => {
     </ToastProvider>
   );
 
-  fireEvent.click(screen.getByLabelText('Abrir menú de acciones'));
-  const retroAction = screen.getByRole('menuitem', { name: 'Salir de modo retro' });
-  fireEvent.click(retroAction);
+  const [desktopActionsButton] = screen.getAllByLabelText('Abrir menú de acciones');
+  fireEvent.click(desktopActionsButton);
+  const menu = await screen.findByRole('menu', { name: 'Acciones rápidas' });
+  const itemLabels = within(menu)
+    .getAllByRole('menuitem')
+    .map(element => element.textContent?.trim());
+  // eslint-disable-next-line no-console
+  console.log('menu items:', itemLabels);
+  expect(itemLabels).toContain('Salir de modo retro');
+  const retroActionButton = within(menu).getByRole('menuitem', { name: /salir de modo retro/i });
+  fireEvent.click(retroActionButton);
   expect(onExitRetro).toHaveBeenCalledTimes(1);
 });

@@ -291,43 +291,62 @@ export default function Header({ retroModeEnabled = false, onExitRetroMode }: He
     [data.nav, navigateTo]
   );
 
-  const overflowSections = useMemo<QuickActionGroup[]>(
-    () => {
-      const preferenceItems: QuickAction[] = [
-        { key: 'pdf', label: data.tooltips.pdf, icon: <Download size={22} aria-hidden="true" />, action: handlePdf, immediate: true },
-        {
-          key: 'confetti',
-          label: confettiLabel,
-          icon: <Sparkles size={22} aria-hidden="true" />,
-          action: handleConfettiClick,
-          disabled: isConfettiOnCooldown
-        },
-        {
-          key: 'language',
-          label: languageToggleLabel,
-          icon: <Languages size={22} aria-hidden="true" />,
-          action: toggleLanguage
-        },
-        {
-          key: 'theme',
-          label: themeToggleLabel,
-          icon: theme === 'dark' ? <Sun size={22} aria-hidden="true" /> : <Moon size={22} aria-hidden="true" />,
-          action: toggleTheme
-        }
-      ];
+  const preferenceItems = useMemo<QuickAction[]>(() => {
+    const baseItems: QuickAction[] = [
+      { key: 'pdf', label: data.tooltips.pdf, icon: <Download size={22} aria-hidden="true" />, action: handlePdf, immediate: true },
+      {
+        key: 'confetti',
+        label: confettiLabel,
+        icon: <Sparkles size={22} aria-hidden="true" />,
+        action: handleConfettiClick,
+        disabled: isConfettiOnCooldown
+      },
+      {
+        key: 'language',
+        label: languageToggleLabel,
+        icon: <Languages size={22} aria-hidden="true" />,
+        action: toggleLanguage
+      },
+      {
+        key: 'theme',
+        label: themeToggleLabel,
+        icon: theme === 'dark' ? <Sun size={22} aria-hidden="true" /> : <Moon size={22} aria-hidden="true" />,
+        action: toggleTheme
+      }
+    ];
 
-      if (retroModeEnabled && onExitRetroMode) {
-        preferenceItems.unshift({
+    if (retroModeEnabled && onExitRetroMode) {
+      return [
+        {
           key: 'retro-exit',
           label: 'Salir de modo retro',
           icon: <Sparkles size={22} aria-hidden="true" />,
           action: onExitRetroMode,
           immediate: true
-        });
-      }
+        },
+        ...baseItems
+      ];
+    }
 
-      return [
-        {
+    return baseItems;
+  }, [
+    confettiLabel,
+    data.tooltips.pdf,
+    isConfettiOnCooldown,
+    languageToggleLabel,
+    onExitRetroMode,
+    retroModeEnabled,
+    theme,
+    themeToggleLabel,
+    toggleLanguage,
+    toggleTheme,
+    handleConfettiClick,
+    handlePdf
+  ]);
+
+  const overflowSections = useMemo<QuickActionGroup[]>(
+    () => [
+      {
         id: 'social',
         label: 'Redes profesionales',
         items: [
@@ -356,8 +375,7 @@ export default function Header({ retroModeEnabled = false, onExitRetroMode }: He
         label: 'Preferencias y extras',
         items: preferenceItems
       }
-      ];
-    },
+    ],
     [
       copyEmail,
       data.tooltips.copy,
