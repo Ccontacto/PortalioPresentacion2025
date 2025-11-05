@@ -12,13 +12,21 @@ export default function Hero() {
   const shouldReduceMotion = useReducedMotion();
 
   const heroTitleHtml = t('title')
-    .replace('Generative', '<span class="hero-intro__accent">Generative</span>')
-    .replace('AI & iOS', '<span class="hero-intro__accent">AI &amp; iOS</span>');
+    .replace(
+      'Líder Técnico iOS',
+      '<span class="hero-intro__accent hero-intro__accent--primary">Líder Técnico iOS</span>'
+    )
+    .replace(
+      'Arquitecto de IA',
+      '<span class="hero-intro__accent hero-intro__accent--secondary">Arquitecto de IA</span>'
+    );
 
   const heroDescriptionHtml = t('description')
+    .replace('Swift/SwiftUI', '<span class="hero-intro__gradient">Swift · SwiftUI</span>')
+    .replace('Clean Architecture', '<span class="hero-intro__gradient">Clean Architecture</span>')
     .replace('IA generativa', '<span class="hero-intro__gradient">IA generativa</span>')
-    .replace('LLMs', '<span class="hero-intro__gradient">LLMs</span>')
-    .replace('RAG', '<span class="hero-intro__gradient">RAG</span>');
+    .replace('RAG', '<span class="hero-intro__gradient">RAG</span>')
+    .replace('LangChain', '<span class="hero-intro__gradient">LangChain</span>');
 
   return (
     <section id="home" className="page-section" aria-labelledby="hero-heading">
@@ -51,9 +59,7 @@ export default function Hero() {
           ))}
         </div>
 
-        <h2 className="hero-name mt-10">
-          {t('name')}
-        </h2>
+        <h2 className="hero-name mt-10">{t('name')}</h2>
       </motion.div>
     </section>
   );
