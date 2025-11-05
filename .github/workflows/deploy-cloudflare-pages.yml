@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [ "**" ]
 
+defaults:
+  run:
+    shell: bash --noprofile --norc {0}
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -19,7 +23,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 20
           cache: npm
           cache-dependency-path: package-lock.json
 

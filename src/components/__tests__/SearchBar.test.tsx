@@ -24,6 +24,16 @@ vi.mock('../../contexts/NavigationContext', async () => {
   };
 });
 
+vi.mock('../../contexts/LanguageContext', () => ({
+  useLanguage: () => ({
+    data: {
+      ui: {
+        viewProjects: 'Ver proyectos'
+      }
+    }
+  })
+}));
+
 vi.mock('focus-trap-react', () => ({
   FocusTrap: ({ children }: { children: React.ReactNode }) => <>{children}</>
 }));

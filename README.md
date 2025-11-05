@@ -3,8 +3,16 @@
 Portfolio React + Vite listo para desarrollo local, testing y despliegue en Cloudflare Pages.
 
 ## Requisitos
-- Node 22 o superior (ver `.nvmrc`)
+- Node 20 LTS (para builds en Cloudflare Pages) o Node 22+ para desarrollo local
 - Dependencias instaladas (`npm install` / `pnpm install`)
+
+## Stack 2025
+- React 19.2 + React DOM 19.2 (renderizado SPA con Suspense y server hints opcionales)
+- Vite 7.1 como bundler/dev server con TypeScript 5.9 y compatibilidad ESM nativa
+- Tailwind CSS 4.1 + utilidades personalizadas (`src/index.css`) más PostCSS 8.5 via `@tailwindcss/postcss`
+- Framer Motion 12.23 para animaciones, Lucide 0.552 para iconografía, jsPDF 3.0 para exportar CV
+- Vitest 4 + Testing Library para pruebas de componentes, ESLint 9 + Prettier 3 para lint/format
+- Deploy automatizado en Cloudflare Pages (build `npm run build`, directorio `dist`)
 
 ## Scripts disponibles
 - `npm run dev`: levanta Vite (0.0.0.0:5173). Si cambias deps, limpia cache con `rm -rf node_modules/.vite`.
@@ -33,6 +41,7 @@ Portfolio React + Vite listo para desarrollo local, testing y despliegue en Clou
    - Framework preset: **Vite**
    - Build command: `npm run build`
    - Output directory: `dist`
+   - Variable de entorno `NODE_VERSION=20` (Cloudflare expone Node 20.x en los builds 2025)
 3. (Opcional) CLI Wrangler: `npx wrangler pages deploy dist --project-name <tu-proyecto>`.
 
 ## CI/CD
@@ -53,3 +62,26 @@ Portfolio React + Vite listo para desarrollo local, testing y despliegue en Clou
 - Tests (`npm run test:ci`): ✅
 - Build (`npm run build`): ✅
 - caché Vite limpia (`rm -rf node_modules/.vite` antes de `npm run dev` si cambias bundling).
+
+## Setup rápido (Git + Cloudflare)
+
+1. Configura las variables de entorno con tus credenciales:
+   ```bash
+   export GIT_USER_NAME="Tu Nombre"
+   export GIT_USER_EMAIL="contacto@yosoymx.com"
+   export CLOUDFLARE_ACCOUNT_ID="<tu-account-id>"
+   export CLOUDFLARE_API_TOKEN="<tu-api-token>"
+   export CLOUDFLARE_PROJECT="portalio-presentacion-2025"
+   ```
+2. Inicializa la configuración de Git en el repo:
+   ```bash
+   npm run setup:git
+   ```
+3. Despliega manualmente a Cloudflare Pages cuando quieras:
+   ```bash
+   npm run deploy:cf
+   ```
+
+> **Nota:** el script de deploy ejecuta `npm run build` y usa `wrangler` bajo el capó. Si no deseas exportar los secretos en la terminal, puedes ejecutarlo así: `CLOUDFLARE_API_TOKEN=... npm run deploy:cf`.
+
+Para ejecución continua, los workflows de GitHub Actions ya están listos; sólo asegúrate de registrar los secretos `CLOUDFLARE_API_TOKEN` y `CLOUDFLARE_ACCOUNT_ID` en el repositorio.

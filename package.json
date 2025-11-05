@@ -5,7 +5,7 @@
   "type": "module",
   "packageManager": "npm@10",
   "engines": {
-    "node": ">=22"
+    "node": ">=20"
   },
   "scripts": {
     "dev": "vite --host 0.0.0.0 --port 5173",
@@ -17,7 +17,9 @@
     "tsc": "tsc --noEmit",
     "test": "vitest",
     "test:ci": "vitest run --reporter=dot --coverage",
-    "check:ci": "npm run test:ci && npm run build"
+    "check:ci": "npm run test:ci && npm run build",
+    "setup:git": "bash scripts/configure-dev.sh",
+    "deploy:cf": "bash scripts/deploy-cloudflare.sh"
   },
   "dependencies": {
     "focus-trap-react": "^11.0.4",

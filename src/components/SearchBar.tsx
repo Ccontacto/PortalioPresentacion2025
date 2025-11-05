@@ -12,6 +12,7 @@ import {
 } from 'react';
 import { createPortal } from 'react-dom';
 
+import { useLanguage } from '../contexts/LanguageContext';
 import { useNavigation } from '../contexts/NavigationContext';
 import { useBodyScrollLock } from '../hooks/useBodyScrollLock';
 import { launchConfetti } from '../utils/confetti';
@@ -51,6 +52,7 @@ export default function SearchBar({
   const descriptionId = useId();
   const panelId = useId();
   const { navigateTo } = useNavigation();
+  const { data } = useLanguage();
 
   const tagOccurrences = useMemo(() => {
     const map = new Map<ProjectTag, number>();
@@ -95,11 +97,11 @@ export default function SearchBar({
 
   useEffect(() => {
     if (!isModalOpen || typeof window === 'undefined') return undefined;
-    const focusTimer = window.setTimeout(() => {
+    const focusTimer = setTimeout(() => {
       inputRef.current?.focus();
     }, 90);
     return () => {
-      window.clearTimeout(focusTimer);
+      clearTimeout(focusTimer);
     };
   }, [isModalOpen]);
 
@@ -109,14 +111,14 @@ export default function SearchBar({
       return;
     }
     if (debounceRef.current) {
-      window.clearTimeout(debounceRef.current);
+      clearTimeout(debounceRef.current);
     }
-    debounceRef.current = window.setTimeout(() => {
+    debounceRef.current = setTimeout(() => {
       onSearch(searchTerm.trim());
     }, DEBOUNCE_MS);
     return () => {
       if (debounceRef.current) {
-        window.clearTimeout(debounceRef.current);
+        clearTimeout(debounceRef.current);
       }
     };
   }, [searchTerm, onSearch]);
@@ -307,9 +309,10 @@ export default function SearchBar({
                     type="button"
                     className="search-modal__apply"
                     onClick={handleNavigateProjects}
+                    data-retro-sfx
                   >
                     <ArrowRight size={18} aria-hidden="true" />
-                    Ver proyectos
+                    {data.ui.viewProjects}
                   </button>
                 </div>
 
@@ -344,6 +347,7 @@ export default function SearchBar({
         aria-controls={isModalOpen ? panelId : undefined}
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.97 }}
+        data-retro-sfx
       >
         <Search size={22} aria-hidden="true" />
         {isIconVariant ? (

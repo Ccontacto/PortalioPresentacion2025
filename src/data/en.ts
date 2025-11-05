@@ -45,6 +45,13 @@ export const en = {
     whatsapp_open: 'Opening WhatsApp...',
     availability_available: 'Status updated: available',
     availability_listening: 'Status updated: open to proposals',
-    availability_unavailable: 'Status updated: not available'
+    availability_unavailable: 'Status updated: not available',
+    retro_enabled: 'Retro mode enabled. Welcome to the 8-bit future.',
+    retro_disabled: 'Retro mode disabled. Back to the present.'
+  },
+  ui: {
+    viewProjects: 'View projects',
+    retroExit: 'Exit retro mode',
+    retroActiveLabel: 'Retro mode active'
   }
 };

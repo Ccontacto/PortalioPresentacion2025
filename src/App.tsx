@@ -6,6 +6,7 @@ import Header from './components/Header';
 import LoadingScreen from './components/LoadingScreen';
 import PageIndicator from './components/PageIndicator';
 import PageProgress from './components/PageProgress';
+import { RetroModeBanner } from './components/RetroModeBanner';
 import SkipToContent from './components/SkipToContent';
 import ToastContainer from './components/ToastContainer';
 import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
@@ -31,6 +32,17 @@ function AppContent() {
   const shouldReduceMotion = useReducedMotion();
   const konamiAnnouncementRef = useRef(true);
 
+  const retroEnabledMessage =
+    data.toasts?.retro_enabled ??
+    (data.lang === 'en'
+      ? 'Retro mode enabled. Welcome to the 8-bit future.'
+      : KONAMI_ENABLE_MESSAGE);
+  const retroDisabledMessage =
+    data.toasts?.retro_disabled ??
+    (data.lang === 'en'
+      ? 'Retro mode disabled. Back to the present.'
+      : KONAMI_DISABLE_MESSAGE);
+
   const keyboardShortcuts = useMemo(
     () => [
       { keys: ['t'], metaKey: true, callback: () => toggleTheme() },
@@ -41,17 +53,34 @@ function AppContent() {
 
   useKeyboardShortcuts(keyboardShortcuts);
 
+  const exitKonamiMode = useCallback(
+    (options?: { announce?: boolean }) => {
+      if (!isKonami) {
+        return;
+      }
+      deactivateKonami();
+      if (options?.announce !== false) {
+        showToast(retroDisabledMessage, 'info');
+      }
+    },
+    [deactivateKonami, isKonami, retroDisabledMessage, showToast]
+  );
+
   const toggleKonamiMode = useCallback(() => {
     if (isKonami) {
-      deactivateKonami();
-      showToast(KONAMI_DISABLE_MESSAGE, 'info');
+      exitKonamiMode();
       return;
     }
     activateKonami();
-    showToast(KONAMI_ENABLE_MESSAGE, 'success');
-  }, [activateKonami, deactivateKonami, isKonami, showToast]);
+    showToast(retroEnabledMessage, 'success');
+  }, [activateKonami, exitKonamiMode, isKonami, retroEnabledMessage, showToast]);
 
   useKonamiCode(toggleKonamiMode);
+
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+    document.documentElement.classList.toggle('retro-mode', isKonami);
+  }, [isKonami]);
 
   useEffect(() => {
     if (!konamiAnnouncementRef.current) {
@@ -59,9 +88,9 @@ function AppContent() {
     }
     konamiAnnouncementRef.current = false;
     if (isKonami) {
-      showToast(KONAMI_ENABLE_MESSAGE, 'success');
+      showToast(retroEnabledMessage, 'success');
     }
-  }, [isKonami, showToast]);
+  }, [isKonami, retroEnabledMessage, showToast]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -81,7 +110,8 @@ function AppContent() {
       >
         <PageProgress />
         <SkipToContent />
-        <Header />
+        <Header retroModeEnabled={isKonami} onExitRetroMode={exitKonamiMode} />
+        {isKonami ? <RetroModeBanner onExitRetro={exitKonamiMode} /> : null}
         {/* MEJORA 1: main con role explícito y aria-label */}
         <main className="main-content" id="main-content" role="main" aria-label="Contenido principal">
           <Hero />

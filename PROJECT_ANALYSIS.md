@@ -17,13 +17,13 @@ This project is a modern, single-page portfolio for a professional named José C
 
 ## 2. Technology Stack
 
-*   **Frontend:** React 18.3, TypeScript 5.5
-*   **Build Tool:** Vite 5.3
-*   **Styling:** Tailwind CSS 3.4, CSS Variables
-*   **Animations:** Framer Motion 11.2
-*   **Icons:** Lucide React
-*   **PDF Generation:** jsPDF 2.5
-*   **Linting:** ESLint, Prettier
+*   **Frontend:** React 19.2, TypeScript 5.9
+*   **Build Tool:** Vite 7.1 (ESM-first, SSR-ready)
+*   **Styling:** Tailwind CSS 4.1 reforzado con design tokens y custom utilities
+*   **Animations:** Framer Motion 12.23
+*   **Icons:** Lucide React 0.552
+*   **PDF Generation:** jsPDF 3.0
+*   **Linting:** ESLint 9 + Prettier 3
 
 ## 3. Project Structure
 

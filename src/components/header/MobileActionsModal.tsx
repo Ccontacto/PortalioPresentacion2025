@@ -76,6 +76,7 @@ export function MobileActionsModal({ open, groups, onClose, menuRef }: Props) {
                       }}
                       disabled={item.disabled}
                       aria-disabled={item.disabled ? 'true' : 'false'}
+                      data-retro-sfx
                     >
                       {item.icon ? <span className="mobile-actions-modal__icon">{item.icon}</span> : null}
                       <span className="mobile-actions-modal__label">{item.label}</span>
