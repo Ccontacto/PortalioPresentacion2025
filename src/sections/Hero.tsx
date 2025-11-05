@@ -28,10 +28,6 @@ export default function Hero() {
     .replace('RAG', '<span class="hero-intro__gradient">RAG</span>')
     .replace('LangChain', '<span class="hero-intro__gradient">LangChain</span>');
 
-  const heroTaglineHtml = t('tagline')
-    .replace('IA generativa', '<span class="hero-intro__gradient hero-intro__gradient--soft">IA generativa</span>')
-    .replace('iOS', '<span class="hero-intro__gradient hero-intro__gradient--soft">iOS</span>');
-
   return (
     <section id="home" className="page-section" aria-labelledby="hero-heading">
       <motion.div
@@ -50,7 +46,7 @@ export default function Hero() {
 
         <div className="hero-intro">
           <p className="hero-intro__title" dangerouslySetInnerHTML={{ __html: heroTitleHtml }} />
-          <p className="hero-intro__tagline" dangerouslySetInnerHTML={{ __html: heroTaglineHtml }} />
+          <p className="hero-intro__tagline">{t('tagline')}</p>
           <p className="hero-intro__body" dangerouslySetInnerHTML={{ __html: heroDescriptionHtml }} />
         </div>
 
@@ -63,10 +59,7 @@ export default function Hero() {
           ))}
         </div>
 
-        <h2 className="hero-name mt-10">
-          <span className="hero-name__text">{t('name')}</span>
-          <span className="hero-name__gradient-text">{t('title')}</span>
-        </h2>
+        <h2 className="hero-name mt-10">{t('name')}</h2>
       </motion.div>
     </section>
   );
