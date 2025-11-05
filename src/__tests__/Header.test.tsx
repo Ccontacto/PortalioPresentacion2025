@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom/vitest';
-import { render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { fireEvent, render, screen, within } from '@testing-library/react';
+import { describe, it, expect } from 'vitest';
 
 import Header from '../components/Header';
 import { LanguageProvider } from '../contexts/LanguageContext';
@@ -9,7 +9,7 @@ import { ThemeProvider } from '../contexts/ThemeContext';
 import { ToastProvider } from '../contexts/ToastContext';
 
 describe('Header', () => {
-  it('should render header and actions without errors', () => {
+  const renderHeader = () =>
     render(
       <ToastProvider>
         <LanguageProvider>
@@ -21,9 +21,28 @@ describe('Header', () => {
         </LanguageProvider>
       </ToastProvider>
     );
-    // Header landmark exists
+
+  it('should render header and actions without errors', () => {
+    renderHeader();
     expect(screen.getByRole('banner')).toBeInTheDocument();
-    // Mobile quick actions button is present (unique label)
     expect(screen.getByLabelText('Abrir menú de acciones rápidas')).toBeInTheDocument();
+  });
+
+  it('toggles Konami quick action label when pressed', async () => {
+    renderHeader();
+
+    const [desktopActionsButton] = screen.getAllByLabelText('Abrir menú de acciones');
+    fireEvent.click(desktopActionsButton);
+
+    const menu = await screen.findByRole('menu', { name: 'Acciones rápidas' });
+    const konamiAction = within(menu).getByRole('menuitem', { name: /activar modo konami/i });
+    fireEvent.click(konamiAction);
+
+    fireEvent.click(desktopActionsButton);
+    const updatedMenu = await screen.findByRole('menu', { name: 'Acciones rápidas' });
+
+    expect(
+      within(updatedMenu).getByRole('menuitem', { name: /salir de modo konami/i })
+    ).toBeInTheDocument();
   });
 });
