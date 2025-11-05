@@ -12,13 +12,25 @@ export default function Hero() {
   const shouldReduceMotion = useReducedMotion();
 
   const heroTitleHtml = t('title')
-    .replace('Generative', '<span class="hero-intro__accent">Generative</span>')
-    .replace('AI & iOS', '<span class="hero-intro__accent">AI &amp; iOS</span>');
+    .replace(
+      'Líder Técnico iOS',
+      '<span class="hero-intro__accent hero-intro__accent--primary">Líder Técnico iOS</span>'
+    )
+    .replace(
+      'Arquitecto de IA',
+      '<span class="hero-intro__accent hero-intro__accent--secondary">Arquitecto de IA</span>'
+    );
 
   const heroDescriptionHtml = t('description')
+    .replace('Swift/SwiftUI', '<span class="hero-intro__gradient">Swift · SwiftUI</span>')
+    .replace('Clean Architecture', '<span class="hero-intro__gradient">Clean Architecture</span>')
     .replace('IA generativa', '<span class="hero-intro__gradient">IA generativa</span>')
-    .replace('LLMs', '<span class="hero-intro__gradient">LLMs</span>')
-    .replace('RAG', '<span class="hero-intro__gradient">RAG</span>');
+    .replace('RAG', '<span class="hero-intro__gradient">RAG</span>')
+    .replace('LangChain', '<span class="hero-intro__gradient">LangChain</span>');
+
+  const heroTaglineHtml = t('tagline')
+    .replace('IA generativa', '<span class="hero-intro__gradient hero-intro__gradient--soft">IA generativa</span>')
+    .replace('iOS', '<span class="hero-intro__gradient hero-intro__gradient--soft">iOS</span>');
 
   return (
     <section id="home" className="page-section" aria-labelledby="hero-heading">
@@ -38,7 +50,7 @@ export default function Hero() {
 
         <div className="hero-intro">
           <p className="hero-intro__title" dangerouslySetInnerHTML={{ __html: heroTitleHtml }} />
-          <p className="hero-intro__tagline">{t('tagline')}</p>
+          <p className="hero-intro__tagline" dangerouslySetInnerHTML={{ __html: heroTaglineHtml }} />
           <p className="hero-intro__body" dangerouslySetInnerHTML={{ __html: heroDescriptionHtml }} />
         </div>
 
@@ -52,7 +64,8 @@ export default function Hero() {
         </div>
 
         <h2 className="hero-name mt-10">
-          {t('name')}
+          <span className="hero-name__text">{t('name')}</span>
+          <span className="hero-name__gradient-text">{t('title')}</span>
         </h2>
       </motion.div>
     </section>

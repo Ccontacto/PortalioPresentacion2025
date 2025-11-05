@@ -9,9 +9,9 @@ import type { ReactElement } from 'react';
 type SkillItem = SkillCategory['items'][number];
 
 const iconMap: Record<string, ReactElement> = {
-  device: <Smartphone size={36} />,
-  robot: <Bot size={36} />,
-  cloud: <Cloud size={36} />
+  device: <Smartphone size={32} />,
+  robot: <Bot size={32} />,
+  cloud: <Cloud size={32} />
 };
 
 export default function Skills() {
@@ -39,8 +39,8 @@ export default function Skills() {
             viewport={{ once: true }}
             whileHover={{ y: -8 }}
           >
-            <div className="text-4xl mb-4 text-neutral-900 dark:text-neutral-100" aria-hidden="true">
-              {iconMap[cat.icon] ?? <Cpu size={36} />}
+            <div className="skill-card__icon" aria-hidden="true">
+              {iconMap[cat.icon] ?? <Cpu size={32} />}
             </div>
             <h3 className="text-lg font-bold mb-4">{cat.title}</h3>
             <div className="flex flex-wrap gap-2" role="list" aria-label={`Habilidades de ${cat.title}`}>

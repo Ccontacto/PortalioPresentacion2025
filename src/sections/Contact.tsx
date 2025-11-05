@@ -47,18 +47,30 @@ export default function Contact() {
     showToast(data.toasts.whatsapp_open, 'info');
   };
 
+  const contactTitleHtml = data.sections.contact.title.replace(
+    /IA/i,
+    '<span class="contact-hero__accent">IA</span>'
+  );
+
+  const contactSubtitleHtml = data.sections.contact.subtitle
+    .replace('IA', '<span class="contact-hero__accent">IA</span>')
+    .replace('iOS', '<span class="contact-hero__accent">iOS</span>');
+
   return (
     <>
       <section id="contact" className="page-section" aria-labelledby="contact-heading">
         <div className="contact-wrapper">
           <header className="contact-hero">
             <span className="contact-hero__eyebrow">Conectemos</span>
-            <h2 id="contact-heading" className="contact-hero__title">
-              {data.sections.contact.title}
-            </h2>
-            <p className="contact-hero__subtitle">
-              {data.sections.contact.subtitle}
-            </p>
+            <h2
+              id="contact-heading"
+              className="contact-hero__title"
+              dangerouslySetInnerHTML={{ __html: contactTitleHtml }}
+            />
+            <p
+              className="contact-hero__subtitle"
+              dangerouslySetInnerHTML={{ __html: contactSubtitleHtml }}
+            />
           </header>
 
           {/* MEJORA 5: aria-live para feedback de contacto */}
@@ -75,35 +87,42 @@ export default function Contact() {
 
           <div className="contact-actions">
             <button
+              type="button"
               onClick={openWhatsApp}
               className="contact-cta contact-cta--whatsapp"
-              aria-label="Contactar por WhatsApp"
             >
-              <WhatsappGlyph className="h-8 w-8" aria-hidden="true" />
-              <span className="sr-only">WhatsApp</span>
+              <span className="contact-cta__icon" aria-hidden="true">
+                <WhatsappGlyph className="h-8 w-8" />
+              </span>
+              <span className="contact-cta__label">WhatsApp</span>
             </button>
             <button
+              type="button"
               onClick={openEmail}
               className="contact-cta contact-cta--email"
-              aria-label="Contactar por Email"
             >
-              <Mail className="h-8 w-8" aria-hidden="true" />
-              <span className="sr-only">Email</span>
+              <span className="contact-cta__icon" aria-hidden="true">
+                <Mail className="h-8 w-8" />
+              </span>
+              <span className="contact-cta__label">Email</span>
             </button>
             <button
+              type="button"
               onClick={copyEmail}
               className="contact-cta contact-cta--copy"
-              aria-label="Copiar dirección de email"
             >
-              <Copy className="h-8 w-8" aria-hidden="true" />
-              <span className="sr-only">Copiar correo</span>
+              <span className="contact-cta__icon" aria-hidden="true">
+                <Copy className="h-8 w-8" />
+              </span>
+              <span className="contact-cta__label">Copiar correo</span>
             </button>
           </div>
 
           <section className="contact-info">
             <header className="contact-info__header">
               <h3 className="contact-info__title">{data.name}</h3>
-              <p className="contact-info__tagline">IA &amp; App Solutions</p>
+              <p className="contact-info__tagline">Líder Técnico iOS · Arquitectura IA</p>
+              <span className="contact-info__location">Basado en {data.location}</span>
             </header>
 
             <dl className="contact-info__list">
@@ -126,11 +145,6 @@ export default function Contact() {
                   </dd>
                 </div>
               ) : null}
-
-              <div className="contact-info__row">
-                <dt>Ubicación</dt>
-                <dd>{data.location}</dd>
-              </div>
             </dl>
 
             <footer className="contact-info__footer">
