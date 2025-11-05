@@ -8,13 +8,10 @@ describe('ThemeProvider', () => {
     vi.unstubAllGlobals();
   });
 
-  it('toggles between light and dark themes', () => {
-    const listeners: Array<(event: MediaQueryListEvent) => void> = [];
+  it('manages base and Konami themes', () => {
     const matchMediaMock = vi.fn().mockImplementation(() => ({
       matches: false,
-      addEventListener: (_event: string, listener: (event: MediaQueryListEvent) => void) => {
-        listeners.push(listener);
-      },
+      addEventListener: vi.fn(),
       removeEventListener: vi.fn(),
       addListener: vi.fn(),
       removeListener: vi.fn(),
@@ -29,17 +26,45 @@ describe('ThemeProvider', () => {
     });
 
     expect(result.current.theme).toBe('light');
+    expect(result.current.baseTheme).toBe('light');
+    expect(result.current.isKonami).toBe(false);
 
     act(() => {
       result.current.toggleTheme();
     });
 
     expect(result.current.theme).toBe('dark');
+    expect(result.current.baseTheme).toBe('dark');
+    expect(result.current.isKonami).toBe(false);
+
+    act(() => {
+      result.current.activateKonami();
+    });
+
+    expect(result.current.theme).toBe('konami');
+    expect(result.current.baseTheme).toBe('dark');
+    expect(result.current.isKonami).toBe(true);
 
     act(() => {
       result.current.toggleTheme();
     });
 
     expect(result.current.theme).toBe('light');
+    expect(result.current.baseTheme).toBe('light');
+    expect(result.current.isKonami).toBe(false);
+
+    act(() => {
+      result.current.toggleKonami();
+    });
+
+    expect(result.current.theme).toBe('konami');
+    expect(result.current.isKonami).toBe(true);
+
+    act(() => {
+      result.current.deactivateKonami();
+    });
+
+    expect(result.current.theme).toBe('light');
+    expect(result.current.isKonami).toBe(false);
   });
 });

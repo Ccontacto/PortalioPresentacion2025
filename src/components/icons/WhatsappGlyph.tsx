@@ -1,7 +1,6 @@
 import type { SVGProps } from 'react';
 
 // Custom glyph keeps WhatsApp brand silhouette while inheriting text color.
-
 export function WhatsappGlyph(props: SVGProps<SVGSVGElement>) {
   return (
     <svg

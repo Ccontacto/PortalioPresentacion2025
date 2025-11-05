@@ -9,6 +9,7 @@ import {
   Mail,
   Moon,
   Search,
+  Sparkles,
   Sun,
   X
 } from 'lucide-react';
@@ -30,6 +31,7 @@ import { useTheme } from '../contexts/ThemeContext';
 import { useToast } from '../contexts/ToastContext';
 import { useBodyScrollLock } from '../hooks/useBodyScrollLock';
 import { useCvDownload } from '../hooks/useCvDownload';
+import { KONAMI_ENABLE_MESSAGE, KONAMI_DISABLE_MESSAGE } from '../constants/konami';
 
 import { WhatsappGlyph } from './icons/WhatsappGlyph';
 
@@ -51,7 +53,7 @@ const DEBOUNCE_MS = 160;
 export default function CommandPalette() {
   const { data, toggleLanguage, currentLang } = useLanguage();
   const { navigateTo } = useNavigation();
-  const { theme, toggleTheme } = useTheme();
+  const { baseTheme, toggleTheme, isKonami, activateKonami, deactivateKonami } = useTheme();
   const { showToast } = useToast();
   const downloadCv = useCvDownload();
 
@@ -220,10 +222,27 @@ export default function CommandPalette() {
 
     const preferenceItems: CommandItem[] = [
       {
-        id: 'pref-theme',
-        label: theme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro',
+        id: 'pref-konami',
+        label: isKonami ? 'Salir de modo Konami' : 'Activar modo Konami',
         group: 'Preferencias',
-        icon: theme === 'dark' ? <Sun size={22} aria-hidden="true" /> : <Moon size={22} aria-hidden="true" />,
+        icon: <Sparkles size={22} aria-hidden="true" />,
+        keywords: ['konami', 'retro', 'easter egg'],
+        action: () => {
+          if (isKonami) {
+            deactivateKonami();
+            showToast(KONAMI_DISABLE_MESSAGE, 'info');
+          } else {
+            activateKonami();
+            showToast(KONAMI_ENABLE_MESSAGE, 'success');
+          }
+          closePalette();
+        }
+      },
+      {
+        id: 'pref-theme',
+        label: baseTheme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro',
+        group: 'Preferencias',
+        icon: baseTheme === 'dark' ? <Sun size={22} aria-hidden="true" /> : <Moon size={22} aria-hidden="true" />,
         keywords: ['tema', 'theme', 'modo'],
         action: () => {
           toggleTheme();
@@ -244,7 +263,20 @@ export default function CommandPalette() {
     ];
 
     return [...navItems, ...contactItems, ...socialItems, ...actionItems, ...preferenceItems];
-  }, [closePalette, currentLang, data, downloadCv, navigateTo, showToast, theme, toggleLanguage, toggleTheme]);
+  }, [
+    activateKonami,
+    baseTheme,
+    closePalette,
+    currentLang,
+    data,
+    deactivateKonami,
+    downloadCv,
+    isKonami,
+    navigateTo,
+    showToast,
+    toggleLanguage,
+    toggleTheme
+  ]);
 
   const availableItems = useMemo(
     () => items.filter(item => !item.predicate || item.predicate()),

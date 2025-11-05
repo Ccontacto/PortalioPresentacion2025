@@ -16,7 +16,6 @@ import {
 } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useReducer, useRef } from 'react';
 
-
 import { useLanguage } from '../contexts/LanguageContext';
 import { useNavigation } from '../contexts/NavigationContext';
 import { useTheme } from '../contexts/ThemeContext';
@@ -24,6 +23,7 @@ import { useToast } from '../contexts/ToastContext';
 import { useBodyScrollLock } from '../hooks/useBodyScrollLock';
 import { useConfettiCooldown } from '../hooks/useConfettiCooldown';
 import { useCvDownload } from '../hooks/useCvDownload';
+import { KONAMI_ENABLE_MESSAGE, KONAMI_DISABLE_MESSAGE } from '../constants/konami';
 
 import { AvailabilityBadge } from './header/AvailabilityBadge';
 import { MobileActionsModal } from './header/MobileActionsModal';
@@ -98,8 +98,8 @@ type HeaderProps = {
   onExitRetroMode?: () => void;
 };
 
-export default function Header({ retroModeEnabled = false, onExitRetroMode }: HeaderProps = {}) {
-  const { theme, toggleTheme } = useTheme();
+export default function Header({ retroModeEnabled, onExitRetroMode }: HeaderProps = {}) {
+  const { baseTheme, toggleTheme, isKonami, activateKonami, deactivateKonami } = useTheme();
   const { data, currentLang, toggleLanguage } = useLanguage();
   const { toasts } = data;
   const { showToast } = useToast();
@@ -122,6 +122,21 @@ export default function Header({ retroModeEnabled = false, onExitRetroMode }: He
     tryLaunch: tryLaunchConfetti
   } = useConfettiCooldown({ cooldownMs: CONFETTI_COOLDOWN_MS, tickMs: CONFETTI_TICK_MS });
   const downloadCv = useCvDownload();
+  const retroEnabledMessage =
+    data.toasts?.retro_enabled ??
+    (currentLang === 'es'
+      ? KONAMI_ENABLE_MESSAGE
+      : 'Retro mode enabled. Welcome to the 8-bit future.');
+  const retroDisabledMessage =
+    data.toasts?.retro_disabled ??
+    (currentLang === 'es'
+      ? KONAMI_DISABLE_MESSAGE
+      : 'Retro mode disabled. Back to the present.');
+  const retroIsActive = retroModeEnabled ?? isKonami;
+  const retroEnterLabel = currentLang === 'es' ? 'Activar modo retro' : 'Enable retro mode';
+  const retroExitLabel =
+    data.ui?.retroExit ?? (currentLang === 'es' ? 'Salir de modo retro' : 'Exit retro mode');
+  const retroToggleLabel = retroIsActive ? retroExitLabel : retroEnterLabel;
 
   const copyEmail = useCallback(async () => {
     if (!navigator.clipboard) {
@@ -277,8 +292,31 @@ export default function Header({ retroModeEnabled = false, onExitRetroMode }: He
   const availabilityLabel = data.availability?.status?.[availability] ?? availability;
   const availabilityToggleLabel = data.availability?.toggle?.[availability] ?? 'Cambiar disponibilidad';
   const languageToggleLabel = currentLang === 'es' ? 'Switch to English' : 'Cambiar a español';
-  const themeToggleLabel = theme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro';
+  const themeToggleLabel = baseTheme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro';
   const confettiLabel = data.tooltips.celebrate;
+
+  const handleKonamiToggle = useCallback(() => {
+    if (retroIsActive) {
+      if (onExitRetroMode) {
+        onExitRetroMode();
+      } else if (isKonami) {
+        deactivateKonami();
+        showToast(retroDisabledMessage, 'info');
+      }
+      return;
+    }
+    activateKonami();
+    showToast(retroEnabledMessage, 'success');
+  }, [
+    activateKonami,
+    deactivateKonami,
+    isKonami,
+    onExitRetroMode,
+    retroDisabledMessage,
+    retroEnabledMessage,
+    retroIsActive,
+    showToast
+  ]);
 
   const navActions = useMemo<QuickAction[]>(
     () =>
@@ -292,7 +330,7 @@ export default function Header({ retroModeEnabled = false, onExitRetroMode }: He
   );
 
   const preferenceItems = useMemo<QuickAction[]>(() => {
-    const baseItems: QuickAction[] = [
+    return [
       { key: 'pdf', label: data.tooltips.pdf, icon: <Download size={22} aria-hidden="true" />, action: handlePdf, immediate: true },
       {
         key: 'confetti',
@@ -300,6 +338,13 @@ export default function Header({ retroModeEnabled = false, onExitRetroMode }: He
         icon: <Sparkles size={22} aria-hidden="true" />,
         action: handleConfettiClick,
         disabled: isConfettiOnCooldown
+      },
+      {
+        key: 'retro-mode',
+        label: retroToggleLabel,
+        icon: <Sparkles size={22} aria-hidden="true" />,
+        action: handleKonamiToggle,
+        immediate: true
       },
       {
         key: 'language',
@@ -310,40 +355,23 @@ export default function Header({ retroModeEnabled = false, onExitRetroMode }: He
       {
         key: 'theme',
         label: themeToggleLabel,
-        icon: theme === 'dark' ? <Sun size={22} aria-hidden="true" /> : <Moon size={22} aria-hidden="true" />,
+        icon: baseTheme === 'dark' ? <Sun size={22} aria-hidden="true" /> : <Moon size={22} aria-hidden="true" />,
         action: toggleTheme
       }
     ];
-
-    if (retroModeEnabled && onExitRetroMode) {
-      const result = [
-        {
-          key: 'retro-exit',
-          label: data.ui.retroExit,
-          icon: <Sparkles size={22} aria-hidden="true" />,
-          action: onExitRetroMode,
-          immediate: true
-        },
-        ...baseItems
-      ];
-      return result;
-    }
-
-    return baseItems;
   }, [
+    baseTheme,
     confettiLabel,
     data.tooltips.pdf,
-    data.ui.retroExit,
+    handleConfettiClick,
+    handleKonamiToggle,
+    handlePdf,
     isConfettiOnCooldown,
     languageToggleLabel,
-    onExitRetroMode,
-    retroModeEnabled,
-    theme,
+    retroToggleLabel,
     themeToggleLabel,
     toggleLanguage,
-    toggleTheme,
-    handleConfettiClick,
-    handlePdf
+    toggleTheme
   ]);
 
   const overflowSections = useMemo<QuickActionGroup[]>(
@@ -421,19 +449,20 @@ export default function Header({ retroModeEnabled = false, onExitRetroMode }: He
           <span ref={liveRegionRef} className="sr-only" role="status" aria-live="polite"></span>
           <div className="header-actions desktop-only header-actions--primary">
             <button
+              type="button"
               className="icon-btn"
-            aria-haspopup="true"
-            aria-expanded={activePanel === 'overflow'}
-            aria-controls="header-panel-overflow"
-            onClick={() => togglePanel('overflow')}
-            title="Acciones rápidas"
-            aria-label="Abrir menú de acciones"
-            data-retro-sfx
-          >
-            <MoreHorizontal size={24} aria-hidden="true" />
-          </button>
-        </div>
-        <button
+              aria-haspopup="true"
+              aria-expanded={activePanel === 'overflow'}
+              aria-controls="header-panel-overflow"
+              onClick={() => togglePanel('overflow')}
+              title="Acciones rápidas"
+              aria-label="Abrir menú de acciones"
+              data-retro-sfx
+            >
+              <MoreHorizontal size={24} aria-hidden="true" />
+            </button>
+          </div>
+          <button
             type="button"
             className="icon-btn mobile-only"
             onClick={() => dispatch({ type: 'openMobileMenu' })}

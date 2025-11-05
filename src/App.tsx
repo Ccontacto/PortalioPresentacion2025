@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { useCallback, useEffect, useMemo, useRef, useState, lazy, Suspense } from 'react';
+import { useCallback, useEffect, useMemo, useRef, lazy, Suspense } from 'react';
 
 import Dock from './components/Dock';
 import Header from './components/Header';
@@ -16,6 +16,7 @@ import { ToastProvider, useToast } from './contexts/ToastContext';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
 import { useKonamiCode } from './hooks/useKonamiCode';
 import { useReducedMotion } from './hooks/useReducedMotion';
+import { KONAMI_ENABLE_MESSAGE, KONAMI_DISABLE_MESSAGE } from './constants/konami';
 const ConfettiCanvas = lazy(() => import('./components/ConfettiCanvas'));
 const CommandPalette = lazy(() => import('./components/CommandPalette'));
 import Contact from './sections/Contact';
@@ -27,10 +28,20 @@ import Skills from './sections/Skills';
 function AppContent() {
   const { showToast } = useToast();
   const { data, toggleLanguage } = useLanguage();
-  const { theme, toggleTheme } = useTheme();
+  const { toggleTheme, isKonami, activateKonami, deactivateKonami } = useTheme();
   const shouldReduceMotion = useReducedMotion();
-  const [retroMode, setRetroMode] = useState(false);
-  const previousRetroRef = useRef(false);
+  const konamiAnnouncementRef = useRef(true);
+
+  const retroEnabledMessage =
+    data.toasts?.retro_enabled ??
+    (data.lang === 'en'
+      ? 'Retro mode enabled. Welcome to the 8-bit future.'
+      : KONAMI_ENABLE_MESSAGE);
+  const retroDisabledMessage =
+    data.toasts?.retro_disabled ??
+    (data.lang === 'en'
+      ? 'Retro mode disabled. Back to the present.'
+      : KONAMI_DISABLE_MESSAGE);
 
   const keyboardShortcuts = useMemo(
     () => [
@@ -42,40 +53,44 @@ function AppContent() {
 
   useKeyboardShortcuts(keyboardShortcuts);
 
-  const toggleRetroMode = useCallback(() => {
-    setRetroMode(prev => !prev);
-  }, []);
+  const exitKonamiMode = useCallback(
+    (options?: { announce?: boolean }) => {
+      if (!isKonami) {
+        return;
+      }
+      deactivateKonami();
+      if (options?.announce !== false) {
+        showToast(retroDisabledMessage, 'info');
+      }
+    },
+    [deactivateKonami, isKonami, retroDisabledMessage, showToast]
+  );
 
-  const exitRetroMode = useCallback(() => {
-    setRetroMode(false);
-  }, []);
+  const toggleKonamiMode = useCallback(() => {
+    if (isKonami) {
+      exitKonamiMode();
+      return;
+    }
+    activateKonami();
+    showToast(retroEnabledMessage, 'success');
+  }, [activateKonami, exitKonamiMode, isKonami, retroEnabledMessage, showToast]);
 
-  useKonamiCode(toggleRetroMode);
+  useKonamiCode(toggleKonamiMode);
 
   useEffect(() => {
     if (typeof document === 'undefined') return;
-    document.documentElement.classList.toggle('retro-mode', retroMode);
-  }, [retroMode]);
+    document.documentElement.classList.toggle('retro-mode', isKonami);
+  }, [isKonami]);
 
   useEffect(() => {
-    const activatedMessage =
-      data.toasts.retro_enabled ??
-      (data.lang === 'en'
-        ? 'Retro mode enabled. Welcome to the 8-bit future.'
-        : 'Modo retro activado. Bienvenido al futuro en 8 bits.');
-    const disabledMessage =
-      data.toasts.retro_disabled ??
-      (data.lang === 'en'
-        ? 'Retro mode disabled. Back to the present.'
-        : 'Modo retro desactivado. Volviendo al presente.');
-
-    if (retroMode && !previousRetroRef.current) {
-      showToast(activatedMessage, 'success');
-    } else if (!retroMode && previousRetroRef.current) {
-      showToast(disabledMessage, 'info');
+    if (!konamiAnnouncementRef.current) {
+      return;
     }
-    previousRetroRef.current = retroMode;
-  }, [retroMode, data.lang, data.toasts.retro_enabled, data.toasts.retro_disabled, showToast]);
+    konamiAnnouncementRef.current = false;
+    if (isKonami) {
+      showToast(retroEnabledMessage, 'success');
+    }
+  }, [isKonami, retroEnabledMessage, showToast]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -92,12 +107,11 @@ function AppContent() {
       <motion.div
         initial={shouldReduceMotion ? undefined : { opacity: 0 }}
         animate={shouldReduceMotion ? undefined : { opacity: 1 }}
-        className={theme === 'dark' ? 'dark' : ''}
       >
         <PageProgress />
         <SkipToContent />
-        <Header retroModeEnabled={retroMode} onExitRetroMode={exitRetroMode} />
-        {retroMode ? <RetroModeBanner onExitRetro={exitRetroMode} /> : null}
+        <Header retroModeEnabled={isKonami} onExitRetroMode={exitKonamiMode} />
+        {isKonami ? <RetroModeBanner onExitRetro={exitKonamiMode} /> : null}
         {/* MEJORA 1: main con role explícito y aria-label */}
         <main className="main-content" id="main-content" role="main" aria-label="Contenido principal">
           <Hero />
