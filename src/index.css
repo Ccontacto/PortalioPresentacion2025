@@ -102,6 +102,16 @@
   --border: var(--border-strong); /* Added */
   --card: var(--surface-card); /* Added */
   --font-ui: 'Manrope', system-ui, sans-serif; /* Added */
+  --sketch-ink: color-mix(in srgb, #050505 80%, var(--text-strong));
+  --sketch-graphite: color-mix(in srgb, #8f8f8f 55%, var(--text-strong));
+  --fx-gradient-angle: 90deg;
+  --fx-gradient-stop-1: transparent;
+  --fx-gradient-stop-2: transparent;
+  --fx-linear-gradient: linear-gradient(
+    var(--fx-gradient-angle, 90deg),
+    var(--fx-gradient-stop-1, transparent),
+    var(--fx-gradient-stop-2, transparent)
+  );
 }
 
 html[data-theme='dark'] {
@@ -154,6 +164,8 @@ html[data-theme='dark'] {
   --availability-unavailable-bg-start: rgba(189, 227, 255, 0.45);
   --availability-unavailable-bg-end: rgba(189, 227, 255, 0.28);
   --availability-unavailable-text: var(--token-text-dark);
+  --sketch-ink: color-mix(in srgb, #f5f5f5 80%, var(--text-strong));
+  --sketch-graphite: color-mix(in srgb, rgba(255, 255, 255, 0.85) 55%, var(--text-strong));
 }
 
 html[data-theme='konami'] {
@@ -3043,38 +3055,46 @@ html[data-theme='dark'] .hero-name {
 .page-section--hero {
   position: relative;
   min-height: 100vh;
-  padding: clamp(96px, 14vh, 140px) clamp(16px, 6vw, 56px) clamp(120px, 18vh, 180px);
+  padding: clamp(48px, 8vh, 96px) clamp(24px, 8vw, 96px);
+  display: flex;
+  align-items: center;
   justify-content: center;
-  background: radial-gradient(120% 120% at 50% 0%, rgba(255, 183, 221, 0.25), transparent 65%),
-    radial-gradient(90% 90% at 80% 20%, rgba(160, 231, 229, 0.22), transparent 70%),
-    var(--surface-primary);
+  background: var(--surface-primary);
 }
 
 .hero-shell {
   position: relative;
   width: 100%;
-  max-width: 1120px;
-  margin: 0 auto;
-  padding: clamp(24px, 4vw, 48px);
-  border-radius: 32px;
-  border: 1px solid color-mix(in srgb, var(--border-muted) 70%, transparent);
-  background:
-    linear-gradient(145deg, color-mix(in srgb, var(--surface-card) 88%, transparent), color-mix(in srgb, var(--surface-panel) 82%, transparent )),
-    var(--surface-card);
-  box-shadow: 0 32px 80px rgba(15, 23, 42, 0.18);
-  overflow: hidden;
-  isolation: isolate;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border-radius: 0;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  overflow: visible;
+  isolation: auto;
+  filter: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-shell::before,
+.hero-shell::after {
+  content: none;
 }
 
 .hero-backdrop {
   position: absolute;
-  inset: -40% -25% -30% -25%;
-  background: radial-gradient(50% 50% at 25% 30%, rgba(255, 137, 160, 0.22), transparent 70%),
-    radial-gradient(55% 55% at 75% 20%, rgba(165, 228, 220, 0.3), transparent 75%),
-    radial-gradient(65% 65% at 50% 70%, rgba(189, 227, 255, 0.25), transparent 75%);
-  filter: blur(80px);
-  opacity: 0.85;
+  inset: -12% -12% -12% -12%;
+  background:
+    repeating-linear-gradient(90deg, color-mix(in srgb, var(--sketch-ink) 35%, transparent) 0 1px, transparent 1px 18px),
+    repeating-linear-gradient(0deg, color-mix(in srgb, var(--sketch-ink) 25%, transparent) 0 1px, transparent 1px 28px);
+  filter: none;
+  opacity: 0.12;
   pointer-events: none;
+  mix-blend-mode: multiply;
   z-index: -1;
 }
 
@@ -3083,7 +3103,10 @@ html[data-theme='dark'] .hero-name {
   display: grid;
   gap: clamp(32px, 5vw, 64px);
   grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
-  align-items: start;
+  align-items: center;
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
 }
 
 .hero-content {
@@ -3095,20 +3118,39 @@ html[data-theme='dark'] .hero-name {
 .hero-eyebrow {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  font-size: 0.9rem;
+  gap: 12px;
+  font-size: 0.95rem;
   font-weight: 700;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: color-mix(in srgb, var(--text-strong) 65%, rgba(15, 23, 42, 0.4));
+  color: color-mix(in srgb, var(--sketch-ink) 55%, rgba(255, 255, 255, 0.02));
+  -webkit-text-stroke: 0.6px color-mix(in srgb, var(--sketch-ink) 80%, transparent);
+  text-shadow:
+    0.5px 0.5px 0 color-mix(in srgb, var(--sketch-graphite) 65%, transparent),
+    -0.5px -0.5px 0 color-mix(in srgb, var(--sketch-ink) 25%, transparent);
 }
 
 .hero-eyebrow::before {
   content: '';
-  width: 26px;
-  height: 3px;
-  border-radius: 999px;
-  background: linear-gradient(90deg, var(--gradient-brand-start), var(--gradient-brand-end));
+  width: 48px;
+  height: 1px;
+  --fx-gradient-angle: 90deg;
+  --fx-gradient-stop-1: color-mix(in srgb, var(--sketch-ink) 85%, transparent);
+  --fx-gradient-stop-2: color-mix(in srgb, var(--sketch-graphite) 55%, transparent);
+  background: var(--fx-linear-gradient);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--sketch-graphite) 35%, transparent);
+}
+
+.hero-eyebrow::after {
+  content: '';
+  width: 42px;
+  aspect-ratio: 1 / 1.618;
+  border: 1px solid color-mix(in srgb, var(--sketch-ink) 45%, transparent);
+  border-left-color: transparent;
+  border-bottom-color: transparent;
+  border-radius: 0 100% 0 0;
+  opacity: 0.65;
+  box-shadow: 2px 2px 0 color-mix(in srgb, var(--sketch-graphite) 35%, transparent);
 }
 
 .page-section--hero .hero-title {
@@ -3119,48 +3161,68 @@ html[data-theme='dark'] .hero-name {
   line-height: 1.05;
   letter-spacing: -0.015em;
   text-transform: none;
-  color: var(--text-strong);
-  text-shadow: none;
+  color: color-mix(in srgb, var(--sketch-ink) 25%, transparent);
+  -webkit-text-stroke: 1.8px color-mix(in srgb, var(--sketch-ink) 85%, transparent);
+  text-shadow:
+    2px 2px 0 color-mix(in srgb, var(--sketch-graphite) 65%, transparent),
+    -2px -2px 0 color-mix(in srgb, var(--sketch-ink) 35%, transparent);
 }
 
 .hero-title__accent {
   display: inline-block;
-  background: var(--token-grad-ia);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  -webkit-text-stroke: 0.8px color-mix(in srgb, var(--text-strong) 30%, rgba(15, 23, 42, 0.25));
+  position: relative;
+  background: none;
+  -webkit-background-clip: border-box;
+  -webkit-text-fill-color: currentColor;
+  color: inherit;
+  -webkit-text-stroke: inherit;
 }
 
-.hero-title__accent--primary {
-  background: linear-gradient(120deg, var(--token-accent1), var(--token-accent2));
+.hero-title__accent::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -6px;
+  height: 1px;
+  background: repeating-linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--sketch-ink) 45%, transparent) 0 8px,
+    transparent 8px 14px
+  );
+  opacity: 0.5;
 }
 
+.hero-title__accent--primary,
 .hero-title__accent--secondary {
-  background: linear-gradient(120deg, var(--token-accent3), var(--token-accent2));
+  background: none;
 }
 
 .hero-description__accent {
   display: inline;
   font-weight: 700;
-  background: var(--token-grad-ia);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  -webkit-text-stroke: 0.6px color-mix(in srgb, var(--text-strong) 24%, rgba(15, 23, 42, 0.2));
+  background: none;
+  -webkit-background-clip: border-box;
+  -webkit-text-fill-color: currentColor;
+  color: color-mix(in srgb, var(--sketch-ink) 65%, transparent);
+  -webkit-text-stroke: 0.6px color-mix(in srgb, var(--sketch-ink) 70%, transparent);
+  text-shadow: 1px 1px 0 color-mix(in srgb, var(--sketch-graphite) 45%, transparent);
 }
 
 .hero-tagline {
   font-size: clamp(1.1rem, 1.6vw, 1.35rem);
-  font-weight: 700;
-  color: color-mix(in srgb, var(--text-strong) 76%, rgba(15, 23, 42, 0.4));
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: color-mix(in srgb, var(--sketch-ink) 65%, rgba(255, 255, 255, 0.08));
+  text-shadow: 1px 1px 0 color-mix(in srgb, var(--sketch-graphite) 45%, transparent);
 }
 
 .hero-description {
   max-width: 640px;
   font-size: 1.05rem;
   line-height: 1.65;
-  color: color-mix(in srgb, var(--text-strong) 80%, rgba(15, 23, 42, 0.25));
+  color: color-mix(in srgb, var(--sketch-ink) 50%, rgba(255, 255, 255, 0.12));
+  text-shadow: 0.5px 0.5px 0 color-mix(in srgb, var(--sketch-graphite) 35%, transparent);
 }
 
 .hero-actions {
