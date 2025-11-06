@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { Home, Briefcase, Code, Rocket, Mail, Menu, X } from 'lucide-react';
+import { Briefcase, Code, Ellipsis, Home, Mail, Rocket } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState, type JSX, type KeyboardEvent as ReactKeyboardEvent } from 'react';
 
 import { useLanguage } from '../contexts/LanguageContext';
@@ -21,6 +21,8 @@ export default function Dock() {
   const buttonRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const [isDockVisible, setIsDockVisible] = useState(true);
   const [isExpanded, setIsExpanded] = useState(false);
+  const toggleRef = useRef<HTMLButtonElement | null>(null);
+  const navRef = useRef<HTMLElement | null>(null);
   const scrollTimeoutRef = useRef<number | null>(null);
 
   buttonRefs.current.length = data.nav.length;
@@ -71,6 +73,7 @@ export default function Dock() {
         if (!prev) return prev;
         return false;
       });
+      setIsExpanded(false);
 
       if (scrollTimeoutRef.current) {
         window.clearTimeout(scrollTimeoutRef.current);
@@ -100,9 +103,26 @@ export default function Dock() {
       }
     };
 
+    const handlePointerDown = (event: PointerEvent) => {
+      const target = event.target as Node | null;
+      if (!target) {
+        setIsExpanded(false);
+        return;
+      }
+      if (toggleRef.current?.contains(target)) {
+        return;
+      }
+      if (navRef.current?.contains(target)) {
+        return;
+      }
+      setIsExpanded(false);
+    };
+
     window.addEventListener('keydown', handleEscape);
+    window.addEventListener('pointerdown', handlePointerDown, { capture: true });
     return () => {
       window.removeEventListener('keydown', handleEscape);
+      window.removeEventListener('pointerdown', handlePointerDown, { capture: true });
     };
   }, [isExpanded]);
 
@@ -115,12 +135,19 @@ export default function Dock() {
     setIsExpanded(false);
   };
 
+  const navItems = data.nav ?? [];
+  const activeNav = navItems.find(item => item.id === activePage) ?? navItems[0];
+  const orderedNavItems = activeNav
+    ? [activeNav, ...navItems.filter(item => item.id !== activeNav.id)]
+    : navItems;
+  const currentIcon = activeNav ? icons[activeNav.id] ?? <Home size={24} aria-hidden="true" /> : <Home size={24} aria-hidden="true" />;
   const toggleLabel = isExpanded ? 'Cerrar navegación flotante' : 'Abrir navegación flotante';
 
   return (
     <div className="dock-container">
       <motion.div
         className="dock-shell"
+        layout
         initial={shouldReduceMotion ? undefined : { y: 120, opacity: 0 }}
         animate={
           shouldReduceMotion
@@ -142,28 +169,69 @@ export default function Dock() {
         }
         style={{ pointerEvents: isDockVisible ? 'auto' : 'none' }}
       >
-        <button
-          type="button"
-          className={`dock-toggle ${isExpanded ? 'is-active' : ''}`}
-          aria-label={toggleLabel}
-          aria-pressed={isExpanded}
-          aria-expanded={isExpanded}
-          onClick={handleToggle}
-        >
-          {isExpanded ? <X size={22} aria-hidden="true" /> : <Menu size={22} aria-hidden="true" />}
-        </button>
+        <AnimatePresence initial={false} mode="wait">
+          {!isExpanded && (
+            <motion.div
+              key="dock-collapsed"
+              className="dock-collapsed"
+              initial={shouldReduceMotion ? undefined : { opacity: 0, scale: 0.8, y: 12 }}
+              animate={shouldReduceMotion ? undefined : { opacity: 1, scale: 1, y: 0 }}
+              exit={shouldReduceMotion ? undefined : { opacity: 0, scale: 0.65, y: -8 }}
+              transition={
+                shouldReduceMotion
+                  ? undefined
+                  : {
+                      type: 'spring',
+                      stiffness: 320,
+                      damping: 28
+                    }
+              }
+            >
+              <button
+                type="button"
+                className="dock-current"
+                aria-label={activeNav ? `Ir a ${activeNav.label}` : 'Ir a inicio'}
+                title={activeNav?.label ?? 'Inicio'}
+              onClick={() => {
+                if (activeNav) {
+                  handleNavigate(activeNav.id);
+                } else {
+                  handleNavigate('home');
+                }
+                }}
+              >
+                {currentIcon}
+              </button>
+              <button
+                type="button"
+                className={`dock-toggle ${isExpanded ? 'is-active' : ''}`}
+                ref={toggleRef}
+                aria-label={toggleLabel}
+                aria-pressed={isExpanded}
+                aria-expanded={isExpanded}
+                onClick={handleToggle}
+              >
+                <Ellipsis size={22} aria-hidden="true" />
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         <AnimatePresence>
           {isExpanded && (
             <motion.nav
               key="dock-nav"
+              ref={node => {
+                navRef.current = node;
+              }}
               className="dock"
+              layout
               role="navigation"
               aria-label="Navegación principal del portfolio"
               onKeyDown={handleKeyNavigation}
-              initial={shouldReduceMotion ? undefined : { opacity: 0, y: 24, scale: 0.94 }}
+              initial={shouldReduceMotion ? undefined : { opacity: 0, y: 24, scale: 0.85 }}
               animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0, scale: 1 }}
-              exit={shouldReduceMotion ? undefined : { opacity: 0, y: 16, scale: 0.9 }}
+              exit={shouldReduceMotion ? undefined : { opacity: 0, y: 18, scale: 0.7 }}
               transition={
                 shouldReduceMotion
                   ? undefined
@@ -174,7 +242,7 @@ export default function Dock() {
                     }
               }
             >
-              {data.nav.map((item, index) => (
+              {orderedNavItems.map((item, index) => (
                 <button
                   key={item.id}
                   className={`dock-item ${activePage === item.id ? 'active' : ''}`}

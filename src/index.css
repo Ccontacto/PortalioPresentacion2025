@@ -1840,8 +1840,38 @@ html[data-theme='dark'] .contact-highlight:hover {
   pointer-events: auto;
   display: inline-flex;
   align-items: center;
-  gap: 12px;
-  background: transparent;
+  gap: 10px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--surface-panel) 85%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-ink) 12%, transparent);
+  box-shadow: 12px 12px 0 color-mix(in srgb, var(--color-ink) 4%, transparent);
+}
+
+.dock-current {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  border: 2px solid var(--border-strong);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--sketch-ink) 22%, rgba(255, 255, 255, 0.8)), color-mix(in srgb, var(--sketch-graphite) 18%, rgba(255, 255, 255, 0.6)));
+  color: color-mix(in srgb, var(--text-strong) 90%, var(--sketch-ink));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 6px 6px 0 var(--shadow-strong);
+  cursor: pointer;
+  transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+}
+
+.dock-current:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 8px 8px 0 var(--shadow-strong-hover);
+}
+
+.dock-collapsed {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .dock-toggle {
@@ -1881,6 +1911,34 @@ html[data-theme='konami'] .dock-toggle {
   box-shadow:
     0 0 0 2px rgba(0, 255, 156, 0.32),
     6px 6px 0 rgba(0, 255, 156, 0.35);
+}
+
+html[data-theme='dark'] .dock-shell {
+  background: rgba(15, 23, 42, 0.85);
+  border-color: rgba(248, 250, 252, 0.18);
+  box-shadow:
+    0 0 0 2px rgba(248, 250, 252, 0.08),
+    12px 12px 0 rgba(15, 23, 42, 0.45);
+}
+
+html[data-theme='konami'] .dock-shell {
+  background: rgba(6, 10, 24, 0.92);
+  border-color: rgba(113, 255, 178, 0.55);
+  box-shadow:
+    0 0 0 2px rgba(0, 255, 156, 0.35),
+    12px 12px 0 rgba(0, 255, 156, 0.35);
+}
+
+html[data-theme='dark'] .dock-current {
+  background: linear-gradient(135deg, rgba(165, 228, 220, 0.35), rgba(218, 183, 255, 0.32));
+  border-color: rgba(248, 250, 252, 0.28);
+  color: #f8fafc;
+}
+
+html[data-theme='konami'] .dock-current {
+  background: linear-gradient(135deg, rgba(0, 198, 255, 0.35), rgba(255, 0, 229, 0.32));
+  border-color: rgba(113, 255, 178, 0.65);
+  color: #71ffb2;
 }
 
 .dock {
