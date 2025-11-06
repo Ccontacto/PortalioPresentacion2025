@@ -38,7 +38,8 @@ export default function Hero() {
     ? heroCopy.descriptionSegments
     : [{ text: data.description }];
 
-  const tagline = heroCopy.tagline ?? data.tagline;
+  const tagline = heroCopy.tagline ?? data.tagline ?? '';
+  const taglineSegments = tagline.split(/(IA generativa|iOS)/gi);
   const status = heroCopy.status;
   const note = heroCopy.note;
 
@@ -68,7 +69,29 @@ export default function Hero() {
                 )
               )}
             </h1>
-            <p className="hero-tagline">{tagline}</p>
+            <p className="hero-tagline">
+              {taglineSegments.map((segment, index) => {
+                if (!segment) {
+                  return null;
+                }
+                const normalized = segment.toLowerCase();
+                if (normalized === 'ia generativa') {
+                  return (
+                    <span key={`tagline-ia-${index}`} className="hero-tagline__accent">
+                      {segment}
+                    </span>
+                  );
+                }
+                if (normalized === 'ios') {
+                  return (
+                    <span key={`tagline-ios-${index}`} className="hero-tagline__accent hero-tagline__accent--ios">
+                      {segment}
+                    </span>
+                  );
+                }
+                return <Fragment key={`tagline-text-${index}`}>{segment}</Fragment>;
+              })}
+            </p>
             <p className="hero-description">
               {descriptionSegments.map((segment, index) =>
                 segment.accent === 'gradient' ? (

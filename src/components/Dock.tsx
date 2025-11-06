@@ -1,5 +1,5 @@
-import { motion } from 'framer-motion';
-import { Home, Briefcase, Code, Rocket, Mail } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Home, Briefcase, Code, Rocket, Mail, Menu, X } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState, type JSX, type KeyboardEvent as ReactKeyboardEvent } from 'react';
 
 import { useLanguage } from '../contexts/LanguageContext';
@@ -20,11 +20,15 @@ export default function Dock() {
   const shouldReduceMotion = useReducedMotion();
   const buttonRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const [isDockVisible, setIsDockVisible] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(false);
   const scrollTimeoutRef = useRef<number | null>(null);
 
   buttonRefs.current.length = data.nav.length;
 
   const handleKeyNavigation = useCallback((event: ReactKeyboardEvent<HTMLDivElement>) => {
+    if (!isExpanded) {
+      return;
+    }
     if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') {
       return;
     }
@@ -44,7 +48,7 @@ export default function Dock() {
       currentIndex === -1 ? (direction === 1 ? 0 : buttons.length - 1) : (currentIndex + direction + buttons.length) % buttons.length;
 
     buttons[targetIndex]?.focus();
-  }, []);
+  }, [isExpanded]);
 
   useEffect(() => {
     if (shouldReduceMotion) {
@@ -85,14 +89,38 @@ export default function Dock() {
     };
   }, [shouldReduceMotion]);
 
+  useEffect(() => {
+    if (!isExpanded) {
+      return undefined;
+    }
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsExpanded(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleEscape);
+    return () => {
+      window.removeEventListener('keydown', handleEscape);
+    };
+  }, [isExpanded]);
+
+  const handleToggle = () => {
+    setIsExpanded(prev => !prev);
+  };
+
+  const handleNavigate = (sectionId: string) => {
+    navigateTo(sectionId);
+    setIsExpanded(false);
+  };
+
+  const toggleLabel = isExpanded ? 'Cerrar navegación flotante' : 'Abrir navegación flotante';
+
   return (
     <div className="dock-container">
-      {/* MEJORA 1: nav con role y aria-label */}
-      <motion.nav
-        className="dock"
-        role="navigation"
-        aria-label="Navegación principal del portfolio"
-        onKeyDown={handleKeyNavigation}
+      <motion.div
+        className="dock-shell"
         initial={shouldReduceMotion ? undefined : { y: 120, opacity: 0 }}
         animate={
           shouldReduceMotion
@@ -109,30 +137,63 @@ export default function Dock() {
                 type: 'spring',
                 stiffness: 260,
                 damping: 28,
-                delay: 0.3
+                delay: 0.2
               }
         }
         style={{ pointerEvents: isDockVisible ? 'auto' : 'none' }}
       >
-        {data.nav.map((item, index) => (
-          <button
-            key={item.id}
-            className={`dock-item ${activePage === item.id ? 'active' : ''}`}
-            onClick={() => navigateTo(item.id)}
-            ref={node => {
-              buttonRefs.current[index] = node;
-            }}
-            // MEJORA 1: aria-current para página activa
-            aria-current={activePage === item.id ? 'page' : undefined}
-            // MEJORA 3: aria-label explícito
-            aria-label={item.label}
-            title={item.label}
-            data-retro-sfx
-          >
-            {icons[item.id] || <Home size={24} aria-hidden="true" />}
-          </button>
-        ))}
-      </motion.nav>
+        <button
+          type="button"
+          className={`dock-toggle ${isExpanded ? 'is-active' : ''}`}
+          aria-label={toggleLabel}
+          aria-pressed={isExpanded}
+          aria-expanded={isExpanded}
+          onClick={handleToggle}
+        >
+          {isExpanded ? <X size={22} aria-hidden="true" /> : <Menu size={22} aria-hidden="true" />}
+        </button>
+
+        <AnimatePresence>
+          {isExpanded && (
+            <motion.nav
+              key="dock-nav"
+              className="dock"
+              role="navigation"
+              aria-label="Navegación principal del portfolio"
+              onKeyDown={handleKeyNavigation}
+              initial={shouldReduceMotion ? undefined : { opacity: 0, y: 24, scale: 0.94 }}
+              animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0, scale: 1 }}
+              exit={shouldReduceMotion ? undefined : { opacity: 0, y: 16, scale: 0.9 }}
+              transition={
+                shouldReduceMotion
+                  ? undefined
+                  : {
+                      type: 'spring',
+                      stiffness: 280,
+                      damping: 30
+                    }
+              }
+            >
+              {data.nav.map((item, index) => (
+                <button
+                  key={item.id}
+                  className={`dock-item ${activePage === item.id ? 'active' : ''}`}
+                  onClick={() => handleNavigate(item.id)}
+                  ref={node => {
+                    buttonRefs.current[index] = node;
+                  }}
+                  aria-current={activePage === item.id ? 'page' : undefined}
+                  aria-label={item.label}
+                  title={item.label}
+                  data-retro-sfx
+                >
+                  {icons[item.id] || <Home size={24} aria-hidden="true" />}
+                </button>
+              ))}
+            </motion.nav>
+          )}
+        </AnimatePresence>
+      </motion.div>
     </div>
   );
 }
