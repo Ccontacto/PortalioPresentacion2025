@@ -21,6 +21,7 @@ const ConfettiCanvas = lazy(() => import('./components/ConfettiCanvas'));
 const CommandPalette = lazy(() => import('./components/CommandPalette'));
 import Contact from './sections/Contact';
 import Experience from './sections/Experience';
+import FocusAreas from './sections/FocusAreas';
 import Hero from './sections/Hero';
 import Projects from './sections/Projects';
 import Skills from './sections/Skills';
@@ -115,6 +116,7 @@ function AppContent() {
         {/* MEJORA 1: main con role explícito y aria-label */}
         <main className="main-content" id="main-content" role="main" aria-label="Contenido principal">
           <Hero />
+          <FocusAreas />
           <Experience />
           <Skills />
           <Projects />

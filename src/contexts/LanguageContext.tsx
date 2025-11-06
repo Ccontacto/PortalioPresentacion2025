@@ -1,9 +1,10 @@
 import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
 
+import type { PortfolioData } from '../types/portfolio';
 import { en } from '../data/en';
 import { es } from '../data/es';
 
-type Data = typeof es;
+type Data = PortfolioData;
 type Lang = 'es' | 'en';
 
 type LanguageContextValue = {

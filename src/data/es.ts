@@ -1,11 +1,13 @@
+import type { PortfolioData } from '../types/portfolio';
+
 export const es = {
   lang: 'es',
   name: 'José Carlos Torres Rivera',
   title: 'Líder Técnico iOS & Arquitecto de IA',
-  subtitle: 'Líder Técnico iOS & Arquitecto de IA',
+  subtitle: 'IA generativa segura en ecosistemas iOS',
   tagline: 'Integro IA generativa en productos iOS desde la visión hasta el lanzamiento',
   description:
-    'Arquitecto de software y líder técnico iOS con 12+ años creando apps nativas, arquitecturas escalables y squads de alto desempeño. Especialista en Swift/SwiftUI, Clean Architecture y adopción de IA generativa (RAG, Core ML, LangChain).',
+    'Arquitecto de software y líder técnico iOS con 12+ años creando apps nativas, arquitecturas escalables y squads de alto desempeño. Especialista en Swift, SwiftUI, Clean Architecture y adopción de IA generativa (RAG, Core ML, LangChain).',
   email: 'jctorresrivera@live.com',
   phone: '+52 56 1172 7994',
   whatsapp: '5611727994',
@@ -40,6 +42,39 @@ export const es = {
     { id: 's2', value: '+10 %', label: 'Precisión en búsquedas' },
     { id: 's3', value: '85 %', label: 'Cobertura de pruebas' }
   ],
+  hero: {
+    eyebrow: 'Liderazgo iOS · IA generativa',
+    titleSegments: [
+      { text: 'Líder Técnico iOS', accent: 'primary' },
+      { text: ' & ' },
+      { text: 'Arquitecto de IA', accent: 'secondary' }
+    ],
+    descriptionSegments: [
+      {
+        text:
+          'Arquitecto de software y líder técnico iOS con 12+ años creando apps nativas, arquitecturas escalables y squads de alto desempeño. Especialista en '
+      },
+      { text: 'Swift · SwiftUI', accent: 'gradient' },
+      { text: ', Clean Architecture y adopción de ' },
+      { text: 'IA generativa', accent: 'gradient' },
+      { text: ' (RAG, Core ML, LangChain).' }
+    ],
+    status: {
+      title: 'Ahora',
+      description:
+        'Acompaño squads para lanzar experiencias nativas con IA generativa segura y medible.'
+    },
+    meta: [
+      { label: 'Ubicación', field: 'location' },
+      { label: 'Disponibilidad', field: 'badge' },
+      { label: 'Enfoque', value: 'Roadmaps iOS con IA generativa segura' }
+    ],
+    note: {
+      title: 'En lo que estoy trabajando',
+      items: ['IA en dispositivo', 'Playbooks RAG', 'CI/CD móvil']
+    },
+    tagline: 'Integro IA generativa en productos iOS desde la visión hasta el lanzamiento'
+  },
   sections: {
     experience: {
       title: 'Experiencia Profesional',
@@ -131,6 +166,38 @@ export const es = {
         }
       ]
     },
+    focus: {
+      eyebrow: 'Playbooks accionables',
+      title: 'Estrategia lista para integrar en tu roadmap',
+      subtitle:
+        'Tres líneas de ejecución para acelerar lanzamientos iOS potenciados con IA, métricas claras y equipos alineados.',
+      items: [
+        {
+          id: 'focus-ai',
+          eyebrow: 'IA aplicada',
+          title: 'IA confiable dentro del producto',
+          description:
+            'Diseño experiencias que mezclan RAG, modelos en dispositivo y guardrails medibles para liberar features seguros.',
+          highlights: ['Evaluaciones automáticas', 'Guardrails multicanal', 'Controles de calidad continuos']
+        },
+        {
+          id: 'focus-execution',
+          eyebrow: 'Entrega continua',
+          title: 'Operación que escala con tu equipo',
+          description:
+            'Creo pipelines móviles/IA con CI/CD, observabilidad y feature flags para lanzar sin fricción ni regresiones.',
+          highlights: ['CI/CD móvil con métricas', 'Feature flags + experimentos', 'Tableros de salud del release']
+        },
+        {
+          id: 'focus-leadership',
+          eyebrow: 'Liderazgo',
+          title: 'Alineación y coaching técnico',
+          description:
+            'Facilito decisiones entre producto, ingeniería y data con workshops, documentación y mentoría práctica.',
+          highlights: ['Workshops tácticos', 'Documentación viva', 'Mentoría para squads']
+        }
+      ]
+    },
     contact: {
       title: 'Contacto',
       subtitle: '¿Listo para acelerar tu roadmap de iOS e IA?',
@@ -162,7 +229,8 @@ export const es = {
   },
   ui: {
     viewProjects: 'Ver proyectos',
+    bookCall: 'Agendar conversación',
     retroExit: 'Salir de modo retro',
     retroActiveLabel: 'Modo retro activo'
   }
-};
+} as const satisfies PortfolioData;

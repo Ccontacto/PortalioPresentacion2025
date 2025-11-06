@@ -1,0 +1,57 @@
+import { motion } from 'framer-motion';
+
+import { useLanguage } from '../contexts/LanguageContext';
+import { useReducedMotion } from '../hooks/useReducedMotion';
+
+import type { FocusAreaItem } from '../types/portfolio';
+
+export default function FocusAreas() {
+  const { data } = useLanguage();
+  const focus = data.sections.focus;
+  const shouldReduceMotion = useReducedMotion();
+
+  if (!focus) {
+    return null;
+  }
+
+  return (
+    <section id="focus" className="page-section page-section--focus" aria-labelledby="focus-heading">
+      <header className="focus-header">
+        <span className="focus-header__eyebrow">{focus.eyebrow}</span>
+        <h2 id="focus-heading" className="focus-header__title">
+          {focus.title}
+        </h2>
+        <p className="focus-header__subtitle">{focus.subtitle}</p>
+      </header>
+
+      <div className="focus-grid" role="list">
+        {focus.items.map((item: FocusAreaItem, index: number) => (
+          <motion.article
+            key={item.id}
+            className="focus-card"
+            role="listitem"
+            initial={shouldReduceMotion ? undefined : { opacity: 0, y: 40 }}
+            whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
+            viewport={shouldReduceMotion ? undefined : { once: true, amount: 0.35 }}
+            transition={
+              shouldReduceMotion
+                ? undefined
+                : { delay: index * 0.08, duration: 0.5, ease: 'easeOut' }
+            }
+          >
+            <span className="focus-card__eyebrow">{item.eyebrow}</span>
+            <h3 className="focus-card__title">{item.title}</h3>
+            <p className="focus-card__description">{item.description}</p>
+            <ul className="focus-card__list">
+              {item.highlights.map(highlight => (
+                <li key={highlight} className="focus-card__list-item">
+                  {highlight}
+                </li>
+              ))}
+            </ul>
+          </motion.article>
+        ))}
+      </div>
+    </section>
+  );
+}
