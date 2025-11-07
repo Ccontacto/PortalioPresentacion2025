@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 
 import { useLanguage } from '../contexts/LanguageContext';
 import { useReducedMotion } from '../hooks/useReducedMotion';
@@ -26,18 +26,14 @@ export default function FocusAreas() {
 
       <div className="focus-grid" role="list">
         {focus.items.map((item: FocusAreaItem, index: number) => (
-          <motion.article
+          <m.article
             key={item.id}
             className="focus-card"
             role="listitem"
             initial={shouldReduceMotion ? undefined : { opacity: 0, y: 40 }}
             whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
             viewport={shouldReduceMotion ? undefined : { once: true, amount: 0.35 }}
-            transition={
-              shouldReduceMotion
-                ? undefined
-                : { delay: index * 0.08, duration: 0.5, ease: 'easeOut' }
-            }
+             transition={shouldReduceMotion ? undefined : { delay: index * 0.08 }}
           >
             <span className="focus-card__eyebrow">{item.eyebrow}</span>
             <h3 className="focus-card__title">{item.title}</h3>
@@ -49,7 +45,7 @@ export default function FocusAreas() {
                 </li>
               ))}
             </ul>
-          </motion.article>
+          </m.article>
         ))}
       </div>
     </section>

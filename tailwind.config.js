@@ -20,8 +20,8 @@ export default {
         'error': '#B91C1C'
       },
       fontFamily: {
-        heading: ['Montserrat', 'sans-serif'],
-        body: ['Inter', 'sans-serif']
+        heading: ['Outfit', 'sans-serif'],
+        body: ['Manrope', 'sans-serif']
       },
       borderWidth: {
         '3': '3px'

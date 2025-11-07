@@ -1,10 +1,11 @@
-import { AnimatePresence, motion, type Variants } from 'framer-motion';
+import { AnimatePresence, m, type Variants } from 'framer-motion';
 import { Briefcase, Code, Ellipsis, Home, Mail, Rocket } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useRef, useState, type JSX, type KeyboardEvent as ReactKeyboardEvent } from 'react';
 
 import { useLanguage } from '../contexts/LanguageContext';
 import { useNavigation } from '../contexts/NavigationContext';
 import { useReducedMotion } from '../hooks/useReducedMotion';
+import { MOTION, SPRING } from '../constants/animation';
 
 const icons: Record<string, JSX.Element> = {
   home: <Home size={24} aria-hidden="true" />,
@@ -20,15 +21,15 @@ const capsuleVariants: Variants = {
     opacity: 1,
     scale: 1,
     y: 0,
-    transition: {
+  transition: {
       type: 'spring',
-      stiffness: 260,
-      damping: 28,
+      stiffness: SPRING.stiffness,
+      damping: SPRING.damping,
       staggerChildren: 0.05,
       delayChildren: 0.08
     }
   },
-  exit: { opacity: 0, scale: 0.8, y: 10, transition: { duration: 0.14 } }
+  exit: { opacity: 0, scale: 0.8, y: 10, transition: { duration: MOTION.fast } }
 };
 
 const itemVariants: Variants = {
@@ -38,8 +39,8 @@ const itemVariants: Variants = {
     y: 0,
     transition: {
       type: 'spring',
-      stiffness: 360,
-      damping: 28
+      stiffness: SPRING.stiffness,
+      damping: SPRING.damping
     }
   }
 };
@@ -50,7 +51,7 @@ const collapsedActiveVariants: Variants = {
     x: -32,
     opacity: 0,
     scale: 0.92,
-    transition: { duration: 0.16, ease: 'easeInOut' }
+    transition: { duration: MOTION.fast, ease: 'easeInOut' }
   }
 };
 
@@ -60,7 +61,7 @@ const collapsedToggleVariants: Variants = {
     x: 32,
     opacity: 0,
     scale: 0.92,
-    transition: { duration: 0.16, ease: 'easeInOut' }
+    transition: { duration: MOTION.fast, ease: 'easeInOut' }
   }
 };
 
@@ -70,9 +71,9 @@ const navVariants: Variants = {
     opacity: 1,
     scale: 1,
     y: 0,
-    transition: { type: 'spring', stiffness: 280, damping: 30 }
+    transition: { type: 'spring', stiffness: SPRING.stiffness, damping: SPRING.damping }
   },
-  exit: { opacity: 0, scale: 0.8, y: 10, transition: { duration: 0.14 } }
+  exit: { opacity: 0, scale: 0.8, y: 10, transition: { duration: MOTION.fast } }
 };
 
 export default function Dock() {
@@ -208,7 +209,7 @@ export default function Dock() {
 
   return (
     <div className="dock-container">
-      <motion.div
+      <m.div
         className="dock-shell"
         layout
         initial={shouldReduceMotion ? undefined : { y: 120, opacity: 0 }}
@@ -225,15 +226,15 @@ export default function Dock() {
             ? undefined
             : {
                 type: 'spring',
-                stiffness: 260,
-                damping: 28,
+                stiffness: SPRING.stiffness,
+                damping: SPRING.damping,
                 delay: 0.2
               }
         }
       >
         <AnimatePresence initial={false} mode="wait">
           {!isExpanded && activeNav && (
-            <motion.div
+            <m.div
               key="dock-collapsed"
               className="dock-collapsed"
               initial={shouldReduceMotion ? undefined : { opacity: 0, scale: 0.9, y: 10 }}
@@ -244,12 +245,12 @@ export default function Dock() {
                   ? undefined
                   : {
                       type: 'spring',
-                      stiffness: 320,
-                      damping: 28
+                      stiffness: SPRING.stiffness,
+                      damping: SPRING.damping
                     }
               }
             >
-              <motion.button
+              <m.button
                 layoutId="dock-active"
                 type="button"
                 className="dock-current"
@@ -262,9 +263,9 @@ export default function Dock() {
                 exit={shouldReduceMotion ? undefined : 'exit'}
               >
                 {currentIcon}
-              </motion.button>
+              </m.button>
 
-              <motion.button
+              <m.button
                 layoutId="dock-toggle"
                 type="button"
                 className="dock-toggle"
@@ -279,14 +280,14 @@ export default function Dock() {
                 exit={shouldReduceMotion ? undefined : 'exit'}
               >
                 <Ellipsis size={22} aria-hidden="true" />
-              </motion.button>
-            </motion.div>
+              </m.button>
+            </m.div>
           )}
         </AnimatePresence>
 
         <AnimatePresence>
           {isExpanded && (
-            <motion.nav
+            <m.nav
               key="dock-nav"
               ref={node => {
                 navRef.current = node;
@@ -300,7 +301,7 @@ export default function Dock() {
               animate="show"
               exit="exit"
             >
-              <motion.button
+              <m.button
                 layoutId="dock-active"
                 className={`dock-item dock-item--active ${activePage === activeNav.id ? 'active' : ''}`}
                 onClick={() => handleNavigate(activeNav.id)}
@@ -309,9 +310,9 @@ export default function Dock() {
                 title={activeNav.label}
               >
                 {currentIcon}
-              </motion.button>
+              </m.button>
 
-              <motion.div
+              <m.div
                 layoutId="dock-toggle"
                 className="dock-list"
                 variants={shouldReduceMotion ? undefined : capsuleVariants}
@@ -320,7 +321,7 @@ export default function Dock() {
                 exit="exit"
               >
                 {secondaryNavItems.map(item => (
-                  <motion.button
+                  <m.button
                     key={item.id}
                     className={`dock-item ${activePage === item.id ? 'active' : ''}`}
                     onClick={() => handleNavigate(item.id)}
@@ -339,13 +340,13 @@ export default function Dock() {
                     exit="hidden"
                   >
                     {icons[item.id] || <Home size={24} aria-hidden="true" />}
-                  </motion.button>
+                  </m.button>
                 ))}
-              </motion.div>
-            </motion.nav>
+              </m.div>
+            </m.nav>
           )}
         </AnimatePresence>
-      </motion.div>
+      </m.div>
     </div>
   );
 }

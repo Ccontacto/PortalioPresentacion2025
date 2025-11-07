@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { LazyMotion, domAnimation, m } from 'framer-motion';
 import { useCallback, useEffect, useMemo, useRef, lazy, Suspense } from 'react';
 
 import Dock from './components/Dock';
@@ -105,7 +105,7 @@ function AppContent() {
   return (
     <>
       <LoadingScreen />
-      <motion.div
+      <m.div
         initial={shouldReduceMotion ? undefined : { opacity: 0 }}
         animate={shouldReduceMotion ? undefined : { opacity: 1 }}
       >
@@ -131,7 +131,7 @@ function AppContent() {
         <Suspense fallback={null}>
           <CommandPalette />
         </Suspense>
-      </motion.div>
+      </m.div>
     </>
   );
 }
@@ -142,7 +142,9 @@ export default function App() {
       <LanguageProvider>
         <ThemeProvider>
           <NavigationProvider>
-            <AppContent />
+            <LazyMotion features={domAnimation} strict>
+              <AppContent />
+            </LazyMotion>
           </NavigationProvider>
         </ThemeProvider>
       </LanguageProvider>

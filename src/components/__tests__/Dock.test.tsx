@@ -1,8 +1,10 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, within } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 
 import { NavigationProvider } from '../../contexts/NavigationContext';
 import { ThemeProvider } from '../../contexts/ThemeContext';
+// Forzar reduce motion en pruebas para evitar estados intermedios animados
+vi.mock('../../hooks/useReducedMotion', () => ({ useReducedMotion: () => true }));
 import Dock from '../Dock';
 import '@testing-library/jest-dom/vitest';
 
@@ -40,11 +42,16 @@ const renderWithProviders = (ui: React.ReactElement) => {
 };
 
 describe('Dock Component', () => {
-  it('should move focus to the right when ArrowRight is pressed', () => {
+  it('should move focus to the right when ArrowRight is pressed', async () => {
     renderWithProviders(<Dock />);
-    const buttons = screen.getAllByRole('button');
-    const firstButton = buttons[0];
-    const secondButton = buttons[1];
+    // Expand dock to enable keyboard navigation over items
+    fireEvent.click(screen.getByLabelText('Abrir navegación flotante'));
+    const navs = await screen.findAllByRole('navigation', { name: 'Navegación flotante' });
+    const nav = navs[navs.length - 1];
+    const buttons = within(nav).getAllByRole('button');
+    const listButtons = buttons.filter(btn => !btn.getAttribute('aria-current'));
+    const firstButton = listButtons[0];
+    const secondButton = listButtons[1];
 
     firstButton.focus();
     expect(firstButton).toHaveFocus();
@@ -53,11 +60,15 @@ describe('Dock Component', () => {
     expect(secondButton).toHaveFocus();
   });
 
-  it('should move focus to the left when ArrowLeft is pressed', () => {
+  it('should move focus to the left when ArrowLeft is pressed', async () => {
     renderWithProviders(<Dock />);
-    const buttons = screen.getAllByRole('button');
-    const firstButton = buttons[0];
-    const secondButton = buttons[1];
+    fireEvent.click(screen.getByLabelText('Abrir navegación flotante'));
+    const navs = await screen.findAllByRole('navigation', { name: 'Navegación flotante' });
+    const nav = navs[navs.length - 1];
+    const buttons = within(nav).getAllByRole('button');
+    const listButtons = buttons.filter(btn => !btn.getAttribute('aria-current'));
+    const firstButton = listButtons[0];
+    const secondButton = listButtons[1];
 
     secondButton.focus();
     expect(secondButton).toHaveFocus();
@@ -68,22 +79,30 @@ describe('Dock Component', () => {
 
   it('should wrap focus from the last item to the first when ArrowRight is pressed', async () => {
     renderWithProviders(<Dock />);
-    const buttons = screen.getAllByRole('button');
-    const lastButton = buttons[buttons.length - 1];
+    fireEvent.click(screen.getByLabelText('Abrir navegación flotante'));
+    const navs = await screen.findAllByRole('navigation', { name: 'Navegación flotante' });
+    const nav = navs[navs.length - 1];
+    const buttons = within(nav).getAllByRole('button');
+    const listButtons = buttons.filter(btn => !btn.getAttribute('aria-current'));
+    const lastButton = listButtons[listButtons.length - 1];
 
     lastButton.focus();
     expect(lastButton).toHaveFocus();
 
     fireEvent.keyDown(lastButton, { key: 'ArrowRight' });
     await waitFor(() => {
-      expect(document.activeElement).toHaveAttribute('aria-label', 'Home');
+      expect(document.activeElement).toHaveAttribute('aria-label', 'Experience');
     });
   });
 
   it('should wrap focus from the first item to the last when ArrowLeft is pressed', async () => {
     renderWithProviders(<Dock />);
-    const buttons = screen.getAllByRole('button');
-    const firstButton = buttons[0];
+    fireEvent.click(screen.getByLabelText('Abrir navegación flotante'));
+    const navs = await screen.findAllByRole('navigation', { name: 'Navegación flotante' });
+    const nav = navs[navs.length - 1];
+    const buttons = within(nav).getAllByRole('button');
+    const listButtons = buttons.filter(btn => !btn.getAttribute('aria-current'));
+    const firstButton = listButtons[0];
 
     firstButton.focus();
     expect(firstButton).toHaveFocus();

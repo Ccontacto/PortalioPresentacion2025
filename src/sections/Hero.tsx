@@ -1,5 +1,5 @@
 import { Fragment } from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 
 import { useLanguage } from '../contexts/LanguageContext';
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
@@ -45,7 +45,7 @@ export default function Hero() {
 
   return (
     <section id="home" className="page-section page-section--hero" aria-labelledby="hero-heading">
-      <motion.div
+      <m.div
         ref={ref}
         className="hero-shell"
         initial={shouldReduceMotion ? undefined : { opacity: 0, y: 32 }}
@@ -150,7 +150,7 @@ export default function Hero() {
             </div>
           </aside>
         </div>
-      </motion.div>
+      </m.div>
     </section>
   );
 }

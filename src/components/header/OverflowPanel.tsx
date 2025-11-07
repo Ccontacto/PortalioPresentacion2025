@@ -1,5 +1,5 @@
 import { X } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { PANEL_TRANSITION, PANEL_VARIANTS } from '../../constants/animation';
 
@@ -14,7 +14,7 @@ type Props = {
 export function OverflowPanel({ items, onClose, panelRef }: Props) {
   const shouldReduceMotion = useReducedMotion();
   return (
-    <motion.div
+    <m.div
       id="header-panel-overflow"
       className="header-panel header-panel--overflow"
       role="menu"
@@ -61,6 +61,6 @@ export function OverflowPanel({ items, onClose, panelRef }: Props) {
           </button>
         ))}
       </div>
-    </motion.div>
+    </m.div>
   );
 }

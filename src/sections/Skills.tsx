@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { Smartphone, Bot, Cloud, Cpu } from 'lucide-react';
 
 import { useLanguage } from '../contexts/LanguageContext';
@@ -31,7 +31,7 @@ export default function Skills() {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl">
         {data.sections.skills.categories.map((cat: SkillCategory) => (
-          <motion.article
+          <m.article
             key={cat.id}
             className="card"
             initial={{ opacity: 0, y: 50 }}
@@ -54,7 +54,7 @@ export default function Skills() {
                 </span>
               ))}
             </div>
-          </motion.article>
+          </m.article>
         ))}
       </div>
     </section>

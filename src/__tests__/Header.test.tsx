@@ -35,14 +35,14 @@ describe('Header', () => {
     fireEvent.click(desktopActionsButton);
 
     const menu = await screen.findByRole('menu', { name: 'Acciones rápidas' });
-    const konamiAction = within(menu).getByRole('menuitem', { name: /activar modo konami/i });
+    const konamiAction = within(menu).getByRole('menuitem', { name: /activar modo (retro|konami)/i });
     fireEvent.click(konamiAction);
 
     fireEvent.click(desktopActionsButton);
     const updatedMenu = await screen.findByRole('menu', { name: 'Acciones rápidas' });
 
     expect(
-      within(updatedMenu).getByRole('menuitem', { name: /salir de modo konami/i })
+      within(updatedMenu).getByRole('menuitem', { name: /salir de modo (retro|konami)/i })
     ).toBeInTheDocument();
   });
 });

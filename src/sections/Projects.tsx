@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { ExternalLink, Rocket } from 'lucide-react';
 import { useMemo, useState } from 'react';
 
@@ -52,7 +52,7 @@ export default function Projects() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl">
         {filteredProjects.map((proj: ProjectItem, index: number) => (
-          <motion.article
+          <m.article
             key={proj.id}
             className="card"
             initial={{ opacity: 0, y: 50 }}
@@ -87,7 +87,7 @@ export default function Projects() {
                 Ver proyecto
               </a>
             )}
-          </motion.article>
+          </m.article>
         ))}
       </div>
     </section>

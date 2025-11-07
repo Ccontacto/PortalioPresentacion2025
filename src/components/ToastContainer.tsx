@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { Info, CheckCircle, XCircle, X } from 'lucide-react';
 
 import { useToast } from '../contexts/ToastContext';
@@ -26,7 +26,7 @@ export default function ToastContainer() {
     >
       <AnimatePresence>
         {toasts.map(toast => (
-          <motion.div
+          <m.div
             key={toast.id}
             // MEJORA 5: role="status" en cada toast
             role="status"
@@ -44,7 +44,7 @@ export default function ToastContainer() {
             >
               <X size={24} aria-hidden="true" />
             </button>
-          </motion.div>
+          </m.div>
         ))}
       </AnimatePresence>
     </div>

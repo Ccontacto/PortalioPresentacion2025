@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 
 import { useLanguage } from '../contexts/LanguageContext';
 
@@ -25,7 +25,7 @@ export default function Experience() {
         {data.sections.experience.jobs.map((job: ExperienceJob, index: number) => {
           const isLast = index === data.sections.experience.jobs.length - 1;
           return (
-            <motion.article
+            <m.article
               key={job.id}
               className={`experience-node${isLast ? ' experience-node--last' : ''}`}
               initial={{ opacity: 0, y: 40 }}
@@ -50,7 +50,7 @@ export default function Experience() {
                   ))}
                 </div>
               </div>
-            </motion.article>
+            </m.article>
           );
         })}
       </div>

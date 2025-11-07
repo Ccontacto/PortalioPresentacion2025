@@ -4,6 +4,27 @@
    VARIABLES CSS MEJORADAS
    ======================================== */
 :root{
+  /* Motion tokens */
+  --motion-fast: 120ms;
+  --motion-normal: 200ms;
+  --motion-slow: 320ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+
+  /* Radius tokens */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-2xl: 20px;
+
+  /* Elevation tokens */
+  --elev-1: 0px 1px 2px rgba(0,0,0,0.07);
+  --elev-2: 0px 2px 6px rgba(0,0,0,0.08);
+  --elev-3: 0px 8px 24px rgba(0,0,0,0.08);
+
+  /* Focus tokens */
+  --focus-color: #3B82F6;
+  --focus-width: 2px;
+  --focus-offset: 2px;
   /* Unified token palette */
   --token-bg-dark: #0b0b0b;
   --token-card-dark: rgba(255, 255, 255, 0.05);
@@ -345,7 +366,10 @@ p, span, small {
   box-shadow: 8px 8px 0 var(--shadow-strong);
   text-transform: uppercase;
   cursor: pointer;
-  transition: transform 150ms ease, box-shadow 150ms ease, background-color 150ms ease;
+  transition:
+    transform var(--motion-fast) var(--ease-standard),
+    box-shadow var(--motion-fast) var(--ease-standard),
+    background-color var(--motion-fast) var(--ease-standard);
   color: var(--logo-text);
 }
 
@@ -371,7 +395,11 @@ p, span, small {
   letter-spacing: 0.08em;
   cursor: pointer;
   box-shadow: 6px 6px 0 var(--shadow-strong);
-  transition: transform 120ms ease, box-shadow 120ms ease, background-color 120ms ease, color 120ms ease;
+  transition:
+    transform var(--motion-fast) var(--ease-standard),
+    box-shadow var(--motion-fast) var(--ease-standard),
+    background-color var(--motion-fast) var(--ease-standard),
+    color var(--motion-fast) var(--ease-standard);
 }
 
 .availability-badge:hover {
@@ -472,7 +500,10 @@ html[data-theme='konami'] .availability-unavailable {
   border: 3px solid var(--button-outline);
   border-radius: 50%;
   cursor: pointer;
-  transition: transform 150ms ease, box-shadow 150ms ease, background-color 150ms ease;
+  transition:
+    transform var(--motion-fast) var(--ease-standard),
+    box-shadow var(--motion-fast) var(--ease-standard),
+    background-color var(--motion-fast) var(--ease-standard);
   box-shadow: var(--shadow-lg) var(--shadow-strong);
   color: var(--text-strong);
 }
@@ -660,7 +691,10 @@ html[data-theme='konami'] .icon-btn:hover {
   border-radius: 12px;
   background: transparent;
   border: 2px solid var(--button-outline);
-  transition: transform 150ms ease, box-shadow 150ms ease, background-color 150ms ease;
+  transition:
+    transform var(--motion-fast) var(--ease-standard),
+    box-shadow var(--motion-fast) var(--ease-standard),
+    background-color var(--motion-fast) var(--ease-standard);
 }
 
 .header-panel button:hover {
@@ -721,7 +755,9 @@ html[data-theme='konami'] .icon-btn:hover {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: transform 150ms ease, box-shadow 150ms ease;
+  transition:
+    transform var(--motion-fast) var(--ease-standard),
+    box-shadow var(--motion-fast) var(--ease-standard);
 }
 
 .header-panel-close:hover {
@@ -766,7 +802,10 @@ html[data-theme='konami'] .icon-btn:hover {
   text-transform: uppercase;
   box-shadow: 10px 10px 0 var(--shadow-strong);
   cursor: pointer;
-  transition: transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
+  transition:
+    transform var(--motion-fast) var(--ease-standard),
+    box-shadow var(--motion-fast) var(--ease-standard),
+    background-color var(--motion-fast) var(--ease-standard);
 }
 
 .search-trigger span {
@@ -890,7 +929,9 @@ html[data-theme='dark'] .search-modal__subtitle {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: transform 150ms ease, box-shadow 150ms ease;
+  transition:
+    transform var(--motion-fast) var(--ease-standard),
+    box-shadow var(--motion-fast) var(--ease-standard);
 }
 
 .search-modal__close:hover {
@@ -930,7 +971,10 @@ html[data-theme='dark'] .search-modal__subtitle {
   font-weight: 600;
   letter-spacing: 0.02em;
   box-shadow: 10px 10px 0 var(--shadow-strong);
-  transition: transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
+  transition:
+    transform var(--motion-fast) var(--ease-standard),
+    box-shadow var(--motion-fast) var(--ease-standard),
+    background-color var(--motion-fast) var(--ease-standard);
 }
 
 .search-modal__input::placeholder {
@@ -969,7 +1013,10 @@ html[data-theme='dark'] .search-modal__input::placeholder {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: transform 150ms ease, box-shadow 150ms ease, background-color 150ms ease;
+  transition:
+    transform var(--motion-fast) var(--ease-standard),
+    box-shadow var(--motion-fast) var(--ease-standard),
+    background-color var(--motion-fast) var(--ease-standard);
 }
 
 .search-modal__clear:hover {
@@ -1005,7 +1052,11 @@ html[data-theme='dark'] .search-modal__clear {
   text-transform: uppercase;
   cursor: pointer;
   box-shadow: 6px 6px 0 var(--shadow-strong);
-  transition: transform 150ms ease, box-shadow 150ms ease, background-color 150ms ease, color 150ms ease;
+  transition:
+    transform var(--motion-fast) var(--ease-standard),
+    box-shadow var(--motion-fast) var(--ease-standard),
+    background-color var(--motion-fast) var(--ease-standard),
+    color var(--motion-fast) var(--ease-standard);
 }
 
 .search-modal__chip:hover {
@@ -1044,7 +1095,11 @@ html[data-theme='dark'] .search-modal__chip {
   text-transform: uppercase;
   cursor: pointer;
   box-shadow: 6px 6px 0 var(--shadow-strong);
-  transition: transform 150ms ease, box-shadow 150ms ease, background-color 150ms ease, color 150ms ease;
+  transition:
+    transform var(--motion-fast) var(--ease-standard),
+    box-shadow var(--motion-fast) var(--ease-standard),
+    background-color var(--motion-fast) var(--ease-standard),
+    color var(--motion-fast) var(--ease-standard);
 }
 
 .search-modal__tag:hover {
@@ -1080,7 +1135,10 @@ html[data-theme='dark'] .search-modal__chip {
   text-transform: uppercase;
   cursor: pointer;
   box-shadow: 8px 8px 0 var(--shadow-strong);
-  transition: transform 150ms ease, box-shadow 150ms ease, filter 150ms ease;
+  transition:
+    transform var(--motion-fast) var(--ease-standard),
+    box-shadow var(--motion-fast) var(--ease-standard),
+    filter var(--motion-fast) var(--ease-standard);
 }
 
 .search-modal__apply:hover {
@@ -1115,7 +1173,10 @@ html[data-theme='dark'] .search-modal__chip {
   text-transform: uppercase;
   cursor: pointer;
   box-shadow: 6px 6px 0 var(--shadow-strong);
-  transition: transform 150ms ease, box-shadow 150ms ease, background-color 150ms ease;
+  transition:
+    transform var(--motion-fast) var(--ease-standard),
+    box-shadow var(--motion-fast) var(--ease-standard),
+    background-color var(--motion-fast) var(--ease-standard);
 }
 
 .search-modal__confetti:hover {
@@ -1169,7 +1230,10 @@ html[data-theme='dark'] .search-modal__chip {
   letter-spacing: 0.06em;
   cursor: pointer;
   box-shadow: 4px 4px 0 var(--shadow-strong);
-  transition: transform 150ms ease, box-shadow 150ms ease, filter 150ms ease;
+  transition:
+    transform var(--motion-fast) var(--ease-standard),
+    box-shadow var(--motion-fast) var(--ease-standard),
+    filter var(--motion-fast) var(--ease-standard);
 }
 
 .retro-banner__button:hover {
@@ -1239,7 +1303,11 @@ html[data-theme='dark'] .search-modal--command .search-modal__backdrop {
   text-align: left;
   box-shadow: 8px 8px 0 var(--shadow-strong);
   cursor: pointer;
-  transition: transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease, color 160ms ease;
+  transition:
+    transform var(--motion-fast) var(--ease-standard),
+    box-shadow var(--motion-fast) var(--ease-standard),
+    background-color var(--motion-fast) var(--ease-standard),
+    color var(--motion-fast) var(--ease-standard);
 }
 
 .command-modal__option:hover,
@@ -1462,7 +1530,9 @@ html[data-theme='dark'] .mobile-actions-modal {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: transform 150ms ease, box-shadow 150ms ease;
+  transition:
+    transform var(--motion-fast) var(--ease-standard),
+    box-shadow var(--motion-fast) var(--ease-standard);
 }
 
 .mobile-actions-modal__close:hover {
@@ -1522,7 +1592,10 @@ html[data-theme='dark'] .mobile-actions-modal {
   font-weight: 700;
   letter-spacing: 0.04em;
   text-align: left;
-  transition: transform 140ms ease, box-shadow 140ms ease, background-color 140ms ease;
+  transition:
+    transform var(--motion-fast) var(--ease-standard),
+    box-shadow var(--motion-fast) var(--ease-standard),
+    background-color var(--motion-fast) var(--ease-standard);
 }
 
 .mobile-actions-modal__item:hover {
@@ -1708,7 +1781,9 @@ html[data-theme='dark'] .hero-name {
 .contact-highlight {
   color: var(--text-strong);
   text-shadow: none;
-  transition: transform 180ms ease, box-shadow 180ms ease;
+  transition:
+    transform var(--motion-normal) var(--ease-standard),
+    box-shadow var(--motion-normal) var(--ease-standard);
   background: linear-gradient(135deg, var(--gradient-hero-start), var(--gradient-hero-end));
   border: 3px solid var(--border-strong);
   box-shadow: 10px 10px 0 var(--shadow-strong);
@@ -1750,7 +1825,9 @@ html[data-theme='dark'] .contact-highlight:hover {
   border: 3px solid var(--border-strong);
   border-radius: 22px;
   box-shadow: 10px 10px 0 var(--shadow-strong);
-  transition: transform 200ms ease, box-shadow 200ms ease;
+  transition:
+    transform var(--motion-normal) var(--ease-standard),
+    box-shadow var(--motion-normal) var(--ease-standard);
 }
 
 .card:hover {
@@ -1767,7 +1844,9 @@ html[data-theme='dark'] .contact-highlight:hover {
   border-radius: 18px;
   box-shadow: 6px 6px 0 var(--shadow-strong);
   text-align: center;
-  transition: transform 200ms ease, box-shadow 200ms ease;
+  transition:
+    transform var(--motion-normal) var(--ease-standard),
+    box-shadow var(--motion-normal) var(--ease-standard);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1860,7 +1939,10 @@ html[data-theme='dark'] .contact-highlight:hover {
   justify-content: center;
   box-shadow: 6px 6px 0 var(--shadow-strong);
   cursor: pointer;
-  transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+  transition:
+    transform var(--motion-fast) var(--ease-standard),
+    box-shadow var(--motion-fast) var(--ease-standard),
+    background var(--motion-fast) var(--ease-standard);
 }
 
 .dock-current:hover {
@@ -1886,7 +1968,10 @@ html[data-theme='dark'] .contact-highlight:hover {
   justify-content: center;
   cursor: pointer;
   box-shadow: 6px 6px 0 var(--shadow-strong);
-  transition: transform 150ms ease, box-shadow 150ms ease, background-color 150ms ease;
+  transition:
+    transform var(--motion-fast) var(--ease-standard),
+    box-shadow var(--motion-fast) var(--ease-standard),
+    background-color var(--motion-fast) var(--ease-standard);
 }
 
 .dock-toggle:hover {
@@ -2030,7 +2115,10 @@ html[data-theme='dark'] .dock {
   color: var(--text-strong);
   cursor: pointer;
   box-shadow: 4px 4px 0 var(--shadow-strong);
-  transition: transform 150ms ease, box-shadow 150ms ease, background-color 150ms ease;
+  transition:
+    transform var(--motion-fast) var(--ease-standard),
+    box-shadow var(--motion-fast) var(--ease-standard),
+    background-color var(--motion-fast) var(--ease-standard);
 }
 
 html[data-theme='dark'] .dock-item {
@@ -2447,7 +2535,9 @@ html[data-theme='konami'] .dock-item.active svg {
   color: #060608;
   border: 2px solid var(--border-strong);
   box-shadow: 8px 8px 0 var(--shadow-strong);
-  transition: transform 180ms ease, box-shadow 180ms ease;
+  transition:
+    transform var(--motion-normal) var(--ease-standard),
+    box-shadow var(--motion-normal) var(--ease-standard);
 }
 
 .skill-card__icon svg {
@@ -2493,7 +2583,11 @@ html[data-theme='konami'] .skill-card__icon {
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: var(--text-strong);
-  transition: transform 150ms ease, box-shadow 150ms ease, background-color 150ms ease, color 150ms ease;
+  transition:
+    transform var(--motion-fast) var(--ease-standard),
+    box-shadow var(--motion-fast) var(--ease-standard),
+    background-color var(--motion-fast) var(--ease-standard),
+    color var(--motion-fast) var(--ease-standard);
 }
 
 .skill-badge:hover {
@@ -3424,7 +3518,11 @@ html[data-theme='dark'] .hero-name {
   border-radius: 999px;
   font-weight: 700;
   letter-spacing: 0.04em;
-  transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease, color 180ms ease;
+  transition:
+    transform var(--motion-normal) var(--ease-standard),
+    box-shadow var(--motion-normal) var(--ease-standard),
+    background var(--motion-normal) var(--ease-standard),
+    color var(--motion-normal) var(--ease-standard);
   border: 1.5px solid transparent;
   text-decoration: none;
 }
@@ -3519,7 +3617,11 @@ html[data-theme='dark'] .hero-name {
   box-shadow: 10px 10px 0 color-mix(in srgb, var(--sketch-ink) 5%, transparent);
   position: relative;
   overflow: hidden;
-  transition: transform 220ms ease, box-shadow 220ms ease, background 220ms ease, border-color 220ms ease;
+  transition:
+    transform var(--motion-normal) var(--ease-standard),
+    box-shadow var(--motion-normal) var(--ease-standard),
+    background var(--motion-normal) var(--ease-standard),
+    border-color var(--motion-normal) var(--ease-standard);
 }
 
 .hero-panel__card--note::after {
@@ -3608,7 +3710,10 @@ html[data-theme='dark'] .hero-name {
   color: color-mix(in srgb, var(--sketch-ink) 75%, rgba(255, 255, 255, 0.08));
   border: 1px solid color-mix(in srgb, var(--sketch-ink) 45%, transparent);
   text-shadow: 0.5px 0.5px 0 color-mix(in srgb, var(--sketch-graphite) 35%, transparent);
-  transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+  transition:
+    transform var(--motion-normal) var(--ease-standard),
+    box-shadow var(--motion-normal) var(--ease-standard),
+    background var(--motion-normal) var(--ease-standard);
 }
 
 .hero-panel__tag:hover {
@@ -3671,7 +3776,10 @@ html[data-theme='dark'] .hero-name {
   flex-direction: column;
   gap: 14px;
   overflow: hidden;
-  transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+  transition:
+    transform var(--motion-normal) var(--ease-standard),
+    box-shadow var(--motion-normal) var(--ease-standard),
+    border-color var(--motion-normal) var(--ease-standard);
 }
 
 .focus-card::after {
@@ -3681,7 +3789,7 @@ html[data-theme='dark'] .hero-name {
   height: 160px;
   background: radial-gradient(60% 60% at 50% 50%, rgba(160, 231, 229, 0.35), transparent 70%);
   opacity: 0;
-  transition: opacity 200ms ease;
+  transition: opacity var(--motion-normal) var(--ease-standard);
 }
 
 .focus-card:hover,

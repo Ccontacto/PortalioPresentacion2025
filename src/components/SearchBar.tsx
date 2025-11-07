@@ -1,5 +1,5 @@
 import { FocusTrap } from 'focus-trap-react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, m } from 'framer-motion';
 import { ArrowRight, Eraser, Search, Sparkles, X } from 'lucide-react';
 import {
   useCallback,
@@ -16,6 +16,8 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { useNavigation } from '../contexts/NavigationContext';
 import { useBodyScrollLock } from '../hooks/useBodyScrollLock';
 import { launchConfetti } from '../utils/confetti';
+import { useReducedMotion } from '../hooks/useReducedMotion';
+import { DIALOG_VARIANTS, PANEL_TRANSITION, OVERLAY_FADE } from '../constants/animation';
 
 import type { ProjectItem } from '../types/portfolio';
 
@@ -53,6 +55,7 @@ export default function SearchBar({
   const panelId = useId();
   const { navigateTo } = useNavigation();
   const { data } = useLanguage();
+  const shouldReduceMotion = useReducedMotion();
 
   const tagOccurrences = useMemo(() => {
     const map = new Map<ProjectTag, number>();
@@ -191,12 +194,13 @@ export default function SearchBar({
     return createPortal(
       <AnimatePresence>
         {isModalOpen ? (
-          <motion.div
+          <m.div
             className="search-modal"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2, ease: 'easeOut' }}
+            variants={shouldReduceMotion ? undefined : OVERLAY_FADE}
+            initial={shouldReduceMotion ? undefined : 'hidden'}
+            animate={shouldReduceMotion ? undefined : 'show'}
+            exit={shouldReduceMotion ? undefined : 'exit'}
+            transition={shouldReduceMotion ? undefined : PANEL_TRANSITION}
             role="presentation"
           >
             <div
@@ -215,17 +219,18 @@ export default function SearchBar({
                 returnFocusOnDeactivate: false
               }}
             >
-              <motion.div
+              <m.div
                 className="search-modal__panel"
                 role="dialog"
                 aria-modal="true"
                 aria-labelledby={titleId}
                 aria-describedby={descriptionId}
                 id={panelId}
-                initial={{ opacity: 0, scale: 0.96, y: 12 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.96, y: 12 }}
-                transition={{ duration: 0.22, ease: 'easeOut' }}
+                variants={shouldReduceMotion ? undefined : DIALOG_VARIANTS}
+                initial={shouldReduceMotion ? undefined : 'hidden'}
+                animate={shouldReduceMotion ? undefined : 'show'}
+                exit={shouldReduceMotion ? undefined : 'exit'}
+                transition={shouldReduceMotion ? undefined : PANEL_TRANSITION}
               >
                 <header className="search-modal__header">
                   <div>
@@ -326,9 +331,9 @@ export default function SearchBar({
                     confetti
                   </button>
                 )}
-              </motion.div>
+              </m.div>
             </FocusTrap>
-          </motion.div>
+          </m.div>
         ) : null}
       </AnimatePresence>,
       document.body
@@ -337,7 +342,7 @@ export default function SearchBar({
 
   return (
     <div className={`search-bar ${isIconVariant ? 'search-bar--icon' : ''}`}>
-      <motion.button
+      <m.button
         ref={triggerRef}
         type="button"
         className={`search-trigger ${isIconVariant ? 'search-trigger--icon' : ''}`}
@@ -355,7 +360,7 @@ export default function SearchBar({
         ) : (
           <span>{triggerText}</span>
         )}
-      </motion.button>
+      </m.button>
       {renderModal()}
     </div>
   );

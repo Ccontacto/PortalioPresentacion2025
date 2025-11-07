@@ -1,6 +1,8 @@
 import { FocusTrap } from 'focus-trap-react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { X } from 'lucide-react';
+import { useReducedMotion } from '../../hooks/useReducedMotion';
+import { DIALOG_VARIANTS, PANEL_TRANSITION } from '../../constants/animation';
 
 import type { QuickActionGroup } from './types';
 import type { RefObject } from 'react';
@@ -14,6 +16,7 @@ type Props = {
 
 export function MobileActionsModal({ open, groups, onClose, menuRef }: Props) {
   if (!open) return null;
+  const shouldReduceMotion = useReducedMotion();
 
   return (
     <div
@@ -29,17 +32,18 @@ export function MobileActionsModal({ open, groups, onClose, menuRef }: Props) {
           onDeactivate: onClose
         }}
       >
-        <motion.div
+        <m.div
           className="mobile-actions-modal"
           id="mobile-quick-actions"
           ref={menuRef}
           role="dialog"
           aria-modal="true"
           aria-labelledby="mobile-actions-title"
-          initial={{ opacity: 0, scale: 0.96, y: 20 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.96, y: 20 }}
-          transition={{ duration: 0.2, ease: 'easeOut' }}
+          variants={shouldReduceMotion ? undefined : DIALOG_VARIANTS}
+          initial={shouldReduceMotion ? undefined : 'hidden'}
+          animate={shouldReduceMotion ? undefined : 'show'}
+          exit={shouldReduceMotion ? undefined : 'exit'}
+          transition={shouldReduceMotion ? undefined : PANEL_TRANSITION}
         >
           <header className="mobile-actions-modal__header">
             <h2 id="mobile-actions-title">Acciones y accesos rápidos</h2>
@@ -86,7 +90,7 @@ export function MobileActionsModal({ open, groups, onClose, menuRef }: Props) {
               </div>
             ))}
           </div>
-        </motion.div>
+        </m.div>
       </FocusTrap>
     </div>
   );
