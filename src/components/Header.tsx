@@ -31,6 +31,7 @@ import { OverflowPanel } from './header/OverflowPanel';
 import { WhatsappGlyph } from './icons/WhatsappGlyph';
 
 import type { AvailabilityState, QuickAction, QuickActionGroup } from './header/types';
+import { AnimatePresence } from 'framer-motion';
 import type { JSX } from 'react';
 
 type HeaderPanel = 'overflow';
@@ -283,9 +284,16 @@ export default function Header({ retroModeEnabled, onExitRetroMode }: HeaderProp
         closeActivePanel();
       }
     };
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        closeActivePanel();
+      }
+    };
     document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleKeyDown);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
     };
   }, [activePanel]);
 
@@ -477,9 +485,11 @@ export default function Header({ retroModeEnabled, onExitRetroMode }: HeaderProp
         </div>
       </div>
 
-      {activePanel === 'overflow' ? (
-        <OverflowPanel items={overflowItems} onClose={closeActivePanel} panelRef={setPanelRef} />
-      ) : null}
+      <AnimatePresence>
+        {activePanel === 'overflow' ? (
+          <OverflowPanel items={overflowItems} onClose={closeActivePanel} panelRef={setPanelRef} />
+        ) : null}
+      </AnimatePresence>
 
       <MobileActionsModal
         open={mobileMenuOpen}

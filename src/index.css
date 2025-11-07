@@ -1913,6 +1913,59 @@ html[data-theme='konami'] .dock-toggle {
     6px 6px 0 rgba(0, 255, 156, 0.35);
 }
 
+.dock-list {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--surface-card) 82%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-ink) 16%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, rgba(255, 255, 255, 0.6) 25%, transparent);
+  position: relative;
+}
+
+.dock-list::before {
+  content: '';
+  position: absolute;
+  left: -18px;
+  width: 18px;
+  height: 2px;
+  background: color-mix(in srgb, var(--color-ink) 35%, transparent);
+  opacity: 0.6;
+  border-radius: 999px;
+}
+
+html[data-theme='dark'] .dock-list {
+  background: rgba(15, 23, 42, 0.9);
+  border-color: rgba(248, 250, 252, 0.18);
+  box-shadow:
+    inset 0 0 0 1px rgba(248, 250, 252, 0.2),
+    0 0 20px rgba(15, 23, 42, 0.4);
+}
+
+html[data-theme='dark'] .dock-list::before {
+  background: rgba(248, 250, 252, 0.35);
+}
+
+html[data-theme='konami'] .dock-list {
+  background: rgba(6, 10, 24, 0.9);
+  border-color: rgba(113, 255, 178, 0.45);
+  box-shadow:
+    inset 0 0 0 1px rgba(113, 255, 178, 0.35),
+    0 0 24px rgba(0, 255, 156, 0.32);
+}
+
+html[data-theme='konami'] .dock-list::before {
+  background: rgba(113, 255, 178, 0.65);
+}
+
+.dock-item--active {
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.2),
+    10px 10px 0 color-mix(in srgb, var(--color-ink) 8%, transparent);
+}
+
 html[data-theme='dark'] .dock-shell {
   background: rgba(15, 23, 42, 0.85);
   border-color: rgba(248, 250, 252, 0.18);

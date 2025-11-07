@@ -1,4 +1,7 @@
 import { X } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { useReducedMotion } from '../../hooks/useReducedMotion';
+import { PANEL_TRANSITION, PANEL_VARIANTS } from '../../constants/animation';
 
 import type { QuickAction } from './types';
 
@@ -9,8 +12,9 @@ type Props = {
 };
 
 export function OverflowPanel({ items, onClose, panelRef }: Props) {
+  const shouldReduceMotion = useReducedMotion();
   return (
-    <div
+    <motion.div
       id="header-panel-overflow"
       className="header-panel header-panel--overflow"
       role="menu"
@@ -22,6 +26,11 @@ export function OverflowPanel({ items, onClose, panelRef }: Props) {
         borderRadius: '16px',
         boxShadow: 'var(--shadow-lg) var(--shadow-strong)'
       }}
+      variants={shouldReduceMotion ? undefined : PANEL_VARIANTS}
+      initial={shouldReduceMotion ? undefined : 'hidden'}
+      animate={shouldReduceMotion ? undefined : 'show'}
+      exit={shouldReduceMotion ? undefined : 'exit'}
+      transition={shouldReduceMotion ? undefined : PANEL_TRANSITION}
     >
       <button
         type="button"
@@ -52,6 +61,6 @@ export function OverflowPanel({ items, onClose, panelRef }: Props) {
           </button>
         ))}
       </div>
-    </div>
+    </motion.div>
   );
 }

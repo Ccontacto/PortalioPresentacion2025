@@ -1,6 +1,6 @@
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion, type Variants } from 'framer-motion';
 import { Briefcase, Code, Ellipsis, Home, Mail, Rocket } from 'lucide-react';
-import { useCallback, useEffect, useRef, useState, type JSX, type KeyboardEvent as ReactKeyboardEvent } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type JSX, type KeyboardEvent as ReactKeyboardEvent } from 'react';
 
 import { useLanguage } from '../contexts/LanguageContext';
 import { useNavigation } from '../contexts/NavigationContext';
@@ -14,43 +14,120 @@ const icons: Record<string, JSX.Element> = {
   contact: <Mail size={24} aria-hidden="true" />
 };
 
+const capsuleVariants: Variants = {
+  hidden: { opacity: 0, scale: 0.65, y: 14 },
+  show: {
+    opacity: 1,
+    scale: 1,
+    y: 0,
+    transition: {
+      type: 'spring',
+      stiffness: 260,
+      damping: 28,
+      staggerChildren: 0.05,
+      delayChildren: 0.08
+    }
+  },
+  exit: { opacity: 0, scale: 0.8, y: 10, transition: { duration: 0.14 } }
+};
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 10 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      type: 'spring',
+      stiffness: 360,
+      damping: 28
+    }
+  }
+};
+
+const collapsedActiveVariants: Variants = {
+  rest: { x: 0, opacity: 1, scale: 1 },
+  exit: {
+    x: -32,
+    opacity: 0,
+    scale: 0.92,
+    transition: { duration: 0.16, ease: 'easeInOut' }
+  }
+};
+
+const collapsedToggleVariants: Variants = {
+  rest: { x: 0, opacity: 1, scale: 1 },
+  exit: {
+    x: 32,
+    opacity: 0,
+    scale: 0.92,
+    transition: { duration: 0.16, ease: 'easeInOut' }
+  }
+};
+
+const navVariants: Variants = {
+  hidden: { opacity: 0, scale: 0.85, y: 12 },
+  show: {
+    opacity: 1,
+    scale: 1,
+    y: 0,
+    transition: { type: 'spring', stiffness: 280, damping: 30 }
+  },
+  exit: { opacity: 0, scale: 0.8, y: 10, transition: { duration: 0.14 } }
+};
+
 export default function Dock() {
   const { data } = useLanguage();
   const { activePage, navigateTo } = useNavigation();
   const shouldReduceMotion = useReducedMotion();
+
+  const navItems = useMemo(() => data.nav ?? [], [data.nav]);
+  if (!navItems.length) {
+    return null;
+  }
+
+  const activeNav = navItems.find(item => item.id === activePage) ?? navItems[0];
+  const secondaryNavItems = navItems.filter(item => item.id !== activeNav.id);
+  const currentIcon = icons[activeNav?.id ?? 'home'] ?? <Home size={24} aria-hidden="true" />;
+
   const buttonRefs = useRef<Array<HTMLButtonElement | null>>([]);
+  buttonRefs.current.length = navItems.length;
+
   const [isDockVisible, setIsDockVisible] = useState(true);
   const [isExpanded, setIsExpanded] = useState(false);
   const toggleRef = useRef<HTMLButtonElement | null>(null);
   const navRef = useRef<HTMLElement | null>(null);
   const scrollTimeoutRef = useRef<number | null>(null);
 
-  buttonRefs.current.length = data.nav.length;
+  const handleKeyNavigation = useCallback(
+    (event: ReactKeyboardEvent<HTMLDivElement>) => {
+      if (!isExpanded) {
+        return;
+      }
+      if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') {
+        return;
+      }
 
-  const handleKeyNavigation = useCallback((event: ReactKeyboardEvent<HTMLDivElement>) => {
-    if (!isExpanded) {
-      return;
-    }
-    if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') {
-      return;
-    }
+      const buttons = buttonRefs.current.filter(Boolean) as HTMLButtonElement[];
+      if (!buttons.length) {
+        return;
+      }
 
-    const buttons = buttonRefs.current.filter(Boolean) as HTMLButtonElement[];
-    if (buttons.length === 0) {
-      return;
-    }
+      event.preventDefault();
 
-    event.preventDefault();
+      const activeElement = document.activeElement as HTMLButtonElement | null;
+      const currentIndex = buttons.findIndex(button => button === activeElement);
+      const direction = event.key === 'ArrowRight' ? 1 : -1;
+      const targetIndex =
+        currentIndex === -1
+          ? direction === 1
+            ? 0
+            : buttons.length - 1
+          : (currentIndex + direction + buttons.length) % buttons.length;
 
-    const activeElement = document.activeElement as HTMLButtonElement | null;
-    const currentIndex = buttons.findIndex(button => button === activeElement);
-    const direction = event.key === 'ArrowRight' ? 1 : -1;
-
-    const targetIndex =
-      currentIndex === -1 ? (direction === 1 ? 0 : buttons.length - 1) : (currentIndex + direction + buttons.length) % buttons.length;
-
-    buttons[targetIndex]?.focus();
-  }, [isExpanded]);
+      buttons[targetIndex]?.focus();
+    },
+    [isExpanded]
+  );
 
   useEffect(() => {
     if (shouldReduceMotion) {
@@ -109,10 +186,7 @@ export default function Dock() {
         setIsExpanded(false);
         return;
       }
-      if (toggleRef.current?.contains(target)) {
-        return;
-      }
-      if (navRef.current?.contains(target)) {
+      if (toggleRef.current?.contains(target) || navRef.current?.contains(target)) {
         return;
       }
       setIsExpanded(false);
@@ -126,22 +200,11 @@ export default function Dock() {
     };
   }, [isExpanded]);
 
-  const handleToggle = () => {
-    setIsExpanded(prev => !prev);
-  };
-
+  const handleToggle = () => setIsExpanded(prev => !prev);
   const handleNavigate = (sectionId: string) => {
     navigateTo(sectionId);
     setIsExpanded(false);
   };
-
-  const navItems = data.nav ?? [];
-  const activeNav = navItems.find(item => item.id === activePage) ?? navItems[0];
-  const orderedNavItems = activeNav
-    ? [activeNav, ...navItems.filter(item => item.id !== activeNav.id)]
-    : navItems;
-  const currentIcon = activeNav ? icons[activeNav.id] ?? <Home size={24} aria-hidden="true" /> : <Home size={24} aria-hidden="true" />;
-  const toggleLabel = isExpanded ? 'Cerrar navegación flotante' : 'Abrir navegación flotante';
 
   return (
     <div className="dock-container">
@@ -167,16 +230,15 @@ export default function Dock() {
                 delay: 0.2
               }
         }
-        style={{ pointerEvents: isDockVisible ? 'auto' : 'none' }}
       >
         <AnimatePresence initial={false} mode="wait">
-          {!isExpanded && (
+          {!isExpanded && activeNav && (
             <motion.div
               key="dock-collapsed"
               className="dock-collapsed"
-              initial={shouldReduceMotion ? undefined : { opacity: 0, scale: 0.8, y: 12 }}
+              initial={shouldReduceMotion ? undefined : { opacity: 0, scale: 0.9, y: 10 }}
               animate={shouldReduceMotion ? undefined : { opacity: 1, scale: 1, y: 0 }}
-              exit={shouldReduceMotion ? undefined : { opacity: 0, scale: 0.65, y: -8 }}
+              exit={shouldReduceMotion ? undefined : { opacity: 0, scale: 0.95, y: -6 }}
               transition={
                 shouldReduceMotion
                   ? undefined
@@ -187,32 +249,37 @@ export default function Dock() {
                     }
               }
             >
-              <button
+              <motion.button
+                layoutId="dock-active"
                 type="button"
                 className="dock-current"
-                aria-label={activeNav ? `Ir a ${activeNav.label}` : 'Ir a inicio'}
-                title={activeNav?.label ?? 'Inicio'}
-              onClick={() => {
-                if (activeNav) {
-                  handleNavigate(activeNav.id);
-                } else {
-                  handleNavigate('home');
-                }
-                }}
+                aria-label={`Ir a ${activeNav.label}`}
+                title={activeNav.label}
+                onClick={() => handleNavigate(activeNav.id)}
+                variants={shouldReduceMotion ? undefined : collapsedActiveVariants}
+                initial={shouldReduceMotion ? undefined : 'rest'}
+                animate={shouldReduceMotion ? undefined : 'rest'}
+                exit={shouldReduceMotion ? undefined : 'exit'}
               >
                 {currentIcon}
-              </button>
-              <button
+              </motion.button>
+
+              <motion.button
+                layoutId="dock-toggle"
                 type="button"
-                className={`dock-toggle ${isExpanded ? 'is-active' : ''}`}
+                className="dock-toggle"
                 ref={toggleRef}
-                aria-label={toggleLabel}
+                aria-label={isExpanded ? 'Cerrar navegación flotante' : 'Abrir navegación flotante'}
                 aria-pressed={isExpanded}
                 aria-expanded={isExpanded}
                 onClick={handleToggle}
+                variants={shouldReduceMotion ? undefined : collapsedToggleVariants}
+                initial={shouldReduceMotion ? undefined : 'rest'}
+                animate={shouldReduceMotion ? undefined : 'rest'}
+                exit={shouldReduceMotion ? undefined : 'exit'}
               >
                 <Ellipsis size={22} aria-hidden="true" />
-              </button>
+              </motion.button>
             </motion.div>
           )}
         </AnimatePresence>
@@ -225,39 +292,56 @@ export default function Dock() {
                 navRef.current = node;
               }}
               className="dock"
-              layout
               role="navigation"
-              aria-label="Navegación principal del portfolio"
+              aria-label="Navegación flotante"
               onKeyDown={handleKeyNavigation}
-              initial={shouldReduceMotion ? undefined : { opacity: 0, y: 24, scale: 0.85 }}
-              animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0, scale: 1 }}
-              exit={shouldReduceMotion ? undefined : { opacity: 0, y: 18, scale: 0.7 }}
-              transition={
-                shouldReduceMotion
-                  ? undefined
-                  : {
-                      type: 'spring',
-                      stiffness: 280,
-                      damping: 30
-                    }
-              }
+              variants={shouldReduceMotion ? undefined : navVariants}
+              initial="hidden"
+              animate="show"
+              exit="exit"
             >
-              {orderedNavItems.map((item, index) => (
-                <button
-                  key={item.id}
-                  className={`dock-item ${activePage === item.id ? 'active' : ''}`}
-                  onClick={() => handleNavigate(item.id)}
-                  ref={node => {
-                    buttonRefs.current[index] = node;
-                  }}
-                  aria-current={activePage === item.id ? 'page' : undefined}
-                  aria-label={item.label}
-                  title={item.label}
-                  data-retro-sfx
-                >
-                  {icons[item.id] || <Home size={24} aria-hidden="true" />}
-                </button>
-              ))}
+              <motion.button
+                layoutId="dock-active"
+                className={`dock-item dock-item--active ${activePage === activeNav.id ? 'active' : ''}`}
+                onClick={() => handleNavigate(activeNav.id)}
+                aria-current={activePage === activeNav.id ? 'page' : undefined}
+                aria-label={activeNav.label}
+                title={activeNav.label}
+              >
+                {currentIcon}
+              </motion.button>
+
+              <motion.div
+                layoutId="dock-toggle"
+                className="dock-list"
+                variants={shouldReduceMotion ? undefined : capsuleVariants}
+                initial="hidden"
+                animate="show"
+                exit="exit"
+              >
+                {secondaryNavItems.map(item => (
+                  <motion.button
+                    key={item.id}
+                    className={`dock-item ${activePage === item.id ? 'active' : ''}`}
+                    onClick={() => handleNavigate(item.id)}
+                    ref={node => {
+                      const navIndex = navItems.findIndex(navItem => navItem.id === item.id);
+                      if (navIndex >= 0) {
+                        buttonRefs.current[navIndex] = node;
+                      }
+                    }}
+                    aria-current={activePage === item.id ? 'page' : undefined}
+                    aria-label={item.label}
+                    title={item.label}
+                    variants={shouldReduceMotion ? undefined : itemVariants}
+                    initial="hidden"
+                    animate="show"
+                    exit="hidden"
+                  >
+                    {icons[item.id] || <Home size={24} aria-hidden="true" />}
+                  </motion.button>
+                ))}
+              </motion.div>
             </motion.nav>
           )}
         </AnimatePresence>
