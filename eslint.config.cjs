@@ -57,6 +57,13 @@ module.exports = [
     }
   },
   {
+    files: ['**/__tests__/**/*', '**/*.test.*'],
+    rules: {
+      // Permitir mocks parciales que referencien `motion` en tests
+      'no-restricted-imports': 'off'
+    }
+  },
+  {
     files: ['**/*.{js,jsx}'],
     languageOptions: {
       ecmaVersion: 2020,
@@ -94,3 +101,15 @@ module.exports = [
     ignores: ['dist', 'coverage', 'node_modules']
   }
 ];
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: 'framer-motion',
+              importNames: ['motion'],
+              message: 'Usa `m` con LazyMotion estricto en lugar de `motion`.'
+            }
+          ]
+        }
+      ],

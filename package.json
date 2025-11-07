@@ -19,7 +19,10 @@
     "test:ci": "vitest run --reporter=dot --coverage",
     "check:ci": "npm run test:ci && npm run build",
     "setup:git": "bash scripts/configure-dev.sh",
-    "deploy:cf": "bash scripts/deploy-cloudflare.sh"
+    "deploy:cf": "bash scripts/deploy-cloudflare.sh",
+    "tokens:build": "node scripts/tokens-build.mjs",
+    "tokens:watch": "node scripts/tokens-build.mjs && chokidar \"tokens/**/*.json\" -c \"node scripts/tokens-build.mjs\"",
+    "tokens:lint": "node scripts/token-lint.mjs"
   },
   "dependencies": {
     "focus-trap-react": "^11.0.4",
