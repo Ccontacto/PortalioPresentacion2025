@@ -1,18 +1,17 @@
 import { LazyMotion, domAnimation, m } from 'framer-motion';
 import { useCallback, useEffect, useMemo, useRef, lazy, Suspense } from 'react';
 
-import Dock from './components/Dock';
-import Header from './components/Header';
 import LoadingScreen from './components/LoadingScreen';
-import PageIndicator from './components/PageIndicator';
 import PageProgress from './components/PageProgress';
 import { RetroModeBanner } from './components/RetroModeBanner';
 import SkipToContent from './components/SkipToContent';
 import ToastContainer from './components/ToastContainer';
+import FloatingQuick from './components/FloatingQuick';
 import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
 import { NavigationProvider } from './contexts/NavigationContext';
 import { ThemeProvider, useTheme } from './contexts/ThemeContext';
 import { ToastProvider, useToast } from './contexts/ToastContext';
+import { DevProvider } from './contexts/DevContext';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
 import { useKonamiCode } from './hooks/useKonamiCode';
 import { useReducedMotion } from './hooks/useReducedMotion';
@@ -111,7 +110,7 @@ function AppContent() {
       >
         <PageProgress />
         <SkipToContent />
-        <Header retroModeEnabled={isKonami} onExitRetroMode={exitKonamiMode} />
+        {/* Header/TopBar removidos por solicitud: contenido inicia directo */}
         {isKonami ? <RetroModeBanner onExitRetro={exitKonamiMode} /> : null}
         {/* MEJORA 1: main con role explícito y aria-label */}
         <main className="main-content" id="main-content" role="main" aria-label="Contenido principal">
@@ -122,12 +121,11 @@ function AppContent() {
           <Projects />
           <Contact />
         </main>
-        <Dock />
         <ToastContainer />
+        <FloatingQuick />
         <Suspense fallback={null}>
           <ConfettiCanvas />
         </Suspense>
-        <PageIndicator />
         <Suspense fallback={null}>
           <CommandPalette />
         </Suspense>
@@ -142,9 +140,11 @@ export default function App() {
       <LanguageProvider>
         <ThemeProvider>
           <NavigationProvider>
-            <LazyMotion features={domAnimation} strict>
-              <AppContent />
-            </LazyMotion>
+            <DevProvider>
+              <LazyMotion features={domAnimation} strict>
+                <AppContent />
+              </LazyMotion>
+            </DevProvider>
           </NavigationProvider>
         </ThemeProvider>
       </LanguageProvider>

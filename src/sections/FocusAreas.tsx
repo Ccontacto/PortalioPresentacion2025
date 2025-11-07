@@ -15,8 +15,8 @@ export default function FocusAreas() {
   }
 
   return (
-    <section id="focus" className="page-section page-section--focus" aria-labelledby="focus-heading">
-      <header className="focus-header">
+    <section id="focus" className="page-section page-section--focus" aria-labelledby="focus-heading" data-dev-id="3000">
+      <header className="focus-header" data-dev-id="3001">
         <span className="focus-header__eyebrow">{focus.eyebrow}</span>
         <h2 id="focus-heading" className="focus-header__title">
           {focus.title}
@@ -24,11 +24,12 @@ export default function FocusAreas() {
         <p className="focus-header__subtitle">{focus.subtitle}</p>
       </header>
 
-      <div className="focus-grid" role="list">
+      <div className="focus-grid" role="list" data-dev-id="3002">
         {focus.items.map((item: FocusAreaItem, index: number) => (
           <m.article
             key={item.id}
             className="focus-card"
+            data-dev-id={`300${index}`}
             role="listitem"
             initial={shouldReduceMotion ? undefined : { opacity: 0, y: 40 }}
             whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}

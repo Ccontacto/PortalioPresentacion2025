@@ -1,16 +1,27 @@
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
 import { m } from 'framer-motion';
+// iconos flotantes movidos a FloatingQuick, no usados aquí
 
 import { useLanguage } from '../contexts/LanguageContext';
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
-import { useReducedMotion } from '../hooks/useReducedMotion';
+// motion reducido no condiciona visibilidad del héroe
+import { useToast } from '../contexts/ToastContext';
+import { AvailabilityBadge } from '../components/header/AvailabilityBadge';
 
 import type { HeroDescriptionSegment, HeroMetaItem, HeroTitleSegment, Stat } from '../types/portfolio';
 
 export default function Hero() {
   const { data } = useLanguage();
-  const [ref, visible] = useIntersectionObserver<HTMLDivElement>({ threshold: 0.3 });
-  const shouldReduceMotion = useReducedMotion();
+  const [ref] = useIntersectionObserver<HTMLDivElement>({ threshold: 0.3 });
+  const { showToast } = useToast();
+  const [availability, setAvailability] = useState<'available' | 'listening' | 'unavailable'>(() => {
+    if (typeof window !== 'undefined') {
+      const v = window.localStorage.getItem('portfolio_availability');
+      if (v === 'available' || v === 'listening' || v === 'unavailable') return v;
+    }
+    // Estado inicial: escuchando propuestas
+    return 'listening';
+  });
 
   const heroCopy = data.hero;
 
@@ -43,17 +54,43 @@ export default function Hero() {
   const status = heroCopy.status;
   const note = heroCopy.note;
 
+  const availabilityLabel = data.availability?.status?.[availability] ?? availability;
+  const availabilityToggleLabel = data.availability?.toggle?.[availability] ?? 'Cambiar disponibilidad';
+
+  const handleToggleAvailability = () => {
+    const order = ['available', 'listening', 'unavailable'] as const;
+    const next = order[(order.indexOf(availability as any) + 1) % order.length];
+    setAvailability(next);
+    if (typeof window !== 'undefined') window.localStorage.setItem('portfolio_availability', next);
+    const toastKey: any = { available: 'availability_available', listening: 'availability_listening', unavailable: 'availability_unavailable' }[next];
+    const type: any = { available: 'success', listening: 'info', unavailable: 'warning' }[next];
+    const msg = toastKey ? (data.toasts as any)?.[toastKey] : null;
+    if (msg) showToast(msg, type);
+  };
+
+
   return (
-    <section id="home" className="page-section page-section--hero" aria-labelledby="hero-heading">
+    <section id="home" className="page-section page-section--hero fx-chaos-bg" aria-labelledby="hero-heading" data-dev-id="2001">
       <m.div
         ref={ref}
         className="hero-shell"
-        initial={shouldReduceMotion ? undefined : { opacity: 0, y: 32 }}
-        animate={shouldReduceMotion ? undefined : { opacity: visible ? 1 : 0, y: visible ? 0 : 32 }}
+        /* Evitar gating de visibilidad en iOS: héroe siempre visible al inicio */
+        initial={undefined}
+        animate={undefined}
       >
         <div className="hero-backdrop" aria-hidden="true"></div>
         <div className="hero-grid">
           <div className="hero-content">
+            <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
+              <AvailabilityBadge
+                availability={availability}
+                badgeClass={`availability-${availability}`}
+                icon={undefined as unknown as any}
+                label={availabilityLabel}
+                toggleLabel={availabilityToggleLabel}
+                onToggle={handleToggleAvailability}
+              />
+            </div>
             <span className="hero-eyebrow">{heroCopy.eyebrow}</span>
             <h1 id="hero-heading" className="hero-title">
               {titleSegments.map((segment, index) =>
@@ -124,12 +161,12 @@ export default function Hero() {
           </div>
 
           <aside className="hero-panel" aria-label={data.lang === 'en' ? 'Current focus' : 'Foco actual'}>
-            <div className="hero-panel__card hero-panel__card--status">
+            <div className="hero-panel__card hero-panel__card--status" data-dev-id="2002">
               <span className="hero-panel__eyebrow">{status.title}</span>
               <p className="hero-panel__description">{status.description}</p>
             </div>
 
-            <div className="hero-stats" role="list">
+            <div className="hero-stats" role="list" data-dev-id="2003">
               {data.stats.map((stat: Stat) => (
                 <div key={stat.id} className="hero-stat" role="listitem">
                   <span className="hero-stat__value">{stat.value}</span>
@@ -138,7 +175,7 @@ export default function Hero() {
               ))}
             </div>
 
-            <div className="hero-panel__card hero-panel__card--note">
+            <div className="hero-panel__card hero-panel__card--note fx-sketch-outline" data-dev-id="2004">
               <span className="hero-panel__eyebrow">{note.title}</span>
               <div className="hero-panel__tags" role="list">
                 {note.items.map(item => (

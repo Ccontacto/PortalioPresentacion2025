@@ -19,6 +19,7 @@ export default function ToastContainer() {
     // MEJORA 5: role, aria-label y aria-live
     <div
       className="fixed top-5 right-5 z-50 flex flex-col gap-2"
+      data-dev-id="8602"
       role="region"
       aria-label="Notificaciones del sistema"
       aria-live="polite"

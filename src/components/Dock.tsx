@@ -208,7 +208,7 @@ export default function Dock() {
   };
 
   return (
-    <div className="dock-container">
+    <div className="dock-container" data-dev-id="9200">
       <m.div
         className="dock-shell"
         layout
@@ -254,6 +254,7 @@ export default function Dock() {
                 layoutId="dock-active"
                 type="button"
                 className="dock-current"
+                data-dev-id="9201"
                 aria-label={`Ir a ${activeNav.label}`}
                 title={activeNav.label}
                 onClick={() => handleNavigate(activeNav.id)}
@@ -270,6 +271,7 @@ export default function Dock() {
                 type="button"
                 className="dock-toggle"
                 ref={toggleRef}
+                data-dev-id="9202"
                 aria-label={isExpanded ? 'Cerrar navegación flotante' : 'Abrir navegación flotante'}
                 aria-pressed={isExpanded}
                 aria-expanded={isExpanded}
@@ -293,6 +295,7 @@ export default function Dock() {
                 navRef.current = node;
               }}
               className="dock"
+              data-dev-id="9203"
               role="navigation"
               aria-label="Navegación flotante"
               onKeyDown={handleKeyNavigation}

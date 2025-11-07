@@ -18,8 +18,8 @@ export default function Skills() {
   const { data } = useLanguage();
 
   return (
-    <section id="skills" className="page-section" aria-labelledby="skills-heading">
-      <header className="experience-header">
+    <section id="skills" className="page-section" aria-labelledby="skills-heading" data-dev-id="3100">
+      <header className="experience-header" data-dev-id="3101">
         <span className="experience-header__eyebrow">Stack principal</span>
         <h2 id="skills-heading" className="experience-header__title">
           {data.sections.skills.title}
@@ -29,11 +29,12 @@ export default function Skills() {
         </p>
       </header>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl" data-dev-id="3102">
         {data.sections.skills.categories.map((cat: SkillCategory) => (
           <m.article
             key={cat.id}
             className="card"
+            data-dev-id={`310${String(cat.id ?? '').slice(-1) || '5'}`}
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}

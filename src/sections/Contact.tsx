@@ -58,9 +58,9 @@ export default function Contact() {
 
   return (
     <>
-      <section id="contact" className="page-section" aria-labelledby="contact-heading">
-        <div className="contact-wrapper">
-          <header className="contact-hero">
+      <section id="contact" className="page-section" aria-labelledby="contact-heading" data-dev-id="9000">
+        <div className="contact-wrapper" data-dev-id="9001">
+          <header className="contact-hero" data-dev-id="9002">
             <span className="contact-hero__eyebrow">Conectemos</span>
             <h2
               id="contact-heading"
@@ -85,7 +85,7 @@ export default function Contact() {
             {status === 'error' && 'Error al enviar. Intenta de nuevo.'}
           </div>
 
-          <div className="contact-actions">
+          <div className="contact-actions" data-dev-id="9003">
             <button
               type="button"
               onClick={openWhatsApp}
@@ -118,8 +118,8 @@ export default function Contact() {
             </button>
           </div>
 
-          <section className="contact-info">
-            <header className="contact-info__header">
+          <section className="contact-info" data-dev-id="9004">
+            <header className="contact-info__header" data-dev-id="9005">
               <h3 className="contact-info__title">{data.name}</h3>
               <p className="contact-info__tagline">Líder Técnico iOS · Arquitectura IA</p>
               <span className="contact-info__location">Basado en {data.location}</span>

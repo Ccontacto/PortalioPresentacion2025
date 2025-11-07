@@ -40,6 +40,20 @@ export function useIntersectionObserver<T extends HTMLElement>(
     );
 
     observer.observe(element);
+
+    // Fallback para Safari iOS: comprobar visibilidad sincrónicamente
+    const checkNow = () => {
+      const rect = element.getBoundingClientRect();
+      const vh = window.innerHeight || document.documentElement.clientHeight;
+      const vw = window.innerWidth || document.documentElement.clientWidth;
+      const inView = rect.top < vh && rect.bottom > 0 && rect.left < vw && rect.right > 0;
+      if (inView) setIntersecting(true);
+    };
+    // Chequeo inmediato y en el siguiente frame
+    checkNow();
+    window.requestAnimationFrame(checkNow);
+    // Chequeo adicional tras carga (iOS tarda en pintar)
+    window.addEventListener('load', checkNow, { once: true });
     return () => observer.disconnect();
   }, [root, serializedOptions]);
 

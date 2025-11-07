@@ -202,6 +202,7 @@ export default function SearchBar({
             exit={shouldReduceMotion ? undefined : 'exit'}
             transition={shouldReduceMotion ? undefined : PANEL_TRANSITION}
             role="presentation"
+            data-dev-id="6002"
           >
             <div
               className="search-modal__backdrop"
@@ -231,6 +232,7 @@ export default function SearchBar({
                 animate={shouldReduceMotion ? undefined : 'show'}
                 exit={shouldReduceMotion ? undefined : 'exit'}
                 transition={shouldReduceMotion ? undefined : PANEL_TRANSITION}
+                data-dev-id="6001"
               >
                 <header className="search-modal__header">
                   <div>
@@ -353,6 +355,7 @@ export default function SearchBar({
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.97 }}
         data-retro-sfx
+        data-dev-id="6000"
       >
         <Search size={22} aria-hidden="true" />
         {isIconVariant ? (

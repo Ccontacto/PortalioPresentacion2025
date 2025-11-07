@@ -32,8 +32,8 @@ export default function Projects() {
   }, [currentSearchTerm, data.sections.projects.items]);
 
   return (
-    <section id="projects" className="page-section" aria-labelledby="projects-heading">
-      <header className="experience-header">
+    <section id="projects" className="page-section" aria-labelledby="projects-heading" data-dev-id="5000">
+      <header className="experience-header" data-dev-id="5001">
         <span className="experience-header__eyebrow">Casos reales</span>
         <h2 id="projects-heading" className="experience-header__title">
           {data.sections.projects.title}
@@ -50,11 +50,12 @@ export default function Projects() {
         resultCount={filteredProjects.length}
       />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl" data-dev-id="5002">
         {filteredProjects.map((proj: ProjectItem, index: number) => (
           <m.article
             key={proj.id}
             className="card"
+            data-dev-id={`500${index}`}
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}

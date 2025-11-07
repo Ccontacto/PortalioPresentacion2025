@@ -394,6 +394,7 @@ export default function CommandPalette() {
       {open ? (
         <m.div
           className="search-modal search-modal--command"
+          data-dev-id="6500"
           variants={shouldReduceMotion ? undefined : OVERLAY_FADE}
           initial={shouldReduceMotion ? undefined : 'hidden'}
           animate={shouldReduceMotion ? undefined : 'show'}
@@ -403,6 +404,7 @@ export default function CommandPalette() {
         >
           <div
             className="search-modal__backdrop"
+            data-dev-id="6501"
             role="presentation"
             aria-hidden="true"
             onClick={closePalette}
@@ -418,6 +420,7 @@ export default function CommandPalette() {
           >
             <m.div
               className="search-modal__panel search-modal__panel--command"
+              data-dev-id="6502"
               role="dialog"
               aria-modal="true"
               aria-labelledby={titleId}

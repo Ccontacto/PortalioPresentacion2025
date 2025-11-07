@@ -10,8 +10,8 @@ export default function Experience() {
   const { data } = useLanguage();
 
   return (
-    <section id="experience" className="page-section" aria-labelledby="experience-heading">
-      <header className="experience-header">
+    <section id="experience" className="page-section" aria-labelledby="experience-heading" data-dev-id="4000">
+      <header className="experience-header" data-dev-id="4001">
         <span className="experience-header__eyebrow">Trayectoria destacada</span>
         <h2 id="experience-heading" className="experience-header__title">
           {data.sections.experience.title}
@@ -21,13 +21,14 @@ export default function Experience() {
         </p>
       </header>
 
-      <div className="experience-track">
+      <div className="experience-track" data-dev-id="4002">
         {data.sections.experience.jobs.map((job: ExperienceJob, index: number) => {
           const isLast = index === data.sections.experience.jobs.length - 1;
           return (
             <m.article
               key={job.id}
               className={`experience-node${isLast ? ' experience-node--last' : ''}`}
+              data-dev-id={`400${index}`}
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
