@@ -231,6 +231,11 @@ export const es = {
     viewProjects: 'Ver proyectos',
     bookCall: 'Agendar conversación',
     retroExit: 'Salir de modo retro',
-    retroActiveLabel: 'Modo retro activo'
+    retroActiveLabel: 'Modo retro activo',
+    quickActionsTitle: 'Acciones rápidas',
+    searchAriaLabel: 'Buscar accesos rápidos',
+    searchPlaceholder: 'Buscar…',
+    noMatchesTitle: 'Sin coincidencias',
+    noMatchesSubtitle: 'Ajusta la búsqueda o explora otras acciones.'
   }
 } as const satisfies PortfolioData;

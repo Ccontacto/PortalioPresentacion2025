@@ -77,7 +77,7 @@ const navVariants: Variants = {
 };
 
 export default function Dock() {
-  const { data } = useLanguage();
+  const { data, currentLang } = useLanguage();
   const { activePage, navigateTo } = useNavigation();
   const shouldReduceMotion = useReducedMotion();
 
@@ -103,19 +103,25 @@ export default function Dock() {
       if (!isExpanded) {
         return;
       }
-      if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') {
-        return;
-      }
-
       const buttons = buttonRefs.current.filter(Boolean) as HTMLButtonElement[];
-      if (!buttons.length) {
-        return;
-      }
-
-      event.preventDefault();
+      if (!buttons.length) return;
 
       const activeElement = document.activeElement as HTMLButtonElement | null;
       const currentIndex = buttons.findIndex(button => button === activeElement);
+
+      if (event.key === 'Home') {
+        event.preventDefault();
+        buttons[0]?.focus();
+        return;
+      }
+      if (event.key === 'End') {
+        event.preventDefault();
+        buttons[buttons.length - 1]?.focus();
+        return;
+      }
+      if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return;
+
+      event.preventDefault();
       const direction = event.key === 'ArrowRight' ? 1 : -1;
       const targetIndex =
         currentIndex === -1
@@ -171,6 +177,8 @@ export default function Dock() {
 
   useEffect(() => {
     if (!isExpanded) {
+      // devolver foco al toggle cuando se cierra
+      toggleRef.current?.focus();
       return undefined;
     }
 
@@ -200,6 +208,23 @@ export default function Dock() {
     };
   }, [isExpanded]);
 
+  // Al expandir, enfocar el primer botón navegable
+  useEffect(() => {
+    if (!isExpanded) return;
+    const buttons = buttonRefs.current.filter(Boolean) as HTMLButtonElement[];
+    if (!buttons.length) return;
+    const timeout = window.setTimeout(() => {
+      // priorizar el elemento activo actual si existe
+      const activeIndex = navItems.findIndex(navItem => navItem.id === activeNav?.id);
+      if (activeIndex >= 0 && buttons[activeIndex]) {
+        buttons[activeIndex].focus();
+      } else {
+        buttons[0]?.focus();
+      }
+    }, 0);
+    return () => window.clearTimeout(timeout);
+  }, [isExpanded, navItems, activeNav]);
+
   const handleToggle = () => setIsExpanded(prev => !prev);
   const handleNavigate = (sectionId: string) => {
     navigateTo(sectionId);
@@ -209,6 +234,12 @@ export default function Dock() {
   if (!hasNavItems || !activeNav) {
     return null;
   }
+
+  const i18n = {
+    open: currentLang === 'es' ? 'Abrir navegación flotante' : 'Open floating navigation',
+    close: currentLang === 'es' ? 'Cerrar navegación flotante' : 'Close floating navigation',
+    nav: currentLang === 'es' ? 'Navegación flotante' : 'Floating navigation'
+  } as const;
 
   return (
     <div className="dock-container" data-dev-id="9200">
@@ -272,12 +303,13 @@ export default function Dock() {
               <m.button
                 layoutId="dock-toggle"
                 type="button"
-                className="dock-toggle"
+                className={`dock-toggle ${isExpanded ? 'is-active' : ''}`}
                 ref={toggleRef}
                 data-dev-id="9202"
-                aria-label={isExpanded ? 'Cerrar navegación flotante' : 'Abrir navegación flotante'}
+                aria-label={isExpanded ? i18n.close : i18n.open}
                 aria-pressed={isExpanded}
                 aria-expanded={isExpanded}
+                aria-controls="floating-dock-nav"
                 onClick={handleToggle}
                 variants={shouldReduceMotion ? undefined : collapsedToggleVariants}
                 initial={shouldReduceMotion ? undefined : 'rest'}
@@ -299,8 +331,9 @@ export default function Dock() {
               }}
               className="dock"
               data-dev-id="9203"
+              id="floating-dock-nav"
               role="navigation"
-              aria-label="Navegación flotante"
+              aria-label={i18n.nav}
               onKeyDown={handleKeyNavigation}
               variants={shouldReduceMotion ? undefined : navVariants}
               initial="hidden"

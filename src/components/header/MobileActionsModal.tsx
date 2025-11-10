@@ -6,6 +6,7 @@ import { createPortal } from 'react-dom';
 
 import { DIALOG_VARIANTS, PANEL_TRANSITION } from '../../constants/animation';
 import { KONAMI_ENABLE_MESSAGE } from '../../constants/konami';
+import { useLanguage } from '../../contexts/LanguageContext';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useToast } from '../../contexts/ToastContext';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
@@ -25,6 +26,17 @@ export function MobileActionsModal({ open, groups, onClose, menuRef }: Props) {
   const [query, setQuery] = useState('');
   const { activateKonami, isKonami } = useTheme();
   const { showToast } = useToast();
+  const { data, currentLang } = useLanguage();
+
+  const i18n = {
+    title: data.ui.quickActionsTitle ?? (currentLang === 'es' ? 'Acciones rápidas' : 'Quick actions'),
+    searchAria: data.ui.searchAriaLabel ?? (currentLang === 'es' ? 'Buscar accesos rápidos' : 'Search quick actions'),
+    searchPlaceholder: data.ui.searchPlaceholder ?? (currentLang === 'es' ? 'Buscar…' : 'Search…'),
+    noMatchesTitle: data.ui.noMatchesTitle ?? (currentLang === 'es' ? 'Sin coincidencias' : 'No matches'),
+    noMatchesSubtitle:
+      data.ui.noMatchesSubtitle ??
+      (currentLang === 'es' ? 'Ajusta la búsqueda o explora otras acciones.' : 'Try adjusting your query or explore other actions.')
+  } as const;
 
   const itemsByKey = useMemo(() => {
     const map = new Map<string, QuickAction>();
@@ -105,7 +117,7 @@ export function MobileActionsModal({ open, groups, onClose, menuRef }: Props) {
           transition={shouldReduceMotion ? undefined : PANEL_TRANSITION}
         >
           <header className="mobile-actions-modal__header">
-            <h2 id="mobile-actions-title">Acciones rápidas</h2>
+            <h2 id="mobile-actions-title">{i18n.title}</h2>
             <button
               type="button"
               className="mobile-actions-modal__close"
@@ -117,15 +129,15 @@ export function MobileActionsModal({ open, groups, onClose, menuRef }: Props) {
             </button>
           </header>
 
-          <div className="remote-search" aria-label="Buscar accesos rápidos">
+          <div className="remote-search" aria-label={i18n.searchAria}>
             <Search size={18} aria-hidden="true" />
             <input
               type="search"
-              placeholder="Buscar…"
+              placeholder={i18n.searchPlaceholder}
               value={query}
               onChange={e => setQuery(e.target.value)}
               onKeyDown={(event: KeyboardEvent<HTMLInputElement>) => handleKonamiKey(event.key)}
-              aria-label="Buscar opciones"
+              aria-label={i18n.searchAria}
             />
           </div>
 
@@ -154,8 +166,8 @@ export function MobileActionsModal({ open, groups, onClose, menuRef }: Props) {
               ))
             ) : (
               <div className="command-modal__empty" role="status">
-                <p className="command-modal__empty-title">Sin coincidencias</p>
-                <p className="command-modal__empty-subtitle">Ajusta la búsqueda o explora otras acciones.</p>
+                <p className="command-modal__empty-title">{i18n.noMatchesTitle}</p>
+                <p className="command-modal__empty-subtitle">{i18n.noMatchesSubtitle}</p>
               </div>
             )}
           </div>

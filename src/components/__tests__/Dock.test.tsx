@@ -42,10 +42,52 @@ const renderWithProviders = (ui: React.ReactElement) => {
 };
 
 describe('Dock Component', () => {
+  it('focuses first list item when expanded and restores focus on close', async () => {
+    renderWithProviders(<Dock />);
+    const toggle = screen.getAllByLabelText('Abrir navegación flotante')[0];
+    fireEvent.click(toggle);
+    const nav = await screen.findByRole('navigation', { name: 'Navegación flotante' });
+    const buttons = within(nav).getAllByRole('button');
+    const listButtons = buttons.filter(btn => !btn.getAttribute('aria-current'));
+    await waitFor(() => expect(listButtons[0]).toHaveFocus());
+
+    // cerrar con Escape y verificar retorno de foco al toggle
+    fireEvent.keyDown(window, { key: 'Escape' });
+    await waitFor(() => expect(screen.getByLabelText('Abrir navegación flotante')).toHaveFocus());
+  });
+
+  it('supports Home/End to jump first/last', async () => {
+    renderWithProviders(<Dock />);
+    fireEvent.click(screen.getAllByLabelText('Abrir navegación flotante')[0]);
+    const nav = await screen.findByRole('navigation', { name: 'Navegación flotante' });
+    const buttons = within(nav).getAllByRole('button');
+    const listButtons = buttons.filter(btn => !btn.getAttribute('aria-current'));
+
+    // Move focus somewhere in the middle
+    listButtons[1].focus();
+    expect(listButtons[1]).toHaveFocus();
+
+    fireEvent.keyDown(listButtons[1], { key: 'Home' });
+    expect(listButtons[0]).toHaveFocus();
+
+    fireEvent.keyDown(listButtons[0], { key: 'End' });
+    expect(listButtons[listButtons.length - 1]).toHaveFocus();
+  });
+
+  it('toggle controls nav (aria-controls) and opens navigation', async () => {
+    renderWithProviders(<Dock />);
+    const toggle = screen.getAllByRole('button', { name: 'Abrir navegación flotante' })[0];
+    expect(toggle).toHaveAttribute('aria-expanded', 'false');
+    expect(toggle).toHaveAttribute('aria-controls', 'floating-dock-nav');
+    fireEvent.click(toggle);
+    expect(toggle).toHaveAttribute('aria-controls', 'floating-dock-nav');
+    const navs = await screen.findAllByRole('navigation', { name: 'Navegación flotante' });
+    expect(navs.length).toBeGreaterThan(0);
+  });
   it('should move focus to the right when ArrowRight is pressed', async () => {
     renderWithProviders(<Dock />);
     // Expand dock to enable keyboard navigation over items
-    fireEvent.click(screen.getByLabelText('Abrir navegación flotante'));
+    fireEvent.click(screen.getAllByLabelText('Abrir navegación flotante')[0]);
     const navs = await screen.findAllByRole('navigation', { name: 'Navegación flotante' });
     const nav = navs[navs.length - 1];
     const buttons = within(nav).getAllByRole('button');
@@ -62,7 +104,7 @@ describe('Dock Component', () => {
 
   it('should move focus to the left when ArrowLeft is pressed', async () => {
     renderWithProviders(<Dock />);
-    fireEvent.click(screen.getByLabelText('Abrir navegación flotante'));
+    fireEvent.click(screen.getAllByLabelText('Abrir navegación flotante')[0]);
     const navs = await screen.findAllByRole('navigation', { name: 'Navegación flotante' });
     const nav = navs[navs.length - 1];
     const buttons = within(nav).getAllByRole('button');
@@ -79,7 +121,7 @@ describe('Dock Component', () => {
 
   it('should wrap focus from the last item to the first when ArrowRight is pressed', async () => {
     renderWithProviders(<Dock />);
-    fireEvent.click(screen.getByLabelText('Abrir navegación flotante'));
+    fireEvent.click(screen.getAllByLabelText('Abrir navegación flotante')[0]);
     const navs = await screen.findAllByRole('navigation', { name: 'Navegación flotante' });
     const nav = navs[navs.length - 1];
     const buttons = within(nav).getAllByRole('button');
@@ -97,7 +139,7 @@ describe('Dock Component', () => {
 
   it('should wrap focus from the first item to the last when ArrowLeft is pressed', async () => {
     renderWithProviders(<Dock />);
-    fireEvent.click(screen.getByLabelText('Abrir navegación flotante'));
+    fireEvent.click(screen.getAllByLabelText('Abrir navegación flotante')[0]);
     const navs = await screen.findAllByRole('navigation', { name: 'Navegación flotante' });
     const nav = navs[navs.length - 1];
     const buttons = within(nav).getAllByRole('button');

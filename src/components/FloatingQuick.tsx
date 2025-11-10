@@ -116,7 +116,7 @@ export default function FloatingQuick() {
           className="icon-btn"
           aria-haspopup="dialog"
           aria-expanded={open}
-          aria-controls="floating-quick-actions"
+          aria-controls="mobile-quick-actions"
           aria-label={currentLang === 'es' ? 'Abrir acciones' : 'Open actions'}
           onClick={() => setOpen(true)}
           onTouchStart={(e) => { e.preventDefault(); setOpen(true); }}

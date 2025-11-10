@@ -133,6 +133,12 @@ export interface PortfolioUiStrings {
   bookCall: string;
   retroExit: string;
   retroActiveLabel: string;
+  // Opcionales: modal de acciones rápidas / búsqueda
+  quickActionsTitle?: string;
+  searchAriaLabel?: string;
+  searchPlaceholder?: string;
+  noMatchesTitle?: string;
+  noMatchesSubtitle?: string;
 }
 
 export interface PortfolioToasts {

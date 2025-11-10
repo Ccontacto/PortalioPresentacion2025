@@ -42,7 +42,7 @@ export default function PageProgress() {
         left: 0,
         height: 4,
         width: `${width}%`,
-        background: '#A0E7E5',
+        background: 'var(--progress-color)',
         zIndex: 60,
         pointerEvents: 'none',
         transition: 'width 120ms linear'
