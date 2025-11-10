@@ -444,34 +444,33 @@ html[data-theme='konami'] .availability-unavailable {
   color: #040209;
 }
 
-/* Remote control layout inside actions modal */
-.remote-ctrl { display: grid; gap: 12px; }
-.remote-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 42px);
-  grid-template-rows: repeat(3, 42px);
-  gap: 6px;
-  align-self: center;
-}
-.remote-btn {
-  display: inline-flex;
+/* Quick actions search */
+.remote-search {
+  display: flex;
   align-items: center;
-  justify-content: center;
-  width: 42px; height: 42px;
-  border-radius: 10px;
+  gap: 10px;
+  padding: 12px 16px;
   border: 2px solid var(--border-strong);
-  background: var(--surface-card);
-  font-weight: 800;
-  letter-spacing: 0.06em;
-  box-shadow: 6px 6px 0 var(--shadow-strong);
+  border-radius: 16px;
+  background: var(--surface-panel);
+  color: var(--text-strong);
+  margin: 0 0 20px;
 }
-.remote-btn:hover { transform: translate(-2px,-2px); box-shadow: 8px 8px 0 var(--shadow-strong-hover); }
-.remote-center { align-self: center; justify-self: center; opacity: 0.6; }
-.remote-ab { display: flex; gap: 10px; justify-content: center; }
-.remote-a { background: linear-gradient(135deg, var(--gradient-brand-start), var(--gradient-brand-end)); color: var(--text-on-brand); }
-.remote-b { background: linear-gradient(135deg, var(--gradient-close-start), var(--gradient-close-end)); color: var(--text-on-brand); }
-.remote-search { display:flex; justify-content: center; }
-.remote-search input { width: 100%; max-width: 360px; padding: 10px 12px; border: 2px solid var(--border-strong); border-radius: 12px; background: var(--surface-panel); color: var(--text-strong); }
+.remote-search svg {
+  flex-shrink: 0;
+  color: currentColor;
+  opacity: 0.85;
+}
+.remote-search input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font-size: 0.95rem;
+}
+.remote-search input:focus {
+  outline: none;
+}
 
 .availability-icon {
   display: inline-flex;

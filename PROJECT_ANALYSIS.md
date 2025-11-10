@@ -43,6 +43,7 @@ portfolio-jctr-2025/
 │   ├── App.tsx            # Composition root
 │   └── main.tsx           # Entry point
 ├── tokens/                # DTCG-compliant design tokens
+├── docs/TECH_DEBT.md      # Registro de experimentos aparcados/deuda
 ├── eslint.config.cjs      # Flat ESLint config (Framer motion guardrails)
 ├── tailwind.config.js
 ├── tsconfig.json
@@ -73,6 +74,7 @@ The project demonstrates a good understanding of modern web development practice
 
 *   **SLOs para PDF y descargas:** `pdfGenerator.ts` y `useCvDownload` ya manejan estados concurrentes, pero conviene agregar métricas/logs para fallos (por ejemplo, captura de tamaño de payload, tiempos y errores jsPDF).
 *   **Hardening de accesibilidad dinámica:** Componentes como `CommandPalette`, `SearchBar` y `MobileActionsModal` dependen de FocusTrap y motion tokens; se recomienda auditar con axe o Lighthouse para asegurar que los overlays cumplan roles/aria en cada idioma.
+*   **Mantener el registro de deuda técnica:** La nueva bitácora en `docs/TECH_DEBT.md` centraliza features pausados (p. ej. el “control remoto”). Es clave actualizarla cada vez que se archive o reactive una pieza para no duplicar esfuerzos.
 
 ### Medium Priority
 

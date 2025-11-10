@@ -34,6 +34,12 @@ Portfolio React + Vite listo para desarrollo local, testing y despliegue en Clou
 ## A11y
 - `.hit-44` garantiza targets ≥44px. Se aplica a triggers, cierres y dock.
 - Focus visible con box-shadow (ver `:focus-visible` en `src/index.css`).
+- El menú flotante (`FloatingQuick`) abre un modal accesible con buscador (`MobileActionsModal`) y permite ejecutar acciones con teclado o pantalla táctil. El backdrop se puede cerrar con clic/tap o `Esc`.
+
+## Accesos rápidos y UI flotante
+- El botón flotante siempre muestra dos acciones: regresar a “Inicio” y abrir el modal de accesos rápidos.
+- El modal lista secciones (`data.nav`) y preferencias (tema, idioma, Konami, confetti, IDs de depuración, descarga de CV).
+- Las acciones también pueden invocarse mediante el Command Palette (`⌘/Ctrl + K`) para desktop.
 
 ## Despliegue en Cloudflare Pages
 1. Ejecuta `npm run build` (generará `dist`).
@@ -51,6 +57,9 @@ Portfolio React + Vite listo para desarrollo local, testing y despliegue en Clou
 - Para reproducir el pipeline localmente ejecuta `npm run lint && npm run check:ci`.
 - El job de CI adjunta un artefacto `coverage-report`. Descárgalo desde la run más reciente para revisar el HTML detallado de cobertura.
 - Sitio publicado: [https://portalio-presentacion-2025.pages.dev](https://portalio-presentacion-2025.pages.dev) (actualizado después de cada merge en `main`).
+
+## Deuda técnica rastreada
+- `docs/TECH_DEBT.md` agrupa los experimentos que se quitaron del runtime (p. ej. el antiguo “control remoto” del modal y la documentación histórica). Revisa ese archivo antes de reactivar features en pausa.
 
 ## Flujo Git recomendado
 1. `git status`

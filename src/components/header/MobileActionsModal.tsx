@@ -76,24 +76,27 @@ export function MobileActionsModal({ open, groups, onClose, menuRef }: Props) {
   const content = (
     <div
       className="mobile-actions-backdrop"
+      role="presentation"
+      onClick={onClose}
     >
       <FocusTrap
         active={open}
         focusTrapOptions={{
           allowOutsideClick: true,
-          clickOutsideDeactivates: false,
+          clickOutsideDeactivates: true,
           initialFocus: () =>
             menuRef.current?.querySelector('[data-focus-default]') ?? menuRef.current ?? undefined,
           onDeactivate: onClose
         }}
       >
         <m.div
-          className="mobile-actions-modal remote-modal"
+          className="mobile-actions-modal"
           id="mobile-quick-actions"
           ref={menuRef}
           role="dialog"
           aria-modal="true"
           aria-labelledby="mobile-actions-title"
+          onClick={event => event.stopPropagation()}
           data-dev-id="7001"
           variants={shouldReduceMotion ? undefined : DIALOG_VARIANTS}
           initial={shouldReduceMotion ? undefined : 'hidden'}
