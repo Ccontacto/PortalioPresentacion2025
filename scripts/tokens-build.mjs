@@ -5,6 +5,10 @@ import path from 'node:path';
 const SRC = new URL('../tokens/core.json', import.meta.url);
 
 const toOklch = (obj) => `oklch(${obj.L} ${obj.C} ${obj.h})`;
+const toOklchFromSpace = (v) =>
+  v && typeof v === 'object' && v.colorSpace === 'oklch' && Array.isArray(v.components)
+    ? `oklch(${v.components[0]} ${v.components[1]} ${v.components[2]})`
+    : null;
 const isObj = (v) => typeof v === 'object' && v !== null;
 const tokenVal = (entry) => (entry?.$value ?? entry?.value ?? entry);
 
@@ -28,8 +32,12 @@ const emit = async () => {
     if (isObj(v) && 'L' in v && 'C' in v && 'h' in v) {
       lines.push(`  --neutral-${k}: ${toOklch(v)};`);
     } else {
-      lines.push(`  --neutral-${k}: ${v};`);
+      const alt = toOklchFromSpace(v);
+      lines.push(`  --neutral-${k}: ${alt ?? v};`);
     }
+    // prefijo opcional
+    const vv = isObj(v) ? (toOklchFromSpace(v) ?? (('L' in v) ? toOklch(v) : v)) : v;
+    lines.push(`  --u-color-neutral-${k}: ${vv};`);
   }
 
   // accents
@@ -39,8 +47,38 @@ const emit = async () => {
     if (isObj(v) && 'L' in v && 'C' in v && 'h' in v) {
       lines.push(`  --accent-${k}: ${toOklch(v)};`);
     } else {
-      lines.push(`  --accent-${k}: ${v};`);
+      const alt = toOklchFromSpace(v);
+      lines.push(`  --accent-${k}: ${alt ?? v};`);
     }
+    const vv = isObj(v) ? (toOklchFromSpace(v) ?? (('L' in v) ? toOklch(v) : v)) : v;
+    lines.push(`  --u-color-accent-${k}: ${vv};`);
+  }
+
+  // roles (t0/t1) → variables u-roles-* y alias por tema
+  const roles = t?.roles ?? {};
+  const roleSets = {};
+  for (const setKey of Object.keys(roles)) {
+    if (String(setKey).startsWith('$')) continue; // ignora metadatos
+    const set = roles[setKey];
+    if (!isObj(set)) continue;
+    roleSets[setKey] = {};
+    for (const roleKey of Object.keys(set)) {
+      if (String(roleKey).startsWith('$')) continue;
+      const v = tokenVal(set[roleKey]);
+      const alt = toOklchFromSpace(v);
+      const out = alt ?? v;
+      roleSets[setKey][roleKey] = out;
+      lines.push(`  --u-roles-${setKey}-${roleKey}: ${out};`);
+    }
+  }
+
+  // Alias de roles activos (t0 por defecto)
+  if (roleSets['t0']) {
+    const r = roleSets['t0'];
+    if (r.bg) lines.push(`  --u-role-bg: ${r.bg};`);
+    if (r.fg) lines.push(`  --u-role-fg: ${r.fg};`);
+    if (r.ax) lines.push(`  --u-role-ax: ${r.ax};`);
+    if (r.ol) lines.push(`  --u-role-ol: ${r.ol};`);
   }
 
   // typography sizes
@@ -49,6 +87,7 @@ const emit = async () => {
     const v = tokenVal(sizes[k]);
     const n = typeof v === 'string' && v.endsWith('px') ? parseFloat(v) / 16 : Number(v);
     if (!Number.isNaN(n)) lines.push(`  --type-size-${k}: ${rem(n)};`);
+    if (!Number.isNaN(n)) lines.push(`  --u-type-size-${k}: ${rem(n)};`);
   }
 
   // spacing
@@ -57,6 +96,7 @@ const emit = async () => {
     const v = tokenVal(spacing[k]);
     const n = typeof v === 'string' && v.endsWith('px') ? parseFloat(v) / 16 : Number(v);
     if (!Number.isNaN(n)) lines.push(`  --space-${k}: ${rem(n)};`);
+    if (!Number.isNaN(n)) lines.push(`  --u-space-${k}: ${rem(n)};`);
   }
 
   // radius
@@ -65,6 +105,7 @@ const emit = async () => {
     const v = tokenVal(radius[k]);
     const n = typeof v === 'string' && v.endsWith('px') ? parseFloat(v) : Number(v);
     if (!Number.isNaN(n)) lines.push(`  --radius-${k}: ${px(n)};`);
+    if (!Number.isNaN(n)) lines.push(`  --u-radius-${k}: ${px(n)};`);
   }
 
   // shadows (approximate using black base)
@@ -94,6 +135,21 @@ const emit = async () => {
   }
 
   lines.push('}');
+
+  // Overrides para dark mode: mapea alias a t1 si existe
+  if (roleSets['t1']) {
+    const r1 = roleSets['t1'];
+    const dark = [];
+    if (r1.bg) dark.push(`  --u-role-bg: ${r1.bg};`);
+    if (r1.fg) dark.push(`  --u-role-fg: ${r1.fg};`);
+    if (r1.ax) dark.push(`  --u-role-ax: ${r1.ax};`);
+    if (r1.ol) dark.push(`  --u-role-ol: ${r1.ol};`);
+    if (dark.length) {
+      lines.push("[data-theme='dark']{");
+      lines.push(...dark);
+      lines.push('}');
+    }
+  }
 
   const css = lines.join('\n') + '\n';
 

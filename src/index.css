@@ -148,57 +148,57 @@
 }
 
 html[data-theme='dark'] {
-  --surface-primary: var(--neutral-900, var(--token-bg-dark));
-  --surface-card: color-mix(in oklab, var(--neutral-900) 92%, transparent);
-  --surface-panel: color-mix(in oklab, var(--neutral-900) 88%, transparent);
-  --text-strong: var(--neutral-near-white, var(--token-text-dark));
-  --text-inverse: #060608;
-  --text-cta: var(--token-text-dark);
-  --logo-text: var(--token-text-dark);
-  --text-on-brand: #060608;
-  --border-strong: color-mix(in oklab, var(--neutral-near-white) 35%, transparent);
-  --border-muted: color-mix(in oklab, var(--neutral-near-white) 18%, transparent);
-  --shadow-strong: rgba(0, 0, 0, 0.65);
-  --shadow-soft: rgba(0, 0, 0, 0.35);
-  --shadow-strong-hover: rgba(0, 0, 0, 0.8);
+  --surface-primary: #05070d;
+  --surface-card: #0b0f1c;
+  --surface-panel: #11162a;
+  --text-strong: #f4f7ff;
+  --text-inverse: #05070d;
+  --text-cta: #05070d;
+  --logo-text: #f4f7ff;
+  --text-on-brand: #05070d;
+  --border-strong: rgba(255, 255, 255, 0.28);
+  --border-muted: rgba(255, 255, 255, 0.14);
+  --shadow-strong: rgba(5, 7, 13, 0.9);
+  --shadow-soft: rgba(5, 7, 13, 0.55);
+  --shadow-strong-hover: rgba(0, 0, 0, 0.95);
 
-  --gradient-brand-start: var(--token-accent1);
-  --gradient-brand-end: var(--token-accent3);
-  --gradient-hero-start: rgba(165, 228, 220, 0.35);
-  --gradient-hero-end: rgba(218, 183, 255, 0.35);
-  --gradient-close-start: rgba(255, 137, 160, 0.35);
-  --gradient-close-end: rgba(255, 209, 220, 0.55);
-  --gradient-whatsapp-start: rgba(165, 228, 220, 0.45);
-  --gradient-whatsapp-end: rgba(189, 227, 255, 0.45);
-  --gradient-email-start: rgba(189, 227, 255, 0.45);
-  --gradient-email-end: rgba(218, 183, 255, 0.45);
-  --gradient-copy-start: rgba(189, 227, 255, 0.35);
-  --gradient-copy-end: rgba(165, 228, 220, 0.35);
+  --gradient-brand-start: #a0e7e5;
+  --gradient-brand-end: #d7b7ff;
+  --gradient-hero-start: rgba(160, 231, 229, 0.18);
+  --gradient-hero-end: rgba(215, 183, 255, 0.2);
+  --gradient-close-start: rgba(255, 183, 221, 0.22);
+  --gradient-close-end: rgba(255, 218, 235, 0.26);
+  --gradient-whatsapp-start: rgba(46, 213, 166, 0.35);
+  --gradient-whatsapp-end: rgba(24, 144, 255, 0.32);
+  --gradient-email-start: rgba(24, 144, 255, 0.32);
+  --gradient-email-end: rgba(131, 161, 255, 0.28);
+  --gradient-copy-start: rgba(255, 183, 221, 0.28);
+  --gradient-copy-end: rgba(255, 122, 167, 0.32);
 
-  --stat-card-1-bg: rgba(165, 228, 220, 0.16);
-  --stat-card-1-text: var(--token-text-dark);
-  --stat-card-2-bg: rgba(218, 183, 255, 0.16);
-  --stat-card-2-text: var(--token-text-dark);
-  --stat-card-3-bg: rgba(189, 227, 255, 0.16);
-  --stat-card-3-text: var(--token-text-dark);
+  --stat-card-1-bg: rgba(160, 231, 229, 0.18);
+  --stat-card-1-text: #e5fbff;
+  --stat-card-2-bg: rgba(215, 183, 255, 0.18);
+  --stat-card-2-text: #f2e8ff;
+  --stat-card-3-bg: rgba(255, 183, 221, 0.18);
+  --stat-card-3-text: #ffeefd;
 
-  --toast-success-bg: rgba(165, 228, 220, 0.22);
-  --toast-error-bg: rgba(218, 183, 255, 0.22);
-  --toast-info-bg: rgba(189, 227, 255, 0.22);
-  --toast-warning-bg: rgba(189, 227, 255, 0.19);
-  --toast-text: var(--token-text-dark);
+  --toast-success-bg: rgba(46, 213, 166, 0.18);
+  --toast-error-bg: rgba(255, 122, 167, 0.2);
+  --toast-info-bg: rgba(131, 161, 255, 0.18);
+  --toast-warning-bg: rgba(255, 214, 153, 0.2);
+  --toast-text: #06101c;
 
-  --availability-available-bg-start: rgba(165, 228, 220, 0.45);
-  --availability-available-bg-end: rgba(165, 228, 220, 0.28);
-  --availability-available-text: var(--token-text-dark);
-  --availability-listening-bg-start: rgba(218, 183, 255, 0.45);
-  --availability-listening-bg-end: rgba(218, 183, 255, 0.28);
-  --availability-listening-text: var(--token-text-dark);
-  --availability-unavailable-bg-start: rgba(189, 227, 255, 0.45);
-  --availability-unavailable-bg-end: rgba(189, 227, 255, 0.28);
-  --availability-unavailable-text: var(--token-text-dark);
-  --sketch-ink: color-mix(in srgb, var(--color-ink) 70%, var(--token-text-dark));
-  --sketch-graphite: color-mix(in srgb, rgba(255, 255, 255, 0.85) 55%, var(--color-ink));
+  --availability-available-bg-start: rgba(46, 213, 166, 0.32);
+  --availability-available-bg-end: rgba(46, 213, 166, 0.18);
+  --availability-available-text: #041b16;
+  --availability-listening-bg-start: rgba(131, 161, 255, 0.32);
+  --availability-listening-bg-end: rgba(131, 161, 255, 0.18);
+  --availability-listening-text: #0a1026;
+  --availability-unavailable-bg-start: rgba(255, 183, 221, 0.32);
+  --availability-unavailable-bg-end: rgba(255, 183, 221, 0.18);
+  --availability-unavailable-text: #2a0c1a;
+  --sketch-ink: color-mix(in srgb, #f4f7ff 82%, #05070d);
+  --sketch-graphite: color-mix(in srgb, rgba(244, 247, 255, 0.85) 60%, rgba(5, 7, 13, 0.6));
 }
 
 html[data-theme='konami'] {

@@ -4,7 +4,7 @@ import type { JSX } from 'react';
 type Props = {
   availability: AvailabilityState;
   badgeClass: string;
-  icon: JSX.Element;
+  icon?: JSX.Element;
   label: string;
   toggleLabel: string;
   onToggle: () => void;
@@ -28,9 +28,11 @@ export function AvailabilityBadge({
       data-retro-sfx
     >
       <span className="availability-indicator" aria-hidden="true"></span>
-      <span className="availability-icon" aria-hidden="true">
-        {icon}
-      </span>
+      {icon ? (
+        <span className="availability-icon" aria-hidden="true">
+          {icon}
+        </span>
+      ) : null}
       <span className="availability-label" aria-live="polite">
         {label}
       </span>

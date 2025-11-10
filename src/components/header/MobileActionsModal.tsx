@@ -1,16 +1,17 @@
 import { FocusTrap } from 'focus-trap-react';
-import { createPortal } from 'react-dom';
 import { m } from 'framer-motion';
+import { Search, X } from 'lucide-react';
 import { useMemo, useState } from 'react';
-import { X } from 'lucide-react';
+import { createPortal } from 'react-dom';
+
+import { DIALOG_VARIANTS, PANEL_TRANSITION } from '../../constants/animation';
+import { KONAMI_ENABLE_MESSAGE } from '../../constants/konami';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useToast } from '../../contexts/ToastContext';
-import { KONAMI_ENABLE_MESSAGE } from '../../constants/konami';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
-import { DIALOG_VARIANTS, PANEL_TRANSITION } from '../../constants/animation';
 
 import type { QuickAction, QuickActionGroup } from './types';
-import type { RefObject } from 'react';
+import type { KeyboardEvent, RefObject } from 'react';
 
 type Props = {
   open: boolean;
@@ -20,7 +21,6 @@ type Props = {
 };
 
 export function MobileActionsModal({ open, groups, onClose, menuRef }: Props) {
-  if (!open) return null;
   const shouldReduceMotion = useReducedMotion();
   const [query, setQuery] = useState('');
   const { activateKonami, isKonami } = useTheme();
@@ -40,18 +40,22 @@ export function MobileActionsModal({ open, groups, onClose, menuRef }: Props) {
     else window.setTimeout(() => it.action(), 160);
   };
 
-  // Konami: U U D D L R L R B A
-  const [, setKonami] = useState<string>('');
-  const KONAMI_SEQ = 'UUDDLRLRBA';
-  const pushKonami = (ch: 'U'|'D'|'L'|'R'|'A'|'B') => {
-    setKonami(prev => {
-      const next = (prev + ch).slice(-KONAMI_SEQ.length);
-      if (next === KONAMI_SEQ && !isKonami) {
+  const KONAMI_SEQ = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'] as const;
+  const [konamiIndex, setKonamiIndex] = useState(0);
+  const handleKonamiKey = (key: string) => {
+    const expected = KONAMI_SEQ[konamiIndex];
+    if (key === expected) {
+      const nextIndex = konamiIndex + 1;
+      if (nextIndex === KONAMI_SEQ.length && !isKonami) {
         activateKonami();
         showToast(KONAMI_ENABLE_MESSAGE, 'success');
+        setKonamiIndex(0);
+      } else {
+        setKonamiIndex(nextIndex % KONAMI_SEQ.length);
       }
-      return next;
-    });
+      return;
+    }
+    setKonamiIndex(key === KONAMI_SEQ[0] ? 1 : 0);
   };
 
   const filtered = useMemo(() => {
@@ -64,6 +68,10 @@ export function MobileActionsModal({ open, groups, onClose, menuRef }: Props) {
       }))
       .filter(g => g.items.length > 0);
   }, [groups, query]);
+
+  if (!open) {
+    return null;
+  }
 
   const content = (
     <div
@@ -94,7 +102,7 @@ export function MobileActionsModal({ open, groups, onClose, menuRef }: Props) {
           transition={shouldReduceMotion ? undefined : PANEL_TRANSITION}
         >
           <header className="mobile-actions-modal__header">
-            <h2 id="mobile-actions-title">Control</h2>
+            <h2 id="mobile-actions-title">Acciones rápidas</h2>
             <button
               type="button"
               className="mobile-actions-modal__close"
@@ -106,42 +114,21 @@ export function MobileActionsModal({ open, groups, onClose, menuRef }: Props) {
             </button>
           </header>
 
-          {/* Control remoto + buscador (no cierra el modal; solo registra entradas para Konami) */}
-          <div className="remote-ctrl" role="group" aria-label="Control remoto">
-            <div className="remote-sensor" aria-hidden="true"></div>
-            <div className="remote-grid">
-              <button className="remote-btn" aria-label="Arriba" onClick={() => pushKonami('U')}>▲</button>
-              <div />
-              <button className="remote-btn" aria-label="Derecha" onClick={() => pushKonami('R')}>▶</button>
-              <button className="remote-btn" aria-label="Izquierda" onClick={() => pushKonami('L')}>◀</button>
-              <div className="remote-center" aria-hidden="true">●</div>
-              <div />
-              <div />
-              <button className="remote-btn" aria-label="Abajo" onClick={() => pushKonami('D')}>▼</button>
-              <div />
-            </div>
-            <div className="remote-ab">
-              <button className="remote-btn remote-a" aria-label="A" onClick={() => pushKonami('A')}>A</button>
-              <button className="remote-btn remote-b" aria-label="B" onClick={() => pushKonami('B')}>B</button>
-            </div>
-            <div className="remote-start-select" aria-hidden="true">
-              <span className="remote-pill">Select</span>
-              <span className="remote-pill">Start</span>
-            </div>
-            <div className="remote-search">
-              <input
-                type="search"
-                placeholder="Buscar…"
-                value={query}
-                onChange={e => setQuery(e.target.value)}
-                aria-label="Buscar opciones"
-              />
-            </div>
+          <div className="remote-search" aria-label="Buscar accesos rápidos">
+            <Search size={18} aria-hidden="true" />
+            <input
+              type="search"
+              placeholder="Buscar…"
+              value={query}
+              onChange={e => setQuery(e.target.value)}
+              onKeyDown={(event: KeyboardEvent<HTMLInputElement>) => handleKonamiKey(event.key)}
+              aria-label="Buscar opciones"
+            />
           </div>
 
-          {query.trim() ? (
-            <div className="mobile-actions-modal__content">
-              {filtered.map(group => (
+          <div className="mobile-actions-modal__content">
+            {filtered.length ? (
+              filtered.map(group => (
                 <div className="mobile-actions-modal__group" key={group.id}>
                   <p className="mobile-actions-modal__group-label">{group.label}</p>
                   <div className="mobile-actions-modal__group-items">
@@ -161,9 +148,14 @@ export function MobileActionsModal({ open, groups, onClose, menuRef }: Props) {
                     ))}
                   </div>
                 </div>
-              ))}
-            </div>
-          ) : null}
+              ))
+            ) : (
+              <div className="command-modal__empty" role="status">
+                <p className="command-modal__empty-title">Sin coincidencias</p>
+                <p className="command-modal__empty-subtitle">Ajusta la búsqueda o explora otras acciones.</p>
+              </div>
+            )}
+          </div>
         </m.div>
       </FocusTrap>
     </div>

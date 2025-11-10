@@ -1,14 +1,21 @@
-import { Fragment, useState } from 'react';
 import { m } from 'framer-motion';
+import { Fragment, useState } from 'react';
 // iconos flotantes movidos a FloatingQuick, no usados aquí
 
+import { AvailabilityBadge } from '../components/header/AvailabilityBadge';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useToast } from '../contexts/ToastContext';
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
 // motion reducido no condiciona visibilidad del héroe
-import { useToast } from '../contexts/ToastContext';
-import { AvailabilityBadge } from '../components/header/AvailabilityBadge';
 
-import type { HeroDescriptionSegment, HeroMetaItem, HeroTitleSegment, Stat } from '../types/portfolio';
+import type {
+  AvailabilityKey,
+  HeroDescriptionSegment,
+  HeroMetaItem,
+  HeroTitleSegment,
+  PortfolioToasts,
+  Stat
+} from '../types/portfolio';
 
 export default function Hero() {
   const { data } = useLanguage();
@@ -56,16 +63,30 @@ export default function Hero() {
 
   const availabilityLabel = data.availability?.status?.[availability] ?? availability;
   const availabilityToggleLabel = data.availability?.toggle?.[availability] ?? 'Cambiar disponibilidad';
+  const availabilityCycle: AvailabilityKey[] = ['available', 'listening', 'unavailable'];
+  const toastKeyMap: Record<AvailabilityKey, keyof PortfolioToasts | null> = {
+    available: 'availability_available',
+    listening: 'availability_listening',
+    unavailable: 'availability_unavailable'
+  };
+  const toastTypeMap: Record<AvailabilityKey, 'success' | 'info' | 'warning'> = {
+    available: 'success',
+    listening: 'info',
+    unavailable: 'warning'
+  };
 
   const handleToggleAvailability = () => {
-    const order = ['available', 'listening', 'unavailable'] as const;
-    const next = order[(order.indexOf(availability as any) + 1) % order.length];
+    const currentIndex = availabilityCycle.indexOf(availability);
+    const next = availabilityCycle[(currentIndex + 1) % availabilityCycle.length];
     setAvailability(next);
-    if (typeof window !== 'undefined') window.localStorage.setItem('portfolio_availability', next);
-    const toastKey: any = { available: 'availability_available', listening: 'availability_listening', unavailable: 'availability_unavailable' }[next];
-    const type: any = { available: 'success', listening: 'info', unavailable: 'warning' }[next];
-    const msg = toastKey ? (data.toasts as any)?.[toastKey] : null;
-    if (msg) showToast(msg, type);
+    if (typeof window !== 'undefined') {
+      window.localStorage.setItem('portfolio_availability', next);
+    }
+    const toastKey = toastKeyMap[next];
+    const toastMessage = toastKey ? data.toasts?.[toastKey] : null;
+    if (toastMessage) {
+      showToast(toastMessage, toastTypeMap[next]);
+    }
   };
 
 
@@ -85,7 +106,6 @@ export default function Hero() {
               <AvailabilityBadge
                 availability={availability}
                 badgeClass={`availability-${availability}`}
-                icon={undefined as unknown as any}
                 label={availabilityLabel}
                 toggleLabel={availabilityToggleLabel}
                 onToggle={handleToggleAvailability}

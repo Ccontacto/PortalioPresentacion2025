@@ -1,5 +1,6 @@
-import { useNavigation } from '../contexts/NavigationContext';
 import { Home, Briefcase, Code, Rocket, Mail } from 'lucide-react';
+
+import { useNavigation } from '../contexts/NavigationContext';
 
 export default function PageIndicator() {
   const { activePage } = useNavigation();

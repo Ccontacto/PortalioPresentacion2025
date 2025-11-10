@@ -25,15 +25,15 @@ import {
 } from 'react';
 import { createPortal } from 'react-dom';
 
+import { DIALOG_VARIANTS, OVERLAY_FADE, PANEL_TRANSITION } from '../constants/animation';
+import { KONAMI_DISABLE_MESSAGE, KONAMI_ENABLE_MESSAGE } from '../constants/konami';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useNavigation } from '../contexts/NavigationContext';
 import { useTheme } from '../contexts/ThemeContext';
 import { useToast } from '../contexts/ToastContext';
 import { useBodyScrollLock } from '../hooks/useBodyScrollLock';
 import { useCvDownload } from '../hooks/useCvDownload';
-import { KONAMI_ENABLE_MESSAGE, KONAMI_DISABLE_MESSAGE } from '../constants/konami';
 import { useReducedMotion } from '../hooks/useReducedMotion';
-import { DIALOG_VARIANTS, PANEL_TRANSITION, OVERLAY_FADE } from '../constants/animation';
 
 import { WhatsappGlyph } from './icons/WhatsappGlyph';
 

@@ -1,21 +1,23 @@
 import { LazyMotion, domAnimation, m } from 'framer-motion';
 import { useCallback, useEffect, useMemo, useRef, lazy, Suspense } from 'react';
 
+import Dock from './components/Dock';
+import FloatingQuick from './components/FloatingQuick';
 import LoadingScreen from './components/LoadingScreen';
+import PageIndicator from './components/PageIndicator';
 import PageProgress from './components/PageProgress';
 import { RetroModeBanner } from './components/RetroModeBanner';
 import SkipToContent from './components/SkipToContent';
 import ToastContainer from './components/ToastContainer';
-import FloatingQuick from './components/FloatingQuick';
+import { KONAMI_DISABLE_MESSAGE, KONAMI_ENABLE_MESSAGE } from './constants/konami';
+import { DevProvider } from './contexts/DevContext';
 import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
 import { NavigationProvider } from './contexts/NavigationContext';
 import { ThemeProvider, useTheme } from './contexts/ThemeContext';
 import { ToastProvider, useToast } from './contexts/ToastContext';
-import { DevProvider } from './contexts/DevContext';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
 import { useKonamiCode } from './hooks/useKonamiCode';
 import { useReducedMotion } from './hooks/useReducedMotion';
-import { KONAMI_ENABLE_MESSAGE, KONAMI_DISABLE_MESSAGE } from './constants/konami';
 const ConfettiCanvas = lazy(() => import('./components/ConfettiCanvas'));
 const CommandPalette = lazy(() => import('./components/CommandPalette'));
 import Contact from './sections/Contact';
@@ -110,6 +112,7 @@ function AppContent() {
       >
         <PageProgress />
         <SkipToContent />
+        <PageIndicator />
         {/* Header/TopBar removidos por solicitud: contenido inicia directo */}
         {isKonami ? <RetroModeBanner onExitRetro={exitKonamiMode} /> : null}
         {/* MEJORA 1: main con role explícito y aria-label */}
@@ -122,6 +125,7 @@ function AppContent() {
           <Contact />
         </main>
         <ToastContainer />
+        <Dock />
         <FloatingQuick />
         <Suspense fallback={null}>
           <ConfettiCanvas />

@@ -2,10 +2,10 @@ import { AnimatePresence, m, type Variants } from 'framer-motion';
 import { Briefcase, Code, Ellipsis, Home, Mail, Rocket } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useRef, useState, type JSX, type KeyboardEvent as ReactKeyboardEvent } from 'react';
 
+import { MOTION, SPRING } from '../constants/animation';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useNavigation } from '../contexts/NavigationContext';
 import { useReducedMotion } from '../hooks/useReducedMotion';
-import { MOTION, SPRING } from '../constants/animation';
 
 const icons: Record<string, JSX.Element> = {
   home: <Home size={24} aria-hidden="true" />,
@@ -82,13 +82,12 @@ export default function Dock() {
   const shouldReduceMotion = useReducedMotion();
 
   const navItems = useMemo(() => data.nav ?? [], [data.nav]);
-  if (!navItems.length) {
-    return null;
-  }
-
-  const activeNav = navItems.find(item => item.id === activePage) ?? navItems[0];
-  const secondaryNavItems = navItems.filter(item => item.id !== activeNav.id);
-  const currentIcon = icons[activeNav?.id ?? 'home'] ?? <Home size={24} aria-hidden="true" />;
+  const hasNavItems = navItems.length > 0;
+  const activeNav = hasNavItems ? navItems.find(item => item.id === activePage) ?? navItems[0] : undefined;
+  const secondaryNavItems =
+    hasNavItems && activeNav ? navItems.filter(item => item.id !== activeNav.id) : [];
+  const currentIcon =
+    activeNav && activeNav.id in icons ? icons[activeNav.id] : <Home size={24} aria-hidden="true" />;
 
   const buttonRefs = useRef<Array<HTMLButtonElement | null>>([]);
   buttonRefs.current.length = navItems.length;
@@ -206,6 +205,10 @@ export default function Dock() {
     navigateTo(sectionId);
     setIsExpanded(false);
   };
+
+  if (!hasNavItems || !activeNav) {
+    return null;
+  }
 
   return (
     <div className="dock-container" data-dev-id="9200">

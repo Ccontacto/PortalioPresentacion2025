@@ -1,5 +1,6 @@
-import type { PortfolioData } from '../types/portfolio';
 import { es } from './es';
+
+import type { PortfolioData } from '../types/portfolio';
 
 export const en = {
   ...es,

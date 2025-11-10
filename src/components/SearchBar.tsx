@@ -12,12 +12,12 @@ import {
 } from 'react';
 import { createPortal } from 'react-dom';
 
+import { DIALOG_VARIANTS, OVERLAY_FADE, PANEL_TRANSITION } from '../constants/animation';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useNavigation } from '../contexts/NavigationContext';
 import { useBodyScrollLock } from '../hooks/useBodyScrollLock';
-import { launchConfetti } from '../utils/confetti';
 import { useReducedMotion } from '../hooks/useReducedMotion';
-import { DIALOG_VARIANTS, PANEL_TRANSITION, OVERLAY_FADE } from '../constants/animation';
+import { launchConfetti } from '../utils/confetti';
 
 import type { ProjectItem } from '../types/portfolio';
 

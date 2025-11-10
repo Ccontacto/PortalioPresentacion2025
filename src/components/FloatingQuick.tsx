@@ -1,15 +1,17 @@
-import { useMemo, useRef, useState } from 'react';
-import { Home, Briefcase, Code, Rocket, Mail, MoreHorizontal } from 'lucide-react';
+import { Briefcase, Code, Home, Mail, MoreHorizontal, Rocket } from 'lucide-react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 
+import { KONAMI_DISABLE_MESSAGE, KONAMI_ENABLE_MESSAGE } from '../constants/konami';
+import { useDev } from '../contexts/DevContext';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useNavigation } from '../contexts/NavigationContext';
 import { useTheme } from '../contexts/ThemeContext';
 import { useToast } from '../contexts/ToastContext';
-import { useDev } from '../contexts/DevContext';
-import { useNavigation } from '../contexts/NavigationContext';
 import { useConfettiCooldown } from '../hooks/useConfettiCooldown';
 import { useCvDownload } from '../hooks/useCvDownload';
-import { KONAMI_ENABLE_MESSAGE, KONAMI_DISABLE_MESSAGE } from '../constants/konami';
+
 import { MobileActionsModal } from './header/MobileActionsModal';
+
 import type { QuickAction, QuickActionGroup } from './header/types';
 
 export default function FloatingQuick() {
@@ -24,7 +26,7 @@ export default function FloatingQuick() {
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
 
-  const handleKonamiToggle = () => {
+  const handleKonamiToggle = useCallback(() => {
     if (isKonami) {
       deactivateKonami();
       showToast(KONAMI_DISABLE_MESSAGE, 'info');
@@ -32,15 +34,15 @@ export default function FloatingQuick() {
       activateKonami();
       showToast(KONAMI_ENABLE_MESSAGE, 'success');
     }
-  };
+  }, [activateKonami, deactivateKonami, isKonami, showToast]);
 
-  const handleConfettiClick = () => {
+  const handleConfettiClick = useCallback(() => {
     const res = tryLaunchConfetti();
     if (!res.launched) {
       const s = Math.ceil(res.remaining / 1000);
       showToast(`Confetti disponible en ${s}s`, 'warning');
     }
-  };
+  }, [showToast, tryLaunchConfetti]);
 
   const navActions = useMemo<QuickAction[]>(
     () => data.nav.map(item => ({ key: `nav-${item.id}`, label: item.label, action: () => navigateTo(item.id) })),

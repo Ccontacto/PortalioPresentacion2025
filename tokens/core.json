@@ -1,134 +1,373 @@
 {
-  "$schema": "https://design-tokens.org/dtcg/v1.0/schema.json",
-  "meta": {
-    "standard": "DTCG",
-    "version": "1.0.0",
-    "wcag": "2.2-AA",
-    "locale": "es-MX",
-    "description": "Tokens atómicos 2025 con modos y alias semánticos (light/dark/high-contrast)."
-  },
+  "$schema": "https://design-tokens.org/schema.json",
+  "$description": "ΣΩ·UNIPACK.TOKENS.MÉTRICA.NOCODE.FINAL++.v2025.11 — RESUELTO (sin alias). Atomic 2025 · OKLCH numérico · DTCG/W3C compatible · shape SD · niveles (átomo→célula→molécula→organismo) y sets t0(light)/t1(dark) materializados.",
   "$extensions": {
-    "modes": ["light", "dark", "high-contrast"]
-  },
-  "color": {
-    "neutral": {
-      "near-black": {"$type": "color", "value": "#0A0A0A"},
-      "950": {"$type": "color", "value": "#0E0E0E"},
-      "900": {"$type": "color", "value": "#1A1A1A"},
-      "800": {"$type": "color", "value": "#2A2A2A"},
-      "700": {"$type": "color", "value": "#3F3F3F"},
-      "600": {"$type": "color", "value": "#525252"},
-      "500": {"$type": "color", "value": "#737373"},
-      "400": {"$type": "color", "value": "#A3A3A3"},
-      "300": {"$type": "color", "value": "#D1D1D1"},
-      "200": {"$type": "color", "value": "#E5E5E5"},
-      "150": {"$type": "color", "value": "#EEEEEE"},
-      "100": {"$type": "color", "value": "#F2F2F2"},
-      "near-white": {"$type": "color", "value": "#F7F7F7"},
-      "white": {"$type": "color", "value": "#FFFFFF"}
+    "pack": {
+      "name": "ΣΩ·UNIPACK",
+      "version": "2025.11",
+      "resolved": true,
+      "no_alias": true,
+      "sets": ["t0","t1"],
+      "color_space": "oklch",
+      "numeric_only": true,
+      "notes": "Paquete resuelto con valores explícitos; preparado para auditoría no-code y exportes multiplataforma."
     },
-    "brand": {
-      "primary": {
-        "700": {"$type": "color", "value": "#1D4ED8"},
-        "600": {"$type": "color", "value": "#2563EB"}
+    "sd": {
+      "cssVarPrefix": "u",
+      "transforms": ["color/oklch","dimension/rem-to-px","shadow/spread"],
+      "targets": ["css","ios","android","flutter","react-native","swiftui","compose"]
+    }
+  },
+  "tokens": {
+    "base": {
+      "unit": {
+        "rem":        { "$type": "number",   "$value": 1.0 },
+        "px_per_rem": { "$type": "number",   "$value": 16 }
+      },
+      "scale": {
+        "ratio_type":   { "$type": "number", "$value": 1.2 },
+        "ratio_space":  { "$type": "number", "$value": 1.333333 },
+        "ratio_radius": { "$type": "number", "$value": 1.5 },
+        "ratio_elev":   { "$type": "number", "$value": 1.25 }
+      },
+      "limits": {
+        "wcag_text":     { "$type": "number", "$value": 4.5 },
+        "wcag_large":    { "$type": "number", "$value": 3.0 },
+        "wcag_nontext":  { "$type": "number", "$value": 3.0 },
+        "deltaE00_dup":  { "$type": "number", "$value": 1.0 }
+      }
+    },
+
+    "color": {
+      "$description": "OKLCH numérico sin nombres cromáticos.",
+      "$type": "color",
+      "neutral": {
+        "0":   { "$value": { "colorSpace": "oklch", "components": [0.99, 0.00, 250] } },
+        "50":  { "$value": { "colorSpace": "oklch", "components": [0.95, 0.01, 250] } },
+        "100": { "$value": { "colorSpace": "oklch", "components": [0.90, 0.02, 250] } },
+        "300": { "$value": { "colorSpace": "oklch", "components": [0.75, 0.03, 250] } },
+        "600": { "$value": { "colorSpace": "oklch", "components": [0.45, 0.04, 250] } },
+        "900": { "$value": { "colorSpace": "oklch", "components": [0.18, 0.02, 250] } }
       },
       "accent": {
-        "500": {"$type": "color", "value": "#10B981"}
+        "1": { "$value": { "colorSpace": "oklch", "components": [0.275, 0.16, 230] } },
+        "2": { "$value": { "colorSpace": "oklch", "components": [0.275, 0.16, 130] } },
+        "3": { "$value": { "colorSpace": "oklch", "components": [0.275, 0.16, 77.5] } },
+        "4": { "$value": { "colorSpace": "oklch", "components": [0.275, 0.16, 10] } }
       }
     },
+
+    "typography": {
+      "$description": "Solo magnitudes; sin familias.",
+      "size": {
+        "$type": "dimension",
+        "xs": { "$value": "0.694rem" },
+        "sm": { "$value": "0.833rem" },
+        "md": { "$value": "1.000rem" },
+        "lg": { "$value": "1.200rem" },
+        "xl": { "$value": "1.440rem" }
+      },
+      "line_height": {
+        "$type": "number",
+        "body":     { "$value": 1.45 },
+        "headings": { "$value": 1.20 }
+      },
+      "tracking_em": {
+        "$type": "number",
+        "body": { "$value": 0.00 },
+        "caps": { "$value": 0.02 }
+      }
+    },
+
+    "spacing": {
+      "$type": "dimension",
+      "xs": { "$value": "0.250rem" },
+      "sm": { "$value": "0.333rem" },
+      "md": { "$value": "0.444rem" },
+      "lg": { "$value": "0.593rem" },
+      "xl": { "$value": "0.790rem" },
+      "inset": {
+        "$type": "dimension",
+        "sm": { "$value": "0.250rem" },
+        "md": { "$value": "0.500rem" },
+        "lg": { "$value": "1.000rem" }
+      }
+    },
+
+    "radius": {
+      "$type": "dimension",
+      "sm": { "$value": "4px" },
+      "md": { "$value": "6px" },
+      "lg": { "$value": "9px" }
+    },
+
+    "border": {
+      "$type": "dimension",
+      "hair":   { "$value": "1px" },
+      "strong": { "$value": "2px" },
+      "focus":  { "$value": "3px" }
+    },
+
+    "elevation": {
+      "$description": "Geometría/α; sin color.",
+      "phi_e": { "$type": "number", "$value": 1.25 },
+      "lv0": { "$type": "shadow", "$value": { "z": 0, "dx": 0.000, "dy": 0.000, "blur": 0.000, "spread": 0, "alpha": 0.000 } },
+      "lv1": { "$type": "shadow", "$value": { "z": 1, "dx": 0.000, "dy": 1.000, "blur": 2.000, "spread": 0, "alpha": 0.080 } },
+      "lv2": { "$type": "shadow", "$value": { "z": 2, "dx": 0.000, "dy": 1.250, "blur": 2.500, "spread": 0, "alpha": 0.088 } },
+      "lv3": { "$type": "shadow", "$value": { "z": 3, "dx": 0.000, "dy": 1.563, "blur": 3.125, "spread": 0, "alpha": 0.097 } }
+    },
+
+    "opacity": {
+      "$type": "number",
+      "o1": { "$value": 0.04 },
+      "o2": { "$value": 0.08 },
+      "o3": { "$value": 0.12 },
+      "o4": { "$value": 0.18 },
+      "o5": { "$value": 0.24 },
+      "o6": { "$value": 0.32 }
+    },
+
+    "motion": {
+      "duration": {
+        "$type": "duration",
+        "xs": { "$value": "75ms" },
+        "sm": { "$value": "150ms" },
+        "md": { "$value": "240ms" },
+        "lg": { "$value": "360ms" }
+      },
+      "easing": {
+        "$type": "cubicBezier",
+        "in":    { "$value": [0.4, 0.0, 1.0, 1.0] },
+        "out":   { "$value": [0.0, 0.0, 0.2, 1.0] },
+        "inout": { "$value": [0.4, 0.0, 0.2, 1.0] }
+      }
+    },
+
+    "layout": {
+      "breakpoint": {
+        "$type": "dimension",
+        "xs": { "$value": "360px" },
+        "sm": { "$value": "600px" },
+        "md": { "$value": "900px" },
+        "lg": { "$value": "1200px" },
+        "xl": { "$value": "1600px" }
+      },
+      "grid": {
+        "columns":  { "$type": "number",    "$value": 12 },
+        "gutter":   { "$type": "dimension", "$value": "0.593rem" },
+        "baseline": { "$type": "dimension", "$value": "0.250rem" }
+      },
+      "target": {
+        "touch_min": { "$type": "dimension", "$value": "44px" }
+      },
+      "z": {
+        "base":  { "$type": "number", "$value": 0 },
+        "nav":   { "$type": "number", "$value": 100 },
+        "modal": { "$type": "number", "$value": 1000 },
+        "toast": { "$type": "number", "$value": 2000 }
+      },
+      "icon": {
+        "$type": "dimension",
+        "sm": { "$value": "16px" },
+        "md": { "$value": "20px" },
+        "lg": { "$value": "24px" }
+      },
+      "blur": {
+        "$type": "dimension",
+        "sm": { "$value": "4px" },
+        "md": { "$value": "8px" },
+        "lg": { "$value": "16px" }
+      }
+    },
+
     "state": {
-      "success": {"500": {"$type": "color", "value": "#16A34A"}},
-      "warning": {"500": {"$type": "color", "value": "#F59E0B"}},
-      "error": {"500": {"$type": "color", "value": "#DC2626"}},
-      "info": {"500": {"$type": "color", "value": "#0EA5E9"}}
-    },
-    "semantic": {
-      "bg/default": {"$type": "color", "value": "{color.neutral.near-white.value}"},
-      "bg/elevated": {"$type": "color", "value": "{color.neutral.100.value}"},
-      "bg/inverse": {"$type": "color", "value": "{color.neutral.near-black.value}"},
-      "text/default": {"$type": "color", "value": "{color.neutral.900.value}"},
-      "text/muted": {"$type": "color", "value": "{color.neutral.600.value}"},
-      "text/inverse": {"$type": "color", "value": "{color.neutral.near-white.value}"},
-      "text/link": {"$type": "color", "value": "{color.brand.primary.700.value}"},
-      "brand/solid": {"$type": "color", "value": "{color.brand.primary.700.value}"},
-      "brand/soft": {"$type": "color", "value": "#E8F1FE"},
-      "border/default": {"$type": "color", "value": "{color.neutral.200.value}"},
-      "border/strong": {"$type": "color", "value": "{color.neutral.300.value}"},
-      "focus/outline": {"$type": "color", "value": "#3B82F6"}
-    }
-  },
-  "typography": {
-    "fontFamily": {
-      "sans": {"$type": "fontFamily", "value": ["Manrope", "system-ui", "Arial", "sans-serif"]}
-    },
-    "size": {
-      "sm": {"$type": "fontSize", "value": "14px"},
-      "md": {"$type": "fontSize", "value": "16px"},
-      "lg": {"$type": "fontSize", "value": "18px"}
-    },
-    "lineHeight": {
-      "normal": {"$type": "lineHeight", "value": "1.55"}
-    },
-    "weight": {
-      "regular": {"$type": "fontWeight", "value": 400},
-      "medium": {"$type": "fontWeight", "value": 500},
-      "semibold": {"$type": "fontWeight", "value": 600}
-    }
-  },
-  "space": {
-    "4": {"$type": "spacing", "value": "4px"},
-    "8": {"$type": "spacing", "value": "8px"},
-    "12": {"$type": "spacing", "value": "12px"},
-    "16": {"$type": "spacing", "value": "16px"},
-    "24": {"$type": "spacing", "value": "24px"}
-  },
-  "radius": {
-    "sm": {"$type": "borderRadius", "value": "6px"},
-    "md": {"$type": "borderRadius", "value": "12px"},
-    "lg": {"$type": "borderRadius", "value": "16px"},
-    "2xl": {"$type": "borderRadius", "value": "20px"}
-  },
-  "shadow": {
-    "xs": {"$type": "shadow", "value": "0px 1px 2px rgba(0,0,0,0.07)"},
-    "sm": {"$type": "shadow", "value": "0px 2px 6px rgba(0,0,0,0.08)"},
-    "md": {"$type": "shadow", "value": "0px 8px 24px rgba(0,0,0,0.08)"}
-  },
-  "motion": {
-    "duration": {
-      "fast": {"$type": "duration", "value": "120ms"},
-      "normal": {"$type": "duration", "value": "200ms"},
-      "slow": {"$type": "duration", "value": "320ms"}
-    },
-    "easing": {
-      "standard": {"$type": "cubicBezier", "value": [0.2, 0, 0, 1]}
-    }
-  },
-  "component": {
-    "button": {
-      "primary": {
-        "bg": {"$type": "color", "value": "{color.semantic.brand/solid.value}"},
-        "text": {"$type": "color", "value": "{color.neutral.white.value}"},
-        "radius": {"$type": "borderRadius", "value": "{radius.lg.value}"}
+      "$description": "Estados paramétricos (sin semántica cromática).",
+      "overlay_alpha": {
+        "$type": "number",
+        "hover":   { "$value": 0.04 },
+        "focus":   { "$value": 0.12 },
+        "press":   { "$value": 0.18 },
+        "drag":    { "$value": 0.24 },
+        "disable": { "$value": 0.38 }
       }
     },
-    "card": {
-      "bg": {"$type": "color", "value": "{color.semantic.bg/elevated.value}"},
-      "shadow": {"$type": "shadow", "value": "{shadow.md.value}"},
-      "radius": {"$type": "borderRadius", "value": "{radius.2xl.value}"}
-    }
-  },
-  "modes": {
-    "dark": {
-      "color.semantic.bg/default.value": "{color.neutral.near-black.value}",
-      "color.semantic.text/default.value": "{color.neutral.near-white.value}",
-      "color.semantic.border/default.value": "{color.neutral.700.value}",
-      "color.semantic.brand/soft.value": "#0F1A2E"
+
+    "roles": {
+      "$description": "Asignaciones abstractas para modos (materializadas).",
+      "t0": {
+        "bg": { "$type": "color", "$value": { "colorSpace": "oklch", "components": [0.99, 0.00, 250] } },
+        "fg": { "$type": "color", "$value": { "colorSpace": "oklch", "components": [0.18, 0.02, 250] } },
+        "ax": { "$type": "color", "$value": { "colorSpace": "oklch", "components": [0.275, 0.16, 230] } },
+        "ol": { "$type": "color", "$value": { "colorSpace": "oklch", "components": [0.45, 0.04, 250] } }
+      },
+      "t1": {
+        "bg": { "$type": "color", "$value": { "colorSpace": "oklch", "components": [0.18, 0.02, 250] } },
+        "fg": { "$type": "color", "$value": { "colorSpace": "oklch", "components": [0.99, 0.00, 250] } },
+        "ax": { "$type": "color", "$value": { "colorSpace": "oklch", "components": [0.275, 0.16, 130] } },
+        "ol": { "$type": "color", "$value": { "colorSpace": "oklch", "components": [0.90, 0.02, 250] } }
+      }
     },
-    "high-contrast": {
-      "color.semantic.bg/default.value": "#000000",
-      "color.semantic.text/default.value": "#FFFFFF",
-      "color.semantic.border/strong.value": "#FFFFFF"
+
+    "entities": {
+      "$description": "Niveles resueltos por set (t0=light, t1=dark).",
+      
+      "t0": {
+        "atom": {
+          "surface_bg": { "$type": "color",     "$value": { "colorSpace": "oklch", "components": [0.99, 0.00, 250] } },
+          "text_fg":    { "$type": "color",     "$value": { "colorSpace": "oklch", "components": [0.18, 0.02, 250] } },
+          "accent_ax":  { "$type": "color",     "$value": { "colorSpace": "oklch", "components": [0.275, 0.16, 230] } },
+          "outline_ol": { "$type": "color",     "$value": { "colorSpace": "oklch", "components": [0.45, 0.04, 250] } },
+          "pad_x":      { "$type": "dimension", "$value": "0.333rem" },
+          "pad_y":      { "$type": "dimension", "$value": "0.250rem" },
+          "radius":     { "$type": "dimension", "$value": "4px" },
+          "shadow":     { "$type": "shadow",    "$value": { "z": 1, "dx": 0.000, "dy": 1.000, "blur": 2.000, "spread": 0, "alpha": 0.080 } }
+        },
+        "cell": {
+          "c1": {
+            "bg":     { "$type": "color",     "$value": { "colorSpace": "oklch", "components": [0.99, 0.00, 250] } },
+            "fg":     { "$type": "color",     "$value": { "colorSpace": "oklch", "components": [0.18, 0.02, 250] } },
+            "ax":     { "$type": "color",     "$value": { "colorSpace": "oklch", "components": [0.275, 0.16, 230] } },
+            "pad_x":  { "$type": "dimension", "$value": "0.444rem" },
+            "pad_y":  { "$type": "dimension", "$value": "0.333rem" },
+            "radius": { "$type": "dimension", "$value": "6px" },
+            "gap":    { "$type": "dimension", "$value": "0.333rem" }
+          }
+        },
+        "molecule": {
+          "m1": {
+            "bg":     { "$type": "color",     "$value": { "colorSpace": "oklch", "components": [0.99, 0.00, 250] } },
+            "fg":     { "$type": "color",     "$value": { "colorSpace": "oklch", "components": [0.18, 0.02, 250] } },
+            "ax":     { "$type": "color",     "$value": { "colorSpace": "oklch", "components": [0.275, 0.16, 230] } },
+            "radius": { "$type": "dimension", "$value": "9px" },
+            "shadow": { "$type": "shadow",    "$value": { "z": 2, "dx": 0.000, "dy": 1.250, "blur": 2.500, "spread": 0, "alpha": 0.088 } },
+            "gap":    { "$type": "dimension", "$value": "0.444rem" },
+            "inset":  { "$type": "dimension", "$value": "1.000rem" }
+          }
+        },
+        "organism": {
+          "o1": {
+            "surface":   { "$type": "color",     "$value": { "colorSpace": "oklch", "components": [0.99, 0.00, 250] } },
+            "text":      { "$type": "color",     "$value": { "colorSpace": "oklch", "components": [0.18, 0.02, 250] } },
+            "accent":    { "$type": "color",     "$value": { "colorSpace": "oklch", "components": [0.275, 0.16, 230] } },
+            "gap":       { "$type": "dimension", "$value": "0.593rem" },
+            "grid_cols": { "$type": "number",    "$value": 12 },
+            "elev":      { "$type": "shadow",    "$value": { "z": 3, "dx": 0.000, "dy": 1.563, "blur": 3.125, "spread": 0, "alpha": 0.097 } },
+            "pad_block": { "$type": "dimension", "$value": "0.790rem" }
+          }
+        }
+      },
+
+      "t1": {
+        "atom": {
+          "surface_bg": { "$type": "color",     "$value": { "colorSpace": "oklch", "components": [0.18, 0.02, 250] } },
+          "text_fg":    { "$type": "color",     "$value": { "colorSpace": "oklch", "components": [0.99, 0.00, 250] } },
+          "accent_ax":  { "$type": "color",     "$value": { "colorSpace": "oklch", "components": [0.275, 0.16, 130] } },
+          "outline_ol": { "$type": "color",     "$value": { "colorSpace": "oklch", "components": [0.90, 0.02, 250] } },
+          "pad_x":      { "$type": "dimension", "$value": "0.333rem" },
+          "pad_y":      { "$type": "dimension", "$value": "0.250rem" },
+          "radius":     { "$type": "dimension", "$value": "4px" },
+          "shadow":     { "$type": "shadow",    "$value": { "z": 1, "dx": 0.000, "dy": 1.000, "blur": 2.000, "spread": 0, "alpha": 0.080 } }
+        },
+        "cell": {
+          "c1": {
+            "bg":     { "$type": "color",     "$value": { "colorSpace": "oklch", "components": [0.18, 0.02, 250] } },
+            "fg":     { "$type": "color",     "$value": { "colorSpace": "oklch", "components": [0.99, 0.00, 250] } },
+            "ax":     { "$type": "color",     "$value": { "colorSpace": "oklch", "components": [0.275, 0.16, 130] } },
+            "pad_x":  { "$type": "dimension", "$value": "0.444rem" },
+            "pad_y":  { "$type": "dimension", "$value": "0.333rem" },
+            "radius": { "$type": "dimension", "$value": "6px" },
+            "gap":    { "$type": "dimension", "$value": "0.333rem" }
+          }
+        },
+        "molecule": {
+          "m1": {
+            "bg":     { "$type": "color",     "$value": { "colorSpace": "oklch", "components": [0.18, 0.02, 250] } },
+            "fg":     { "$type": "color",     "$value": { "colorSpace": "oklch", "components": [0.99, 0.00, 250] } },
+            "ax":     { "$type": "color",     "$value": { "colorSpace": "oklch", "components": [0.275, 0.16, 130] } },
+            "radius": { "$type": "dimension", "$value": "9px" },
+            "shadow": { "$type": "shadow",    "$value": { "z": 2, "dx": 0.000, "dy": 1.250, "blur": 2.500, "spread": 0, "alpha": 0.088 } },
+            "gap":    { "$type": "dimension", "$value": "0.444rem" },
+            "inset":  { "$type": "dimension", "$value": "1.000rem" }
+          }
+        },
+        "organism": {
+          "o1": {
+            "surface":   { "$type": "color",     "$value": { "colorSpace": "oklch", "components": [0.18, 0.02, 250] } },
+            "text":      { "$type": "color",     "$value": { "colorSpace": "oklch", "components": [0.99, 0.00, 250] } },
+            "accent":    { "$type": "color",     "$value": { "colorSpace": "oklch", "components": [0.275, 0.16, 130] } },
+            "gap":       { "$type": "dimension", "$value": "0.593rem" },
+            "grid_cols": { "$type": "number",    "$value": 12 },
+            "elev":      { "$type": "shadow",    "$value": { "z": 3, "dx": 0.000, "dy": 1.563, "blur": 3.125, "spread": 0, "alpha": 0.097 } },
+            "pad_block": { "$type": "dimension", "$value": "0.790rem" }
+          }
+        }
+      }
+    },
+
+    "audit": {
+      "$description": "Bloque métrico declarativo (no-code) para consumo por linters/scripts.",
+      "wcag_targets": {
+        "body_text":  { "$type": "number", "$value": 4.5 },
+        "large_text": { "$type": "number", "$value": 3.0 },
+        "non_text":   { "$type": "number", "$value": 3.0 }
+      },
+      "typography_policy": {
+        "$description": "Relación mínima entre niveles y line-height por contexto.",
+        "ratio_min":   { "$type": "number", "$value": 1.2 },
+        "lh_body_min": { "$type": "number", "$value": 1.4 },
+        "lh_head_max": { "$type": "number", "$value": 1.3 }
+      },
+      "duplication_policy": {
+        "$description": "Umbral de duplicidad perceptual ΔE00 (máximo permitido).",
+        "deltaE00_max": { "$type": "number", "$value": 1.0 }
+      },
+      "pairs": {
+        "$description": "Pares a verificar (bg/fg/ax/ol) por roles y niveles.",
+        "roles_t0": {
+          "$extensions": { "kind": "pair", "set": "t0", "note": "Modo claro base" },
+          "bg": { "$type": "color", "$value": { "colorSpace": "oklch", "components": [0.99, 0.00, 250] } },
+          "fg": { "$type": "color", "$value": { "colorSpace": "oklch", "components": [0.18, 0.02, 250] } },
+          "ax": { "$type": "color", "$value": { "colorSpace": "oklch", "components": [0.275, 0.16, 230] } },
+          "ol": { "$type": "color", "$value": { "colorSpace": "oklch", "components": [0.45, 0.04, 250] } }
+        },
+        "roles_t1": {
+          "$extensions": { "kind": "pair", "set": "t1", "note": "Modo oscuro base" },
+          "bg": { "$type": "color", "$value": { "colorSpace": "oklch", "components": [0.18, 0.02, 250] } },
+          "fg": { "$type": "color", "$value": { "colorSpace": "oklch", "components": [0.99, 0.00, 250] } },
+          "ax": { "$type": "color", "$value": { "colorSpace": "oklch", "components": [0.275, 0.16, 130] } },
+          "ol": { "$type": "color", "$value": { "colorSpace": "oklch", "components": [0.90, 0.02, 250] } }
+        },
+        "t0_atom": {
+          "$extensions": { "kind": "pair", "set": "t0", "entity": "atom" },
+          "bg": { "$type": "color", "$value": { "colorSpace": "oklch", "components": [0.99, 0.00, 250] } },
+          "fg": { "$type": "color", "$value": { "colorSpace": "oklch", "components": [0.18, 0.02, 250] } }
+        },
+        "t0_molecule": {
+          "$extensions": { "kind": "pair", "set": "t0", "entity": "molecule.m1" },
+          "bg": { "$type": "color", "$value": { "colorSpace": "oklch", "components": [0.99, 0.00, 250] } },
+          "fg": { "$type": "color", "$value": { "colorSpace": "oklch", "components": [0.18, 0.02, 250] } }
+        },
+        "t0_organism": {
+          "$extensions": { "kind": "pair", "set": "t0", "entity": "organism.o1" },
+          "bg": { "$type": "color", "$value": { "colorSpace": "oklch", "components": [0.99, 0.00, 250] } },
+          "fg": { "$type": "color", "$value": { "colorSpace": "oklch", "components": [0.18, 0.02, 250] } }
+        },
+        "t1_atom": {
+          "$extensions": { "kind": "pair", "set": "t1", "entity": "atom" },
+          "bg": { "$type": "color", "$value": { "colorSpace": "oklch", "components": [0.18, 0.02, 250] } },
+          "fg": { "$type": "color", "$value": { "colorSpace": "oklch", "components": [0.99, 0.00, 250] } }
+        },
+        "t1_molecule": {
+          "$extensions": { "kind": "pair", "set": "t1", "entity": "molecule.m1" },
+          "bg": { "$type": "color", "$value": { "colorSpace": "oklch", "components": [0.18, 0.02, 250] } },
+          "fg": { "$type": "color", "$value": { "colorSpace": "oklch", "components": [0.99, 0.00, 250] } }
+        },
+        "t1_organism": {
+          "$extensions": { "kind": "pair", "set": "t1", "entity": "organism.o1" },
+          "bg": { "$type": "color", "$value": { "colorSpace": "oklch", "components": [0.18, 0.02, 250] } },
+          "fg": { "$type": "color", "$value": { "colorSpace": "oklch", "components": [0.99, 0.00, 250] } }
+        }
+      }
     }
   }
 }
-
