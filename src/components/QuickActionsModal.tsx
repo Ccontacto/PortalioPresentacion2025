@@ -1,7 +1,7 @@
 import { FocusTrap } from 'focus-trap-react';
 import { AnimatePresence, m } from 'framer-motion';
 import { Search, X } from 'lucide-react';
-import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react';
 import { createPortal } from 'react-dom';
 
 import { DIALOG_VARIANTS, OVERLAY_FADE, PANEL_TRANSITION } from '../constants/animation';
@@ -28,9 +28,12 @@ export function QuickActionsModal({ open, groups, onClose }: Props) {
   const { activateKonami, isKonami } = useTheme();
   const { showToast } = useToast();
   const openedAtRef = useRef(0);
+  // Ventana anti-ruido para evitar cierres inmediatos
   const BACKDROP_CLICK_GUARD_MS = 300;
 
-  useEffect(() => {
+  // Registrar el instante de apertura antes del paint para que el primer click del overlay
+  // (ghost click o propagación inmediata) sea descartado de forma fiable.
+  useLayoutEffect(() => {
     if (open) {
       openedAtRef.current = typeof performance !== 'undefined' ? performance.now() : Date.now();
     }

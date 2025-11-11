@@ -2,6 +2,7 @@ import { LazyMotion, domAnimation, m } from 'framer-motion';
 import { useCallback, useEffect, useMemo, useRef, lazy, Suspense } from 'react';
 
 import LoadingScreen from './components/LoadingScreen';
+import HamburgerMenu from './components/HamburgerMenu';
 import PageProgress from './components/PageProgress';
 import QuickActionsMenu from './components/QuickActionsMenu';
 import { RetroModeBanner } from './components/RetroModeBanner';
@@ -110,6 +111,7 @@ function AppContent() {
       >
         <PageProgress />
         <SkipToContent />
+        <HamburgerMenu />
         <QuickActionsMenu />
         {/* Header/TopBar removidos por solicitud: contenido inicia directo */}
         {isKonami ? <RetroModeBanner onExitRetro={exitKonamiMode} /> : null}

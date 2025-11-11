@@ -27,6 +27,7 @@
     "audit:lh": "lighthouse http://localhost:5176 --only-categories=accessibility,seo,performance --output html --output-path ./logs/lh-report.html --quiet"
   },
   "dependencies": {
+    "@dataconnect/generated": "file:src/dataconnect-generated",
     "focus-trap-react": "^11.0.4",
     "framer-motion": "^12.23.24",
     "jspdf": "^3.0.3",
