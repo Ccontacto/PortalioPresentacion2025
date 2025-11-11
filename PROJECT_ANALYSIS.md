@@ -34,7 +34,7 @@ portfolio-jctr-2025/
 ├── public/                # Static assets + security headers + tokens.css
 ├── scripts/               # tokens build/lint + deploy helpers
 ├── src/
-│   ├── components/        # UI primitives (Dock, CommandPalette, SearchBar…)
+│   ├── components/        # UI primitives (QuickActionsMenu, CommandPalette, SearchBar…)
 │   ├── contexts/          # Theme, Language, Navigation, Toast, Dev
 │   ├── data/              # i18n payloads (es/en)
 │   ├── hooks/             # Accessibility + UX helpers (Konami, CV download…)
@@ -64,7 +64,7 @@ The project demonstrates a good understanding of modern web development practice
 
 **Areas for Improvement:**
 
-*   **Testing depth:** Hooks y UI críticos (CommandPalette, FloatingQuick, pdfGenerator) podrían beneficiarse de pruebas adicionales para cubrir shortcuts, accesibilidad y flujos de errores.
+*   **Testing depth:** Hooks y UI críticos (CommandPalette, QuickActionsMenu, pdfGenerator) podrían beneficiarse de pruebas adicionales para cubrir shortcuts, accesibilidad y flujos de errores.
 *   **Observabilidad:** `ErrorBoundary.tsx` sólo registra en consola en modo dev; enviar los errores a un servicio externo daría visibilidad en producción.
 *   **Content ops:** El i18n basado en objetos es suficiente para dos idiomas, pero una solución como `i18next` facilitaría pluralización, formatos y carga remota si el contenido crece.
 
@@ -73,12 +73,12 @@ The project demonstrates a good understanding of modern web development practice
 ### High Priority
 
 *   **SLOs para PDF y descargas:** `pdfGenerator.ts` y `useCvDownload` ya manejan estados concurrentes, pero conviene agregar métricas/logs para fallos (por ejemplo, captura de tamaño de payload, tiempos y errores jsPDF).
-*   **Hardening de accesibilidad dinámica:** Componentes como `CommandPalette`, `SearchBar` y `MobileActionsModal` dependen de FocusTrap y motion tokens; se recomienda auditar con axe o Lighthouse para asegurar que los overlays cumplan roles/aria en cada idioma.
+*   **Hardening de accesibilidad dinámica:** Componentes como `CommandPalette`, `SearchBar` y `QuickActionsModal` dependen de FocusTrap y motion tokens; se recomienda auditar con axe o Lighthouse para asegurar que los overlays cumplan roles/aria en cada idioma.
 *   **Mantener el registro de deuda técnica:** La nueva bitácora en `docs/TECH_DEBT.md` centraliza features pausados (p. ej. el “control remoto”). Es clave actualizarla cada vez que se archive o reactive una pieza para no duplicar esfuerzos.
 
 ### Medium Priority
 
-*   **Cobertura adicional:** Extender Vitest/Testing Library a FloatingQuick (acciones preferenciales) y Theme/LanguageContext para validar persistencia y side effects.
+*   **Cobertura adicional:** Extender Vitest/Testing Library a QuickActionsMenu (acciones preferenciales) y Theme/LanguageContext para validar persistencia y side effects.
 *   **Automatizar snapshots de diseño:** El set de design tokens (tokens/core.json) podría integrarse a una pipeline visual o a Storybook para detectar regresiones en estilos personalizados.
 
 ### Low Priority

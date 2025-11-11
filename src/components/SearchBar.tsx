@@ -89,7 +89,7 @@ export default function SearchBar({
     return sortedTags.filter(tag => tag.toLowerCase().includes(searchValue));
   }, [searchTerm, sortedTags]);
 
-  const triggerText = triggerLabel ?? 'Abrir buscador de proyectos';
+  const triggerText = triggerLabel ?? (data.lang === 'es' ? 'Abrir buscador de proyectos' : 'Open projects search');
   const isIconVariant = variant === 'icon';
 
   useEffect(() => {
@@ -237,10 +237,10 @@ export default function SearchBar({
                 <header className="search-modal__header">
                   <div>
                     <h3 id={titleId} className="search-modal__title">
-                      Filtrar proyectos
+                      {data.ui.searchFilterTitle ?? (data.lang === 'es' ? 'Filtrar proyectos' : 'Filter projects')}
                     </h3>
                     <p id={descriptionId} className="search-modal__subtitle">
-                      Escribe una tecnología o selecciona una de las sugerencias.
+                      {data.ui.searchFilterSubtitle ?? (data.lang === 'es' ? 'Escribe una tecnología o selecciona una de las sugerencias.' : 'Type a technology or pick one of the suggestions.')}
                     </p>
                   </div>
                   <button
@@ -260,7 +260,7 @@ export default function SearchBar({
                     type="search"
                     value={searchTerm}
                     onChange={(event) => handleSearchInput(event.target.value)}
-                    placeholder="Buscar por tecnología..."
+                    placeholder={data.ui.searchPlaceholderTech ?? (data.lang === 'es' ? 'Buscar por tecnología...' : 'Search by technology...')}
                     className="search-modal__input"
                     autoCapitalize="none"
                     autoComplete="off"
@@ -271,7 +271,7 @@ export default function SearchBar({
                       type="button"
                       className="search-modal__clear"
                       onClick={() => handleSearchInput('')}
-                      aria-label="Limpiar búsqueda"
+                      aria-label={data.ui.searchClearLabel ?? (data.lang === 'es' ? 'Limpiar búsqueda' : 'Clear search')}
                     >
                       <Eraser size={16} aria-hidden="true" />
                     </button>
@@ -279,7 +279,7 @@ export default function SearchBar({
                 </div>
 
                 {suggestedTags.length > 0 && (
-                  <div className="search-modal__suggestions" aria-label="Sugerencias destacadas">
+                  <div className="search-modal__suggestions" aria-label={data.ui.searchSuggestionsAria ?? (data.lang === 'es' ? 'Sugerencias destacadas' : 'Featured suggestions')}>
                     {suggestedTags.map(tag => (
                       <button
                         key={tag}
@@ -307,7 +307,7 @@ export default function SearchBar({
                       </button>
                     ))
                   ) : (
-                    <p className="search-modal__empty">Sin coincidencias. Ajusta la búsqueda o lanza confetti.</p>
+                    <p className="search-modal__empty">{data.ui.searchNoMatches ?? (data.lang === 'es' ? 'Sin coincidencias. Ajusta la búsqueda o lanza confetti.' : 'No matches. Adjust your query or launch confetti.')}</p>
                   )}
                 </div>
 

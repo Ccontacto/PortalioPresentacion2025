@@ -1,4 +1,8 @@
 import '@testing-library/jest-dom/vitest';
+import { toHaveNoViolations } from 'jest-axe';
+import { expect } from 'vitest';
+
+expect.extend(toHaveNoViolations);
 
 if (typeof window !== 'undefined' && !window.matchMedia) {
   window.matchMedia = (query: string): MediaQueryList => {

@@ -236,6 +236,14 @@ export const es = {
     searchAriaLabel: 'Buscar accesos rápidos',
     searchPlaceholder: 'Buscar…',
     noMatchesTitle: 'Sin coincidencias',
-    noMatchesSubtitle: 'Ajusta la búsqueda o explora otras acciones.'
+    noMatchesSubtitle: 'Ajusta la búsqueda o explora otras acciones.',
+    quickSectionsLabel: 'Secciones',
+    quickPreferencesLabel: 'Preferencias',
+    searchFilterTitle: 'Filtrar proyectos',
+    searchFilterSubtitle: 'Escribe una tecnología o selecciona una de las sugerencias.',
+    searchPlaceholderTech: 'Buscar por tecnología...',
+    searchClearLabel: 'Limpiar búsqueda',
+    searchSuggestionsAria: 'Sugerencias destacadas',
+    searchNoMatches: 'Sin coincidencias. Ajusta la búsqueda o lanza confetti.'
   }
 } as const satisfies PortfolioData;

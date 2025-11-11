@@ -1,6 +1,5 @@
 import { m } from 'framer-motion';
 import { Fragment, useState } from 'react';
-// iconos flotantes movidos a FloatingQuick, no usados aquí
 
 import { AvailabilityBadge } from '../components/header/AvailabilityBadge';
 import { useLanguage } from '../contexts/LanguageContext';

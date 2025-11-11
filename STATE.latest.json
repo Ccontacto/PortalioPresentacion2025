@@ -22,7 +22,7 @@
     "src/constants/animation.ts",
     "src/hooks/useIntersectionObserver.ts",
     "src/components/Header.tsx",
-    "src/components/header/MobileActionsModal.tsx",
+    "src/components/QuickActionsModal.tsx",
     "src/components/header/OverflowPanel.tsx",
     "src/sections/Hero.tsx",
     "scripts/tokens-build.mjs",
@@ -35,4 +35,3 @@
     "Mapear completamente CSS vars → DTCG export"
   ]
 }
-

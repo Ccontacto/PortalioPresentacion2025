@@ -1,11 +1,9 @@
 import { LazyMotion, domAnimation, m } from 'framer-motion';
 import { useCallback, useEffect, useMemo, useRef, lazy, Suspense } from 'react';
 
-import Dock from './components/Dock';
-import FloatingQuick from './components/FloatingQuick';
 import LoadingScreen from './components/LoadingScreen';
-import PageIndicator from './components/PageIndicator';
 import PageProgress from './components/PageProgress';
+import QuickActionsMenu from './components/QuickActionsMenu';
 import { RetroModeBanner } from './components/RetroModeBanner';
 import SkipToContent from './components/SkipToContent';
 import ToastContainer from './components/ToastContainer';
@@ -112,7 +110,7 @@ function AppContent() {
       >
         <PageProgress />
         <SkipToContent />
-        <PageIndicator />
+        <QuickActionsMenu />
         {/* Header/TopBar removidos por solicitud: contenido inicia directo */}
         {isKonami ? <RetroModeBanner onExitRetro={exitKonamiMode} /> : null}
         {/* MEJORA 1: main con role explícito y aria-label */}
@@ -125,8 +123,6 @@ function AppContent() {
           <Contact />
         </main>
         <ToastContainer />
-        <Dock />
-        <FloatingQuick />
         <Suspense fallback={null}>
           <ConfettiCanvas />
         </Suspense>

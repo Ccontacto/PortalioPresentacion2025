@@ -287,7 +287,6 @@ html[data-theme='konami'] .toast {
 }
 
 html[data-theme='konami'] .availability-badge,
-html[data-theme='konami'] .dock,
 html[data-theme='konami'] .search-trigger,
 html[data-theme='konami'] .search-modal__tag,
 html[data-theme='konami'] .command-modal__option,
@@ -382,17 +381,35 @@ small { font-size: var(--fs-small); }
 
 /* topbar removed */
 
-/* Botonera flotante superior derecha */
-.floating-quick {
+/* Botón global de acciones */
+.quick-menu {
   position: fixed;
-  top: 12px;
-  right: 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  z-index: 2000; /* encima de todo */
+  top: 16px;
+  right: 16px;
+  z-index: 2000;
 }
-.floating-quick .icon-btn { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+
+.quick-menu-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 9999px;
+  border: 3px solid var(--border-strong);
+  padding: 10px 18px;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--gradient-brand-start), var(--gradient-brand-end));
+  color: var(--text-on-brand);
+  box-shadow: 8px 8px 0 var(--shadow-strong);
+  cursor: pointer;
+  transition:
+    transform var(--motion-fast) var(--ease-standard),
+    box-shadow var(--motion-fast) var(--ease-standard);
+}
+
+.quick-menu-button:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 12px 12px 0 var(--shadow-strong-hover);
+}
 
 /* ========================================
    AVAILABILITY BADGE
@@ -575,25 +592,6 @@ html[data-theme='dark'] .icon-btn {
   cursor: not-allowed;
   transform: none !important;
   box-shadow: 3px 3px 0 var(--shadow-soft);
-}
-
-.icon-btn-countdown {
-  margin-left: 6px;
-  font-size: 11px;
-  font-weight: 700;
-}
-
-html[data-theme='dark'] .icon-btn-countdown {
-  color: rgba(226, 232, 240, 0.85);
-}
-
-.icon-btn-countdown-icon {
-  margin-left: 4px;
-  color: currentColor;
-}
-
-html[data-theme='dark'] .icon-btn-countdown-icon {
-  color: rgba(226, 232, 240, 0.9);
 }
 
 html[data-theme='dark'] .icon-btn:hover {
@@ -1780,299 +1778,6 @@ html[data-theme='dark'] .contact-highlight:hover {
 /* ========================================
    DOCK
    ======================================== */
-.dock-container {
-  position: fixed;
-  bottom: calc(24px + env(safe-area-inset-bottom, 0px));
-  left: 0;
-  right: 0;
-  display: flex;
-  justify-content: center;
-  pointer-events: none;
-  padding: 0 16px;
-  z-index: 50;
-}
-
-.dock-shell {
-  pointer-events: auto;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  padding: 6px 10px;
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--surface-panel) 85%, transparent);
-  border: 1px solid color-mix(in srgb, var(--color-ink) 12%, transparent);
-  box-shadow: 12px 12px 0 color-mix(in srgb, var(--color-ink) 4%, transparent);
-}
-
-.dock-current {
-  width: 44px;
-  height: 44px;
-  border-radius: 14px;
-  border: 2px solid var(--border-strong);
-  background: linear-gradient(135deg, color-mix(in srgb, var(--sketch-ink) 22%, rgba(255, 255, 255, 0.8)), color-mix(in srgb, var(--sketch-graphite) 18%, rgba(255, 255, 255, 0.6)));
-  color: color-mix(in srgb, var(--text-strong) 90%, var(--sketch-ink));
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 6px 6px 0 var(--shadow-strong);
-  cursor: pointer;
-  transition:
-    transform var(--motion-fast) var(--ease-standard),
-    box-shadow var(--motion-fast) var(--ease-standard),
-    background var(--motion-fast) var(--ease-standard);
-}
-
-.dock-current:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: 8px 8px 0 var(--shadow-strong-hover);
-}
-
-.dock-collapsed {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.dock-toggle {
-  width: 48px;
-  height: 48px;
-  border-radius: var(--radius-lg);
-  border: 3px solid var(--button-outline);
-  background: color-mix(in srgb, var(--surface-panel) 95%, transparent);
-  color: var(--text-strong);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  box-shadow: 6px 6px 0 var(--shadow-strong);
-  transition:
-    transform var(--motion-fast) var(--ease-standard),
-    box-shadow var(--motion-fast) var(--ease-standard),
-    background-color var(--motion-fast) var(--ease-standard);
-}
-
-.dock-toggle:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: 8px 8px 0 var(--shadow-strong-hover);
-}
-
-.dock-toggle.is-active {
-  background: linear-gradient(135deg, var(--gradient-brand-start), var(--gradient-brand-end));
-  color: var(--text-on-brand);
-}
-
-html[data-theme='dark'] .dock-toggle {
-  background: rgba(15, 23, 42, 0.9);
-  color: #f8fafc;
-}
-
-html[data-theme='konami'] .dock-toggle {
-  background: rgba(6, 10, 24, 0.95);
-  color: #71ffb2;
-  border-color: rgba(113, 255, 178, 0.55);
-  box-shadow:
-    0 0 0 2px rgba(0, 255, 156, 0.32),
-    6px 6px 0 rgba(0, 255, 156, 0.35);
-}
-
-.dock-list {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--surface-card) 82%, transparent);
-  border: 1px solid color-mix(in srgb, var(--color-ink) 16%, transparent);
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, rgba(255, 255, 255, 0.6) 25%, transparent);
-  position: relative;
-}
-
-.dock-list::before {
-  content: '';
-  position: absolute;
-  left: -18px;
-  width: 18px;
-  height: 2px;
-  background: color-mix(in srgb, var(--color-ink) 35%, transparent);
-  opacity: 0.6;
-  border-radius: 999px;
-}
-
-html[data-theme='dark'] .dock-list {
-  background: rgba(15, 23, 42, 0.9);
-  border-color: rgba(248, 250, 252, 0.18);
-  box-shadow:
-    inset 0 0 0 1px rgba(248, 250, 252, 0.2),
-    0 0 20px rgba(15, 23, 42, 0.4);
-}
-
-html[data-theme='dark'] .dock-list::before {
-  background: rgba(248, 250, 252, 0.35);
-}
-
-html[data-theme='konami'] .dock-list {
-  background: rgba(6, 10, 24, 0.9);
-  border-color: rgba(113, 255, 178, 0.45);
-  box-shadow:
-    inset 0 0 0 1px rgba(113, 255, 178, 0.35),
-    0 0 24px rgba(0, 255, 156, 0.32);
-}
-
-html[data-theme='konami'] .dock-list::before {
-  background: rgba(113, 255, 178, 0.65);
-}
-
-.dock-item--active {
-  box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.2),
-    10px 10px 0 color-mix(in srgb, var(--color-ink) 8%, transparent);
-}
-
-html[data-theme='dark'] .dock-shell {
-  background: rgba(15, 23, 42, 0.85);
-  border-color: rgba(248, 250, 252, 0.18);
-  box-shadow:
-    0 0 0 2px rgba(248, 250, 252, 0.08),
-    12px 12px 0 rgba(15, 23, 42, 0.45);
-}
-
-html[data-theme='konami'] .dock-shell {
-  background: rgba(6, 10, 24, 0.92);
-  border-color: rgba(113, 255, 178, 0.55);
-  box-shadow:
-    0 0 0 2px rgba(0, 255, 156, 0.35),
-    12px 12px 0 rgba(0, 255, 156, 0.35);
-}
-
-html[data-theme='dark'] .dock-current {
-  background: linear-gradient(135deg, rgba(165, 228, 220, 0.35), rgba(218, 183, 255, 0.32));
-  border-color: rgba(248, 250, 252, 0.28);
-  color: #f8fafc;
-}
-
-html[data-theme='konami'] .dock-current {
-  background: linear-gradient(135deg, rgba(0, 198, 255, 0.35), rgba(255, 0, 229, 0.32));
-  border-color: rgba(113, 255, 178, 0.65);
-  color: #71ffb2;
-}
-
-.dock {
-  pointer-events: auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  width: auto;
-  padding: 12px 16px;
-  background: color-mix(in srgb, var(--surface-panel) 92%, transparent);
-  border: 1px solid color-mix(in srgb, var(--color-ink) 18%, transparent);
-  border-radius: 999px;
-  box-shadow: 12px 12px 0 color-mix(in srgb, var(--color-ink) 6%, transparent);
-  color: var(--text-strong);
-}
-
-html[data-theme='dark'] .dock {
-  background: rgba(15, 23, 42, 0.92);
-  border-color: rgba(248, 250, 252, 0.22);
-  box-shadow:
-    0 0 0 2px rgba(248, 250, 252, 0.15),
-    12px 12px 0 rgba(15, 23, 42, 0.45);
-  color: #f8fafc;
-}
-
-.dock-item {
-  width: 44px;
-  height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid var(--border-strong);
-  border-radius: 14px;
-  background: var(--surface-card);
-  color: var(--text-strong);
-  cursor: pointer;
-  box-shadow: 4px 4px 0 var(--shadow-strong);
-  transition:
-    transform var(--motion-fast) var(--ease-standard),
-    box-shadow var(--motion-fast) var(--ease-standard),
-    background-color var(--motion-fast) var(--ease-standard);
-}
-
-html[data-theme='dark'] .dock-item {
-  background: rgba(15, 23, 42, 0.88);
-  border-color: rgba(248, 250, 252, 0.2);
-  color: #f8fafc;
-  box-shadow:
-    0 0 0 2px rgba(248, 250, 252, 0.12),
-    6px 6px 0 rgba(15, 23, 42, 0.55);
-}
-
-.dock-item:hover {
-  transform: translate(-3px, -3px);
-  box-shadow: 10px 10px 0 var(--shadow-strong-hover);
-}
-
-html[data-theme='dark'] .dock-item:hover {
-  box-shadow:
-    0 0 0 2px rgba(248, 250, 252, 0.24),
-    10px 10px 0 rgba(15, 23, 42, 0.6);
-  background: rgba(30, 41, 59, 0.95);
-}
-
-.dock-item.active {
-  background: linear-gradient(135deg, var(--gradient-brand-start), var(--gradient-brand-end));
-  box-shadow: 8px 8px 0 var(--shadow-strong);
-  color: var(--text-on-brand);
-}
-
-html[data-theme='dark'] .dock-item.active {
-  background: linear-gradient(135deg, rgba(165, 228, 220, 0.9), rgba(218, 183, 255, 0.9));
-  box-shadow:
-    0 0 0 2px rgba(248, 250, 252, 0.22),
-    8px 8px 0 rgba(15, 23, 42, 0.6);
-}
-
-.dock-item.active svg {
-  stroke: currentColor;
-}
-
-html[data-theme='konami'] .dock {
-  background: rgba(4, 8, 18, 0.94);
-  border-color: rgba(113, 255, 178, 0.55);
-  box-shadow:
-    0 0 0 3px rgba(0, 255, 156, 0.35),
-    0 22px 36px rgba(0, 0, 0, 0.45);
-  color: #71ffb2;
-}
-
-html[data-theme='konami'] .dock-item {
-  background: rgba(6, 10, 24, 0.95);
-  border-color: rgba(113, 255, 178, 0.6);
-  box-shadow:
-    0 0 0 2px rgba(0, 255, 156, 0.28),
-    6px 6px 0 rgba(0, 255, 156, 0.35);
-  color: #71ffb2;
-}
-
-html[data-theme='konami'] .dock-item:hover {
-  background: rgba(0, 198, 255, 0.25);
-  box-shadow:
-    0 0 0 2px rgba(0, 255, 156, 0.45),
-    10px 10px 0 rgba(0, 198, 255, 0.45);
-}
-
-html[data-theme='konami'] .dock-item.active {
-  background: linear-gradient(135deg, rgba(0, 198, 255, 0.7), rgba(255, 0, 229, 0.7));
-  box-shadow:
-    0 0 0 2px rgba(0, 255, 156, 0.55),
-    0 0 24px rgba(0, 255, 156, 0.45);
-  color: #040209;
-}
-
-html[data-theme='konami'] .dock-item.active svg {
-  stroke: #040209;
-}
-
 /* ========================================
    TOAST
    ======================================== */
@@ -2159,32 +1864,9 @@ html[data-theme='konami'] .dock-item.active svg {
   color: inherit;
 }
 
-/* ========================================
-   PAGE INDICATOR
-   ======================================== */
-.page-indicator {
-  position: fixed;
-  right: 16px;
-  bottom: 16px;
-  padding: 6px 10px;
-  border: 2px solid var(--border-strong);
-  border-radius: var(--radius-md);
-  background: var(--surface-card);
-  z-index: 40;
-  font-weight: 800;
-  font-size: 14px;
-  color: inherit;
-}
 *:focus-visible {
-  outline: 3px solid var(--marca-secundaria);
-  outline-offset: 3px;
-}
-
-.contact-cta:focus-visible,
-.dock-item:focus-visible,
-.icon-btn:focus-visible {
-  outline: 3px solid var(--marca-secundaria);
-  outline-offset: 3px;
+  outline: var(--focus-width) solid var(--focus-color);
+  outline-offset: var(--focus-offset);
 }
 
 /* ========================================
@@ -2206,8 +1888,6 @@ html[data-theme='konami'] .dock-item.active svg {
   /* Bordes más gruesos */
   .card,
   .stat-card,
-  .dock,
-  .dock-item,
   .header,
   .icon-btn,
   .badge-disponible {
@@ -2232,12 +1912,6 @@ html[data-theme='konami'] .dock-item.active svg {
   .stat-card:nth-child(3) {
     background: var(--color-bg-light) !important;
   }
-
-  .dock-item.active {
-    background: var(--color-bg-light) !important;
-    border-width: 4px !important;
-  }
-
 
   .contact-cta,
   .contact-highlight,
@@ -2273,10 +1947,6 @@ html[data-theme='konami'] .dock-item.active svg {
 [dir='rtl'] .header-equalizer {
   grid-column: 1;
   justify-self: start;
-}
-
-[dir='rtl'] .dock {
-  direction: rtl;
 }
 
 [dir='rtl'] .card,
@@ -2388,10 +2058,6 @@ html[data-theme='konami'] .dock-item.active svg {
     top: calc(var(--header-height) + 16px);
   }
 
-  .dock {
-    padding: 8px 12px;
-    gap: 6px;
-  }
 }
 
 @media (max-width: 480px) {
@@ -3972,7 +3638,7 @@ html[data-dev-ids='on'] [data-dev-id]::after {
 }
 
 /* 3D fuerte solo en elementos interactivos (tap/click) */
-:where(button,[role="button"],.icon-btn,.dock-item,.header-panel-button,.mobile-actions-modal__item,.search-modal__chip,.command-modal__option,.search-trigger,.hero-action) {
+:where(button,[role="button"],.icon-btn,.header-panel-button,.mobile-actions-modal__item,.search-modal__chip,.command-modal__option,.search-trigger,.hero-action) {
   /* iOS tap improvements */
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
@@ -3985,7 +3651,7 @@ html[data-dev-ids='on'] [data-dev-id]::after {
     box-shadow var(--motion-normal) var(--ease-standard);
 }
 
-:where(button,[role="button"],.icon-btn,.dock-item,.header-panel-button,.mobile-actions-modal__item,.search-modal__chip,.command-modal__option,.search-trigger,.hero-action):hover {
+:where(button,[role="button"],.icon-btn,.header-panel-button,.mobile-actions-modal__item,.search-modal__chip,.command-modal__option,.search-trigger,.hero-action):hover {
   transform: translate(-4px, -4px);
   box-shadow:
     0 0 0 1px color-mix(in srgb, var(--sketch-ink) 12%, transparent) inset,
@@ -3993,12 +3659,18 @@ html[data-dev-ids='on'] [data-dev-id]::after {
     16px 16px 0 color-mix(in srgb, var(--detonante-black) 35%, transparent);
 }
 
-:where(button,[role="button"],.icon-btn,.dock-item,.header-panel-button,.mobile-actions-modal__item,.search-modal__chip,.command-modal__option,.search-trigger,.hero-action):active {
+:where(button,[role="button"],.icon-btn,.header-panel-button,.mobile-actions-modal__item,.search-modal__chip,.command-modal__option,.search-trigger,.hero-action):active {
   transform: translate(2px, 2px);
   box-shadow:
     0 0 0 1px color-mix(in srgb, var(--sketch-ink) 12%, transparent) inset,
     4px 4px 0 var(--detonante-black),
     8px 8px 0 color-mix(in srgb, var(--detonante-black) 35%, transparent);
+}
+
+/* Focus visible consistente por tema */
+:where(button,[role="button"],.icon-btn,.header-panel-button,.mobile-actions-modal__item,.search-modal__chip,.command-modal__option,.search-trigger,.hero-action):focus-visible {
+  outline: var(--focus-width) solid var(--focus-color);
+  outline-offset: var(--focus-offset);
 }
 
 .fx-edge-black {

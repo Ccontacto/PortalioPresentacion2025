@@ -32,14 +32,14 @@ Portfolio React + Vite listo para desarrollo local, testing y despliegue en Clou
 - Mantén `@tailwindcss/postcss` en `vite.config.ts` para que no falle el parser.
 
 ## A11y
-- `.hit-44` garantiza targets ≥44px. Se aplica a triggers, cierres y dock.
+- `.hit-44` garantiza targets ≥44px. Se aplica a triggers y botones del menú de acciones.
 - Focus visible con box-shadow (ver `:focus-visible` en `src/index.css`).
-- El menú flotante (`FloatingQuick`) abre un modal accesible con buscador (`MobileActionsModal`) y permite ejecutar acciones con teclado o pantalla táctil. El backdrop se puede cerrar con clic/tap o `Esc`.
+- El botón “Acciones” fija (esquina superior derecha) abre un modal accesible (`QuickActionsModal`) con buscador, soporte teclado/pantalla táctil y cierre por backdrop o `Esc`.
 
-## Accesos rápidos y UI flotante
-- El botón flotante siempre muestra dos acciones: regresar a “Inicio” y abrir el modal de accesos rápidos.
-- El modal lista secciones (`data.nav`) y preferencias (tema, idioma, Konami, confetti, IDs de depuración, descarga de CV).
-- Las acciones también pueden invocarse mediante el Command Palette (`⌘/Ctrl + K`) para desktop.
+## Menú de acciones global
+- El botón redondo “Acciones” opera en todo el sitio; al abrir muestra secciones (`data.nav`) y preferencias (tema, idioma, Konami, confetti, IDs de depuración, descarga de CV).
+- El listado se puede filtrar, activa el easter egg (secuencia Konami) desde el input y devuelve el foco al cerrar.
+- Las mismas acciones están disponibles en el Command Palette (`⌘/Ctrl + K`) para usuarios de desktop.
 
 ## Despliegue en Cloudflare Pages
 1. Ejecuta `npm run build` (generará `dist`).

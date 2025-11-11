@@ -1,59 +1,65 @@
 import { FocusTrap } from 'focus-trap-react';
 import { m } from 'framer-motion';
 import { Search, X } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState, type KeyboardEvent } from 'react';
 import { createPortal } from 'react-dom';
 
-import { DIALOG_VARIANTS, PANEL_TRANSITION } from '../../constants/animation';
-import { KONAMI_ENABLE_MESSAGE } from '../../constants/konami';
-import { useLanguage } from '../../contexts/LanguageContext';
-import { useTheme } from '../../contexts/ThemeContext';
-import { useToast } from '../../contexts/ToastContext';
-import { useReducedMotion } from '../../hooks/useReducedMotion';
+import { DIALOG_VARIANTS, PANEL_TRANSITION } from '../constants/animation';
+import { KONAMI_ENABLE_MESSAGE } from '../constants/konami';
+import { useTheme } from '../contexts/ThemeContext';
+import { useToast } from '../contexts/ToastContext';
+import { useReducedMotion } from '../hooks/useReducedMotion';
 
-import type { QuickAction, QuickActionGroup } from './types';
-import type { KeyboardEvent, RefObject } from 'react';
+import type { QuickAction, QuickActionGroup } from './quick-actions/types';
 
 type Props = {
   open: boolean;
   groups: QuickActionGroup[];
   onClose: () => void;
-  menuRef: RefObject<HTMLDivElement | null>;
 };
 
-export function MobileActionsModal({ open, groups, onClose, menuRef }: Props) {
+export function QuickActionsModal({ open, groups, onClose }: Props) {
   const shouldReduceMotion = useReducedMotion();
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const panelRef = useRef<HTMLDivElement | null>(null);
   const [query, setQuery] = useState('');
   const { activateKonami, isKonami } = useTheme();
   const { showToast } = useToast();
-  const { data, currentLang } = useLanguage();
-
-  const i18n = {
-    title: data.ui.quickActionsTitle ?? (currentLang === 'es' ? 'Acciones rápidas' : 'Quick actions'),
-    searchAria: data.ui.searchAriaLabel ?? (currentLang === 'es' ? 'Buscar accesos rápidos' : 'Search quick actions'),
-    searchPlaceholder: data.ui.searchPlaceholder ?? (currentLang === 'es' ? 'Buscar…' : 'Search…'),
-    noMatchesTitle: data.ui.noMatchesTitle ?? (currentLang === 'es' ? 'Sin coincidencias' : 'No matches'),
-    noMatchesSubtitle:
-      data.ui.noMatchesSubtitle ??
-      (currentLang === 'es' ? 'Ajusta la búsqueda o explora otras acciones.' : 'Try adjusting your query or explore other actions.')
-  } as const;
 
   const itemsByKey = useMemo(() => {
     const map = new Map<string, QuickAction>();
-    groups.forEach(g => g.items.forEach(it => map.set(it.key, it)));
+    groups.forEach(group => {
+      group.items.forEach(item => map.set(item.key, item));
+    });
     return map;
   }, [groups]);
 
   const run = (key: string) => {
-    const it = itemsByKey.get(key);
-    if (!it || it.disabled) return;
+    const action = itemsByKey.get(key);
+    if (!action || action.disabled) return;
     onClose();
-    if (it.immediate) it.action();
-    else window.setTimeout(() => it.action(), 160);
+    if (action.immediate) {
+      action.action();
+    } else {
+      window.setTimeout(() => action.action(), 140);
+    }
   };
 
-  const KONAMI_SEQ = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'] as const;
+  const KONAMI_SEQ = [
+    'ArrowUp',
+    'ArrowUp',
+    'ArrowDown',
+    'ArrowDown',
+    'ArrowLeft',
+    'ArrowRight',
+    'ArrowLeft',
+    'ArrowRight',
+    'b',
+    'a'
+  ] as const;
+
   const [konamiIndex, setKonamiIndex] = useState(0);
+
   const handleKonamiKey = (key: string) => {
     const expected = KONAMI_SEQ[konamiIndex];
     if (key === expected) {
@@ -71,14 +77,14 @@ export function MobileActionsModal({ open, groups, onClose, menuRef }: Props) {
   };
 
   const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    if (!q) return groups;
+    const normalized = query.trim().toLowerCase();
+    if (!normalized) return groups;
     return groups
-      .map(g => ({
-        ...g,
-        items: g.items.filter(it => it.label.toLowerCase().includes(q))
+      .map(group => ({
+        ...group,
+        items: group.items.filter(item => item.label.toLowerCase().includes(normalized))
       }))
-      .filter(g => g.items.length > 0);
+      .filter(group => group.items.length > 0);
   }, [groups, query]);
 
   if (!open) {
@@ -96,18 +102,19 @@ export function MobileActionsModal({ open, groups, onClose, menuRef }: Props) {
         focusTrapOptions={{
           allowOutsideClick: true,
           clickOutsideDeactivates: true,
-          initialFocus: () =>
-            menuRef.current?.querySelector('[data-focus-default]') ?? menuRef.current ?? undefined,
+          initialFocus: () => inputRef.current ?? panelRef.current ?? undefined,
+          fallbackFocus: () => panelRef.current ?? inputRef.current ?? document.body,
           onDeactivate: onClose
         }}
       >
         <m.div
           className="mobile-actions-modal"
-          id="mobile-quick-actions"
-          ref={menuRef}
+          id="quick-actions-modal"
           role="dialog"
           aria-modal="true"
-          aria-labelledby="mobile-actions-title"
+          aria-labelledby="quick-actions-title"
+          tabIndex={-1}
+          ref={panelRef}
           onClick={event => event.stopPropagation()}
           data-dev-id="7001"
           variants={shouldReduceMotion ? undefined : DIALOG_VARIANTS}
@@ -117,7 +124,7 @@ export function MobileActionsModal({ open, groups, onClose, menuRef }: Props) {
           transition={shouldReduceMotion ? undefined : PANEL_TRANSITION}
         >
           <header className="mobile-actions-modal__header">
-            <h2 id="mobile-actions-title">{i18n.title}</h2>
+            <h2 id="quick-actions-title">Acciones rápidas</h2>
             <button
               type="button"
               className="mobile-actions-modal__close"
@@ -129,15 +136,16 @@ export function MobileActionsModal({ open, groups, onClose, menuRef }: Props) {
             </button>
           </header>
 
-          <div className="remote-search" aria-label={i18n.searchAria}>
+          <div className="remote-search" aria-label="Buscar accesos rápidos">
             <Search size={18} aria-hidden="true" />
             <input
+              ref={inputRef}
               type="search"
-              placeholder={i18n.searchPlaceholder}
+              placeholder="Buscar…"
               value={query}
-              onChange={e => setQuery(e.target.value)}
+              onChange={event => setQuery(event.target.value)}
               onKeyDown={(event: KeyboardEvent<HTMLInputElement>) => handleKonamiKey(event.key)}
-              aria-label={i18n.searchAria}
+              aria-label="Buscar opciones"
             />
           </div>
 
@@ -166,8 +174,8 @@ export function MobileActionsModal({ open, groups, onClose, menuRef }: Props) {
               ))
             ) : (
               <div className="command-modal__empty" role="status">
-                <p className="command-modal__empty-title">{i18n.noMatchesTitle}</p>
-                <p className="command-modal__empty-subtitle">{i18n.noMatchesSubtitle}</p>
+                <p className="command-modal__empty-title">Sin coincidencias</p>
+                <p className="command-modal__empty-subtitle">Ajusta la búsqueda o explora otras acciones.</p>
               </div>
             )}
           </div>

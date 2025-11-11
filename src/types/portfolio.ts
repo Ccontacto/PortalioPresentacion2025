@@ -139,6 +139,16 @@ export interface PortfolioUiStrings {
   searchPlaceholder?: string;
   noMatchesTitle?: string;
   noMatchesSubtitle?: string;
+  // Quick actions group labels
+  quickSectionsLabel?: string;
+  quickPreferencesLabel?: string;
+  // Search modal specific
+  searchFilterTitle?: string;
+  searchFilterSubtitle?: string;
+  searchPlaceholderTech?: string;
+  searchClearLabel?: string;
+  searchSuggestionsAria?: string;
+  searchNoMatches?: string;
 }
 
 export interface PortfolioToasts {

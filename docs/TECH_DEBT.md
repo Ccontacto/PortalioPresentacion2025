@@ -3,7 +3,7 @@
 Este archivo concentra piezas heredadas o experimentos retirados del runtime principal para mantener el código utilizable. Cada entrada incluye el origen y cómo reactivarla si vuelve a ser prioritaria.
 
 ## 1. Overlay “control remoto” para acciones rápidas
-- **Origen:** `src/components/header/MobileActionsModal.tsx` y estilos `remote-*` en `src/index.css` (commit previo al refactor de abril 2025).
+- **Origen:** `src/components/header/MobileActionsModal.tsx` (antes de renombrarse a `QuickActionsModal`) y estilos `remote-*` en `src/index.css` (commit previo al refactor de abril 2025). Documentación adicional en `docs/MENU.md`.
 - **Motivo de retiro:** La cuadrícula de botones no era accesible (sin focus visible, dependía de gestos específicos) y bloqueaba la ejecución real de acciones en móviles.
 - **Situación actual:** El modal usa una lista filtrable (`remote-search`) con botones estándares. El easter egg de Konami sigue disponible vía el input.
 - **Cómo reactivarlo:** Recuperar los estilos eliminados (ver historial git de `src/index.css`) y reintroducir el markup del “remote”. Documentar la interacción con lectores de pantalla antes de volver a producción.
@@ -18,3 +18,8 @@ Este archivo concentra piezas heredadas o experimentos retirados del runtime pri
 - **Contexto:** El archivo se genera con `npm run tokens:build`, pero actualmente está versionado para simplificar deploys.
 - **Riesgo:** Puede desincronizarse si alguien olvida ejecutar el script tras tocar `tokens/core.json`.
 - **Pendiente:** Automatizar la generación en CI o ignorar el artefacto y distribuirlo como parte del pipeline de build.
+
+## 4. Dock flotante (2024)
+- **Ubicación del diseño:** `docs/MENU.md`, snapshots en `logs/*` y estilos eliminados del bloque “DOCK” en `src/index.css`.
+- **Motivo de retiro:** UX inconsistente en dispositivos táctiles y dificultad para ejecutar acciones. Fue reemplazado por `QuickActionsMenu` + modal filtrable.
+- **Reactivación:** Requiere restaurar `src/components/Dock.tsx`, sus pruebas (`src/components/__tests__/Dock*.tsx`) y los estilos asociados. Antes de reintroducirlo, documentar el plan de accesibilidad y cómo conviviría con el menú actual.

@@ -121,6 +121,19 @@ export const en = {
     viewProjects: 'View projects',
     bookCall: 'Book intro call',
     retroExit: 'Exit retro mode',
-    retroActiveLabel: 'Retro mode active'
+    retroActiveLabel: 'Retro mode active',
+    quickActionsTitle: 'Quick actions',
+    searchAriaLabel: 'Search quick actions',
+    searchPlaceholder: 'Search…',
+    noMatchesTitle: 'No matches',
+    noMatchesSubtitle: 'Try adjusting your query or explore other actions.',
+    quickSectionsLabel: 'Sections',
+    quickPreferencesLabel: 'Preferences',
+    searchFilterTitle: 'Filter projects',
+    searchFilterSubtitle: 'Type a technology or pick one of the suggestions.',
+    searchPlaceholderTech: 'Search by technology...',
+    searchClearLabel: 'Clear search',
+    searchSuggestionsAria: 'Featured suggestions',
+    searchNoMatches: 'No matches. Adjust your query or launch confetti.'
   }
 } as const satisfies PortfolioData;

@@ -1,5 +1,7 @@
 ## Menú Flotante (Dock) — Diseño, Accesibilidad y Temas
 
+> **Estado:** Documento histórico. El Dock flotante se retiró en 2025 y fue reemplazado por `QuickActionsMenu`. Conservamos estas notas como referencia (ver `docs/TECH_DEBT.md`, sección “Dock flotante 2024”).
+
 Este documento resume cómo está construido el menú flotante (Dock), sus decisiones de diseño, accesibilidad, microinteracciones y cómo extenderlo. La implementación vive en `src/components/Dock.tsx` y sus estilos en `src/index.css` bajo la sección "DOCK".
 
 ### Objetivos de diseño
@@ -47,4 +49,3 @@ Este documento resume cómo está construido el menú flotante (Dock), sus decis
 - Componentes desacoplados por contexto (idioma, navegación, tema).
 - Tokens de diseño y custom properties para consistencia multi-tema.
 - Efectos idempotentes y limpieza adecuada de listeners/timeouts.
-

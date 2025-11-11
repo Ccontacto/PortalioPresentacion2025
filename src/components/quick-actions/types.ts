@@ -1,7 +1,4 @@
-import type { AvailabilityKey } from '../../types/portfolio';
 import type { JSX } from 'react';
-
-export type AvailabilityState = AvailabilityKey;
 
 export type QuickAction = {
   key: string;
