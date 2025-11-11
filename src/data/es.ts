@@ -39,8 +39,8 @@ export const es = {
   ],
   stats: [
     { id: 's1', value: '12+', label: 'Años liderando iOS' },
-    { id: 's2', value: '+10 %', label: 'Precisión en búsquedas' },
-    { id: 's3', value: '85 %', label: 'Cobertura de pruebas' }
+    { id: 's2', value: '10%', label: 'Mejora en precisión de búsqueda' },
+    { id: 's3', value: '85%', label: 'Cobertura de pruebas' }
   ],
   hero: {
     eyebrow: 'Liderazgo iOS · IA generativa',

@@ -16,6 +16,7 @@ export default function HamburgerMenu() {
   const searchInputRef = useRef<HTMLInputElement | null>(null);
   const shouldReduceMotion = useReducedMotion();
   const [panelMaxHeight, setPanelMaxHeight] = useState<string | undefined>(undefined);
+  const [panelStyle, setPanelStyle] = useState<React.CSSProperties | undefined>(undefined);
 
   useEffect(() => {
     if (!open) return;
@@ -46,31 +47,60 @@ export default function HamburgerMenu() {
   useEffect(() => {
     if (!open) return;
     if (typeof window === 'undefined') return;
-    const frame = window.requestAnimationFrame(() => {
-      searchInputRef.current?.focus();
-      searchInputRef.current?.select();
-
-      // Recalcular altura disponible para mostrar todo el menú
-      try {
-        const btn = buttonRef.current;
-        if (btn) {
-          const rect = btn.getBoundingClientRect();
-          const topSafe = 12;
-          const available = Math.max(180, Math.floor(rect.top - topSafe));
-          setPanelMaxHeight(`${available}px`);
-        }
-      } catch {
-        // noop
-      }
-    });
-    const onResize = () => {
-      if (!open) return;
+    const computePlacement = () => {
       const btn = buttonRef.current;
       if (!btn) return;
       const rect = btn.getBoundingClientRect();
-      const topSafe = 12;
-      const available = Math.max(180, Math.floor(rect.top - topSafe));
-      setPanelMaxHeight(`${available}px`);
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      const gap = 8;
+      const safe = 12;
+      const prefWidth = Math.min(320, Math.floor(0.88 * vw));
+
+      // Vertical placement: prefer above; fallback below; clamp maxHeight
+      const spaceAbove = rect.top - safe;
+      const spaceBelow = vh - rect.bottom - safe;
+      const openUp = spaceAbove >= 180 || spaceAbove >= spaceBelow;
+      const maxH = Math.max(180, Math.floor(openUp ? spaceAbove : spaceBelow));
+      setPanelMaxHeight(`${maxH}px`);
+
+      // Horizontal alignment: try align right edge to button right (panel grows left)
+      let style: React.CSSProperties = { width: prefWidth, maxHeight: `${maxH}px`, position: 'fixed' };
+      const rightSpace = vw - rect.right - safe;
+      const leftSpace = rect.left - safe;
+      if (leftSpace >= prefWidth) {
+        // enough space to the left: anchor panel's right to button right
+        style.right = Math.max(safe, Math.floor(vw - rect.right)) + 'px';
+      } else if (rightSpace >= prefWidth) {
+        // enough space to the right: anchor panel's left to button left
+        style.left = Math.max(safe, Math.floor(rect.left)) + 'px';
+      } else {
+        // clamp within viewport
+        const left = Math.min(Math.max(safe, rect.left), Math.max(safe, vw - prefWidth - safe));
+        style.left = left + 'px';
+      }
+
+      // Vertical offsets
+      if (openUp) {
+        // panel bottom aligned to just above the button
+        const bottom = Math.max(safe, Math.floor(vh - rect.top + gap));
+        style.bottom = bottom + 'px';
+      } else {
+        style.top = Math.max(safe, Math.floor(rect.bottom + gap)) + 'px';
+      }
+
+      setPanelStyle(style);
+    };
+
+    const frame = window.requestAnimationFrame(() => {
+      searchInputRef.current?.focus();
+      searchInputRef.current?.select();
+      computePlacement();
+    });
+
+    const onResize = () => {
+      if (!open) return;
+      computePlacement();
     };
     window.addEventListener('resize', onResize);
     window.addEventListener('orientationchange', onResize);
@@ -160,7 +190,7 @@ export default function HamburgerMenu() {
             aria-label="Secciones del sitio"
             className="hamburger-menu__panel"
             ref={panelRef}
-            style={panelMaxHeight ? { maxHeight: panelMaxHeight } : undefined}
+            style={panelStyle}
             initial={panelVariants ? 'hidden' : undefined}
             animate={panelVariants ? 'visible' : undefined}
             exit={panelVariants ? 'exit' : undefined}

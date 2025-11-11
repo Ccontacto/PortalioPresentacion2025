@@ -41,6 +41,11 @@ export const en = {
     },
     tagline: 'Ship native AI experiences from prototype to scale'
   },
+  stats: [
+    { id: 's1', value: '12+', label: 'Years leading iOS' },
+    { id: 's2', value: '10%', label: 'Search precision uplift' },
+    { id: 's3', value: '85%', label: 'Test coverage' }
+  ],
   availability: {
     status: {
       available: 'Available',
