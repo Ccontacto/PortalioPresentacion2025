@@ -1,7 +1,7 @@
 import { FocusTrap } from 'focus-trap-react';
 import { AnimatePresence, m } from 'framer-motion';
 import { Search, X } from 'lucide-react';
-import { useMemo, useRef, useState, type KeyboardEvent } from 'react';
+import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react';
 import { createPortal } from 'react-dom';
 
 import { DIALOG_VARIANTS, OVERLAY_FADE, PANEL_TRANSITION } from '../constants/animation';
@@ -9,6 +9,7 @@ import { KONAMI_ENABLE_MESSAGE } from '../constants/konami';
 import { useTheme } from '../contexts/ThemeContext';
 import { useToast } from '../contexts/ToastContext';
 import { useReducedMotion } from '../hooks/useReducedMotion';
+import { useBodyScrollLock } from '../hooks/useBodyScrollLock';
 import { useDeferredExitAction } from '../hooks/useDeferredExitAction';
 
 import type { QuickAction, QuickActionGroup } from './quick-actions/types';
@@ -26,6 +27,17 @@ export function QuickActionsModal({ open, groups, onClose }: Props) {
   const [query, setQuery] = useState('');
   const { activateKonami, isKonami } = useTheme();
   const { showToast } = useToast();
+  const openedAtRef = useRef(0);
+  const BACKDROP_CLICK_GUARD_MS = 300;
+
+  useEffect(() => {
+    if (open) {
+      openedAtRef.current = typeof performance !== 'undefined' ? performance.now() : Date.now();
+    }
+  }, [open]);
+
+  // Paridad con SearchBar: bloquear scroll de fondo cuando está abierto
+  useBodyScrollLock(open);
 
   const itemsByKey = useMemo(() => {
     const map = new Map<string, QuickAction>();
@@ -95,7 +107,11 @@ export function QuickActionsModal({ open, groups, onClose }: Props) {
         <m.div
           className="mobile-actions-backdrop"
           role="presentation"
-          onClick={onClose}
+          onClick={() => {
+            const now = typeof performance !== 'undefined' ? performance.now() : Date.now();
+            if (now - openedAtRef.current < BACKDROP_CLICK_GUARD_MS) return;
+            onClose();
+          }}
           variants={shouldReduceMotion ? undefined : OVERLAY_FADE}
           initial={shouldReduceMotion ? undefined : 'hidden'}
           animate={shouldReduceMotion ? undefined : 'show'}
@@ -106,7 +122,8 @@ export function QuickActionsModal({ open, groups, onClose }: Props) {
             active={open}
             focusTrapOptions={{
               allowOutsideClick: true,
-              clickOutsideDeactivates: true,
+              // Evita que el primer click fuera desactive el trap automáticamente; delegamos al overlay
+              clickOutsideDeactivates: false,
               initialFocus: () => inputRef.current ?? panelRef.current ?? undefined,
               fallbackFocus: () => panelRef.current ?? inputRef.current ?? document.body,
               onDeactivate: onClose

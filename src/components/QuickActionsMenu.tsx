@@ -1,5 +1,5 @@
 import { Loader2, Menu } from 'lucide-react';
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { KONAMI_DISABLE_MESSAGE, KONAMI_ENABLE_MESSAGE } from '../constants/konami';
 import { useDev } from '../contexts/DevContext';
@@ -31,27 +31,23 @@ export default function QuickActionsMenu() {
   const openTimerRef = useRef<number | null>(null);
 
   const scheduleOpen = useCallback(() => {
-    if (open || loading) return;
+    // Abre inmediatamente; spinner solo como feedback breve
+    if (!open) setOpen(true);
+    if (loading) return; // ya mostrando feedback
     setLoading(true);
-    if (typeof window === 'undefined') {
-      setOpen(true);
+    if (typeof window !== 'undefined') {
+      openTimerRef.current = window.setTimeout(() => {
+        setLoading(false);
+        openTimerRef.current = null;
+      }, 250);
+    } else {
       setLoading(false);
-      return;
     }
-    // Pequeño delay para mostrar feedback de carga antes de abrir
-    openTimerRef.current = window.setTimeout(() => {
-      setOpen(true);
-      setLoading(false);
-      openTimerRef.current = null;
-    }, 220);
   }, [loading, open]);
 
   // Limpieza de timer si el componente se desmonta
-  const mountedRef = useRef(true);
-  useMemo(() => {
-    mountedRef.current = true;
+  useEffect(() => {
     return () => {
-      mountedRef.current = false;
       if (openTimerRef.current !== null && typeof window !== 'undefined') {
         window.clearTimeout(openTimerRef.current);
         openTimerRef.current = null;
@@ -140,19 +136,17 @@ export default function QuickActionsMenu() {
         type="button"
         className="quick-menu-button"
         data-retro-sfx
+        data-testid="quick-actions-button"
         onClick={() => scheduleOpen()}
-        onPointerDown={event => {
-          if (event.pointerType === 'touch') {
-            // Evita que el primer tap se convierta en click retrasado/doble
-            event.preventDefault();
-            scheduleOpen();
-          }
+        onTouchEnd={event => {
+          // En móviles: dispara apertura inmediata y evita click fantasma
+          event.preventDefault();
+          scheduleOpen();
         }}
         aria-haspopup="dialog"
-        aria-controls="quick-actions-modal"
+        aria-controls={open ? 'quick-actions-modal' : undefined}
         aria-expanded={open}
         aria-busy={loading ? 'true' : 'false'}
-        disabled={loading}
         aria-label="Abrir menú de acciones"
       >
         {loading ? (

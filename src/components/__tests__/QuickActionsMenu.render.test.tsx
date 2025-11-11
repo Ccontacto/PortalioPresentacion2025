@@ -62,7 +62,8 @@ describe('QuickActionsMenu: render y comportamiento básico', () => {
     const btn = within(container).getByRole('button', { name: /abrir menú de acciones/i });
     expect(btn).toBeInTheDocument();
     expect(btn).toHaveAttribute('aria-haspopup', 'dialog');
-    expect(btn).toHaveAttribute('aria-controls', 'quick-actions-modal');
+    // aria-controls se publica sólo cuando está abierto (paridad con SearchBar)
+    expect(btn).not.toHaveAttribute('aria-controls');
     expect(btn).toHaveAttribute('aria-expanded', 'false');
 
     // Abre (hay un pequeño delay de loading)
