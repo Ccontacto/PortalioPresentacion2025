@@ -383,10 +383,15 @@ small { font-size: var(--fs-small); }
 
 /* Botón global de acciones */
 .quick-menu {
+  /* Mantener fuera del flujo y en capa superior */
   position: fixed;
-  top: 16px;
-  right: 16px;
-  z-index: 2000;
+  /* Respetar áreas seguras (iOS notch) y ofrecer margen adaptable */
+  top: clamp(12px, calc(env(safe-area-inset-top) + 12px), 32px);
+  right: clamp(12px, calc(env(safe-area-inset-right) + 12px), 32px);
+  /* Permitir parametrizar el stacking; default alto para sobrepasar overlays comunes */
+  z-index: var(--z-quick-menu, 2000);
+  /* Evitar que el contenedor capture eventos; el botón sí los recibe */
+  pointer-events: none;
 }
 
 .quick-menu-button {
@@ -401,6 +406,8 @@ small { font-size: var(--fs-small); }
   color: var(--text-on-brand);
   box-shadow: 8px 8px 0 var(--shadow-strong);
   cursor: pointer;
+  /* Rehabilitar interacción dentro del contenedor con pointer-events:none */
+  pointer-events: auto;
   transition:
     transform var(--motion-fast) var(--ease-standard),
     box-shadow var(--motion-fast) var(--ease-standard);
@@ -409,6 +416,11 @@ small { font-size: var(--fs-small); }
 .quick-menu-button:hover {
   transform: translate(-3px, -3px);
   box-shadow: 12px 12px 0 var(--shadow-strong-hover);
+}
+
+.quick-menu-button:focus-visible {
+  outline: 3px solid var(--marca-secundaria);
+  outline-offset: 3px;
 }
 
 /* ========================================

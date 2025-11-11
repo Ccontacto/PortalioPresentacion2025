@@ -1,14 +1,15 @@
 import { FocusTrap } from 'focus-trap-react';
-import { m } from 'framer-motion';
+import { AnimatePresence, m } from 'framer-motion';
 import { Search, X } from 'lucide-react';
 import { useMemo, useRef, useState, type KeyboardEvent } from 'react';
 import { createPortal } from 'react-dom';
 
-import { DIALOG_VARIANTS, PANEL_TRANSITION } from '../constants/animation';
+import { DIALOG_VARIANTS, OVERLAY_FADE, PANEL_TRANSITION } from '../constants/animation';
 import { KONAMI_ENABLE_MESSAGE } from '../constants/konami';
 import { useTheme } from '../contexts/ThemeContext';
 import { useToast } from '../contexts/ToastContext';
 import { useReducedMotion } from '../hooks/useReducedMotion';
+import { useDeferredExitAction } from '../hooks/useDeferredExitAction';
 
 import type { QuickAction, QuickActionGroup } from './quick-actions/types';
 
@@ -34,15 +35,13 @@ export function QuickActionsModal({ open, groups, onClose }: Props) {
     return map;
   }, [groups]);
 
+  const { queue, onExitComplete } = useDeferredExitAction();
+
   const run = (key: string) => {
     const action = itemsByKey.get(key);
     if (!action || action.disabled) return;
-    onClose();
-    if (action.immediate) {
-      action.action();
-    } else {
-      window.setTimeout(() => action.action(), 140);
-    }
+    const enqueued = queue(() => action.action());
+    if (enqueued) onClose();
   };
 
   const KONAMI_SEQ = [
@@ -87,101 +86,109 @@ export function QuickActionsModal({ open, groups, onClose }: Props) {
       .filter(group => group.items.length > 0);
   }, [groups, query]);
 
-  if (!open) {
-    return null;
-  }
-
   const content = (
-    <div
-      className="mobile-actions-backdrop"
-      role="presentation"
-      onClick={onClose}
+    <AnimatePresence
+      initial={false}
+      onExitComplete={onExitComplete}
     >
-      <FocusTrap
-        active={open}
-        focusTrapOptions={{
-          allowOutsideClick: true,
-          clickOutsideDeactivates: true,
-          initialFocus: () => inputRef.current ?? panelRef.current ?? undefined,
-          fallbackFocus: () => panelRef.current ?? inputRef.current ?? document.body,
-          onDeactivate: onClose
-        }}
-      >
+      {open ? (
         <m.div
-          className="mobile-actions-modal"
-          id="quick-actions-modal"
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="quick-actions-title"
-          tabIndex={-1}
-          ref={panelRef}
-          onClick={event => event.stopPropagation()}
-          data-dev-id="7001"
-          variants={shouldReduceMotion ? undefined : DIALOG_VARIANTS}
+          className="mobile-actions-backdrop"
+          role="presentation"
+          onClick={onClose}
+          variants={shouldReduceMotion ? undefined : OVERLAY_FADE}
           initial={shouldReduceMotion ? undefined : 'hidden'}
           animate={shouldReduceMotion ? undefined : 'show'}
           exit={shouldReduceMotion ? undefined : 'exit'}
           transition={shouldReduceMotion ? undefined : PANEL_TRANSITION}
         >
-          <header className="mobile-actions-modal__header">
-            <h2 id="quick-actions-title">Acciones rápidas</h2>
-            <button
-              type="button"
-              className="mobile-actions-modal__close"
-              onClick={onClose}
-              aria-label="Cerrar menú"
-              data-focus-default
+          <FocusTrap
+            active={open}
+            focusTrapOptions={{
+              allowOutsideClick: true,
+              clickOutsideDeactivates: true,
+              initialFocus: () => inputRef.current ?? panelRef.current ?? undefined,
+              fallbackFocus: () => panelRef.current ?? inputRef.current ?? document.body,
+              onDeactivate: onClose
+            }}
+          >
+            <m.div
+              className="mobile-actions-modal"
+              id="quick-actions-modal"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="quick-actions-title"
+              tabIndex={-1}
+              ref={panelRef}
+              onClick={event => event.stopPropagation()}
+              data-dev-id="7001"
+              variants={shouldReduceMotion ? undefined : DIALOG_VARIANTS}
+              initial={shouldReduceMotion ? undefined : 'hidden'}
+              animate={shouldReduceMotion ? undefined : 'show'}
+              exit={shouldReduceMotion ? undefined : 'exit'}
+              transition={shouldReduceMotion ? undefined : PANEL_TRANSITION}
             >
-              <X size={22} aria-hidden="true" />
-            </button>
-          </header>
+              <header className="mobile-actions-modal__header">
+                <h2 id="quick-actions-title">Acciones rápidas</h2>
+                <button
+                  type="button"
+                  className="mobile-actions-modal__close"
+                  onClick={onClose}
+                  aria-label="Cerrar menú"
+                  data-focus-default
+                >
+                  <X size={22} aria-hidden="true" />
+                </button>
+              </header>
 
-          <div className="remote-search" aria-label="Buscar accesos rápidos">
-            <Search size={18} aria-hidden="true" />
-            <input
-              ref={inputRef}
-              type="search"
-              placeholder="Buscar…"
-              value={query}
-              onChange={event => setQuery(event.target.value)}
-              onKeyDown={(event: KeyboardEvent<HTMLInputElement>) => handleKonamiKey(event.key)}
-              aria-label="Buscar opciones"
-            />
-          </div>
-
-          <div className="mobile-actions-modal__content">
-            {filtered.length ? (
-              filtered.map(group => (
-                <div className="mobile-actions-modal__group" key={group.id}>
-                  <p className="mobile-actions-modal__group-label">{group.label}</p>
-                  <div className="mobile-actions-modal__group-items">
-                    {group.items.map(item => (
-                      <button
-                        key={item.key}
-                        type="button"
-                        className="mobile-actions-modal__item"
-                        onClick={() => run(item.key)}
-                        disabled={item.disabled}
-                        aria-disabled={item.disabled ? 'true' : 'false'}
-                        data-retro-sfx
-                      >
-                        {item.icon ? <span className="mobile-actions-modal__icon">{item.icon}</span> : null}
-                        <span className="mobile-actions-modal__label">{item.label}</span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              ))
-            ) : (
-              <div className="command-modal__empty" role="status">
-                <p className="command-modal__empty-title">Sin coincidencias</p>
-                <p className="command-modal__empty-subtitle">Ajusta la búsqueda o explora otras acciones.</p>
+              <div className="remote-search" aria-label="Buscar accesos rápidos">
+                <Search size={18} aria-hidden="true" />
+                <input
+                  ref={inputRef}
+                  type="search"
+                  placeholder="Buscar…"
+                  value={query}
+                  onChange={event => setQuery(event.target.value)}
+                  onKeyDown={(event: KeyboardEvent<HTMLInputElement>) => handleKonamiKey(event.key)}
+                  aria-label="Buscar opciones"
+                />
               </div>
-            )}
-          </div>
+
+              <div className="mobile-actions-modal__content">
+                {filtered.length ? (
+                  filtered.map(group => (
+                    <div className="mobile-actions-modal__group" key={group.id}>
+                      <p className="mobile-actions-modal__group-label">{group.label}</p>
+                      <div className="mobile-actions-modal__group-items">
+                        {group.items.map(item => (
+                          <button
+                            key={item.key}
+                            type="button"
+                            className="mobile-actions-modal__item"
+                            onClick={() => run(item.key)}
+                            disabled={item.disabled}
+                            aria-disabled={item.disabled ? 'true' : 'false'}
+                            data-retro-sfx
+                          >
+                            {item.icon ? <span className="mobile-actions-modal__icon">{item.icon}</span> : null}
+                            <span className="mobile-actions-modal__label">{item.label}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="command-modal__empty" role="status">
+                    <p className="command-modal__empty-title">Sin coincidencias</p>
+                    <p className="command-modal__empty-subtitle">Ajusta la búsqueda o explora otras acciones.</p>
+                  </div>
+                )}
+              </div>
+            </m.div>
+          </FocusTrap>
         </m.div>
-      </FocusTrap>
-    </div>
+      ) : null}
+    </AnimatePresence>
   );
 
   return createPortal(content, document.body);

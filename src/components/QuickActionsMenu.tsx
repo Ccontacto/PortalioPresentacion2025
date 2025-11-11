@@ -53,7 +53,8 @@ export default function QuickActionsMenu() {
       action: () => {
         navigateTo(item.id);
         setOpen(false);
-      }
+      },
+      immediate: true
     }));
   }, [data.nav, navigateTo]);
 
@@ -107,7 +108,11 @@ export default function QuickActionsMenu() {
       <button
         type="button"
         className="quick-menu-button"
-        onClick={() => setOpen(true)}
+        onClick={event => {
+          event.preventDefault();
+          event.stopPropagation();
+          setOpen(true);
+        }}
         aria-haspopup="dialog"
         aria-controls="quick-actions-modal"
         aria-expanded={open}

@@ -17,6 +17,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { useNavigation } from '../contexts/NavigationContext';
 import { useBodyScrollLock } from '../hooks/useBodyScrollLock';
 import { useReducedMotion } from '../hooks/useReducedMotion';
+import { useDeferredExitAction } from '../hooks/useDeferredExitAction';
 import { launchConfetti } from '../utils/confetti';
 
 import type { ProjectItem } from '../types/portfolio';
@@ -49,6 +50,7 @@ export default function SearchBar({
   const inputRef = useRef<HTMLInputElement | null>(null);
   const debounceRef = useRef<number | null>(null);
   const mountedRef = useRef(false);
+  const { queue, onExitComplete } = useDeferredExitAction();
 
   const titleId = useId();
   const descriptionId = useId();
@@ -180,19 +182,15 @@ export default function SearchBar({
   };
 
   const handleNavigateProjects = () => {
-    handleCloseModal({ resetSearch: false });
-    const runNavigation = () => navigateTo('projects');
-    if (typeof window === 'undefined') {
-      runNavigation();
-      return;
+    if (queue(() => navigateTo('projects'))) {
+      handleCloseModal({ resetSearch: false });
     }
-    window.setTimeout(runNavigation, 120);
   };
 
   const renderModal = () => {
     if (!mountedRef.current) return null;
     return createPortal(
-      <AnimatePresence>
+      <AnimatePresence initial={false} onExitComplete={onExitComplete}>
         {isModalOpen ? (
           <m.div
             className="search-modal"

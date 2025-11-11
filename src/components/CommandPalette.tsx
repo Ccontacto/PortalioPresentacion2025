@@ -32,6 +32,7 @@ import { useNavigation } from '../contexts/NavigationContext';
 import { useTheme } from '../contexts/ThemeContext';
 import { useToast } from '../contexts/ToastContext';
 import { useBodyScrollLock } from '../hooks/useBodyScrollLock';
+import { useDeferredExitAction } from '../hooks/useDeferredExitAction';
 import { useCvDownload } from '../hooks/useCvDownload';
 import { useReducedMotion } from '../hooks/useReducedMotion';
 
@@ -89,6 +90,8 @@ export default function CommandPalette() {
   const closePalette = useCallback(() => {
     setOpen(false);
   }, []);
+
+  const { queue, onExitComplete } = useDeferredExitAction();
 
   const items = useMemo<CommandItem[]>(() => {
     const navItems: CommandItem[] = data.nav.map(navItem => ({
@@ -361,8 +364,9 @@ export default function CommandPalette() {
       if (item.predicate && !item.predicate()) {
         return;
       }
-      item.action();
-      closePalette();
+      if (queue(() => item.action())) {
+        closePalette();
+      }
     },
     [closePalette]
   );
@@ -390,7 +394,10 @@ export default function CommandPalette() {
   if (!mounted) return null;
 
   return createPortal(
-    <AnimatePresence>
+    <AnimatePresence
+      initial={false}
+      onExitComplete={onExitComplete}
+    >
       {open ? (
         <m.div
           className="search-modal search-modal--command"
