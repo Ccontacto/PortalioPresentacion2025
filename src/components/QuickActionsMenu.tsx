@@ -1,5 +1,5 @@
-import { Menu } from 'lucide-react';
-import { useCallback, useMemo, useState } from 'react';
+import { Loader2, Menu } from 'lucide-react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 
 import { KONAMI_DISABLE_MESSAGE, KONAMI_ENABLE_MESSAGE } from '../constants/konami';
 import { useDev } from '../contexts/DevContext';
@@ -27,6 +27,37 @@ export default function QuickActionsMenu() {
   const downloadCv = useCvDownload();
 
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const openTimerRef = useRef<number | null>(null);
+
+  const scheduleOpen = useCallback(() => {
+    if (open || loading) return;
+    setLoading(true);
+    if (typeof window === 'undefined') {
+      setOpen(true);
+      setLoading(false);
+      return;
+    }
+    // Pequeño delay para mostrar feedback de carga antes de abrir
+    openTimerRef.current = window.setTimeout(() => {
+      setOpen(true);
+      setLoading(false);
+      openTimerRef.current = null;
+    }, 220);
+  }, [loading, open]);
+
+  // Limpieza de timer si el componente se desmonta
+  const mountedRef = useRef(true);
+  useMemo(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+      if (openTimerRef.current !== null && typeof window !== 'undefined') {
+        window.clearTimeout(openTimerRef.current);
+        openTimerRef.current = null;
+      }
+    };
+  }, []);
 
   const handleConfettiClick = useCallback(() => {
     const result = tryLaunchConfetti();
@@ -104,22 +135,32 @@ export default function QuickActionsMenu() {
   }, [navActions, preferenceItems]);
 
   return (
-    <div className="quick-menu" data-dev-id="1200">
+    <div className="quick-menu" data-position="bottom-right" data-dev-id="1200">
       <button
         type="button"
         className="quick-menu-button"
-        onClick={event => {
-          event.preventDefault();
-          event.stopPropagation();
-          setOpen(true);
+        data-retro-sfx
+        onClick={() => scheduleOpen()}
+        onPointerDown={event => {
+          if (event.pointerType === 'touch') {
+            // Evita que el primer tap se convierta en click retrasado/doble
+            event.preventDefault();
+            scheduleOpen();
+          }
         }}
         aria-haspopup="dialog"
         aria-controls="quick-actions-modal"
         aria-expanded={open}
+        aria-busy={loading ? 'true' : 'false'}
+        disabled={loading}
         aria-label="Abrir menú de acciones"
       >
-        <Menu size={22} aria-hidden="true" />
-        <span>Acciones</span>
+        {loading ? (
+          <Loader2 size={20} aria-hidden="true" className="icon-spin" />
+        ) : (
+          <Menu size={22} aria-hidden="true" />
+        )}
+        <span>{loading ? 'Abriendo…' : 'Acciones'}</span>
       </button>
 
       <QuickActionsModal open={open} groups={groups} onClose={() => setOpen(false)} />

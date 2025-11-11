@@ -1,9 +1,10 @@
-import { render, screen, fireEvent, within } from '@testing-library/react';
+import { render, screen, fireEvent, within, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
 // Mock de ícono para evitar dependencias de renderizado
 vi.mock('lucide-react', () => ({
-  Menu: () => <svg data-testid="icon-menu" />
+  Menu: () => <svg data-testid="icon-menu" />,
+  Loader2: () => <svg data-testid="icon-loader" />
 }));
 
 // Mock del modal para inspeccionar props y estado
@@ -64,10 +65,11 @@ describe('QuickActionsMenu: render y comportamiento básico', () => {
     expect(btn).toHaveAttribute('aria-controls', 'quick-actions-modal');
     expect(btn).toHaveAttribute('aria-expanded', 'false');
 
-    // Abre
+    // Abre (hay un pequeño delay de loading)
     fireEvent.click(btn);
     const modal = await within(container).findByTestId('qa-modal');
-    expect(modal).toHaveAttribute('data-open', 'true');
+    // Puede haber un pequeño delay por loading; esperar a que abra
+    await waitFor(() => expect(modal).toHaveAttribute('data-open', 'true'));
     expect(btn).toHaveAttribute('aria-expanded', 'true');
 
     // Cierra

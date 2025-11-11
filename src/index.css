@@ -385,13 +385,28 @@ small { font-size: var(--fs-small); }
 .quick-menu {
   /* Mantener fuera del flujo y en capa superior */
   position: fixed;
-  /* Respetar áreas seguras (iOS notch) y ofrecer margen adaptable */
-  top: clamp(12px, calc(env(safe-area-inset-top) + 12px), 32px);
-  right: clamp(12px, calc(env(safe-area-inset-right) + 12px), 32px);
   /* Permitir parametrizar el stacking; default alto para sobrepasar overlays comunes */
   z-index: var(--z-quick-menu, 2000);
   /* Evitar que el contenedor capture eventos; el botón sí los recibe */
   pointer-events: none;
+}
+
+/* Posiciones flotantes soportadas mediante data-attribute */
+.quick-menu[data-position='top-right'] {
+  top: clamp(12px, calc(env(safe-area-inset-top) + 12px), 32px);
+  right: clamp(12px, calc(env(safe-area-inset-right) + 12px), 32px);
+}
+.quick-menu[data-position='top-left'] {
+  top: clamp(12px, calc(env(safe-area-inset-top) + 12px), 32px);
+  left: clamp(12px, calc(env(safe-area-inset-left) + 12px), 32px);
+}
+.quick-menu[data-position='bottom-right'] {
+  bottom: clamp(16px, calc(env(safe-area-inset-bottom) + 16px), 40px);
+  right: clamp(12px, calc(env(safe-area-inset-right) + 12px), 32px);
+}
+.quick-menu[data-position='bottom-left'] {
+  bottom: clamp(16px, calc(env(safe-area-inset-bottom) + 16px), 40px);
+  left: clamp(12px, calc(env(safe-area-inset-left) + 12px), 32px);
 }
 
 .quick-menu-button {
@@ -408,6 +423,9 @@ small { font-size: var(--fs-small); }
   cursor: pointer;
   /* Rehabilitar interacción dentro del contenedor con pointer-events:none */
   pointer-events: auto;
+  /* Eliminar doble tap para zoom/activación en móviles */
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
   transition:
     transform var(--motion-fast) var(--ease-standard),
     box-shadow var(--motion-fast) var(--ease-standard);
@@ -421,6 +439,16 @@ small { font-size: var(--fs-small); }
 .quick-menu-button:focus-visible {
   outline: 3px solid var(--marca-secundaria);
   outline-offset: 3px;
+}
+
+/* Spinner util */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.icon-spin {
+  animation: spin 0.9s linear infinite;
 }
 
 /* ========================================
