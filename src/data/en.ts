@@ -33,11 +33,8 @@ export const en = {
       description:
         'Partnering with squads to launch native experiences infused with responsible generative AI.'
     },
-    meta: [
-      { label: 'Location', field: 'location' },
-      { label: 'Availability', field: 'badge' },
-      { label: 'Focus', value: 'Generative AI acceleration for native apps' }
-    ],
+    // Reduce metadata to avoid duplicating Availability (badge) and Focus (section)
+    meta: [{ label: 'Location', field: 'location' }],
     note: {
       title: 'Recent obsessions',
       items: ['On-device AI', 'RAG playbooks', 'Mobile CI/CD']

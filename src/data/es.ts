@@ -64,11 +64,8 @@ export const es = {
       description:
         'Acompaño squads para lanzar experiencias nativas con IA generativa segura y medible.'
     },
-    meta: [
-      { label: 'Ubicación', field: 'location' },
-      { label: 'Disponibilidad', field: 'badge' },
-      { label: 'Enfoque', value: 'Roadmaps iOS con IA generativa segura' }
-    ],
+    // Evitar duplicidad (la disponibilidad ya vive como badge y el enfoque en su sección)
+    meta: [{ label: 'Ubicación', field: 'location' }],
     note: {
       title: 'En lo que estoy trabajando',
       items: ['IA en dispositivo', 'Playbooks RAG', 'CI/CD móvil']

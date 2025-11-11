@@ -4,7 +4,6 @@ import { useCallback, useEffect, useMemo, useRef, lazy, Suspense } from 'react';
 import LoadingScreen from './components/LoadingScreen';
 import HamburgerMenu from './components/HamburgerMenu';
 import PageProgress from './components/PageProgress';
-import QuickActionsMenu from './components/QuickActionsMenu';
 import { RetroModeBanner } from './components/RetroModeBanner';
 import SkipToContent from './components/SkipToContent';
 import ToastContainer from './components/ToastContainer';
@@ -112,7 +111,7 @@ function AppContent() {
         <PageProgress />
         <SkipToContent />
         <HamburgerMenu />
-        <QuickActionsMenu />
+        {/* QuickActionsMenu eliminado a petición: ocultar FAB Acciones */}
         {/* Header/TopBar removidos por solicitud: contenido inicia directo */}
         {isKonami ? <RetroModeBanner onExitRetro={exitKonamiMode} /> : null}
         {/* MEJORA 1: main con role explícito y aria-label */}

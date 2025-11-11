@@ -11,8 +11,11 @@ export default function HamburgerMenu() {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
+  const panelRef = useRef<HTMLDivElement | null>(null);
   const searchInputRef = useRef<HTMLInputElement | null>(null);
   const shouldReduceMotion = useReducedMotion();
+  const [panelMaxHeight, setPanelMaxHeight] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     if (!open) return;
@@ -46,8 +49,36 @@ export default function HamburgerMenu() {
     const frame = window.requestAnimationFrame(() => {
       searchInputRef.current?.focus();
       searchInputRef.current?.select();
+
+      // Recalcular altura disponible para mostrar todo el menú
+      try {
+        const btn = buttonRef.current;
+        if (btn) {
+          const rect = btn.getBoundingClientRect();
+          const topSafe = 12;
+          const available = Math.max(180, Math.floor(rect.top - topSafe));
+          setPanelMaxHeight(`${available}px`);
+        }
+      } catch {
+        // noop
+      }
     });
-    return () => window.cancelAnimationFrame(frame);
+    const onResize = () => {
+      if (!open) return;
+      const btn = buttonRef.current;
+      if (!btn) return;
+      const rect = btn.getBoundingClientRect();
+      const topSafe = 12;
+      const available = Math.max(180, Math.floor(rect.top - topSafe));
+      setPanelMaxHeight(`${available}px`);
+    };
+    window.addEventListener('resize', onResize);
+    window.addEventListener('orientationchange', onResize);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener('resize', onResize);
+      window.removeEventListener('orientationchange', onResize);
+    };
   }, [open]);
 
   useEffect(() => {
@@ -107,6 +138,7 @@ export default function HamburgerMenu() {
       <button
         type="button"
         className="hamburger-menu__button"
+        ref={buttonRef}
         aria-expanded={open}
         aria-controls="floating-nav"
         aria-label={open ? 'Cerrar menú de navegación' : 'Abrir menú de navegación'}
@@ -127,6 +159,8 @@ export default function HamburgerMenu() {
             id="floating-nav"
             aria-label="Secciones del sitio"
             className="hamburger-menu__panel"
+            ref={panelRef}
+            style={panelMaxHeight ? { maxHeight: panelMaxHeight } : undefined}
             initial={panelVariants ? 'hidden' : undefined}
             animate={panelVariants ? 'visible' : undefined}
             exit={panelVariants ? 'exit' : undefined}

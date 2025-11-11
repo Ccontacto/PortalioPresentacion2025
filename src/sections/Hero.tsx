@@ -111,7 +111,9 @@ export default function Hero() {
               />
             </div>
             <span className="hero-eyebrow">{heroCopy.eyebrow}</span>
-            <h1 id="hero-heading" className="hero-title">
+            <div className="hero-title-wrap" aria-hidden="false">
+              <div className="hero-title-rays" aria-hidden="true" />
+              <h1 id="hero-heading" className="hero-title">
               {titleSegments.map((segment, index) =>
                 segment.accent ? (
                   <span
@@ -124,7 +126,8 @@ export default function Hero() {
                   <Fragment key={`${segment.text}-${index}`}>{segment.text}</Fragment>
                 )
               )}
-            </h1>
+              </h1>
+            </div>
             <p className="hero-tagline">
               {taglineSegments.map((segment, index) => {
                 if (!segment) {
