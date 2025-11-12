@@ -3076,16 +3076,21 @@ html[data-theme='konami'] .experience-header__subtitle {
   margin: 0 auto;
 }
 
+.experience-track-wrapper {
+  position: relative;
+}
+
 .experience-track--horizontal {
   display: grid;
   grid-auto-flow: column;
-  grid-auto-columns: minmax(320px, clamp(320px, 80vw, 520px));
+  grid-auto-columns: minmax(100%, 100%);
   gap: 18px;
   overflow-x: auto;
-  padding: 8px 16px 18px;
-  margin: 0 -16px;
+  padding: 8px 0 18px;
+  margin: 0;
   scroll-snap-type: x proximity;
-  scroll-padding-left: 16px;
+  scroll-padding-left: 0;
+  transition: transform var(--motion-fast) var(--ease-emphasized);
 }
 
 .experience-track--horizontal::before,
@@ -3097,7 +3102,17 @@ html[data-theme='konami'] .experience-header__subtitle {
   scroll-snap-align: start;
   min-height: 100%;
   width: 100%;
-  max-width: clamp(320px, 80vw, 560px);
+  max-width: none;
+}
+
+.experience-track--snap-bounce-left {
+  transform: translateX(8px);
+  transition: transform 0.25s ease;
+}
+
+.experience-track--snap-bounce-right {
+  transform: translateX(-8px);
+  transition: transform 0.25s ease;
 }
 
 .experience-track--horizontal::-webkit-scrollbar {
@@ -3115,10 +3130,7 @@ html[data-theme='konami'] .experience-header__subtitle {
 
 @media (min-width: 1024px) {
   .experience-track--horizontal {
-    grid-auto-columns: minmax(360px, clamp(360px, 38vw, 600px));
-    margin: 0;
-    padding-inline: 0;
-    scroll-padding-left: 0;
+    grid-auto-columns: minmax(100%, 100%);
   }
 }
 
@@ -3157,7 +3169,46 @@ html[data-theme='konami'] .experience-header__subtitle {
   gap: 18px;
   overflow: hidden;
   height: 100%;
-  max-width: clamp(320px, 80vw, 560px);
+  max-width: clamp(320px, 70vw, 520px);
+}
+
+.experience-scroll-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid var(--border-strong);
+  background: var(--surface-card);
+  color: var(--text-strong);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.18);
+  cursor: pointer;
+  transition: transform var(--motion-fast) var(--ease-standard), box-shadow var(--motion-fast) var(--ease-standard);
+}
+
+.experience-scroll-btn:hover {
+  transform: translateY(-50%) translateX(-2px);
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.24);
+}
+
+.experience-scroll-btn--left {
+  left: 0;
+  transform: translate(-50%, -50%);
+}
+
+.experience-scroll-btn--right {
+  right: 0;
+  transform: translate(50%, -50%);
+}
+
+@media (max-width: 640px) {
+  .experience-scroll-btn {
+    display: none;
+  }
 }
 
 html[data-theme='konami'] .experience-node {
