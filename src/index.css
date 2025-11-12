@@ -459,9 +459,8 @@ small { font-size: var(--fs-small); }
 /* Menú hamburguesa fijo (nav principal) */
 .hamburger-menu {
   position: fixed;
-  /* Bottom-right by default, safe-area aware */
-  bottom: clamp(16px, calc(env(safe-area-inset-bottom) + 16px), 40px);
-  right: clamp(12px, calc(env(safe-area-inset-right) + 12px), 32px);
+  top: clamp(12px, calc(env(safe-area-inset-top) + 12px), 32px);
+  left: clamp(12px, calc(env(safe-area-inset-left) + 12px), 32px);
   z-index: var(--z-floating, var(--z-hamburger, 2100));
   pointer-events: none;
 }
@@ -543,6 +542,7 @@ html[data-theme='dark'] .hamburger-menu__button {
   position: absolute;
   top: calc(100% + 12px);
   left: 0;
+  right: auto;
   width: min(640px, calc(100vw - 32px));
   padding: 18px 16px 20px;
   border-radius: 18px;
