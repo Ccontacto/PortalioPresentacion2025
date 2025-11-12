@@ -1,5 +1,6 @@
 import { m } from 'framer-motion';
 import { Fragment, useState } from 'react';
+import { MapPin } from 'lucide-react';
 
 import { AvailabilityBadge } from '../components/header/AvailabilityBadge';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -171,30 +172,28 @@ export default function Hero() {
                 {data.ui.bookCall}
               </a>
             </div>
-
-            <dl className="hero-meta">
-              {resolvedMeta.map(item => (
-                <div key={`${item.label}-${item.value}`} className="hero-meta__item">
-                  <dt>{item.label}</dt>
-                  <dd>{item.value}</dd>
+            <div className="hero-locale" data-dev-id="2001-locale">
+              {resolvedMeta.length ? (
+                <div className="hero-location-chip">
+                  <MapPin size={18} aria-hidden="true" />
+                  <span>{resolvedMeta[0].value}</span>
                 </div>
-              ))}
-            </dl>
+              ) : null}
+              <div className="hero-stat-chips" role="list" aria-label={data.lang === 'en' ? 'Impact metrics' : 'Métricas de impacto'}>
+                {data.stats.map((stat: Stat) => (
+                  <div key={stat.id} className="hero-stat-chip" role="listitem">
+                    <span className="hero-stat-chip__value">{stat.value}</span>
+                    <span className="hero-stat-chip__label">{stat.label}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
 
           <aside className="hero-panel" aria-label={data.lang === 'en' ? 'Current focus' : 'Foco actual'}>
             <div className="hero-panel__card hero-panel__card--status" data-dev-id="2002">
               <span className="hero-panel__eyebrow">{status.title}</span>
               <p className="hero-panel__description">{status.description}</p>
-            </div>
-
-            <div className="hero-stats" role="list" data-dev-id="2003">
-              {data.stats.map((stat: Stat) => (
-                <div key={stat.id} className="hero-stat" role="listitem">
-                  <span className="hero-stat__value">{stat.value}</span>
-                  <span className="hero-stat__label">{stat.label}</span>
-                </div>
-              ))}
             </div>
 
             <div className="hero-panel__card hero-panel__card--note fx-sketch-outline" data-dev-id="2004">

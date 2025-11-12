@@ -72,6 +72,26 @@ Portfolio React + Vite listo para desarrollo local, testing y despliegue en Clou
 - Build (`npm run build`): ✅
 - caché Vite limpia (`rm -rf node_modules/.vite` antes de `npm run dev` si cambias bundling).
 
+## Guía de diseño (menú flotante y disclosure progresivo)
+
+- Menú flotante inferior derecha
+  - Botón hamburguesa circular fijo abajo‑derecha (safe-area), abre panel con búsqueda, 5 secciones y “Acciones rápidas”.
+  - Caret orientado al botón; panel se posiciona arriba/abajo con altura máxima dinámica y scroll interno.
+  - z-index fijo `--z-floating: 15000` para sobresalir de overlays.
+
+- Colocación de panel reutilizable
+  - Hook `useFloatingPanelPlacement` calcula posición y `maxHeight`. Aplícalo en cualquier panel flotante para consistencia.
+
+- Disclosure progresivo en secciones
+  - Skills: muestra una fila de badges por defecto con `badges-clamp-1`; botón “Ver más/menos” para expandir/colapsar.
+  - Projects: renderiza 4 proyectos por defecto, descripciones con `clamp-3` y botón “Ver más proyectos”.
+  - Experience: 2 empleos por defecto, “Mostrar toda la experiencia” y “Ver más/menos” por descripción.
+
+- Troubleshooting
+  - Si el panel no se ve: verifica `--z-floating` (15000) y que no haya contenedores padres con `overflow:hidden`.
+  - En móvil: usa `onTouchEnd` con `preventDefault()` en triggers para evitar double‑tap y ghost clicks.
+  - A11y: listas como `ul > li > button`, `nav[aria-label]`, triggers con `aria-expanded`/`aria-controls`.
+
 ## Setup rápido (Git + Cloudflare)
 
 1. Configura las variables de entorno con tus credenciales:

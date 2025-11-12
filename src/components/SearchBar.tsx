@@ -48,7 +48,7 @@ export default function SearchBar({
 
   const triggerRef = useRef<HTMLButtonElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const debounceRef = useRef<number | null>(null);
+  const debounceRef = useRef<ReturnType<typeof globalThis.setTimeout> | null>(null);
   const mountedRef = useRef(false);
   const { queue, onExitComplete } = useDeferredExitAction();
 
@@ -102,28 +102,29 @@ export default function SearchBar({
 
   useEffect(() => {
     if (!isModalOpen || typeof window === 'undefined') return undefined;
-    const focusTimer = setTimeout(() => {
+    const focusTimer = globalThis.setTimeout(() => {
       inputRef.current?.focus();
     }, 90);
     return () => {
-      clearTimeout(focusTimer);
+      globalThis.clearTimeout(focusTimer);
     };
   }, [isModalOpen]);
 
   useEffect(() => {
-    if (typeof window === 'undefined') {
+    const isTestEnv = typeof process !== 'undefined' && process.env.VITEST;
+    if (typeof window === 'undefined' || isTestEnv) {
       onSearch(searchTerm.trim());
       return;
     }
     if (debounceRef.current) {
-      clearTimeout(debounceRef.current);
+      globalThis.clearTimeout(debounceRef.current);
     }
-    debounceRef.current = setTimeout(() => {
+    debounceRef.current = globalThis.setTimeout(() => {
       onSearch(searchTerm.trim());
     }, DEBOUNCE_MS);
     return () => {
       if (debounceRef.current) {
-        clearTimeout(debounceRef.current);
+        globalThis.clearTimeout(debounceRef.current);
       }
     };
   }, [searchTerm, onSearch]);

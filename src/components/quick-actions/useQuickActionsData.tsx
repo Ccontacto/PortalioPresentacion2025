@@ -7,6 +7,7 @@ import { useTheme } from '../../contexts/ThemeContext';
 import { useToast } from '../../contexts/ToastContext';
 import { useConfettiCooldown } from '../../hooks/useConfettiCooldown';
 import { useCvDownload } from '../../hooks/useCvDownload';
+import { Download, Languages, Moon, PartyPopper, Sparkles, Sun, Wrench } from 'lucide-react';
 
 import type { QuickAction } from './types';
 
@@ -56,36 +57,41 @@ export function useQuickActionsData() {
 
   const preferenceItems = useMemo<QuickAction[]>(() => {
     return [
-      { key: 'pdf', label: tooltips.pdf, action: () => downloadCv({ data }), immediate: true },
+      { key: 'pdf', label: tooltips.pdf, action: () => downloadCv({ data }), immediate: true, icon: <Download size={18} aria-hidden /> },
       {
         key: 'confetti',
         label: tooltips.celebrate,
         action: handleConfettiClick,
-        disabled: isConfettiOnCooldown
+        disabled: isConfettiOnCooldown,
+        icon: <PartyPopper size={18} aria-hidden />
       },
       {
         key: 'retro',
         label: isKonami ? 'Salir modo retro' : 'Activar modo retro',
         action: handleKonamiToggle,
-        immediate: true
+        immediate: true,
+        icon: <Sparkles size={18} aria-hidden />
       },
       {
         key: 'dev-ids',
         label: devIds ? 'Ocultar IDs de inspección' : 'Mostrar IDs de inspección',
         action: toggleDevIds,
-        immediate: true
+        immediate: true,
+        icon: <Wrench size={18} aria-hidden />
       },
       {
         key: 'theme',
         label: baseTheme === 'dark' ? 'Modo claro' : 'Modo oscuro',
         action: toggleTheme,
-        immediate: true
+        immediate: true,
+        icon: baseTheme === 'dark' ? <Sun size={18} aria-hidden /> : <Moon size={18} aria-hidden />
       },
       {
         key: 'language',
         label: currentLang === 'es' ? 'Switch to English' : 'Cambiar a español',
         action: toggleLanguage,
-        immediate: true
+        immediate: true,
+        icon: <Languages size={18} aria-hidden />
       }
     ];
   }, [baseTheme, currentLang, data, devIds, downloadCv, handleConfettiClick, handleKonamiToggle, isConfettiOnCooldown, isKonami, toggleDevIds, toggleLanguage, toggleTheme, tooltips.pdf, tooltips.celebrate]);
@@ -95,3 +101,4 @@ export function useQuickActionsData() {
     preferenceItems
   };
 }
+

@@ -31,6 +31,12 @@ export default function Projects() {
     );
   }, [currentSearchTerm, data.sections.projects.items]);
 
+  const [showAll, setShowAll] = useState(false);
+  const visibleProjects = useMemo(
+    () => (showAll ? filteredProjects : filteredProjects.slice(0, 4)),
+    [showAll, filteredProjects]
+  );
+
   return (
     <section id="projects" className="page-section" aria-labelledby="projects-heading" data-dev-id="5000">
       <header className="experience-header" data-dev-id="5001">
@@ -51,7 +57,7 @@ export default function Projects() {
       />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl" data-dev-id="5002">
-        {filteredProjects.map((proj: ProjectItem, index: number) => (
+        {visibleProjects.map((proj: ProjectItem, index: number) => (
           <m.article
             key={proj.id}
             className="card"
@@ -65,7 +71,7 @@ export default function Projects() {
               <Rocket size={56} />
             </div>
             <h3 className="text-xl font-bold mb-3">{proj.title}</h3>
-            <p className="text-sm mb-4">{proj.description}</p>
+            <p className="text-sm mb-4 clamp-3">{proj.description}</p>
             <div className="flex flex-wrap gap-2 mb-4" role="list" aria-label="Tecnologías del proyecto">
               {proj.tags.map(tag => (
                 <span
@@ -91,6 +97,19 @@ export default function Projects() {
           </m.article>
         ))}
       </div>
+
+      {filteredProjects.length > 4 && (
+        <div className="section-more">
+          <button
+            type="button"
+            className="section-more__button"
+            onClick={() => setShowAll(v => !v)}
+            aria-expanded={showAll}
+          >
+            {showAll ? 'Mostrar menos' : 'Ver más proyectos'}
+          </button>
+        </div>
+      )}
     </section>
   );
 }

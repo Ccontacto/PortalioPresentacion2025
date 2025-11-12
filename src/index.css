@@ -1,4 +1,5 @@
 @import "tailwindcss";
+:root{ --badges-row-height: 40px; }
 
 /* ========================================
    VARIABLES CSS MEJORADAS
@@ -85,10 +86,15 @@
   --shadow-soft: rgba(148, 163, 184, 0.45);
   --shadow-strong-hover: var(--color-true-black);
 
-  --gradient-brand-start: #ffb7dd;
-  --gradient-brand-end: #a0e7e5;
-  --gradient-hero-start: #fef3f2;
-  --gradient-hero-end: #e0f2fe;
+  /* 2025 ALT BRAND: Blue ↔ Emerald */
+  --gradient-brand-start: #60A5FA; /* blue-400 */
+  --gradient-brand-end: #6EE7B7;   /* emerald-300 */
+  --gradient-hero-start: #E0F2FE;  /* sky-100 */
+  --gradient-hero-end: #DCFCE7;    /* emerald-100 */
+  /* CTA identity tints (semi-homologated over brand gradient) */
+  --cta-whatsapp-tint: rgba(6, 95, 70, 0.18);
+  --cta-email-tint:    rgba(29, 78, 216, 0.18);
+  --cta-copy-tint:     rgba(185, 28, 28, 0.18);
   --gradient-close-start: #ffd1dc;
   --gradient-close-end: #ff89a0;
   --gradient-whatsapp-start: #047857;
@@ -172,12 +178,17 @@ html[data-theme='dark'] {
   --shadow-soft: rgba(5, 7, 13, 0.55);
   --shadow-strong-hover: rgba(0, 0, 0, 0.95);
 
-  --gradient-brand-start: #a0e7e5;
-  --gradient-brand-end: #d7b7ff;
-  --gradient-hero-start: rgba(160, 231, 229, 0.18);
-  --gradient-hero-end: rgba(215, 183, 255, 0.2);
+  /* 2025 ALT BRAND (dark): swapped and toned for contrast */
+  --gradient-brand-start: #34D399;  /* emerald-400 */
+  --gradient-brand-end: #93C5FD;    /* blue-300 */
+  --gradient-hero-start: rgba(147, 197, 253, 0.18); /* blue-300 */
+  --gradient-hero-end: rgba(52, 211, 153, 0.22);    /* emerald-400 */
   --gradient-close-start: rgba(255, 183, 221, 0.22);
   --gradient-close-end: rgba(255, 218, 235, 0.26);
+  /* Slightly stronger tints in dark for separation */
+  --cta-whatsapp-tint: rgba(6, 95, 70, 0.24);
+  --cta-email-tint:    rgba(29, 78, 216, 0.24);
+  --cta-copy-tint:     rgba(185, 28, 28, 0.24);
   --gradient-whatsapp-start: rgba(46, 213, 166, 0.35);
   --gradient-whatsapp-end: rgba(24, 144, 255, 0.32);
   --gradient-email-start: rgba(24, 144, 255, 0.32);
@@ -381,12 +392,16 @@ small { font-size: var(--fs-small); }
 
 /* topbar removed */
 
+:root{ --z-floating: 15000; }
+/* altura de fila por defecto para badges (ajustable por diseño) */
+:root{ --badges-row-height: 40px; }
+
 /* Botón global de acciones */
 .quick-menu {
   /* Mantener fuera del flujo y en capa superior */
   position: fixed;
   /* Permitir parametrizar el stacking; default alto para sobrepasar overlays comunes */
-  z-index: var(--z-quick-menu, 2000);
+  z-index: var(--z-floating, var(--z-quick-menu, 2000));
   /* Evitar que el contenedor capture eventos; el botón sí los recibe */
   pointer-events: none;
 }
@@ -444,17 +459,20 @@ small { font-size: var(--fs-small); }
 /* Menú hamburguesa fijo (nav principal) */
 .hamburger-menu {
   position: fixed;
-  top: clamp(12px, calc(env(safe-area-inset-top) + 12px), 28px);
-  left: clamp(12px, calc(env(safe-area-inset-left) + 12px), 28px);
-  z-index: var(--z-hamburger, 2100);
+  /* Bottom-right by default, safe-area aware */
+  bottom: clamp(16px, calc(env(safe-area-inset-bottom) + 16px), 40px);
+  right: clamp(12px, calc(env(safe-area-inset-right) + 12px), 32px);
+  z-index: var(--z-floating, var(--z-hamburger, 2100));
   pointer-events: none;
 }
 
 .hamburger-menu__button {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 10px 14px;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  padding: 0;
   border-radius: 9999px;
   border: 2px solid var(--border-strong);
   background: var(--surface-card);
@@ -483,12 +501,17 @@ html[data-theme='dark'] .hamburger-menu__button {
   outline-offset: 3px;
 }
 
+.hamburger-menu :is(button, a, [role="button"], [tabindex]):focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
 .hamburger-menu__icon {
   display: inline-flex;
   flex-direction: column;
   justify-content: center;
-  gap: 4px;
-  width: 20px;
+  gap: 5px;
+  width: 22px;
   height: 18px;
   position: relative;
 }
@@ -520,17 +543,34 @@ html[data-theme='dark'] .hamburger-menu__button {
   position: absolute;
   top: calc(100% + 12px);
   left: 0;
-  width: min(320px, calc(100vw - 32px));
+  width: min(640px, calc(100vw - 32px));
   padding: 18px 16px 20px;
   border-radius: 18px;
   border: 2px solid var(--border-strong);
   background: var(--surface-card);
+  z-index: var(--z-floating, 12000);
   box-shadow: 18px 18px 0 var(--shadow-strong);
   pointer-events: auto;
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
+
+/* Caret (flecha) del panel: se invierte según placement */
+.hamburger-menu__caret {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  transform: rotate(45deg);
+  background: var(--surface-card);
+  border-left: 2px solid var(--border-strong);
+  border-top: 2px solid var(--border-strong);
+  z-index: 1;
+}
+.hamburger-menu__caret.is-top { top: -7px; }
+.hamburger-menu__caret.is-bottom { bottom: -7px; transform: rotate(225deg); }
+.hamburger-menu__caret.is-right { right: 24px; }
+.hamburger-menu__caret.is-left { left: 24px; }
 
 html[data-theme='dark'] .hamburger-menu__panel {
   background: var(--surface-panel);
@@ -577,6 +617,35 @@ html[data-theme='dark'] .hamburger-menu__panel {
 .hamburger-menu__search input:focus-visible {
   outline: 3px solid var(--marca-secundaria);
   outline-offset: 2px;
+}
+
+.hamburger-menu__content {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-left: 8px;
+  padding-bottom: 8px;
+  scroll-behavior: smooth;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.hamburger-menu__content::-webkit-scrollbar {
+  height: 6px;
+}
+
+.hamburger-menu__content::-webkit-scrollbar-thumb {
+  background: rgba(15, 23, 42, 0.25);
+  border-radius: 999px;
+}
+
+.hamburger-menu__page {
+  min-width: min(420px, 80vw);
+  flex: 0 0 min(420px, 80vw);
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
 }
 
 .hamburger-menu__link {
@@ -666,26 +735,30 @@ html[data-theme='dark'] .hamburger-menu__panel {
 }
 
 @media (max-width: 640px) {
-  .hamburger-menu {
-    left: 50%;
-    transform: translateX(-50%);
-  }
-
   .hamburger-menu__panel {
     width: min(420px, calc(100vw - 24px));
+  }
+
+  .hamburger-menu__page {
+    min-width: min(360px, 82vw);
   }
 }
 
 @media (max-width: 480px) {
-  .hamburger-menu {
-    left: 50%;
-    right: auto;
-  }
-
   .hamburger-menu__panel {
     width: calc(100vw - 24px);
     left: 50%;
     transform: translateX(-50%);
+  }
+
+  .hamburger-menu__page {
+    min-width: min(320px, 88vw);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hamburger-menu__content {
+    scroll-behavior: auto;
   }
 }
 
@@ -697,6 +770,54 @@ html[data-theme='dark'] .hamburger-menu__panel {
 }
 .icon-spin {
   animation: spin 0.9s linear infinite;
+}
+
+/* ========================================
+   Collapsible / Progressive Disclosure
+   ======================================== */
+.clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.collapsible-toggle {
+  margin: 6px 0 10px;
+  display: inline-block;
+  padding: 8px 12px;
+  border-radius: var(--radius-md);
+  border: 2px solid var(--border-strong);
+  background: var(--surface-panel);
+  color: var(--text-strong);
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform var(--motion-fast) var(--ease-standard), box-shadow var(--motion-fast) var(--ease-standard);
+}
+.collapsible-toggle:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--shadow-strong);
+}
+
+.section-more { display: flex; justify-content: center; margin-top: 16px; }
+.section-more__button {
+  padding: 10px 18px;
+  border-radius: 9999px;
+  border: 3px solid var(--border-strong);
+  background: linear-gradient(135deg, var(--gradient-brand-start), var(--gradient-brand-end));
+  color: var(--text-on-brand);
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  box-shadow: 8px 8px 0 var(--shadow-strong);
+  transition: transform var(--motion-fast) var(--ease-standard), box-shadow var(--motion-fast) var(--ease-standard);
+}
+.section-more__button:hover { transform: translate(-3px, -3px); box-shadow: 12px 12px 0 var(--shadow-strong-hover); }
+
+/* Mostrar sólo la primera fila de chips/badges cuando está colapsado */
+.badges-clamp-1 {
+  max-height: var(--badges-row-height);
+  overflow: hidden;
 }
 
 /* ========================================
@@ -2571,20 +2692,54 @@ html[data-theme='dark'] .contact-hero__accent {
   text-transform: uppercase;
 }
 
-.contact-cta--whatsapp {
-  background: linear-gradient(135deg, rgba(4, 120, 87, 0.92), rgba(22, 163, 74, 0.9));
-  border-color: rgba(6, 95, 70, 0.85);
-}
-
-.contact-cta--email {
-  background: linear-gradient(135deg, rgba(29, 78, 216, 0.92), rgba(37, 99, 235, 0.9));
-  border-color: rgba(30, 64, 175, 0.85);
-}
-
+/* Homologar CTAs a identidad 2025: degradado brand + tinte leve */
+.contact-cta--whatsapp,
+.contact-cta--email,
 .contact-cta--copy {
-  background: linear-gradient(135deg, rgba(185, 28, 28, 0.92), rgba(239, 68, 68, 0.9));
-  border-color: rgba(153, 27, 27, 0.85);
+  background:
+    linear-gradient(0deg, var(--cta-whatsapp-tint), var(--cta-whatsapp-tint)), /* default overridden below */
+    linear-gradient(135deg, var(--gradient-brand-start), var(--gradient-brand-end));
+  border-color: color-mix(in srgb, var(--gradient-brand-end) 38%, var(--border-strong));
 }
+/* Specific tints layered over brand gradient */
+.contact-cta--whatsapp {
+  /* Refuerzo de identidad WhatsApp: overlay verde sutil encima del brand gradient */
+  background:
+    linear-gradient(135deg,
+      color-mix(in srgb, var(--gradient-whatsapp-start) 22%, transparent),
+      color-mix(in srgb, var(--gradient-whatsapp-end) 22%, transparent)
+    ),
+    linear-gradient(0deg, var(--cta-whatsapp-tint), var(--cta-whatsapp-tint)),
+    linear-gradient(135deg, var(--gradient-brand-start), var(--gradient-brand-end));
+  border-color: color-mix(in srgb, var(--gradient-whatsapp-end) 45%, var(--border-strong));
+}
+.contact-cta--email {
+  /* Refuerzo de identidad Email: overlay azul rey sutil sobre el gradiente de marca */
+  background:
+    linear-gradient(135deg,
+      color-mix(in srgb, var(--gradient-email-start) 22%, transparent),
+      color-mix(in srgb, var(--gradient-email-end) 22%, transparent)
+    ),
+    linear-gradient(0deg, var(--cta-email-tint), var(--cta-email-tint)),
+    linear-gradient(135deg, var(--gradient-brand-start), var(--gradient-brand-end));
+  border-color: color-mix(in srgb, var(--gradient-email-end) 45%, var(--border-strong));
+}
+.contact-cta--copy {
+  /* Refuerzo de identidad Copiar: overlay rojo sutil sobre el gradiente de marca */
+  background:
+    linear-gradient(135deg,
+      color-mix(in srgb, var(--gradient-copy-start) 22%, transparent),
+      color-mix(in srgb, var(--gradient-copy-end) 22%, transparent)
+    ),
+    linear-gradient(0deg, var(--cta-copy-tint), var(--cta-copy-tint)),
+    linear-gradient(135deg, var(--gradient-brand-start), var(--gradient-brand-end));
+  border-color: color-mix(in srgb, var(--gradient-copy-end) 45%, var(--border-strong));
+}
+
+/* Sub‑identidad sutil por tinta del texto en hover */
+.contact-cta--whatsapp:hover { color: #065f46; }
+.contact-cta--email:hover { color: #1d4ed8; }
+.contact-cta--copy:hover { color: #b91c1c; }
 
 .contact-cta--whatsapp:hover,
 .contact-cta--email:hover,
@@ -2621,7 +2776,40 @@ html[data-theme='dark'] .contact-cta__icon {
 html[data-theme='dark'] .contact-cta--whatsapp,
 html[data-theme='dark'] .contact-cta--email,
 html[data-theme='dark'] .contact-cta--copy {
-  border-color: rgba(248, 250, 252, 0.32);
+  background:
+    linear-gradient(0deg, var(--cta-whatsapp-tint), var(--cta-whatsapp-tint)),
+    linear-gradient(135deg, var(--gradient-brand-start), var(--gradient-brand-end));
+  border-color: rgba(248, 250, 252, 0.28);
+}
+html[data-theme='dark'] .contact-cta--whatsapp {
+  background:
+    linear-gradient(135deg,
+      color-mix(in srgb, var(--gradient-whatsapp-start) 28%, transparent),
+      color-mix(in srgb, var(--gradient-whatsapp-end) 28%, transparent)
+    ),
+    linear-gradient(0deg, var(--cta-whatsapp-tint), var(--cta-whatsapp-tint)),
+    linear-gradient(135deg, var(--gradient-brand-start), var(--gradient-brand-end));
+  border-color: rgba(248, 250, 252, 0.28);
+}
+html[data-theme='dark'] .contact-cta--email {
+  background:
+    linear-gradient(135deg,
+      color-mix(in srgb, var(--gradient-email-start) 28%, transparent),
+      color-mix(in srgb, var(--gradient-email-end) 28%, transparent)
+    ),
+    linear-gradient(0deg, var(--cta-email-tint), var(--cta-email-tint)),
+    linear-gradient(135deg, var(--gradient-brand-start), var(--gradient-brand-end));
+  border-color: rgba(248, 250, 252, 0.28);
+}
+html[data-theme='dark'] .contact-cta--copy {
+  background:
+    linear-gradient(135deg,
+      color-mix(in srgb, var(--gradient-copy-start) 28%, transparent),
+      color-mix(in srgb, var(--gradient-copy-end) 28%, transparent)
+    ),
+    linear-gradient(0deg, var(--cta-copy-tint), var(--cta-copy-tint)),
+    linear-gradient(135deg, var(--gradient-brand-start), var(--gradient-brand-end));
+  border-color: rgba(248, 250, 252, 0.28);
 }
 
 html[data-theme='dark'] .contact-cta--whatsapp:hover,
@@ -2888,6 +3076,52 @@ html[data-theme='konami'] .experience-header__subtitle {
   margin: 0 auto;
 }
 
+.experience-track--horizontal {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(320px, clamp(320px, 80vw, 520px));
+  gap: 18px;
+  overflow-x: auto;
+  padding: 8px 16px 18px;
+  margin: 0 -16px;
+  scroll-snap-type: x proximity;
+  scroll-padding-left: 16px;
+}
+
+.experience-track--horizontal::before,
+.experience-track--horizontal::after {
+  display: none;
+}
+
+.experience-track--horizontal .experience-node {
+  scroll-snap-align: start;
+  min-height: 100%;
+  width: 100%;
+  max-width: clamp(320px, 80vw, 560px);
+}
+
+.experience-track--horizontal::-webkit-scrollbar {
+  height: 8px;
+}
+
+.experience-track--horizontal::-webkit-scrollbar-thumb {
+  background: rgba(15, 23, 42, 0.25);
+  border-radius: 999px;
+}
+
+.experience-track--horizontal::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+@media (min-width: 1024px) {
+  .experience-track--horizontal {
+    grid-auto-columns: minmax(360px, clamp(360px, 38vw, 600px));
+    margin: 0;
+    padding-inline: 0;
+    scroll-padding-left: 0;
+  }
+}
+
 .experience-track::before {
   content: '';
   position: absolute;
@@ -2922,6 +3156,8 @@ html[data-theme='konami'] .experience-header__subtitle {
   flex-direction: column;
   gap: 18px;
   overflow: hidden;
+  height: 100%;
+  max-width: clamp(320px, 80vw, 560px);
 }
 
 html[data-theme='konami'] .experience-node {
@@ -3429,6 +3665,61 @@ html[data-theme='dark'] .hero-name {
 .hero-action--ghost:hover,
 .hero-action--ghost:focus-visible {
   background: color-mix(in srgb, var(--surface-panel) 88%, transparent);
+}
+
+.hero-locale {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 18px;
+}
+
+.hero-location-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 9999px;
+  border: 3px solid var(--border-strong);
+  background: var(--surface-card);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.hero-location-chip svg {
+  color: var(--gradient-brand-end);
+}
+
+.hero-stat-chips {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.hero-stat-chip {
+  padding: 10px 14px;
+  border-radius: var(--radius-lg);
+  border: 2px solid var(--border-strong);
+  background: var(--surface-panel);
+  min-width: 120px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+}
+
+.hero-stat-chip__value {
+  font-size: 1.4rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.hero-stat-chip__label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: color-mix(in srgb, var(--text-strong) 70%, rgba(15, 23, 42, 0.25));
 }
 
 .hero-meta {
@@ -3999,7 +4290,7 @@ html[data-dev-ids='on'] [data-dev-id]::after {
     box-shadow var(--motion-normal) var(--ease-standard);
 }
 
-:where(button,[role="button"],.icon-btn,.header-panel-button,.mobile-actions-modal__item,.search-modal__chip,.command-modal__option,.search-trigger,.hero-action):hover {
+:where(button,[role="button"],.icon-btn,.header-panel-button,.mobile-actions-modal__item,.command-modal__option,.search-trigger,.hero-action):hover {
   transform: translate(-4px, -4px);
   box-shadow:
     0 0 0 1px color-mix(in srgb, var(--sketch-ink) 12%, transparent) inset,
@@ -4007,7 +4298,7 @@ html[data-dev-ids='on'] [data-dev-id]::after {
     16px 16px 0 color-mix(in srgb, var(--detonante-black) 35%, transparent);
 }
 
-:where(button,[role="button"],.icon-btn,.header-panel-button,.mobile-actions-modal__item,.search-modal__chip,.command-modal__option,.search-trigger,.hero-action):active {
+:where(button,[role="button"],.icon-btn,.header-panel-button,.mobile-actions-modal__item,.command-modal__option,.search-trigger,.hero-action):active {
   transform: translate(2px, 2px);
   box-shadow:
     0 0 0 1px color-mix(in srgb, var(--sketch-ink) 12%, transparent) inset,
@@ -4016,10 +4307,13 @@ html[data-dev-ids='on'] [data-dev-id]::after {
 }
 
 /* Focus visible consistente por tema */
-:where(button,[role="button"],.icon-btn,.header-panel-button,.mobile-actions-modal__item,.search-modal__chip,.command-modal__option,.search-trigger,.hero-action):focus-visible {
+:where(button,[role="button"],.icon-btn,.header-panel-button,.mobile-actions-modal__item,.command-modal__option,.search-trigger,.hero-action):focus-visible {
   outline: var(--focus-width) solid var(--focus-color);
   outline-offset: var(--focus-offset);
 }
+
+/* Chips/sugerencias pasivas: sin sombra 3D */
+.search-modal__chip, .search-modal__tag, .hero-panel__tag { box-shadow: none; }
 
 .fx-edge-black {
   border: 3px solid var(--detonante-black);
@@ -4104,7 +4398,15 @@ html[data-dev-ids='on'] [data-dev-id]::after {
   padding: 12px;
 }
 
-.hamburger-menu__search { display: none; }
+.hamburger-menu__search { display: block; padding: 4px 6px 10px; }
+.hamburger-menu__search input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 2px solid var(--border-strong);
+  background: var(--surface-panel);
+  color: var(--text-strong);
+}
 
 .hamburger-menu__section { display: grid; gap: 6px; }
 .hamburger-menu__section-label {
@@ -4131,3 +4433,28 @@ html[data-dev-ids='on'] [data-dev-id]::after {
   font-weight: 700;
 }
 .hamburger-menu__divider { height: 1px; background: color-mix(in srgb, var(--sketch-ink) 18%, transparent); margin: 6px 0; }
+.hamburger-menu__grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+.hamburger-menu__pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 8px;
+  border-radius: 12px;
+  border: 2px solid var(--border-strong);
+  background: var(--surface-card);
+  font-weight: 800;
+}
+.hamburger-menu__pill-icon { display: inline-flex; align-items: center; justify-content: center; }
+.hamburger-menu__pill-label { font-size: 0.82rem; }
+
+.hamburger-menu__action { display: inline-flex; align-items: center; gap: 8px; }
+.hamburger-menu__action-icon { display: inline-flex; align-items: center; justify-content: center; width: 20px; }
+.hamburger-menu__action-label { flex: 1; }
+.hamburger-menu__caret.is-top { top: -7px; }
+.hamburger-menu__caret.is-bottom { bottom: -7px; transform: rotate(225deg); }
+.hamburger-menu__caret.is-right { right: 24px; }
+.hamburger-menu__caret.is-left { left: 24px; }
+
+html[data-theme='dark'] .hamburger-menu__caret { background: var(--surface-panel); }
+html[data-theme='konami'] .hamburger-menu__caret { background: rgba(6,10,24,.95); }

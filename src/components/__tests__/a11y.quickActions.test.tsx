@@ -23,7 +23,7 @@ import { LanguageProvider } from '../../contexts/LanguageContext';
 import { NavigationProvider } from '../../contexts/NavigationContext';
 import { ThemeProvider } from '../../contexts/ThemeContext';
 import { ToastProvider } from '../../contexts/ToastContext';
-import QuickActionsMenu from '../QuickActionsMenu';
+import HamburgerMenu from '../HamburgerMenu';
 
 const Providers = ({ children }: { children: React.ReactNode }) => (
   <ToastProvider>
@@ -37,16 +37,16 @@ const Providers = ({ children }: { children: React.ReactNode }) => (
   </ToastProvider>
 );
 
-describe('A11y: QuickActionsMenu', () => {
+describe('A11y: HamburgerMenu', () => {
   it('does not introduce obvious accessibility regressions when open', async () => {
     const { container } = render(
       <Providers>
-        <QuickActionsMenu />
+        <HamburgerMenu />
       </Providers>
     );
 
-    fireEvent.click(screen.getByRole('button', { name: /abrir menú de acciones/i }));
-    await screen.findByRole('dialog');
+    fireEvent.click(screen.getByRole('button', { name: /abrir menú de navegación/i }));
+    await screen.findByRole('navigation', { name: /secciones del sitio/i });
 
     const results = await axe(container, {
       rules: {

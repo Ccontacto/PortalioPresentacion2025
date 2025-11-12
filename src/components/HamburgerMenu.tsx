@@ -1,8 +1,18 @@
 import { AnimatePresence, m } from 'framer-motion';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { Briefcase, Contact, Home, Package, Sparkles, Wrench, Layers, Mail } from 'lucide-react';
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useId,
+  type KeyboardEventHandler
+} from 'react';
 
 import { useNavigation } from '../contexts/NavigationContext';
 import { useReducedMotion } from '../hooks/useReducedMotion';
+import { useFloatingPanelPlacement } from '../hooks/useFloatingPanelPlacement';
 import { useQuickActionsData } from './quick-actions/useQuickActionsData';
 
 export default function HamburgerMenu() {
@@ -14,9 +24,42 @@ export default function HamburgerMenu() {
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const panelRef = useRef<HTMLDivElement | null>(null);
   const searchInputRef = useRef<HTMLInputElement | null>(null);
+  const contentRef = useRef<HTMLDivElement | null>(null);
   const shouldReduceMotion = useReducedMotion();
-  const [panelMaxHeight, setPanelMaxHeight] = useState<string | undefined>(undefined);
-  const [panelStyle, setPanelStyle] = useState<React.CSSProperties | undefined>(undefined);
+  const { panelStyle, panelMaxHeight, openUp, rightAnchored } = useFloatingPanelPlacement(open, buttonRef, {
+    preferredWidth: 320,
+    gap: 8,
+    safe: 12,
+    minMaxHeight: 180
+  });
+  const pagesHelpId = useId();
+  const [currentPage, setCurrentPage] = useState(0);
+  const pagesLabel = 'Páginas del menú';
+
+  const getPages = useCallback(() => {
+    if (!contentRef.current) return [] as HTMLElement[];
+    return Array.from(contentRef.current.querySelectorAll<HTMLElement>('.hamburger-menu__page'));
+  }, []);
+
+  const scrollToIndex = useCallback(
+    (index: number, immediate = false) => {
+      const pages = getPages();
+      if (!pages.length) {
+        setCurrentPage(0);
+        return;
+      }
+      const clamped = Math.max(0, Math.min(index, pages.length - 1));
+      const target = pages[clamped];
+      setCurrentPage(clamped);
+      const behavior = shouldReduceMotion || immediate ? 'auto' : 'smooth';
+      if (contentRef.current?.scrollTo) {
+        contentRef.current.scrollTo({ left: target.offsetLeft, behavior });
+      } else if (contentRef.current) {
+        contentRef.current.scrollLeft = target.offsetLeft;
+      }
+    },
+    [getPages, shouldReduceMotion]
+  );
 
   useEffect(() => {
     if (!open) return;
@@ -26,11 +69,13 @@ export default function HamburgerMenu() {
       }
     };
     const onPointer = (event: MouseEvent | TouchEvent) => {
-      if (!containerRef.current) return;
       const target = event.target as Node;
-      if (!containerRef.current.contains(target)) {
-        setOpen(false);
+      const isInsideButton = containerRef.current?.contains(target);
+      const isInsidePanel = panelRef.current?.contains(target);
+      if (isInsideButton || isInsidePanel) {
+        return;
       }
+      setOpen(false);
     };
 
     document.addEventListener('keydown', onKey);
@@ -46,69 +91,11 @@ export default function HamburgerMenu() {
 
   useEffect(() => {
     if (!open) return;
-    if (typeof window === 'undefined') return;
-    const computePlacement = () => {
-      const btn = buttonRef.current;
-      if (!btn) return;
-      const rect = btn.getBoundingClientRect();
-      const vw = window.innerWidth;
-      const vh = window.innerHeight;
-      const gap = 8;
-      const safe = 12;
-      const prefWidth = Math.min(320, Math.floor(0.88 * vw));
-
-      // Vertical placement: prefer above; fallback below; clamp maxHeight
-      const spaceAbove = rect.top - safe;
-      const spaceBelow = vh - rect.bottom - safe;
-      const openUp = spaceAbove >= 180 || spaceAbove >= spaceBelow;
-      const maxH = Math.max(180, Math.floor(openUp ? spaceAbove : spaceBelow));
-      setPanelMaxHeight(`${maxH}px`);
-
-      // Horizontal alignment: try align right edge to button right (panel grows left)
-      let style: React.CSSProperties = { width: prefWidth, maxHeight: `${maxH}px`, position: 'fixed' };
-      const rightSpace = vw - rect.right - safe;
-      const leftSpace = rect.left - safe;
-      if (leftSpace >= prefWidth) {
-        // enough space to the left: anchor panel's right to button right
-        style.right = Math.max(safe, Math.floor(vw - rect.right)) + 'px';
-      } else if (rightSpace >= prefWidth) {
-        // enough space to the right: anchor panel's left to button left
-        style.left = Math.max(safe, Math.floor(rect.left)) + 'px';
-      } else {
-        // clamp within viewport
-        const left = Math.min(Math.max(safe, rect.left), Math.max(safe, vw - prefWidth - safe));
-        style.left = left + 'px';
-      }
-
-      // Vertical offsets
-      if (openUp) {
-        // panel bottom aligned to just above the button
-        const bottom = Math.max(safe, Math.floor(vh - rect.top + gap));
-        style.bottom = bottom + 'px';
-      } else {
-        style.top = Math.max(safe, Math.floor(rect.bottom + gap)) + 'px';
-      }
-
-      setPanelStyle(style);
-    };
-
-    const frame = window.requestAnimationFrame(() => {
+    const frame = requestAnimationFrame(() => {
       searchInputRef.current?.focus();
       searchInputRef.current?.select();
-      computePlacement();
     });
-
-    const onResize = () => {
-      if (!open) return;
-      computePlacement();
-    };
-    window.addEventListener('resize', onResize);
-    window.addEventListener('orientationchange', onResize);
-    return () => {
-      window.cancelAnimationFrame(frame);
-      window.removeEventListener('resize', onResize);
-      window.removeEventListener('orientationchange', onResize);
-    };
+    return () => cancelAnimationFrame(frame);
   }, [open]);
 
   useEffect(() => {
@@ -163,6 +150,56 @@ export default function HamburgerMenu() {
   const hasNav = filteredNav.length > 0;
   const showEmpty = !hasNav && !hasActions;
 
+  const handlePageKeyDown = useCallback<KeyboardEventHandler<HTMLDivElement>>(
+    event => {
+      const target = event.target as HTMLElement | null;
+      if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)) {
+        return;
+      }
+      switch (event.key) {
+        case 'ArrowRight':
+          event.preventDefault();
+          scrollToIndex(currentPage + 1);
+          break;
+        case 'ArrowLeft':
+          event.preventDefault();
+          scrollToIndex(currentPage - 1);
+          break;
+        case 'Home':
+          event.preventDefault();
+          scrollToIndex(0);
+          break;
+        case 'End':
+          event.preventDefault();
+          scrollToIndex(getPages().length - 1);
+          break;
+        default:
+          break;
+      }
+    },
+    [currentPage, scrollToIndex, getPages]
+  );
+
+  useEffect(() => {
+    if (!open) {
+      setCurrentPage(0);
+      return;
+    }
+    const frame = requestAnimationFrame(() => scrollToIndex(0, true));
+    return () => cancelAnimationFrame(frame);
+  }, [open, scrollToIndex, filteredNav.length, filteredActions.length]);
+
+  const navIconFor = (id: string) => {
+    switch (id) {
+      case 'home': return <Home size={18} aria-hidden />;
+      case 'experience': return <Briefcase size={18} aria-hidden />;
+      case 'skills': return <Layers size={18} aria-hidden />;
+      case 'projects': return <Package size={18} aria-hidden />;
+      case 'contact': return <Mail size={18} aria-hidden />;
+      default: return <Sparkles size={18} aria-hidden />;
+    }
+  };
+
   return (
     <div ref={containerRef} className="hamburger-menu" data-dev-id="1300">
       <button
@@ -173,6 +210,7 @@ export default function HamburgerMenu() {
         aria-controls="floating-nav"
         aria-label={open ? 'Cerrar menú de navegación' : 'Abrir menú de navegación'}
         onClick={handleToggle}
+        onTouchEnd={e => { e.preventDefault(); setOpen(prev => !prev); }}
         data-retro-sfx
       >
         <span className="hamburger-menu__icon" aria-hidden="true">
@@ -180,7 +218,7 @@ export default function HamburgerMenu() {
           <span className="hamburger-menu__line hamburger-menu__line--middle" />
           <span className="hamburger-menu__line hamburger-menu__line--bottom" />
         </span>
-        <span className="hamburger-menu__label">Menú</span>
+        {/* Round button: hide textual label to keep it circular; keep aria-label for a11y */}
       </button>
 
       <AnimatePresence initial={false}>
@@ -197,6 +235,10 @@ export default function HamburgerMenu() {
             variants={panelVariants}
             transition={panelVariants ? { duration: 0.18, ease: [0.4, 0, 0.2, 1] } : undefined}
           >
+            <span
+              className={`hamburger-menu__caret ${openUp ? 'is-bottom' : 'is-top'} ${rightAnchored ? 'is-right' : 'is-left'}`}
+              aria-hidden="true"
+            />
             <div className="hamburger-menu__search">
               <input
                 ref={searchInputRef}
@@ -207,38 +249,49 @@ export default function HamburgerMenu() {
                 aria-label="Buscar en el menú"
               />
             </div>
-
-            {showEmpty ? (
-              <div className="hamburger-menu__empty" role="status">
-                <p className="hamburger-menu__empty-title">Sin coincidencias</p>
-                <p className="hamburger-menu__empty-subtitle">Intenta con otro término o limpia el filtro.</p>
-              </div>
-            ) : (
-              <>
-                {hasNav ? (
-                  <div className="hamburger-menu__section">
-                    <p className="hamburger-menu__section-label">Secciones</p>
-                    <ul className="hamburger-menu__list" role="list">
-                      {filteredNav.map(item => (
-                        <li key={item.id} className="hamburger-menu__item">
-                          <button
-                            type="button"
-                            onClick={() => handleNavigate(item.id)}
-                            className="hamburger-menu__link"
-                            data-nav-id={item.id}
-                          >
-                            {item.label}
-                          </button>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ) : null}
-
-                {hasActions ? (
-                  <>
-                    <div className="hamburger-menu__divider" aria-hidden="true"></div>
-                    <div className="hamburger-menu__section">
+            <div
+              className="hamburger-menu__content"
+              role="region"
+              aria-label={pagesLabel}
+              aria-describedby={pagesHelpId}
+              ref={contentRef}
+              data-current-page={currentPage}
+              tabIndex={0}
+              onKeyDown={handlePageKeyDown}
+            >
+              <p id={pagesHelpId} className="sr-only">
+                Usa las flechas izquierda y derecha para navegar por todas las páginas del menú. Home va al
+                inicio y End al final.
+              </p>
+              {showEmpty ? (
+                <div className="hamburger-menu__empty" role="status">
+                  <p className="hamburger-menu__empty-title">Sin coincidencias</p>
+                  <p className="hamburger-menu__empty-subtitle">Intenta con otro término o limpia el filtro.</p>
+                </div>
+              ) : (
+                <>
+                  {hasNav ? (
+                    <section className="hamburger-menu__page">
+                      <p className="hamburger-menu__section-label">Secciones</p>
+                      <ul className="hamburger-menu__grid" role="list">
+                        {filteredNav.slice(0, 5).map(item => (
+                          <li key={item.id} role="listitem">
+                            <button
+                              type="button"
+                              onClick={() => handleNavigate(item.id)}
+                              className="hamburger-menu__pill"
+                              data-nav-id={item.id}
+                            >
+                              <span className="hamburger-menu__pill-icon">{navIconFor(item.id)}</span>
+                              <span className="hamburger-menu__pill-label">{item.label}</span>
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    </section>
+                  ) : null}
+                  {hasActions ? (
+                    <section className="hamburger-menu__page">
                       <p className="hamburger-menu__section-label">Acciones rápidas</p>
                       <ul className="hamburger-menu__actions" role="list">
                         {filteredActions.map(item => (
@@ -251,16 +304,22 @@ export default function HamburgerMenu() {
                               aria-disabled={item.disabled ? 'true' : 'false'}
                               data-action-id={item.key}
                             >
-                              {item.label}
+                              {item.icon ? (
+                                <span className="hamburger-menu__action-icon" aria-hidden>
+                                  {item.icon}
+                                </span>
+                              ) : null}
+                              <span className="hamburger-menu__action-label">{item.label}</span>
                             </button>
                           </li>
                         ))}
                       </ul>
-                    </div>
-                  </>
-                ) : null}
-              </>
-            )}
+                    </section>
+                  ) : null}
+                </>
+              )}
+            </div>
+
           </m.nav>
         ) : null}
       </AnimatePresence>
