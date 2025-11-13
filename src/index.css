@@ -3701,7 +3701,11 @@ html[data-theme='dark'] .hero-name {
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  background: var(--surface-primary);
+  background:
+    linear-gradient(135deg, rgba(253, 248, 238, 0.95), rgba(241, 245, 249, 0.95)),
+    repeating-linear-gradient(90deg, rgba(15, 23, 42, 0.06) 0 1px, transparent 1px 48px),
+    repeating-linear-gradient(0deg, rgba(15, 23, 42, 0.04) 0 1px, transparent 1px 48px);
+  background-blend-mode: multiply, normal, normal;
 }
 
 .hero-shell {
@@ -3730,13 +3734,11 @@ html[data-theme='dark'] .hero-name {
 .hero-backdrop {
   position: absolute;
   inset: -12% -12% -12% -12%;
-  background:
-    repeating-linear-gradient(90deg, color-mix(in srgb, var(--sketch-ink) 35%, transparent) 0 1px, transparent 1px 18px),
-    repeating-linear-gradient(0deg, color-mix(in srgb, var(--sketch-ink) 25%, transparent) 0 1px, transparent 1px 28px);
+  background: none;
   filter: none;
-  opacity: 0.12;
+  opacity: 0;
   pointer-events: none;
-  mix-blend-mode: multiply;
+  mix-blend-mode: normal;
   z-index: -1;
 }
 
@@ -3769,26 +3771,11 @@ html[data-theme='dark'] .hero-name {
   inset: -12% -14% -18% -14%;
   pointer-events: none;
   z-index: -1;
-  opacity: 0.22;
-  filter: blur(0.6px) contrast(105%);
-  background:
-    repeating-conic-gradient(
-      from 0deg,
-      color-mix(in srgb, var(--gradient-brand-start) 30%, transparent) 0deg 6deg,
-      transparent 6deg 18deg
-    );
-  mask-image: radial-gradient(120% 120% at 50% 50%, rgba(0,0,0,0.9), rgba(0,0,0,0.3) 55%, transparent 80%);
-  -webkit-mask-image: radial-gradient(120% 120% at 50% 50%, rgba(0,0,0,0.9), rgba(0,0,0,0.3) 55%, transparent 80%);
-  animation: raysSweep 14s linear infinite;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hero-title-rays { animation: none; }
-}
-
-@keyframes raysSweep {
-  0% { transform: rotate(0deg) scale(1.02); }
-  100% { transform: rotate(360deg) scale(1.02); }
+  opacity: 0.24;
+  filter: blur(2px);
+  background: radial-gradient(circle at 50% 55%, rgba(255, 255, 255, 0.25), transparent 62%);
+  mask-image: radial-gradient(120% 120% at 50% 50%, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.3) 55%, transparent 80%);
+  -webkit-mask-image: radial-gradient(120% 120% at 50% 50%, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.3) 55%, transparent 80%);
 }
 
 .hero-eyebrow {
@@ -4398,28 +4385,28 @@ html[data-theme='dark'] .hero-panel__tag:focus-visible {
 }
 
 html[data-theme='dark'] .page-section--hero {
-  background: radial-gradient(120% 120% at 50% 0%, rgba(165, 228, 220, 0.12), transparent 65%),
-    radial-gradient(90% 90% at 80% 20%, rgba(218, 183, 255, 0.12), transparent 70%),
-    var(--surface-primary);
+  background: var(--color-true-black);
 }
 
 html[data-theme='dark'] .hero-shell {
-  background:
-    linear-gradient(140deg, rgba(6, 182, 212, 0.38), rgba(236, 72, 153, 0.35)),
-    linear-gradient(120deg, rgba(14, 165, 233, 0.25), rgba(248, 113, 113, 0.22)),
-    rgba(7, 11, 20, 0.92);
-  border-color: rgba(255, 255, 255, 0.18);
-  box-shadow: 0 45px 120px rgba(5, 12, 26, 0.75);
-  filter: saturate(1.15) brightness(1.03);
+  background: rgba(3, 6, 10, 0.92);
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 32px 90px rgba(0, 0, 0, 0.78);
+  filter: none;
 }
 
 html[data-theme='dark'] .hero-backdrop {
   background:
-    radial-gradient(60% 60% at 22% 25%, color-mix(in srgb, var(--hero-dark-accent-start) 60%, transparent) 0 60%, transparent 65%),
-    radial-gradient(50% 50% at 78% 18%, color-mix(in srgb, var(--hero-dark-accent-end) 55%, transparent) 0 55%, transparent 68%),
-    radial-gradient(65% 65% at 50% 75%, rgba(165, 228, 220, 0.3), transparent 80%);
-  filter: blur(100px) saturate(1.25);
-  opacity: 0.85;
+    radial-gradient(170% 160% at 18% 20%, rgba(56, 189, 248, 0.28), transparent 58%),
+    radial-gradient(160% 140% at 78% 28%, rgba(248, 113, 113, 0.24), transparent 62%),
+    radial-gradient(180% 140% at 50% 78%, rgba(16, 185, 129, 0.18), transparent 60%),
+    radial-gradient(circle, rgba(255, 255, 255, 0.4) 0 1px, transparent 1px 5px),
+    linear-gradient(125deg, rgba(255, 255, 255, 0.08), transparent 70%);
+  background-size: 100% 100%, 100% 100%, 100% 100%, 6px 6px, 200% 200%;
+  background-blend-mode: screen;
+  mix-blend-mode: screen;
+  filter: blur(34px) contrast(115%);
+  opacity: 0.42;
 }
 
 html[data-theme='dark'] .hero-action--ghost {
@@ -4698,9 +4685,24 @@ html[data-dev-ids='on'] [data-dev-id]::after {
 
 .fx-chaos-bg {
   background:
-    radial-gradient(90% 90% at 15% 10%, color-mix(in srgb, var(--gradient-hero-start) 45%, transparent), transparent 60%),
-    radial-gradient(85% 85% at 85% 15%, color-mix(in srgb, var(--gradient-hero-end) 45%, transparent), transparent 60%),
+    radial-gradient(140% 110% at 12% 18%, rgba(59, 130, 246, 0.18), transparent 62%),
+    radial-gradient(120% 120% at 82% 12%, rgba(236, 72, 153, 0.14), transparent 68%),
     var(--surface-primary);
+}
+
+.hero-dark-gradient,
+.hero-retro-gradient {
+  color: var(--text-inverse);
+  background-size: 200% 200%;
+  background-position: center;
+}
+
+.hero-dark-gradient {
+  background: linear-gradient(110deg, var(--hero-dark-accent-start), var(--hero-dark-accent-end));
+}
+
+.hero-retro-gradient {
+  background: linear-gradient(125deg, var(--hero-retro-accent-start), var(--hero-retro-accent-end));
 }
 /* Hamburguesa flotante inferior derecha */
 .hamburger-menu {

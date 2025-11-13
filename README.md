@@ -88,9 +88,16 @@ Portfolio React + Vite listo para desarrollo local, testing y despliegue en Clou
   - Experience: 2 empleos por defecto, “Mostrar toda la experiencia” y “Ver más/menos” por descripción.
 
 - Troubleshooting
-  - Si el panel no se ve: verifica `--z-floating` (15000) y que no haya contenedores padres con `overflow:hidden`.
-  - En móvil: usa `onTouchEnd` con `preventDefault()` en triggers para evitar double‑tap y ghost clicks.
-  - A11y: listas como `ul > li > button`, `nav[aria-label]`, triggers con `aria-expanded`/`aria-controls`.
+- Si el panel no se ve: verifica `--z-floating` (15000) y que no haya contenedores padres con `overflow:hidden`.
+- En móvil: usa `onTouchEnd` con `preventDefault()` en triggers para evitar double‑tap y ghost clicks.
+- A11y: listas como `ul > li > button`, `nav[aria-label]`, triggers con `aria-expanded`/`aria-controls`.
+
+## Hero backgrounds
+
+- `.page-section--hero` ahora pinta un degradado crema muy tenue con las líneas de libreta embebidas; en el tema oscuro (baliza `data-theme="dark"` sobre el `<html>`) el mismo contenedor se transforma en un lienzo negro puro, dejando que `.hero-backdrop` añada únicamente los halos y estrellas puntuales.
+- Conserva el `<div className="hero-backdrop" aria-hidden="true" />` dentro del `Hero` para que los halos se reactiven en modo oscuro sin sumar gradientes contradictorios sobre la base negra.
+- Usa las utilidades `.hero-dark-gradient` y `.hero-retro-gradient` cuando quieras que CTAs o badges brillen con los tonos registrados en `--hero-dark-accent-*` y `--hero-retro-accent-*`; ya ajustan `color: var(--text-inverse)` para mantener contraste fuerte.
+- Si reaplicas `.fx-chaos-bg` en otros paneles, hazlo con moderación: su nueva mezcla son lavados suaves (no gradientes saturados) pensados para no interferir con el fondo hero limpio.
 
 ## Setup rápido (Git + Cloudflare)
 
