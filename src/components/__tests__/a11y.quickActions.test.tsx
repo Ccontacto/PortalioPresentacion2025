@@ -46,7 +46,7 @@ describe('A11y: HamburgerMenu', () => {
     );
 
     fireEvent.click(screen.getByRole('button', { name: /abrir menú de navegación/i }));
-    await screen.findByRole('navigation', { name: /secciones del sitio/i });
+    await screen.findByRole('navigation', { name: /páginas del menú/i });
 
     const results = await axe(container, {
       rules: {

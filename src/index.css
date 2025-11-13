@@ -320,6 +320,7 @@ body {
   color: var(--text-strong);
   font-weight: 500;
   line-height: 1.6;
+  margin: 0;
   overflow-x: hidden;
 }
 
@@ -630,6 +631,8 @@ html[data-theme='dark'] .hamburger-menu__panel {
   scroll-behavior: smooth;
   overscroll-behavior-x: contain;
   -webkit-overflow-scrolling: touch;
+  touch-action: pan-x;
+  scrollbar-gutter: stable both-edges;
 }
 
 .hamburger-menu__content::-webkit-scrollbar {
@@ -642,10 +645,33 @@ html[data-theme='dark'] .hamburger-menu__panel {
 }
 
 .hamburger-menu__page {
-  min-width: min(420px, 80vw);
-  flex: 0 0 min(420px, 80vw);
+  min-width: calc(100% - 8px);
+  flex: 0 0 calc(100% - 8px);
   scroll-snap-align: start;
   scroll-snap-stop: always;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.hamburger-menu__group-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0 4px;
+}
+
+.hamburger-menu__group-header p {
+  font-size: 0.9rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.hamburger-menu__group-header span {
+  font-size: 0.85rem;
+  opacity: 0.7;
 }
 
 .hamburger-menu__link {
@@ -717,6 +743,69 @@ html[data-theme='dark'] .hamburger-menu__panel {
   box-shadow: none;
 }
 
+.hamburger-menu__featured {
+  display: grid;
+  gap: 12px;
+}
+
+.hamburger-menu__featured-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: var(--radius-lg);
+  border: 2px solid var(--border-strong);
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--marca-principal) 22%, transparent),
+    color-mix(in srgb, var(--surface-panel) 85%, transparent)
+  );
+  font-weight: 700;
+  text-align: left;
+  transition:
+    transform var(--motion-fast) var(--ease-standard),
+    box-shadow var(--motion-fast) var(--ease-standard);
+}
+
+.hamburger-menu__featured-btn:hover:not([disabled]) {
+  transform: translate(-3px, -3px);
+  box-shadow: 8px 8px 0 var(--shadow-strong);
+}
+
+.hamburger-menu__featured-btn[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.hamburger-menu__featured-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--text-strong) 12%, transparent);
+}
+
+.hamburger-menu__featured-label {
+  flex: 1;
+}
+
+.hamburger-menu__action-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.hamburger-menu__action-item {
+  display: contents;
+}
+
 .hamburger-menu__empty {
   border: 2px dashed color-mix(in srgb, var(--text-strong) 20%, transparent);
   border-radius: var(--radius-lg);
@@ -740,7 +829,7 @@ html[data-theme='dark'] .hamburger-menu__panel {
   }
 
   .hamburger-menu__page {
-    min-width: min(360px, 82vw);
+    min-width: calc(100% - 8px);
   }
 }
 
@@ -752,7 +841,7 @@ html[data-theme='dark'] .hamburger-menu__panel {
   }
 
   .hamburger-menu__page {
-    min-width: min(320px, 88vw);
+    min-width: calc(100% - 8px);
   }
 }
 
@@ -815,10 +904,6 @@ html[data-theme='dark'] .hamburger-menu__panel {
 .section-more__button:hover { transform: translate(-3px, -3px); box-shadow: 12px 12px 0 var(--shadow-strong-hover); }
 
 /* Mostrar sólo la primera fila de chips/badges cuando está colapsado */
-.badges-clamp-1 {
-  max-height: var(--badges-row-height);
-  overflow: hidden;
-}
 
 /* ========================================
    AVAILABILITY BADGE
@@ -1910,7 +1995,8 @@ html[data-theme='dark'] .mobile-actions-modal {
    ======================================== */
 .main-content {
   width: 100%;
-  padding-top: 20px;
+  /* El contenido debe iniciar en 0,0 sin desplazamiento extra */
+  padding-top: 0;
 }
 
 .page-section {
@@ -1972,10 +2058,27 @@ html[data-theme='dark'] .hero-title strong {
 }
 
 html[data-theme='dark'] .hero-subtitle {
-  color: #e2e8f0;
+  color: rgba(226, 232, 240, 0.95);
+  text-shadow:
+    0 2px 12px rgba(15, 23, 42, 0.6),
+    0 0 20px rgba(160, 231, 229, 0.35);
+  background-image: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0.08) 0%,
+    rgba(15, 23, 42, 0.25) 45%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 .hero-subtitle strong {
   color: #0f172a;
+}
+html[data-theme='dark'] .hero-subtitle strong {
+  color: rgba(248, 250, 252, 0.98);
+  text-shadow:
+    0 0 6px rgba(255, 255, 255, 0.45),
+    0 0 18px rgba(99, 102, 241, 0.45);
 }
 .hero-subtitle span.gradient {
   background: linear-gradient(135deg, #ffb7dd, #a0e7e5);
@@ -1985,6 +2088,13 @@ html[data-theme='dark'] .hero-subtitle {
   background-clip: text;
   font-weight: 800;
   -webkit-text-stroke: 0.8px rgba(15, 23, 42, 0.18);
+}
+html[data-theme='dark'] .hero-subtitle span.gradient {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(160, 231, 229, 0.92));
+  -webkit-text-stroke: 0.4px rgba(15, 23, 42, 0.35);
+  text-shadow:
+    0 0 12px rgba(255, 255, 255, 0.45),
+    0 0 28px rgba(160, 231, 229, 0.55);
 }
 
 .hero-tagline {
@@ -2002,8 +2112,12 @@ html[data-theme='dark'] .hero-subtitle {
 }
 
 html[data-theme='dark'] .hero-tagline {
-  color: #0f172a;
-  box-shadow: 10px 10px 0 var(--shadow-strong);
+  color: #f8fafc;
+  background: linear-gradient(135deg, rgba(18, 24, 38, 0.92), rgba(79, 70, 229, 0.75));
+  box-shadow: 12px 12px 0 rgba(2, 6, 23, 0.8);
+  text-shadow:
+    0 0 12px rgba(147, 197, 253, 0.35),
+    0 0 28px rgba(94, 234, 212, 0.35);
 }
 
 .hero-description {
@@ -2993,7 +3107,7 @@ html[data-theme='konami'] .contact-info__location {
 }
 .project-thumb {
   width: 100%;
-  height: 190px;
+  height: clamp(190px, 28vh, 260px);
   margin-bottom: 16px;
   border: 3px solid var(--border-strong);
   border-radius: 24px;
@@ -3080,17 +3194,31 @@ html[data-theme='konami'] .experience-header__subtitle {
   position: relative;
 }
 
-.experience-track--horizontal {
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: minmax(100%, 100%);
-  gap: 18px;
+.experience-track--horizontal,
+.projects-track {
+  --project-gap: clamp(16px, 2.5vw, 32px);
+  display: flex;
+  flex-wrap: nowrap;
+  gap: var(--project-gap);
   overflow-x: auto;
-  padding: 8px 0 18px;
+  overflow-y: hidden; /* Garantiza una sola fila sin desbordar vertical */
+  padding: 12px clamp(8px, 3.5vw, 28px) 24px 0;
   margin: 0;
-  scroll-snap-type: x proximity;
+  scroll-snap-type: x mandatory;
   scroll-padding-left: 0;
+  /* Estabilidad visual del scrollbar y mejor scroll en iOS */
+  scrollbar-gutter: stable both-edges;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
   transition: transform var(--motion-fast) var(--ease-emphasized);
+}
+
+.projects-track {
+  align-items: flex-start;
+  justify-content: flex-start;
+  max-width: min(1200px, 100%);
+  margin: 0 auto;
+  width: min(100%, 1200px);
 }
 
 .experience-track--horizontal::before,
@@ -3098,33 +3226,174 @@ html[data-theme='konami'] .experience-header__subtitle {
   display: none;
 }
 
-.experience-track--horizontal .experience-node {
+.experience-track--horizontal .experience-node,
+.projects-track .project-card {
   scroll-snap-align: start;
-  min-height: 100%;
-  width: 100%;
-  max-width: none;
+  scroll-snap-stop: always;
+  min-height: clamp(420px, 62vh, 580px);
+  flex: 0 0 min(560px, 92vw);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
-.experience-track--snap-bounce-left {
+/* Experience: mostrar una sola tarjeta por pantalla (100% del ancho del track) */
+.experience-track--horizontal .experience-node {
+  flex: 0 0 100%;
+  max-width: 100%;
+}
+
+/* Projects: mostrar una sola tarjeta por pantalla */
+.projects-track .project-card {
+  flex: 0 0 clamp(280px, 30vw, 360px);
+  min-width: clamp(280px, 30vw, 360px);
+  max-width: 420px;
+  min-height: clamp(320px, 52vh, 520px);
+  align-self: stretch;
+}
+
+.project-card a {
+  margin-top: auto;
+}
+
+.experience-track--snap-bounce-left,
+.projects-track--bounce-left {
   transform: translateX(8px);
   transition: transform 0.25s ease;
 }
 
-.experience-track--snap-bounce-right {
+.experience-track--snap-bounce-right,
+.projects-track--bounce-right {
   transform: translateX(-8px);
   transition: transform 0.25s ease;
 }
 
-.experience-track--horizontal::-webkit-scrollbar {
-  height: 8px;
+.experience-track-wrapper,
+.projects-track-wrapper {
+  position: relative;
 }
 
-.experience-track--horizontal::-webkit-scrollbar-thumb {
+.experience-track-wrapper::before,
+.experience-track-wrapper::after,
+.projects-track-wrapper::before,
+.projects-track-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 16px;
+  bottom: 16px;
+  width: 48px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--motion-fast) var(--ease-standard);
+}
+
+.experience-track-wrapper::before,
+.projects-track-wrapper::before {
+  left: 0;
+  background: linear-gradient(90deg, var(--surface-card), rgba(0, 0, 0, 0));
+}
+
+.experience-track-wrapper::after,
+.projects-track-wrapper::after {
+  right: 0;
+  background: linear-gradient(270deg, var(--surface-card), rgba(0, 0, 0, 0));
+}
+
+.experience-track-wrapper--left::before,
+.projects-track-wrapper--left::before {
+  opacity: 1;
+}
+
+.experience-track-wrapper--right::after,
+.projects-track-wrapper--right::after {
+  opacity: 1;
+}
+
+.skills-grid {
+  --skills-gap: clamp(16px, 2.5vw, 28px);
+  display: flex;
+  flex-wrap: nowrap;
+  gap: var(--skills-gap);
+  padding: 12px clamp(8px, 3.5vw, 28px) 24px 0;
+  margin: 0 auto;
+  max-width: min(1200px, 100%);
+  width: min(100%, 1200px);
+  overflow-x: auto;
+  overflow-y: hidden; /* Máximo una fila */
+  scroll-snap-type: x mandatory;
+  scroll-padding-left: 0;
+  scrollbar-gutter: stable both-edges;
+  touch-action: pan-x;
+  -webkit-overflow-scrolling: touch;
+  align-items: stretch;
+  justify-content: flex-start;
+}
+
+.skills-grid .card {
+  scroll-snap-align: start;
+  /* Mostrar una sola tarjeta por pantalla */
+  flex: 0 0 clamp(260px, 28vw, 360px);
+  min-width: clamp(260px, 28vw, 360px);
+  max-width: 420px;
+  min-height: clamp(320px, 48vh, 480px);
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  height: 100%;
+}
+
+.skill-card__chips,
+.project-tags {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+  scroll-snap-type: x proximity;
+  scrollbar-gutter: stable both-edges;
+  touch-action: pan-x;
+  -webkit-overflow-scrolling: touch;
+}
+
+.skill-card__chips::-webkit-scrollbar,
+.project-tags::-webkit-scrollbar {
+  height: 4px;
+}
+
+.skill-card__chips::-webkit-scrollbar-thumb,
+.project-tags::-webkit-scrollbar-thumb {
   background: rgba(15, 23, 42, 0.25);
   border-radius: 999px;
 }
 
-.experience-track--horizontal::-webkit-scrollbar-track {
+.skill-card__chips .skill-badge,
+.project-tags .skill-badge {
+  white-space: nowrap;
+  scroll-snap-align: start;
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 32px;
+  max-width: min(1100px, 100%);
+  margin-inline: auto;
+}
+
+.experience-track--horizontal::-webkit-scrollbar,
+.projects-track::-webkit-scrollbar {
+  height: 8px;
+}
+
+.experience-track--horizontal::-webkit-scrollbar-thumb,
+.projects-track::-webkit-scrollbar-thumb {
+  background: rgba(15, 23, 42, 0.25);
+  border-radius: 999px;
+}
+
+.experience-track--horizontal::-webkit-scrollbar-track,
+.projects-track::-webkit-scrollbar-track {
   background: transparent;
 }
 
@@ -3172,7 +3441,8 @@ html[data-theme='konami'] .experience-header__subtitle {
   max-width: clamp(320px, 70vw, 520px);
 }
 
-.experience-scroll-btn {
+.experience-scroll-btn,
+.projects-scroll-btn {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -3190,23 +3460,27 @@ html[data-theme='konami'] .experience-header__subtitle {
   transition: transform var(--motion-fast) var(--ease-standard), box-shadow var(--motion-fast) var(--ease-standard);
 }
 
-.experience-scroll-btn:hover {
+.experience-scroll-btn:hover,
+.projects-scroll-btn:hover {
   transform: translateY(-50%) translateX(-2px);
   box-shadow: 0 14px 30px rgba(15, 23, 42, 0.24);
 }
 
-.experience-scroll-btn--left {
+.experience-scroll-btn--left,
+.projects-scroll-btn--left {
   left: 0;
   transform: translate(-50%, -50%);
 }
 
-.experience-scroll-btn--right {
+.experience-scroll-btn--right,
+.projects-scroll-btn--right {
   right: 0;
   transform: translate(50%, -50%);
 }
 
 @media (max-width: 640px) {
-  .experience-scroll-btn {
+  .experience-scroll-btn,
+  .projects-scroll-btn {
     display: none;
   }
 }
@@ -3664,6 +3938,17 @@ html[data-theme='dark'] .hero-name {
 .hero-tagline__accent--ios {
   --fx-gradient-stop-1: color-mix(in srgb, var(--sketch-ink) 35%, rgba(255, 255, 255, 0.85));
   --fx-gradient-stop-2: color-mix(in srgb, var(--sketch-graphite) 45%, rgba(255, 255, 255, 0.65));
+}
+
+html[data-theme='dark'] .hero-tagline__accent {
+  --fx-gradient-stop-1: rgba(248, 250, 252, 0.95);
+  --fx-gradient-stop-2: rgba(96, 165, 250, 0.85);
+  -webkit-text-stroke: 0.5px rgba(15, 23, 42, 0.5);
+}
+
+html[data-theme='dark'] .hero-tagline__accent--ios {
+  --fx-gradient-stop-1: rgba(52, 211, 153, 0.95);
+  --fx-gradient-stop-2: rgba(190, 242, 100, 0.85);
 }
 
 .hero-actions {
@@ -4484,17 +4769,35 @@ html[data-dev-ids='on'] [data-dev-id]::after {
   font-weight: 700;
 }
 .hamburger-menu__divider { height: 1px; background: color-mix(in srgb, var(--sketch-ink) 18%, transparent); margin: 6px 0; }
-.hamburger-menu__grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+.hamburger-menu__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
+  gap: 10px;
+}
+
+.hamburger-menu__pill-wrapper,
+.hamburger-menu__featured-item {
+  display: contents;
+}
 .hamburger-menu__pill {
   display: inline-flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 10px 8px;
-  border-radius: 12px;
+  gap: 6px;
+  padding: 12px 8px;
+  border-radius: 14px;
   border: 2px solid var(--border-strong);
   background: var(--surface-card);
   font-weight: 800;
+  transition:
+    transform var(--motion-fast) var(--ease-standard),
+    box-shadow var(--motion-fast) var(--ease-standard);
+}
+
+.hamburger-menu__pill:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--shadow-strong);
 }
 .hamburger-menu__pill-icon { display: inline-flex; align-items: center; justify-content: center; }
 .hamburger-menu__pill-label { font-size: 0.82rem; }

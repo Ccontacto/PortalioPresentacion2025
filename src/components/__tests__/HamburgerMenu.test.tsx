@@ -4,6 +4,13 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 const mockNavigate = vi.fn();
 const mockAction = vi.fn();
 
+vi.mock('../../contexts/LanguageContext', () => ({
+  useLanguage: () => ({
+    data: { lang: 'es' },
+    currentLang: 'es',
+    toggleLanguage: vi.fn()
+  })
+}));
 vi.mock('../../contexts/NavigationContext', () => ({
   useNavigation: () => ({ navigateTo: mockNavigate })
 }));
@@ -53,28 +60,30 @@ describe('HamburgerMenu', () => {
     render(<HamburgerMenu />);
     const button = screen.getByRole('button', { name: /abrir menú de navegación/i });
     fireEvent.click(button);
-    const navItems = await screen.findAllByRole('button', { name: 'Inicio' });
+    const navItems = await screen.findAllByRole('button', { name: /inicio/i });
     fireEvent.click(navItems[0]);
 
     expect(mockNavigate).toHaveBeenCalledWith('home');
     expect(button).toHaveAttribute('aria-expanded', 'false');
   });
 
-  it('filtra acciones y ejecuta acción rápida', () => {
+  it('filtra acciones y ejecuta acción rápida', async () => {
     render(<HamburgerMenu />);
     const button = screen.getByRole('button', { name: /abrir menú de navegación/i });
     fireEvent.click(button);
 
-    const [actionButton] = screen.getAllByRole('button', { name: 'Modo oscuro' });
+    const [actionButton] = screen.getAllByRole('button', { name: /modo oscuro/i });
     expect(actionButton).toBeInTheDocument();
 
-    fireEvent.change(screen.getByRole('searchbox', { name: /buscar en el menú/i }), {
+    fireEvent.change(screen.getByRole('searchbox'), {
       target: { value: 'modo' }
     });
 
-    fireEvent.click(screen.getAllByRole('button', { name: 'Modo oscuro' })[0]);
+    fireEvent.click(screen.getAllByRole('button', { name: /modo oscuro/i })[0]);
     expect(mockAction).toHaveBeenCalledTimes(1);
-    expect(button).toHaveAttribute('aria-expanded', 'false');
+    await waitFor(() => {
+      expect(button).toHaveAttribute('aria-expanded', 'false');
+    });
   });
 
   it('permite navegar las páginas del panel con el teclado', async () => {

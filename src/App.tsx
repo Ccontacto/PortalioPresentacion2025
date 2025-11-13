@@ -77,6 +77,16 @@ function AppContent() {
 
   useKonamiCode(toggleKonamiMode);
 
+  // Garantiza que la página comience en (0,0) al cargar
+  useEffect(() => {
+    try {
+      window.scrollTo({ top: 0, left: 0 });
+      // Fallbacks para navegadores específicos
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    } catch {}
+  }, []);
+
   useEffect(() => {
     if (typeof document === 'undefined') return;
     document.documentElement.classList.toggle('retro-mode', isKonami);

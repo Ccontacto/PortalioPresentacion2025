@@ -10,6 +10,7 @@ import type { ProjectItem } from '../../types/portfolio';
 
 // Mock the language data
 const mockData = {
+  lang: 'es',
   sections: {
     projects: {
       title: 'Projects',
