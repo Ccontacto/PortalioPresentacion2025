@@ -1,5 +1,4 @@
 import { AnimatePresence, m } from 'framer-motion';
-import { Briefcase, Contact, Home, Layers, Package, Sparkles } from 'lucide-react';
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import type { KeyboardEventHandler } from 'react';
 
@@ -8,6 +7,7 @@ import { useNavigation } from '../contexts/NavigationContext';
 import { useReducedMotion } from '../hooks/useReducedMotion';
 import { useFloatingPanelPlacement } from '../hooks/useFloatingPanelPlacement';
 import { useQuickActionsData } from './quick-actions/useQuickActionsData';
+import { navIconFor } from '../utils/navIcons';
 
 export default function HamburgerMenu() {
   const { data } = useLanguage();
@@ -235,23 +235,6 @@ export default function HamburgerMenu() {
   if (!navItems.length && !preferenceItems.length) {
     return null;
   }
-
-  const navIconFor = (id: string) => {
-    switch (id) {
-      case 'home':
-        return <Home size={18} aria-hidden />;
-      case 'experience':
-        return <Briefcase size={18} aria-hidden />;
-      case 'skills':
-        return <Layers size={18} aria-hidden />;
-      case 'projects':
-        return <Package size={18} aria-hidden />;
-      case 'contact':
-        return <Contact size={18} aria-hidden />;
-      default:
-        return <Sparkles size={18} aria-hidden />;
-    }
-  };
 
   const panelInlineStyle = panelStyle
     ? (panelMaxHeight ? { ...panelStyle, maxHeight: panelMaxHeight } : panelStyle)

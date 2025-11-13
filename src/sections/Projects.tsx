@@ -135,73 +135,75 @@ export default function Projects() {
         </p>
       </header>
 
-      <SearchBar
-        projectItems={data.sections.projects.items}
-        onSearch={setCurrentSearchTerm}
-        resultCount={filteredProjects.length}
-      />
+      <div className="page-section__body" data-dev-id="5003">
+        <SearchBar
+          projectItems={data.sections.projects.items}
+          onSearch={setCurrentSearchTerm}
+          resultCount={filteredProjects.length}
+        />
 
-      <div className={wrapperClass} data-dev-id="5002">
-        <div className="projects-track" role="list" ref={trackRef} onScroll={updateScrollButtons}>
-          {filteredProjects.map((proj: ProjectItem, index: number) => (
-            <m.article
-              key={proj.id}
-              className="card project-card"
-              data-dev-id={`500${index}`}
-              role="listitem"
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.08 }}
+        <div className={wrapperClass} data-dev-id="5002">
+          <div className="projects-track" role="list" ref={trackRef} onScroll={updateScrollButtons}>
+            {filteredProjects.map((proj: ProjectItem, index: number) => (
+              <m.article
+                key={proj.id}
+                className="card project-card"
+                data-dev-id={`500${index}`}
+                role="listitem"
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.08 }}
+              >
+                <div className="project-thumb" aria-hidden="true">
+                  <Rocket size={56} />
+                </div>
+                <h3 className="text-xl font-bold mb-3">{proj.title}</h3>
+                <p className="text-sm mb-4">{proj.description}</p>
+                <div className="project-tags" role="list" aria-label="Tecnologías del proyecto">
+                  {proj.tags.map(tag => (
+                    <span key={tag} className="skill-badge" role="listitem">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                {proj.link && isValidHttpUrl(proj.link) && (
+                  <a
+                    href={proj.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 text-sm font-bold hover:underline"
+                  >
+                    <ExternalLink size={24} aria-hidden="true" />
+                    {data.lang === 'en' ? 'View project' : 'Ver proyecto'}
+                  </a>
+                )}
+              </m.article>
+            ))}
+          </div>
+
+          {canScrollLeft ? (
+            <button
+              type="button"
+              className="projects-scroll-btn projects-scroll-btn--left"
+              aria-label={prevLabel}
+              onClick={() => scrollByCard(-1)}
             >
-              <div className="project-thumb" aria-hidden="true">
-                <Rocket size={56} />
-              </div>
-              <h3 className="text-xl font-bold mb-3">{proj.title}</h3>
-              <p className="text-sm mb-4">{proj.description}</p>
-              <div className="project-tags" role="list" aria-label="Tecnologías del proyecto">
-                {proj.tags.map(tag => (
-                  <span key={tag} className="skill-badge" role="listitem">
-                    {tag}
-                  </span>
-                ))}
-              </div>
-              {proj.link && isValidHttpUrl(proj.link) && (
-                <a
-                  href={proj.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-sm font-bold hover:underline"
-                >
-                  <ExternalLink size={24} aria-hidden="true" />
-                  {data.lang === 'en' ? 'View project' : 'Ver proyecto'}
-                </a>
-              )}
-            </m.article>
-          ))}
+              <ChevronLeft size={18} />
+            </button>
+          ) : null}
+
+          {canScrollRight ? (
+            <button
+              type="button"
+              className="projects-scroll-btn projects-scroll-btn--right"
+              aria-label={nextLabel}
+              onClick={() => scrollByCard(1)}
+            >
+              <ChevronRight size={18} />
+            </button>
+          ) : null}
         </div>
-
-        {canScrollLeft ? (
-          <button
-            type="button"
-            className="projects-scroll-btn projects-scroll-btn--left"
-            aria-label={prevLabel}
-            onClick={() => scrollByCard(-1)}
-          >
-            <ChevronLeft size={18} />
-          </button>
-        ) : null}
-
-        {canScrollRight ? (
-          <button
-            type="button"
-            className="projects-scroll-btn projects-scroll-btn--right"
-            aria-label={nextLabel}
-            onClick={() => scrollByCard(1)}
-          >
-            <ChevronRight size={18} />
-          </button>
-        ) : null}
       </div>
     </section>
   );
