@@ -111,7 +111,7 @@ export default function SearchBar({
   }, [isModalOpen]);
 
   useEffect(() => {
-    const isTestEnv = typeof process !== 'undefined' && process.env.VITEST;
+    const isTestEnv = import.meta.env.VITEST;
     if (typeof window === 'undefined' || isTestEnv) {
       onSearch(searchTerm.trim());
       return;

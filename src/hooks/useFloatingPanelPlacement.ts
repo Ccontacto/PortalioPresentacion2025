@@ -13,7 +13,7 @@ type Options = {
 
 export function useFloatingPanelPlacement(
   open: boolean,
-  anchorRef: React.RefObject<HTMLElement>,
+  anchorRef: React.RefObject<HTMLElement | null>,
   { preferredWidth = 640, gap = 8, safe = 12, minMaxHeight = 180 }: Options = {}
 ) {
   const [panelStyle, setPanelStyle] = useState<React.CSSProperties | undefined>(undefined);
