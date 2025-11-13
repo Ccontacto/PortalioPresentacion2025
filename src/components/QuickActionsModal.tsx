@@ -1,7 +1,7 @@
 import { FocusTrap } from 'focus-trap-react';
 import { AnimatePresence, m } from 'framer-motion';
 import { Search, X } from 'lucide-react';
-import { useEffect, useLayoutEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react';
+import { useLayoutEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react';
 import { createPortal } from 'react-dom';
 
 import { DIALOG_VARIANTS, OVERLAY_FADE, PANEL_TRANSITION } from '../constants/animation';
