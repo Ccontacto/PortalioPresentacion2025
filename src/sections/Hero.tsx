@@ -152,6 +152,11 @@ export default function Hero() {
                 return <Fragment key={`tagline-text-${index}`}>{segment}</Fragment>;
               })}
             </p>
+            {data.name ? (
+              <div className="hero-name" aria-label={`Nombre del autor: ${data.name}`}>
+                {data.name.toUpperCase()}
+              </div>
+            ) : null}
             <p className="hero-description">
               {descriptionSegments.map((segment, index) =>
                 segment.accent === 'gradient' ? (
