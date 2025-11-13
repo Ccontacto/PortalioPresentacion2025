@@ -34,10 +34,10 @@ Portfolio React + Vite listo para desarrollo local, testing y despliegue en Clou
 ## A11y
 - `.hit-44` garantiza targets ≥44px. Se aplica a triggers y botones del menú de acciones.
 - Focus visible con box-shadow (ver `:focus-visible` en `src/index.css`).
-- El botón “Acciones” fija (esquina superior derecha) abre un modal accesible (`QuickActionsModal`) con buscador, soporte teclado/pantalla táctil y cierre por backdrop o `Esc`.
+- Las “Acciones rápidas” aparecen como una página del menú hamburguesa; el buscador interno filtra opciones, se puede navegar con teclado y se cierra con backdrop o `Esc`.
 
 ## Menú de acciones global
-- El botón redondo “Acciones” opera en todo el sitio; al abrir muestra secciones (`data.nav`) y preferencias (tema, idioma, Konami, confetti, IDs de depuración, descarga de CV).
+- La página “Acciones rápidas” dentro del menú hamburguesa opera en todo el sitio; muestra las secciones (`data.nav`) y preferencias (tema, idioma, Konami, confetti, IDs de depuración, descarga de CV) y permite filtrar o ejecutar rápidamente esas acciones.
 - El listado se puede filtrar, activa el easter egg (secuencia Konami) desde el input y devuelve el foco al cerrar.
 - Las mismas acciones están disponibles en el Command Palette (`⌘/Ctrl + K`) para usuarios de desktop.
 

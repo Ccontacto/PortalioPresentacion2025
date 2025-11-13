@@ -1,6 +1,5 @@
 import { AnimatePresence, m } from 'framer-motion';
-import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
-import type { KeyboardEventHandler } from 'react';
+import { useCallback, useEffect, useId, useMemo, useState } from 'react';
 
 import { useLanguage } from '../contexts/LanguageContext';
 import { useNavigation } from '../contexts/NavigationContext';
@@ -19,8 +18,6 @@ export default function HamburgerMenu() {
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const panelRef = useRef<HTMLDivElement | null>(null);
   const searchInputRef = useRef<HTMLInputElement | null>(null);
-  const contentRef = useRef<HTMLDivElement | null>(null);
-  const [currentPage, setCurrentPage] = useState(0);
   const helpId = useId();
   const shouldReduceMotion = useReducedMotion();
   const { panelStyle, panelMaxHeight, openUp, rightAnchored } = useFloatingPanelPlacement(open, buttonRef, {
