@@ -622,33 +622,12 @@ html[data-theme='dark'] .hamburger-menu__panel {
 
 .hamburger-menu__content {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   gap: 16px;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scroll-padding-left: 8px;
-  padding-bottom: 8px;
-  scroll-behavior: smooth;
-  overscroll-behavior-x: contain;
-  -webkit-overflow-scrolling: touch;
-  touch-action: pan-x;
-  scrollbar-gutter: stable both-edges;
-}
-
-.hamburger-menu__content::-webkit-scrollbar {
-  height: 6px;
-}
-
-.hamburger-menu__content::-webkit-scrollbar-thumb {
-  background: rgba(15, 23, 42, 0.25);
-  border-radius: 999px;
 }
 
 .hamburger-menu__page {
-  min-width: calc(100% - 8px);
-  flex: 0 0 calc(100% - 8px);
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -829,7 +808,7 @@ html[data-theme='dark'] .hamburger-menu__panel {
   }
 
   .hamburger-menu__page {
-    min-width: calc(100% - 8px);
+    width: 100%;
   }
 }
 
@@ -841,7 +820,7 @@ html[data-theme='dark'] .hamburger-menu__panel {
   }
 
   .hamburger-menu__page {
-    min-width: calc(100% - 8px);
+    width: 100%;
   }
 }
 

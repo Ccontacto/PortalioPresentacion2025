@@ -1,5 +1,5 @@
 import { AnimatePresence, m } from 'framer-motion';
-import { useCallback, useEffect, useId, useMemo, useState } from 'react';
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 
 import { useLanguage } from '../contexts/LanguageContext';
 import { useNavigation } from '../contexts/NavigationContext';
@@ -44,8 +44,8 @@ export default function HamburgerMenu() {
         ? 'Try another term or clear the filter.'
         : 'Intenta con otro término o limpia el filtro.',
       srHint: isEnglish
-        ? 'Use left and right arrows to move between pages. Home and End jump to the beginning or end.'
-        : 'Usa las flechas izquierda y derecha para moverte entre páginas. Inicio y Fin saltan al principio o final.'
+        ? 'Use Tab/Shift+Tab to move between buttons and Esc to close the menu.'
+        : 'Usa Tab/Shift+Tab para moverte entre botones y Esc para cerrar el menú.'
     };
   }, [lang]);
 
@@ -77,101 +77,14 @@ export default function HamburgerMenu() {
   const featuredActions = filteredActions.slice(0, 2);
   const secondaryActions = filteredActions.slice(2);
 
-  const getPages = useCallback(() => {
-    return Array.from(contentRef.current?.querySelectorAll<HTMLElement>('.hamburger-menu__page') ?? []);
-  }, []);
-
-  const scrollToIndex = useCallback(
-    (index: number, instant = false) => {
-      const pages = getPages();
-      if (!pages.length) return;
-      const clamped = Math.max(0, Math.min(index, pages.length - 1));
-      const target = pages[clamped];
-      if (!target || !contentRef.current) return;
-      setCurrentPage(clamped);
-      const container = contentRef.current;
-      const behavior = instant || shouldReduceMotion ? 'auto' : 'smooth';
-      if (typeof container.scrollTo === 'function') {
-        container.scrollTo({ left: target.offsetLeft, behavior });
-      } else {
-        container.scrollLeft = target.offsetLeft;
-      }
-    },
-    [getPages, shouldReduceMotion]
-  );
-
-  const handlePageKeyDown = useCallback<KeyboardEventHandler<HTMLDivElement>>(
-    event => {
-      const target = event.target as HTMLElement | null;
-      if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)) {
-        return;
-      }
-      switch (event.key) {
-        case 'ArrowRight':
-          event.preventDefault();
-          scrollToIndex(currentPage + 1);
-          break;
-        case 'ArrowLeft':
-          event.preventDefault();
-          scrollToIndex(currentPage - 1);
-          break;
-        case 'Home':
-          event.preventDefault();
-          scrollToIndex(0);
-          break;
-        case 'End':
-          event.preventDefault();
-          scrollToIndex(getPages().length - 1);
-          break;
-        case 'Escape':
-          setOpen(false);
-          break;
-        default:
-          break;
-      }
-    },
-    [currentPage, getPages, scrollToIndex]
-  );
-
-  useEffect(() => {
-    if (!open) return;
-    const content = contentRef.current;
-    if (!content) return;
-    let raf = 0;
-    const onScroll = () => {
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        const pages = getPages();
-        if (!pages.length) return;
-        const left = content.scrollLeft;
-        let closestIndex = 0;
-        let smallest = Number.POSITIVE_INFINITY;
-        pages.forEach((page, idx) => {
-          const diff = Math.abs(page.offsetLeft - left);
-          if (diff < smallest) {
-            smallest = diff;
-            closestIndex = idx;
-          }
-        });
-        setCurrentPage(closestIndex);
-      });
-    };
-    content.addEventListener('scroll', onScroll, { passive: true });
-    return () => {
-      cancelAnimationFrame(raf);
-      content.removeEventListener('scroll', onScroll);
-    };
-  }, [open, getPages]);
-
   useEffect(() => {
     if (!open) return;
     const frame = requestAnimationFrame(() => {
       searchInputRef.current?.focus();
       searchInputRef.current?.select();
-      scrollToIndex(0, true);
     });
     return () => cancelAnimationFrame(frame);
-  }, [open, scrollToIndex, filteredNav.length, filteredActions.length]);
+  }, [open]);
 
   useEffect(() => {
     if (!open) {
@@ -285,16 +198,7 @@ export default function HamburgerMenu() {
                 aria-label={strings.searchPlaceholder}
               />
             </div>
-            <div
-              className="hamburger-menu__content"
-              role="region"
-              aria-label={strings.menuLabel}
-              aria-describedby={srHintId}
-              ref={contentRef}
-              tabIndex={-1}
-              onKeyDown={handlePageKeyDown}
-              data-current-page={currentPage}
-            >
+            <div className="hamburger-menu__content" role="region" aria-label={strings.menuLabel} aria-describedby={srHintId}>
               <p id={srHintId} className="sr-only">
                 {strings.srHint}
               </p>
