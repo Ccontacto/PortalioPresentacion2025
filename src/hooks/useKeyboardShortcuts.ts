@@ -9,9 +9,24 @@ type Shortcut = {
   metaKey?: boolean;
 };
 
+const IGNORED_TAGS = ['input', 'textarea', 'select'];
+
+const shouldIgnoreShortcut = (target: EventTarget | null) => {
+  if (!(target instanceof HTMLElement)) return false;
+  const tag = target.tagName.toLowerCase();
+  if (IGNORED_TAGS.includes(tag)) return true;
+  if (target.isContentEditable) return true;
+  if (target.closest('[contenteditable="true"]')) return true;
+  return false;
+};
+
 export function useKeyboardShortcuts(shortcuts: Shortcut[] = []) {
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
+      if (shouldIgnoreShortcut(e.target)) {
+        return;
+      }
+
       shortcuts.forEach(s => {
         const keyOk = s.keys.some(k => e.key.toLowerCase() === k.toLowerCase());
         const modsOk =
