@@ -38,8 +38,8 @@ export default function HorizontalScroller({
     .filter(Boolean)
     .join(' ');
 
-  const prevLabel = data.ui[prevLabelKey] || 'View previous items';
-  const nextLabel = data.ui[nextLabelKey] || 'View next items';
+  const prevLabel = data.ui?.[prevLabelKey] || 'View previous items';
+  const nextLabel = data.ui?.[nextLabelKey] || 'View next items';
 
   return (
     <div className={wrapperClass}>
