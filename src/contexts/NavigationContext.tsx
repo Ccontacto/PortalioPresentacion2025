@@ -26,7 +26,7 @@ export function NavigationProvider({ children }: { children: React.ReactNode }) 
   }, []);
 
   useEffect(() => {
-    const sections = ['home', 'experience', 'skills', 'projects', 'contact'];
+    const sections = ['home', 'experience', 'skills', 'focus', 'projects', 'contact'];
     const obs = new IntersectionObserver(
       entries => {
         entries.forEach(e => {
