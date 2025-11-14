@@ -1,0 +1,373 @@
+{
+  "$schema": "https://design-tokens.org/schema.json",
+  "$description": "ΣΩ·UNIPACK.TOKENS.MÉTRICA.NOCODE.FINAL++.v2025.11 — RESUELTO (sin alias). Atomic 2025 · OKLCH numérico · DTCG/W3C compatible · shape SD · niveles (átomo→célula→molécula→organismo) y sets t0(light)/t1(dark) materializados.",
+  "$extensions": {
+    "pack": {
+      "name": "ΣΩ·UNIPACK",
+      "version": "2025.11",
+      "resolved": true,
+      "no_alias": true,
+      "sets": ["t0","t1"],
+      "color_space": "oklch",
+      "numeric_only": true,
+      "notes": "Paquete resuelto con valores explícitos; preparado para auditoría no-code y exportes multiplataforma."
+    },
+    "sd": {
+      "cssVarPrefix": "u",
+      "transforms": ["color/oklch","dimension/rem-to-px","shadow/spread"],
+      "targets": ["css","ios","android","flutter","react-native","swiftui","compose"]
+    }
+  },
+  "tokens": {
+    "base": {
+      "unit": {
+        "rem":        { "$type": "number",   "$value": 1.0 },
+        "px_per_rem": { "$type": "number",   "$value": 16 }
+      },
+      "scale": {
+        "ratio_type":   { "$type": "number", "$value": 1.2 },
+        "ratio_space":  { "$type": "number", "$value": 1.333333 },
+        "ratio_radius": { "$type": "number", "$value": 1.5 },
+        "ratio_elev":   { "$type": "number", "$value": 1.25 }
+      },
+      "limits": {
+        "wcag_text":     { "$type": "number", "$value": 4.5 },
+        "wcag_large":    { "$type": "number", "$value": 3.0 },
+        "wcag_nontext":  { "$type": "number", "$value": 3.0 },
+        "deltaE00_dup":  { "$type": "number", "$value": 1.0 }
+      }
+    },
+
+    "color": {
+      "$description": "OKLCH numérico sin nombres cromáticos.",
+      "$type": "color",
+      "neutral": {
+        "0":   { "$value": { "colorSpace": "oklch", "components": [0.99, 0.00, 250] } },
+        "50":  { "$value": { "colorSpace": "oklch", "components": [0.95, 0.01, 250] } },
+        "100": { "$value": { "colorSpace": "oklch", "components": [0.90, 0.02, 250] } },
+        "300": { "$value": { "colorSpace": "oklch", "components": [0.75, 0.03, 250] } },
+        "600": { "$value": { "colorSpace": "oklch", "components": [0.45, 0.04, 250] } },
+        "900": { "$value": { "colorSpace": "oklch", "components": [0.18, 0.02, 250] } }
+      },
+      "accent": {
+        "1": { "$value": { "colorSpace": "oklch", "components": [0.275, 0.16, 230] } },
+        "2": { "$value": { "colorSpace": "oklch", "components": [0.275, 0.16, 130] } },
+        "3": { "$value": { "colorSpace": "oklch", "components": [0.275, 0.16, 77.5] } },
+        "4": { "$value": { "colorSpace": "oklch", "components": [0.275, 0.16, 10] } }
+      }
+    },
+
+    "typography": {
+      "$description": "Solo magnitudes; sin familias.",
+      "size": {
+        "$type": "dimension",
+        "xs": { "$value": "0.694rem" },
+        "sm": { "$value": "0.833rem" },
+        "md": { "$value": "1.000rem" },
+        "lg": { "$value": "1.200rem" },
+        "xl": { "$value": "1.440rem" }
+      },
+      "line_height": {
+        "$type": "number",
+        "body":     { "$value": 1.45 },
+        "headings": { "$value": 1.20 }
+      },
+      "tracking_em": {
+        "$type": "number",
+        "body": { "$value": 0.00 },
+        "caps": { "$value": 0.02 }
+      }
+    },
+
+    "spacing": {
+      "$type": "dimension",
+      "xs": { "$value": "0.250rem" },
+      "sm": { "$value": "0.333rem" },
+      "md": { "$value": "0.444rem" },
+      "lg": { "$value": "0.593rem" },
+      "xl": { "$value": "0.790rem" },
+      "inset": {
+        "$type": "dimension",
+        "sm": { "$value": "0.250rem" },
+        "md": { "$value": "0.500rem" },
+        "lg": { "$value": "1.000rem" }
+      }
+    },
+
+    "radius": {
+      "$type": "dimension",
+      "sm": { "$value": "4px" },
+      "md": { "$value": "6px" },
+      "lg": { "$value": "9px" }
+    },
+
+    "border": {
+      "$type": "dimension",
+      "hair":   { "$value": "1px" },
+      "strong": { "$value": "2px" },
+      "focus":  { "$value": "3px" }
+    },
+
+    "elevation": {
+      "$description": "Geometría/α; sin color.",
+      "phi_e": { "$type": "number", "$value": 1.25 },
+      "lv0": { "$type": "shadow", "$value": { "z": 0, "dx": 0.000, "dy": 0.000, "blur": 0.000, "spread": 0, "alpha": 0.000 } },
+      "lv1": { "$type": "shadow", "$value": { "z": 1, "dx": 0.000, "dy": 1.000, "blur": 2.000, "spread": 0, "alpha": 0.080 } },
+      "lv2": { "$type": "shadow", "$value": { "z": 2, "dx": 0.000, "dy": 1.250, "blur": 2.500, "spread": 0, "alpha": 0.088 } },
+      "lv3": { "$type": "shadow", "$value": { "z": 3, "dx": 0.000, "dy": 1.563, "blur": 3.125, "spread": 0, "alpha": 0.097 } }
+    },
+
+    "opacity": {
+      "$type": "number",
+      "o1": { "$value": 0.04 },
+      "o2": { "$value": 0.08 },
+      "o3": { "$value": 0.12 },
+      "o4": { "$value": 0.18 },
+      "o5": { "$value": 0.24 },
+      "o6": { "$value": 0.32 }
+    },
+
+    "motion": {
+      "duration": {
+        "$type": "duration",
+        "xs": { "$value": "75ms" },
+        "sm": { "$value": "150ms" },
+        "md": { "$value": "240ms" },
+        "lg": { "$value": "360ms" }
+      },
+      "easing": {
+        "$type": "cubicBezier",
+        "in":    { "$value": [0.4, 0.0, 1.0, 1.0] },
+        "out":   { "$value": [0.0, 0.0, 0.2, 1.0] },
+        "inout": { "$value": [0.4, 0.0, 0.2, 1.0] }
+      }
+    },
+
+    "layout": {
+      "breakpoint": {
+        "$type": "dimension",
+        "xs": { "$value": "360px" },
+        "sm": { "$value": "600px" },
+        "md": { "$value": "900px" },
+        "lg": { "$value": "1200px" },
+        "xl": { "$value": "1600px" }
+      },
+      "grid": {
+        "columns":  { "$type": "number",    "$value": 12 },
+        "gutter":   { "$type": "dimension", "$value": "0.593rem" },
+        "baseline": { "$type": "dimension", "$value": "0.250rem" }
+      },
+      "target": {
+        "touch_min": { "$type": "dimension", "$value": "44px" }
+      },
+      "z": {
+        "base":  { "$type": "number", "$value": 0 },
+        "nav":   { "$type": "number", "$value": 100 },
+        "modal": { "$type": "number", "$value": 1000 },
+        "toast": { "$type": "number", "$value": 2000 }
+      },
+      "icon": {
+        "$type": "dimension",
+        "sm": { "$value": "16px" },
+        "md": { "$value": "20px" },
+        "lg": { "$value": "24px" }
+      },
+      "blur": {
+        "$type": "dimension",
+        "sm": { "$value": "4px" },
+        "md": { "$value": "8px" },
+        "lg": { "$value": "16px" }
+      }
+    },
+
+    "state": {
+      "$description": "Estados paramétricos (sin semántica cromática).",
+      "overlay_alpha": {
+        "$type": "number",
+        "hover":   { "$value": 0.04 },
+        "focus":   { "$value": 0.12 },
+        "press":   { "$value": 0.18 },
+        "drag":    { "$value": 0.24 },
+        "disable": { "$value": 0.38 }
+      }
+    },
+
+    "roles": {
+      "$description": "Asignaciones abstractas para modos (materializadas).",
+      "t0": {
+        "bg": { "$type": "color", "$value": { "colorSpace": "oklch", "components": [0.99, 0.00, 250] } },
+        "fg": { "$type": "color", "$value": { "colorSpace": "oklch", "components": [0.18, 0.02, 250] } },
+        "ax": { "$type": "color", "$value": { "colorSpace": "oklch", "components": [0.275, 0.16, 230] } },
+        "ol": { "$type": "color", "$value": { "colorSpace": "oklch", "components": [0.45, 0.04, 250] } }
+      },
+      "t1": {
+        "bg": { "$type": "color", "$value": { "colorSpace": "oklch", "components": [0.18, 0.02, 250] } },
+        "fg": { "$type": "color", "$value": { "colorSpace": "oklch", "components": [0.99, 0.00, 250] } },
+        "ax": { "$type": "color", "$value": { "colorSpace": "oklch", "components": [0.275, 0.16, 130] } },
+        "ol": { "$type": "color", "$value": { "colorSpace": "oklch", "components": [0.90, 0.02, 250] } }
+      }
+    },
+
+    "entities": {
+      "$description": "Niveles resueltos por set (t0=light, t1=dark).",
+      
+      "t0": {
+        "atom": {
+          "surface_bg": { "$type": "color",     "$value": { "colorSpace": "oklch", "components": [0.99, 0.00, 250] } },
+          "text_fg":    { "$type": "color",     "$value": { "colorSpace": "oklch", "components": [0.18, 0.02, 250] } },
+          "accent_ax":  { "$type": "color",     "$value": { "colorSpace": "oklch", "components": [0.275, 0.16, 230] } },
+          "outline_ol": { "$type": "color",     "$value": { "colorSpace": "oklch", "components": [0.45, 0.04, 250] } },
+          "pad_x":      { "$type": "dimension", "$value": "0.333rem" },
+          "pad_y":      { "$type": "dimension", "$value": "0.250rem" },
+          "radius":     { "$type": "dimension", "$value": "4px" },
+          "shadow":     { "$type": "shadow",    "$value": { "z": 1, "dx": 0.000, "dy": 1.000, "blur": 2.000, "spread": 0, "alpha": 0.080 } }
+        },
+        "cell": {
+          "c1": {
+            "bg":     { "$type": "color",     "$value": { "colorSpace": "oklch", "components": [0.99, 0.00, 250] } },
+            "fg":     { "$type": "color",     "$value": { "colorSpace": "oklch", "components": [0.18, 0.02, 250] } },
+            "ax":     { "$type": "color",     "$value": { "colorSpace": "oklch", "components": [0.275, 0.16, 230] } },
+            "pad_x":  { "$type": "dimension", "$value": "0.444rem" },
+            "pad_y":  { "$type": "dimension", "$value": "0.333rem" },
+            "radius": { "$type": "dimension", "$value": "6px" },
+            "gap":    { "$type": "dimension", "$value": "0.333rem" }
+          }
+        },
+        "molecule": {
+          "m1": {
+            "bg":     { "$type": "color",     "$value": { "colorSpace": "oklch", "components": [0.99, 0.00, 250] } },
+            "fg":     { "$type": "color",     "$value": { "colorSpace": "oklch", "components": [0.18, 0.02, 250] } },
+            "ax":     { "$type": "color",     "$value": { "colorSpace": "oklch", "components": [0.275, 0.16, 230] } },
+            "radius": { "$type": "dimension", "$value": "9px" },
+            "shadow": { "$type": "shadow",    "$value": { "z": 2, "dx": 0.000, "dy": 1.250, "blur": 2.500, "spread": 0, "alpha": 0.088 } },
+            "gap":    { "$type": "dimension", "$value": "0.444rem" },
+            "inset":  { "$type": "dimension", "$value": "1.000rem" }
+          }
+        },
+        "organism": {
+          "o1": {
+            "surface":   { "$type": "color",     "$value": { "colorSpace": "oklch", "components": [0.99, 0.00, 250] } },
+            "text":      { "$type": "color",     "$value": { "colorSpace": "oklch", "components": [0.18, 0.02, 250] } },
+            "accent":    { "$type": "color",     "$value": { "colorSpace": "oklch", "components": [0.275, 0.16, 230] } },
+            "gap":       { "$type": "dimension", "$value": "0.593rem" },
+            "grid_cols": { "$type": "number",    "$value": 12 },
+            "elev":      { "$type": "shadow",    "$value": { "z": 3, "dx": 0.000, "dy": 1.563, "blur": 3.125, "spread": 0, "alpha": 0.097 } },
+            "pad_block": { "$type": "dimension", "$value": "0.790rem" }
+          }
+        }
+      },
+
+      "t1": {
+        "atom": {
+          "surface_bg": { "$type": "color",     "$value": { "colorSpace": "oklch", "components": [0.18, 0.02, 250] } },
+          "text_fg":    { "$type": "color",     "$value": { "colorSpace": "oklch", "components": [0.99, 0.00, 250] } },
+          "accent_ax":  { "$type": "color",     "$value": { "colorSpace": "oklch", "components": [0.275, 0.16, 130] } },
+          "outline_ol": { "$type": "color",     "$value": { "colorSpace": "oklch", "components": [0.90, 0.02, 250] } },
+          "pad_x":      { "$type": "dimension", "$value": "0.333rem" },
+          "pad_y":      { "$type": "dimension", "$value": "0.250rem" },
+          "radius":     { "$type": "dimension", "$value": "4px" },
+          "shadow":     { "$type": "shadow",    "$value": { "z": 1, "dx": 0.000, "dy": 1.000, "blur": 2.000, "spread": 0, "alpha": 0.080 } }
+        },
+        "cell": {
+          "c1": {
+            "bg":     { "$type": "color",     "$value": { "colorSpace": "oklch", "components": [0.18, 0.02, 250] } },
+            "fg":     { "$type": "color",     "$value": { "colorSpace": "oklch", "components": [0.99, 0.00, 250] } },
+            "ax":     { "$type": "color",     "$value": { "colorSpace": "oklch", "components": [0.275, 0.16, 130] } },
+            "pad_x":  { "$type": "dimension", "$value": "0.444rem" },
+            "pad_y":  { "$type": "dimension", "$value": "0.333rem" },
+            "radius": { "$type": "dimension", "$value": "6px" },
+            "gap":    { "$type": "dimension", "$value": "0.333rem" }
+          }
+        },
+        "molecule": {
+          "m1": {
+            "bg":     { "$type": "color",     "$value": { "colorSpace": "oklch", "components": [0.18, 0.02, 250] } },
+            "fg":     { "$type": "color",     "$value": { "colorSpace": "oklch", "components": [0.99, 0.00, 250] } },
+            "ax":     { "$type": "color",     "$value": { "colorSpace": "oklch", "components": [0.275, 0.16, 130] } },
+            "radius": { "$type": "dimension", "$value": "9px" },
+            "shadow": { "$type": "shadow",    "$value": { "z": 2, "dx": 0.000, "dy": 1.250, "blur": 2.500, "spread": 0, "alpha": 0.088 } },
+            "gap":    { "$type": "dimension", "$value": "0.444rem" },
+            "inset":  { "$type": "dimension", "$value": "1.000rem" }
+          }
+        },
+        "organism": {
+          "o1": {
+            "surface":   { "$type": "color",     "$value": { "colorSpace": "oklch", "components": [0.18, 0.02, 250] } },
+            "text":      { "$type": "color",     "$value": { "colorSpace": "oklch", "components": [0.99, 0.00, 250] } },
+            "accent":    { "$type": "color",     "$value": { "colorSpace": "oklch", "components": [0.275, 0.16, 130] } },
+            "gap":       { "$type": "dimension", "$value": "0.593rem" },
+            "grid_cols": { "$type": "number",    "$value": 12 },
+            "elev":      { "$type": "shadow",    "$value": { "z": 3, "dx": 0.000, "dy": 1.563, "blur": 3.125, "spread": 0, "alpha": 0.097 } },
+            "pad_block": { "$type": "dimension", "$value": "0.790rem" }
+          }
+        }
+      }
+    },
+
+    "audit": {
+      "$description": "Bloque métrico declarativo (no-code) para consumo por linters/scripts.",
+      "wcag_targets": {
+        "body_text":  { "$type": "number", "$value": 4.5 },
+        "large_text": { "$type": "number", "$value": 3.0 },
+        "non_text":   { "$type": "number", "$value": 3.0 }
+      },
+      "typography_policy": {
+        "$description": "Relación mínima entre niveles y line-height por contexto.",
+        "ratio_min":   { "$type": "number", "$value": 1.2 },
+        "lh_body_min": { "$type": "number", "$value": 1.4 },
+        "lh_head_max": { "$type": "number", "$value": 1.3 }
+      },
+      "duplication_policy": {
+        "$description": "Umbral de duplicidad perceptual ΔE00 (máximo permitido).",
+        "deltaE00_max": { "$type": "number", "$value": 1.0 }
+      },
+      "pairs": {
+        "$description": "Pares a verificar (bg/fg/ax/ol) por roles y niveles.",
+        "roles_t0": {
+          "$extensions": { "kind": "pair", "set": "t0", "note": "Modo claro base" },
+          "bg": { "$type": "color", "$value": { "colorSpace": "oklch", "components": [0.99, 0.00, 250] } },
+          "fg": { "$type": "color", "$value": { "colorSpace": "oklch", "components": [0.18, 0.02, 250] } },
+          "ax": { "$type": "color", "$value": { "colorSpace": "oklch", "components": [0.275, 0.16, 230] } },
+          "ol": { "$type": "color", "$value": { "colorSpace": "oklch", "components": [0.45, 0.04, 250] } }
+        },
+        "roles_t1": {
+          "$extensions": { "kind": "pair", "set": "t1", "note": "Modo oscuro base" },
+          "bg": { "$type": "color", "$value": { "colorSpace": "oklch", "components": [0.18, 0.02, 250] } },
+          "fg": { "$type": "color", "$value": { "colorSpace": "oklch", "components": [0.99, 0.00, 250] } },
+          "ax": { "$type": "color", "$value": { "colorSpace": "oklch", "components": [0.275, 0.16, 130] } },
+          "ol": { "$type": "color", "$value": { "colorSpace": "oklch", "components": [0.90, 0.02, 250] } }
+        },
+        "t0_atom": {
+          "$extensions": { "kind": "pair", "set": "t0", "entity": "atom" },
+          "bg": { "$type": "color", "$value": { "colorSpace": "oklch", "components": [0.99, 0.00, 250] } },
+          "fg": { "$type": "color", "$value": { "colorSpace": "oklch", "components": [0.18, 0.02, 250] } }
+        },
+        "t0_molecule": {
+          "$extensions": { "kind": "pair", "set": "t0", "entity": "molecule.m1" },
+          "bg": { "$type": "color", "$value": { "colorSpace": "oklch", "components": [0.99, 0.00, 250] } },
+          "fg": { "$type": "color", "$value": { "colorSpace": "oklch", "components": [0.18, 0.02, 250] } }
+        },
+        "t0_organism": {
+          "$extensions": { "kind": "pair", "set": "t0", "entity": "organism.o1" },
+          "bg": { "$type": "color", "$value": { "colorSpace": "oklch", "components": [0.99, 0.00, 250] } },
+          "fg": { "$type": "color", "$value": { "colorSpace": "oklch", "components": [0.18, 0.02, 250] } }
+        },
+        "t1_atom": {
+          "$extensions": { "kind": "pair", "set": "t1", "entity": "atom" },
+          "bg": { "$type": "color", "$value": { "colorSpace": "oklch", "components": [0.18, 0.02, 250] } },
+          "fg": { "$type": "color", "$value": { "colorSpace": "oklch", "components": [0.99, 0.00, 250] } }
+        },
+        "t1_molecule": {
+          "$extensions": { "kind": "pair", "set": "t1", "entity": "molecule.m1" },
+          "bg": { "$type": "color", "$value": { "colorSpace": "oklch", "components": [0.18, 0.02, 250] } },
+          "fg": { "$type": "color", "$value": { "colorSpace": "oklch", "components": [0.99, 0.00, 250] } }
+        },
+        "t1_organism": {
+          "$extensions": { "kind": "pair", "set": "t1", "entity": "organism.o1" },
+          "bg": { "$type": "color", "$value": { "colorSpace": "oklch", "components": [0.18, 0.02, 250] } },
+          "fg": { "$type": "color", "$value": { "colorSpace": "oklch", "components": [0.99, 0.00, 250] } }
+        }
+      }
+    }
+  }
+}

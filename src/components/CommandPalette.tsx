@@ -1,5 +1,5 @@
 import { FocusTrap } from 'focus-trap-react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, m } from 'framer-motion';
 import {
   Copy as CopyIcon,
   Download,
@@ -25,13 +25,16 @@ import {
 } from 'react';
 import { createPortal } from 'react-dom';
 
+import { DIALOG_VARIANTS, OVERLAY_FADE, PANEL_TRANSITION } from '../constants/animation';
+import { KONAMI_DISABLE_MESSAGE, KONAMI_ENABLE_MESSAGE } from '../constants/konami';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useNavigation } from '../contexts/NavigationContext';
 import { useTheme } from '../contexts/ThemeContext';
 import { useToast } from '../contexts/ToastContext';
 import { useBodyScrollLock } from '../hooks/useBodyScrollLock';
+import { useDeferredExitAction } from '../hooks/useDeferredExitAction';
 import { useCvDownload } from '../hooks/useCvDownload';
-import { KONAMI_ENABLE_MESSAGE, KONAMI_DISABLE_MESSAGE } from '../constants/konami';
+import { useReducedMotion } from '../hooks/useReducedMotion';
 
 import { WhatsappGlyph } from './icons/WhatsappGlyph';
 
@@ -65,6 +68,7 @@ export default function CommandPalette() {
 
   const inputRef = useRef<HTMLInputElement | null>(null);
   const listRef = useRef<HTMLDivElement | null>(null);
+  const shouldReduceMotion = useReducedMotion();
 
   const titleId = useId();
   const descriptionId = useId();
@@ -86,6 +90,8 @@ export default function CommandPalette() {
   const closePalette = useCallback(() => {
     setOpen(false);
   }, []);
+
+  const { queue, onExitComplete } = useDeferredExitAction();
 
   const items = useMemo<CommandItem[]>(() => {
     const navItems: CommandItem[] = data.nav.map(navItem => ({
@@ -358,8 +364,9 @@ export default function CommandPalette() {
       if (item.predicate && !item.predicate()) {
         return;
       }
-      item.action();
-      closePalette();
+      if (queue(() => item.action())) {
+        closePalette();
+      }
     },
     [closePalette]
   );
@@ -387,18 +394,24 @@ export default function CommandPalette() {
   if (!mounted) return null;
 
   return createPortal(
-    <AnimatePresence>
+    <AnimatePresence
+      initial={false}
+      onExitComplete={onExitComplete}
+    >
       {open ? (
-        <motion.div
+        <m.div
           className="search-modal search-modal--command"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2, ease: 'easeOut' }}
+          data-dev-id="6500"
+          variants={shouldReduceMotion ? undefined : OVERLAY_FADE}
+          initial={shouldReduceMotion ? undefined : 'hidden'}
+          animate={shouldReduceMotion ? undefined : 'show'}
+          exit={shouldReduceMotion ? undefined : 'exit'}
+          transition={shouldReduceMotion ? undefined : PANEL_TRANSITION}
           role="presentation"
         >
           <div
             className="search-modal__backdrop"
+            data-dev-id="6501"
             role="presentation"
             aria-hidden="true"
             onClick={closePalette}
@@ -412,17 +425,19 @@ export default function CommandPalette() {
               returnFocusOnDeactivate: true
             }}
           >
-            <motion.div
+            <m.div
               className="search-modal__panel search-modal__panel--command"
+              data-dev-id="6502"
               role="dialog"
               aria-modal="true"
               aria-labelledby={titleId}
               aria-describedby={descriptionId}
               aria-controls={listId}
-              initial={{ opacity: 0, scale: 0.96, y: 12 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.96, y: 12 }}
-              transition={{ duration: 0.22, ease: 'easeOut' }}
+              variants={shouldReduceMotion ? undefined : DIALOG_VARIANTS}
+              initial={shouldReduceMotion ? undefined : 'hidden'}
+              animate={shouldReduceMotion ? undefined : 'show'}
+              exit={shouldReduceMotion ? undefined : 'exit'}
+              transition={shouldReduceMotion ? undefined : PANEL_TRANSITION}
               onClick={event => event.stopPropagation()}
             >
               <header className="search-modal__header">
@@ -527,9 +542,9 @@ export default function CommandPalette() {
                 <span>Cmd ⌘ / Ctrl ⌃ + K</span>
                 <span>• Esc para cerrar</span>
               </footer>
-            </motion.div>
+            </m.div>
           </FocusTrap>
-        </motion.div>
+        </m.div>
       ) : null}
     </AnimatePresence>,
     document.body

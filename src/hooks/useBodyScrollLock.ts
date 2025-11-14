@@ -1,27 +1,40 @@
 import { useEffect } from 'react';
 
-let lockCount = 0;
-let previousOverflow: string | null = null;
+class BodyScrollLockManager {
+  private lockCount = 0;
+  private previousOverflow: string | null = null;
+
+  acquire() {
+    if (typeof document === 'undefined') return;
+
+    if (this.lockCount === 0) {
+      this.previousOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+    }
+
+    this.lockCount += 1;
+  }
+
+  release() {
+    if (typeof document === 'undefined') return;
+
+    this.lockCount = Math.max(0, this.lockCount - 1);
+    if (this.lockCount === 0) {
+      document.body.style.overflow = this.previousOverflow ?? '';
+      this.previousOverflow = null;
+    }
+  }
+}
+
+const manager = new BodyScrollLockManager();
 
 export function useBodyScrollLock(locked: boolean) {
   useEffect(() => {
-    if (!locked || typeof document === 'undefined') {
-      return;
-    }
+    if (!locked) return;
 
-    const body = document.body;
-    if (lockCount === 0) {
-      previousOverflow = body.style.overflow;
-      body.style.overflow = 'hidden';
-    }
-    lockCount += 1;
-
+    manager.acquire();
     return () => {
-      lockCount = Math.max(0, lockCount - 1);
-      if (lockCount === 0 && previousOverflow !== null) {
-        body.style.overflow = previousOverflow;
-        previousOverflow = null;
-      }
+      manager.release();
     };
   }, [locked]);
 }

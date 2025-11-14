@@ -8,6 +8,8 @@ import type { PortfolioData } from '../types/portfolio';
 
 type Lang = 'es' | 'en';
 
+const isValidLang = (lang: unknown): lang is Lang => lang === 'es' || lang === 'en';
+
 export function useCvDownload() {
   const { showToast } = useToast();
   const { data } = useLanguage();
@@ -35,7 +37,14 @@ export function useCvDownload() {
         showToast('No hay datos disponibles para generar el CV.', 'error');
         return;
       }
-      const targetLang = payload?.lang ?? (targetData.lang as Lang | undefined) ?? 'es';
+
+      const requestedLang = payload?.lang;
+      const fallbackLang = isValidLang(targetData.lang) ? targetData.lang : 'es';
+      const targetLang = isValidLang(requestedLang) ? requestedLang : fallbackLang;
+
+      if (requestedLang && !isValidLang(requestedLang) && import.meta.env.DEV) {
+        console.warn('Descarga de CV recibió un idioma no soportado:', requestedLang);
+      }
 
       showToast('Generando CV...', 'info');
       isGeneratingRef.current = true;
@@ -45,7 +54,6 @@ export function useCvDownload() {
         showToast('CV listo para descargar', 'success');
       } catch (error) {
         handleError(error);
-        throw error;
       } finally {
         isGeneratingRef.current = false;
       }

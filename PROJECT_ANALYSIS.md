@@ -31,27 +31,23 @@ The project follows a standard structure for a Vite-based React application.
 
 ```
 portfolio-jctr-2025/
-├── public/                # Static assets
+├── public/                # Static assets + security headers + tokens.css
+├── scripts/               # tokens build/lint + deploy helpers
 ├── src/
-│   ├── components/        # Reusable UI components
-│   ├── contexts/          # React Context providers
-│   ├── data/              # i18n data (es, en)
-│   ├── hooks/             # Custom React hooks
-│   ├── sections/          # Main sections of the portfolio
-│   ├── utils/             # Utility functions
-│   ├── App.tsx            # Root component
-│   ├── index.css          # Global styles
-│   └── main.tsx           # Application entry point
-├── .eslintrc.cjs          # ESLint configuration (legacy)
-├── .gitignore
-├── .prettierrc
-├── index.html
-├── package.json
-├── postcss.config.js
+│   ├── components/        # UI primitives (QuickActionsMenu, CommandPalette, SearchBar…)
+│   ├── contexts/          # Theme, Language, Navigation, Toast, Dev
+│   ├── data/              # i18n payloads (es/en)
+│   ├── hooks/             # Accessibility + UX helpers (Konami, CV download…)
+│   ├── sections/          # Hero, FocusAreas, Experience, Skills, Projects, Contact
+│   ├── utils/             # pdfGenerator + confetti orchestrator
+│   ├── App.tsx            # Composition root
+│   └── main.tsx           # Entry point
+├── tokens/                # DTCG-compliant design tokens
+├── docs/TECH_DEBT.md      # Registro de experimentos aparcados/deuda
+├── eslint.config.cjs      # Flat ESLint config (Framer motion guardrails)
 ├── tailwind.config.js
-├── tsconfig.json          # TypeScript configuration
-├── tsconfig.node.json     # TypeScript configuration for Node.js
-├── tsconfig.app.json      # TypeScript configuration for the app
+├── tsconfig.json
+├── tsconfig.node.json
 └── vite.config.ts
 ```
 
@@ -68,26 +64,26 @@ The project demonstrates a good understanding of modern web development practice
 
 **Areas for Improvement:**
 
-*   **Component Cohesion:** Some components, like `Header.tsx`, have a lot of responsibilities and could be broken down into smaller, more focused components.
-*   **i18n:** The translation mechanism is basic. A more feature-rich library like `i18next` would provide better support for pluralization and interpolation.
-*   **Error Handling:** The `ErrorBoundary.tsx` component could be enhanced to log errors to a remote service for better monitoring and debugging.
+*   **Testing depth:** Hooks y UI críticos (CommandPalette, QuickActionsMenu, pdfGenerator) podrían beneficiarse de pruebas adicionales para cubrir shortcuts, accesibilidad y flujos de errores.
+*   **Observabilidad:** `ErrorBoundary.tsx` sólo registra en consola en modo dev; enviar los errores a un servicio externo daría visibilidad en producción.
+*   **Content ops:** El i18n basado en objetos es suficiente para dos idiomas, pero una solución como `i18next` facilitaría pluralización, formatos y carga remota si el contenido crece.
 
 ## 5. Identified Issues and Potential Improvements
 
 ### High Priority
 
-*   **Confusing ESLint Configuration:** The project has a legacy `.eslintrc.cjs` file. This should be removed in favor of a modern `eslint.config.js` file.
-*   **Complex TypeScript Configuration:** The presence of three `tsconfig.json` files is confusing. The configuration should be simplified, ideally into a single `tsconfig.json` file.
-*   **Outdated Dependencies and Vulnerabilities:** The `package.json` file shows several outdated dependencies and security vulnerabilities. These should be updated to their latest versions, and `npm audit fix` should be run to patch the vulnerabilities.
+*   **SLOs para PDF y descargas:** `pdfGenerator.ts` y `useCvDownload` ya manejan estados concurrentes, pero conviene agregar métricas/logs para fallos (por ejemplo, captura de tamaño de payload, tiempos y errores jsPDF).
+*   **Hardening de accesibilidad dinámica:** Componentes como `CommandPalette`, `SearchBar` y `QuickActionsModal` dependen de FocusTrap y motion tokens; se recomienda auditar con axe o Lighthouse para asegurar que los overlays cumplan roles/aria en cada idioma.
+*   **Mantener el registro de deuda técnica:** La nueva bitácora en `docs/TECH_DEBT.md` centraliza features pausados (p. ej. el “control remoto”). Es clave actualizarla cada vez que se archive o reactive una pieza para no duplicar esfuerzos.
 
 ### Medium Priority
 
-*   **Refactor Large Components:** Components like `Header.tsx` and `pdfGenerator.ts` should be refactored to improve readability and maintainability.
-*   **Add Unit Tests:** The project lacks tests. Adding unit tests with a framework like Vitest and React Testing Library would significantly improve code quality and prevent regressions.
+*   **Cobertura adicional:** Extender Vitest/Testing Library a QuickActionsMenu (acciones preferenciales) y Theme/LanguageContext para validar persistencia y side effects.
+*   **Automatizar snapshots de diseño:** El set de design tokens (tokens/core.json) podría integrarse a una pipeline visual o a Storybook para detectar regresiones en estilos personalizados.
 
 ### Low Priority
 
-*   **Improve Code Splitting:** While the project uses `manualChunks` for code splitting, it could be further improved by using dynamic imports for the portfolio sections to load them on demand.
+*   **Code splitting granular:** Las secciones se cargan de forma estática; se podría explorar React.lazy en Experience/Projects para optimizar el LCP en dispositivos de gama baja.
 
 ## 6. Suggestions for New Features
 

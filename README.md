@@ -32,8 +32,14 @@ Portfolio React + Vite listo para desarrollo local, testing y despliegue en Clou
 - Mantén `@tailwindcss/postcss` en `vite.config.ts` para que no falle el parser.
 
 ## A11y
-- `.hit-44` garantiza targets ≥44px. Se aplica a triggers, cierres y dock.
+- `.hit-44` garantiza targets ≥44px. Se aplica a triggers y botones del menú de acciones.
 - Focus visible con box-shadow (ver `:focus-visible` en `src/index.css`).
+- Las “Acciones rápidas” aparecen como una página del menú hamburguesa; el buscador interno filtra opciones, se puede navegar con teclado y se cierra con backdrop o `Esc`.
+
+## Menú de acciones global
+- La página “Acciones rápidas” dentro del menú hamburguesa opera en todo el sitio; muestra las secciones (`data.nav`) y preferencias (tema, idioma, Konami, confetti, IDs de depuración, descarga de CV) y permite filtrar o ejecutar rápidamente esas acciones.
+- El listado se puede filtrar, activa el easter egg (secuencia Konami) desde el input y devuelve el foco al cerrar.
+- Las mismas acciones están disponibles en el Command Palette (`⌘/Ctrl + K`) para usuarios de desktop.
 
 ## Despliegue en Cloudflare Pages
 1. Ejecuta `npm run build` (generará `dist`).
@@ -52,6 +58,9 @@ Portfolio React + Vite listo para desarrollo local, testing y despliegue en Clou
 - El job de CI adjunta un artefacto `coverage-report`. Descárgalo desde la run más reciente para revisar el HTML detallado de cobertura.
 - Sitio publicado: [https://portalio-presentacion-2025.pages.dev](https://portalio-presentacion-2025.pages.dev) (actualizado después de cada merge en `main`).
 
+## Deuda técnica rastreada
+- `docs/TECH_DEBT.md` agrupa los experimentos que se quitaron del runtime (p. ej. el antiguo “control remoto” del modal y la documentación histórica). Revisa ese archivo antes de reactivar features en pausa.
+
 ## Flujo Git recomendado
 1. `git status`
 2. `npm run check:ci`
@@ -62,6 +71,33 @@ Portfolio React + Vite listo para desarrollo local, testing y despliegue en Clou
 - Tests (`npm run test:ci`): ✅
 - Build (`npm run build`): ✅
 - caché Vite limpia (`rm -rf node_modules/.vite` antes de `npm run dev` si cambias bundling).
+
+## Guía de diseño (menú flotante y disclosure progresivo)
+
+- Menú flotante inferior derecha
+  - Botón hamburguesa circular fijo abajo‑derecha (safe-area), abre panel con búsqueda, 5 secciones y “Acciones rápidas”.
+  - Caret orientado al botón; panel se posiciona arriba/abajo con altura máxima dinámica y scroll interno.
+  - z-index fijo `--z-floating: 15000` para sobresalir de overlays.
+
+- Colocación de panel reutilizable
+  - Hook `useFloatingPanelPlacement` calcula posición y `maxHeight`. Aplícalo en cualquier panel flotante para consistencia.
+
+- Disclosure progresivo en secciones
+  - Skills: muestra una fila de badges por defecto con `badges-clamp-1`; botón “Ver más/menos” para expandir/colapsar.
+  - Projects: renderiza 4 proyectos por defecto, descripciones con `clamp-3` y botón “Ver más proyectos”.
+  - Experience: 2 empleos por defecto, “Mostrar toda la experiencia” y “Ver más/menos” por descripción.
+
+- Troubleshooting
+- Si el panel no se ve: verifica `--z-floating` (15000) y que no haya contenedores padres con `overflow:hidden`.
+- En móvil: usa `onTouchEnd` con `preventDefault()` en triggers para evitar double‑tap y ghost clicks.
+- A11y: listas como `ul > li > button`, `nav[aria-label]`, triggers con `aria-expanded`/`aria-controls`.
+
+## Hero backgrounds
+
+- `.page-section--hero` ahora pinta un degradado crema muy tenue con las líneas de libreta embebidas; en el tema oscuro (baliza `data-theme="dark"` sobre el `<html>`) el mismo contenedor se transforma en un lienzo negro puro, dejando que `.hero-backdrop` añada únicamente los halos y estrellas puntuales.
+- Conserva el `<div className="hero-backdrop" aria-hidden="true" />` dentro del `Hero` para que los halos se reactiven en modo oscuro sin sumar gradientes contradictorios sobre la base negra.
+- Usa las utilidades `.hero-dark-gradient` y `.hero-retro-gradient` cuando quieras que CTAs o badges brillen con los tonos registrados en `--hero-dark-accent-*` y `--hero-retro-accent-*`; ya ajustan `color: var(--text-inverse)` para mantener contraste fuerte.
+- Si reaplicas `.fx-chaos-bg` en otros paneles, hazlo con moderación: su nueva mezcla son lavados suaves (no gradientes saturados) pensados para no interferir con el fondo hero limpio.
 
 ## Setup rápido (Git + Cloudflare)
 

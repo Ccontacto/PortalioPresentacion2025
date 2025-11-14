@@ -1,5 +1,5 @@
 import { FocusTrap } from 'focus-trap-react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, m } from 'framer-motion';
 import { ArrowRight, Eraser, Search, Sparkles, X } from 'lucide-react';
 import {
   useCallback,
@@ -12,9 +12,12 @@ import {
 } from 'react';
 import { createPortal } from 'react-dom';
 
+import { DIALOG_VARIANTS, OVERLAY_FADE, PANEL_TRANSITION } from '../constants/animation';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useNavigation } from '../contexts/NavigationContext';
 import { useBodyScrollLock } from '../hooks/useBodyScrollLock';
+import { useReducedMotion } from '../hooks/useReducedMotion';
+import { useDeferredExitAction } from '../hooks/useDeferredExitAction';
 import { launchConfetti } from '../utils/confetti';
 
 import type { ProjectItem } from '../types/portfolio';
@@ -45,14 +48,16 @@ export default function SearchBar({
 
   const triggerRef = useRef<HTMLButtonElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const debounceRef = useRef<number | null>(null);
+  const debounceRef = useRef<ReturnType<typeof globalThis.setTimeout> | null>(null);
   const mountedRef = useRef(false);
+  const { queue, onExitComplete } = useDeferredExitAction();
 
   const titleId = useId();
   const descriptionId = useId();
   const panelId = useId();
   const { navigateTo } = useNavigation();
   const { data } = useLanguage();
+  const shouldReduceMotion = useReducedMotion();
 
   const tagOccurrences = useMemo(() => {
     const map = new Map<ProjectTag, number>();
@@ -86,7 +91,7 @@ export default function SearchBar({
     return sortedTags.filter(tag => tag.toLowerCase().includes(searchValue));
   }, [searchTerm, sortedTags]);
 
-  const triggerText = triggerLabel ?? 'Abrir buscador de proyectos';
+  const triggerText = triggerLabel ?? (data.lang === 'es' ? 'Abrir buscador de proyectos' : 'Open projects search');
   const isIconVariant = variant === 'icon';
 
   useEffect(() => {
@@ -97,28 +102,29 @@ export default function SearchBar({
 
   useEffect(() => {
     if (!isModalOpen || typeof window === 'undefined') return undefined;
-    const focusTimer = setTimeout(() => {
+    const focusTimer = globalThis.setTimeout(() => {
       inputRef.current?.focus();
     }, 90);
     return () => {
-      clearTimeout(focusTimer);
+      globalThis.clearTimeout(focusTimer);
     };
   }, [isModalOpen]);
 
   useEffect(() => {
-    if (typeof window === 'undefined') {
+    const isTestEnv = import.meta.env.VITEST;
+    if (typeof window === 'undefined' || isTestEnv) {
       onSearch(searchTerm.trim());
       return;
     }
     if (debounceRef.current) {
-      clearTimeout(debounceRef.current);
+      globalThis.clearTimeout(debounceRef.current);
     }
-    debounceRef.current = setTimeout(() => {
+    debounceRef.current = globalThis.setTimeout(() => {
       onSearch(searchTerm.trim());
     }, DEBOUNCE_MS);
     return () => {
       if (debounceRef.current) {
-        clearTimeout(debounceRef.current);
+        globalThis.clearTimeout(debounceRef.current);
       }
     };
   }, [searchTerm, onSearch]);
@@ -177,27 +183,25 @@ export default function SearchBar({
   };
 
   const handleNavigateProjects = () => {
-    handleCloseModal({ resetSearch: false });
-    const runNavigation = () => navigateTo('projects');
-    if (typeof window === 'undefined') {
-      runNavigation();
-      return;
+    if (queue(() => navigateTo('projects'))) {
+      handleCloseModal({ resetSearch: false });
     }
-    window.setTimeout(runNavigation, 120);
   };
 
   const renderModal = () => {
     if (!mountedRef.current) return null;
     return createPortal(
-      <AnimatePresence>
+      <AnimatePresence initial={false} onExitComplete={onExitComplete}>
         {isModalOpen ? (
-          <motion.div
+          <m.div
             className="search-modal"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2, ease: 'easeOut' }}
+            variants={shouldReduceMotion ? undefined : OVERLAY_FADE}
+            initial={shouldReduceMotion ? undefined : 'hidden'}
+            animate={shouldReduceMotion ? undefined : 'show'}
+            exit={shouldReduceMotion ? undefined : 'exit'}
+            transition={shouldReduceMotion ? undefined : PANEL_TRANSITION}
             role="presentation"
+            data-dev-id="6002"
           >
             <div
               className="search-modal__backdrop"
@@ -215,25 +219,27 @@ export default function SearchBar({
                 returnFocusOnDeactivate: false
               }}
             >
-              <motion.div
+              <m.div
                 className="search-modal__panel"
                 role="dialog"
                 aria-modal="true"
                 aria-labelledby={titleId}
                 aria-describedby={descriptionId}
                 id={panelId}
-                initial={{ opacity: 0, scale: 0.96, y: 12 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.96, y: 12 }}
-                transition={{ duration: 0.22, ease: 'easeOut' }}
+                variants={shouldReduceMotion ? undefined : DIALOG_VARIANTS}
+                initial={shouldReduceMotion ? undefined : 'hidden'}
+                animate={shouldReduceMotion ? undefined : 'show'}
+                exit={shouldReduceMotion ? undefined : 'exit'}
+                transition={shouldReduceMotion ? undefined : PANEL_TRANSITION}
+                data-dev-id="6001"
               >
                 <header className="search-modal__header">
                   <div>
                     <h3 id={titleId} className="search-modal__title">
-                      Filtrar proyectos
+                      {data.ui.searchFilterTitle ?? (data.lang === 'es' ? 'Filtrar proyectos' : 'Filter projects')}
                     </h3>
                     <p id={descriptionId} className="search-modal__subtitle">
-                      Escribe una tecnología o selecciona una de las sugerencias.
+                      {data.ui.searchFilterSubtitle ?? (data.lang === 'es' ? 'Escribe una tecnología o selecciona una de las sugerencias.' : 'Type a technology or pick one of the suggestions.')}
                     </p>
                   </div>
                   <button
@@ -253,7 +259,7 @@ export default function SearchBar({
                     type="search"
                     value={searchTerm}
                     onChange={(event) => handleSearchInput(event.target.value)}
-                    placeholder="Buscar por tecnología..."
+                    placeholder={data.ui.searchPlaceholderTech ?? (data.lang === 'es' ? 'Buscar por tecnología...' : 'Search by technology...')}
                     className="search-modal__input"
                     autoCapitalize="none"
                     autoComplete="off"
@@ -264,7 +270,7 @@ export default function SearchBar({
                       type="button"
                       className="search-modal__clear"
                       onClick={() => handleSearchInput('')}
-                      aria-label="Limpiar búsqueda"
+                      aria-label={data.ui.searchClearLabel ?? (data.lang === 'es' ? 'Limpiar búsqueda' : 'Clear search')}
                     >
                       <Eraser size={16} aria-hidden="true" />
                     </button>
@@ -272,7 +278,7 @@ export default function SearchBar({
                 </div>
 
                 {suggestedTags.length > 0 && (
-                  <div className="search-modal__suggestions" aria-label="Sugerencias destacadas">
+                  <div className="search-modal__suggestions" aria-label={data.ui.searchSuggestionsAria ?? (data.lang === 'es' ? 'Sugerencias destacadas' : 'Featured suggestions')}>
                     {suggestedTags.map(tag => (
                       <button
                         key={tag}
@@ -300,7 +306,7 @@ export default function SearchBar({
                       </button>
                     ))
                   ) : (
-                    <p className="search-modal__empty">Sin coincidencias. Ajusta la búsqueda o lanza confetti.</p>
+                    <p className="search-modal__empty">{data.ui.searchNoMatches ?? (data.lang === 'es' ? 'Sin coincidencias. Ajusta la búsqueda o lanza confetti.' : 'No matches. Adjust your query or launch confetti.')}</p>
                   )}
                 </div>
 
@@ -326,9 +332,9 @@ export default function SearchBar({
                     confetti
                   </button>
                 )}
-              </motion.div>
+              </m.div>
             </FocusTrap>
-          </motion.div>
+          </m.div>
         ) : null}
       </AnimatePresence>,
       document.body
@@ -337,7 +343,7 @@ export default function SearchBar({
 
   return (
     <div className={`search-bar ${isIconVariant ? 'search-bar--icon' : ''}`}>
-      <motion.button
+      <m.button
         ref={triggerRef}
         type="button"
         className={`search-trigger ${isIconVariant ? 'search-trigger--icon' : ''}`}
@@ -348,6 +354,7 @@ export default function SearchBar({
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.97 }}
         data-retro-sfx
+        data-dev-id="6000"
       >
         <Search size={22} aria-hidden="true" />
         {isIconVariant ? (
@@ -355,7 +362,7 @@ export default function SearchBar({
         ) : (
           <span>{triggerText}</span>
         )}
-      </motion.button>
+      </m.button>
       {renderModal()}
     </div>
   );

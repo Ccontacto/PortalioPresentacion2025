@@ -40,7 +40,10 @@ export default function ConfettiCanvas() {
     };
 
     const spawnParticles = (count: number) => {
-      if (particlesRef.current.length > 1500) particlesRef.current.splice(0, 500);
+      // More efficient: slice instead of splice to avoid shifting all elements
+      if (particlesRef.current.length > 1500) {
+        particlesRef.current = particlesRef.current.slice(-1000);
+      }
       const canvas = canvasRef.current;
       if (!canvas) return;
       const centerX = canvas.width / (window.devicePixelRatio || 1) / 2;

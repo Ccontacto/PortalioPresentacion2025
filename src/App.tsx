@@ -1,14 +1,14 @@
-import { motion } from 'framer-motion';
+import { LazyMotion, domAnimation, m } from 'framer-motion';
 import { useCallback, useEffect, useMemo, useRef, lazy, Suspense } from 'react';
 
-import Dock from './components/Dock';
-import Header from './components/Header';
 import LoadingScreen from './components/LoadingScreen';
-import PageIndicator from './components/PageIndicator';
+import HamburgerMenu from './components/HamburgerMenu';
 import PageProgress from './components/PageProgress';
 import { RetroModeBanner } from './components/RetroModeBanner';
 import SkipToContent from './components/SkipToContent';
 import ToastContainer from './components/ToastContainer';
+import { KONAMI_DISABLE_MESSAGE, KONAMI_ENABLE_MESSAGE } from './constants/konami';
+import { DevProvider } from './contexts/DevContext';
 import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
 import { NavigationProvider } from './contexts/NavigationContext';
 import { ThemeProvider, useTheme } from './contexts/ThemeContext';
@@ -16,11 +16,11 @@ import { ToastProvider, useToast } from './contexts/ToastContext';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
 import { useKonamiCode } from './hooks/useKonamiCode';
 import { useReducedMotion } from './hooks/useReducedMotion';
-import { KONAMI_ENABLE_MESSAGE, KONAMI_DISABLE_MESSAGE } from './constants/konami';
 const ConfettiCanvas = lazy(() => import('./components/ConfettiCanvas'));
 const CommandPalette = lazy(() => import('./components/CommandPalette'));
 import Contact from './sections/Contact';
 import Experience from './sections/Experience';
+import FocusAreas from './sections/FocusAreas';
 import Hero from './sections/Hero';
 import Projects from './sections/Projects';
 import Skills from './sections/Skills';
@@ -77,6 +77,16 @@ function AppContent() {
 
   useKonamiCode(toggleKonamiMode);
 
+  // Garantiza que la página comience en (0,0) al cargar
+  useEffect(() => {
+    try {
+      window.scrollTo({ top: 0, left: 0 });
+      // Fallbacks para navegadores específicos
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    } catch {}
+  }, []);
+
   useEffect(() => {
     if (typeof document === 'undefined') return;
     document.documentElement.classList.toggle('retro-mode', isKonami);
@@ -104,32 +114,32 @@ function AppContent() {
   return (
     <>
       <LoadingScreen />
-      <motion.div
+      <m.div
         initial={shouldReduceMotion ? undefined : { opacity: 0 }}
         animate={shouldReduceMotion ? undefined : { opacity: 1 }}
       >
         <PageProgress />
         <SkipToContent />
-        <Header retroModeEnabled={isKonami} onExitRetroMode={exitKonamiMode} />
+        <HamburgerMenu />
+        {/* Header/TopBar removidos por solicitud: contenido inicia directo */}
         {isKonami ? <RetroModeBanner onExitRetro={exitKonamiMode} /> : null}
         {/* MEJORA 1: main con role explícito y aria-label */}
         <main className="main-content" id="main-content" role="main" aria-label="Contenido principal">
           <Hero />
+          <FocusAreas />
           <Experience />
           <Skills />
           <Projects />
           <Contact />
         </main>
-        <Dock />
         <ToastContainer />
         <Suspense fallback={null}>
           <ConfettiCanvas />
         </Suspense>
-        <PageIndicator />
         <Suspense fallback={null}>
           <CommandPalette />
         </Suspense>
-      </motion.div>
+      </m.div>
     </>
   );
 }
@@ -140,7 +150,11 @@ export default function App() {
       <LanguageProvider>
         <ThemeProvider>
           <NavigationProvider>
-            <AppContent />
+            <DevProvider>
+              <LazyMotion features={domAnimation} strict>
+                <AppContent />
+              </LazyMotion>
+            </DevProvider>
           </NavigationProvider>
         </ThemeProvider>
       </LanguageProvider>

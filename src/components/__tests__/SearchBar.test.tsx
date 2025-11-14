@@ -49,7 +49,7 @@ describe('SearchBar', () => {
 
     const user = userEvent.setup();
 
-    await user.click(screen.getByRole('button', { name: /abrir buscador de proyectos/i }));
+    await user.click(screen.getByRole('button', { name: /abrir buscador de proyectos|open projects search/i }));
     const input = await screen.findByRole('searchbox');
 
     await user.type(input, 'react');

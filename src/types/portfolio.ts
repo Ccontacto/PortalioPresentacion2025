@@ -11,6 +11,58 @@ export interface Stat {
   label: string;
 }
 
+export type HeroAccent = 'primary' | 'secondary';
+
+export type HeroMetaField = 'location' | 'badge' | 'subtitle';
+
+export interface HeroTitleSegment {
+  text: string;
+  accent?: HeroAccent;
+}
+
+export interface HeroDescriptionSegment {
+  text: string;
+  accent?: 'gradient';
+}
+
+export type HeroMetaItem =
+  | {
+      label: string;
+      field: HeroMetaField;
+      value?: string;
+    }
+  | {
+      label: string;
+      value: string;
+      field?: undefined;
+    };
+
+export interface HeroNote {
+  title: string;
+  items: string[];
+}
+
+export interface PortfolioHero {
+  eyebrow: string;
+  titleSegments: HeroTitleSegment[];
+  descriptionSegments: HeroDescriptionSegment[];
+  status: {
+    title: string;
+    description: string;
+  };
+  meta: HeroMetaItem[];
+  note: HeroNote;
+  tagline?: string;
+}
+
+export interface FocusAreaItem {
+  id: string;
+  eyebrow: string;
+  title: string;
+  description: string;
+  highlights: string[];
+}
+
 export interface ExperienceJob {
   id: string;
   role: string;
@@ -55,6 +107,12 @@ export interface PortfolioSections {
     title: string;
     items: ProjectItem[];
   };
+  focus?: {
+    eyebrow: string;
+    title: string;
+    subtitle: string;
+    items: FocusAreaItem[];
+  };
   contact: PortfolioContactSection;
 }
 
@@ -72,8 +130,25 @@ export interface PortfolioTooltips {
 
 export interface PortfolioUiStrings {
   viewProjects: string;
+  bookCall: string;
   retroExit: string;
   retroActiveLabel: string;
+  // Opcionales: modal de acciones rápidas / búsqueda
+  quickActionsTitle?: string;
+  searchAriaLabel?: string;
+  searchPlaceholder?: string;
+  noMatchesTitle?: string;
+  noMatchesSubtitle?: string;
+  // Quick actions group labels
+  quickSectionsLabel?: string;
+  quickPreferencesLabel?: string;
+  // Search modal specific
+  searchFilterTitle?: string;
+  searchFilterSubtitle?: string;
+  searchPlaceholderTech?: string;
+  searchClearLabel?: string;
+  searchSuggestionsAria?: string;
+  searchNoMatches?: string;
 }
 
 export interface PortfolioToasts {
@@ -111,6 +186,7 @@ export interface PortfolioData {
   badge: string;
   nav: NavItem[];
   stats: Stat[];
+  hero: PortfolioHero;
   sections: PortfolioSections;
   tooltips: PortfolioTooltips;
   toasts: PortfolioToasts;

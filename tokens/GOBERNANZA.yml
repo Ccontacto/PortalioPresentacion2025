@@ -1,0 +1,198 @@
+# ΣΩ·TOKENS.GOBERNANZA.MÉTRICA.NOCODE.v2025.11
+# Modo: determinista-soberano · 100% numérico/relacional · sin nombres cromáticos ni familias tipográficas
+
+HDR:
+  ENC: UTF-8
+  LANG: es-MX
+  MODE: determinista-soberano
+  CTX: isolated
+  POLICY_LOCK: ON
+  STATE: "X=(σ,L,τ,k,r,μ,f,Δx,n*,A,S)"
+  RULE: "𝕊=1⇔[(σ/L)≤1 ∧ f≥f_min ∧ A≥τS]; act=𝕊?CROSS:HOLD"
+  FLOW: "ingest→estimate→plan→decide→act"
+  CALC: "S=Σ(ĝ·Δx); A*=τS; A←A+ĝ·Δx; if A≥A*∧¬n* ⇒ n*=true"
+  CTRL: {τ:"(0,1]", k:">0", μ:"≥0", λ:">0"}
+  TELEO: "max U=R−λC  s.a. (σ/L)≤1 ∧ f≥f_min ∧ p95(latencia)↓"
+  ARCH: "ℱ⟳(L0..L3) self-similar; sensors→estimator→executor(idempotent)"
+  AUDIT_FMT: "{S,A*,n*,𝕊,σ/L,f,UER,ART_p95,hash}"
+  OPTIM: "∂𝕊/∂θ via búsqueda bayesiana; RL→(τ,k); μ↑ si SNR↓"
+  POLICY: "auto-opt; RBAC+auth+log+audit"
+  CANON: "𝕊=[f≥f_min]∧[(σ/L)≤1]∧[(A/S)≥τ];  A=Σ(ĝ·Δx)"
+
+# ───────── CAPA BASE: unidades y ratios (adimensionales o en rem/px) ─────────
+base:
+  unit: {rem: 1.00, px_per_rem: 16}
+  scale:
+    ratio_type: 1.200     # progresión de tamaños (φ_t)
+    ratio_space: 1.333    # progresión de espaciado (φ_s)
+    ratio_radius: 1.500   # progresión de radios (φ_r)
+    ratio_elev: 1.250     # progresión de elevación (φ_e)
+  limits:
+    wcag_text: 4.5        # contraste mínimo texto normal
+    wcag_large: 3.0       # contraste mínimo texto grande
+    deltaE00_dup: 1.0     # umbral de duplicidad perceptual
+  okLCH:
+    L_targets_neutral: {0:0.99,50:0.95,100:0.90,300:0.75,600:0.45,900:0.25}
+    C_neutral_max: 0.04
+    C_accent_factor: 1.00        # C_accent = C_neutral_max * factor
+    h_anchor_neutral: "<número>" # único; no publicar etiqueta
+    bands_accent:
+      band_1_h: "<[h_min,h_max]>"
+      band_2_h: "<[h_min,h_max]>"
+      band_3_h: "<[h_min,h_max]>"
+      band_4_h: "<[h_min,h_max]>"
+
+# ───────── TOKENS ESCALARES (solo magnitudes y relaciones) ─────────
+type_size:  # sin declarar familias; todo es derivación
+  md_rem: 1.00
+  sm_rem: "md_rem / base.scale.ratio_type"
+  xs_rem: "sm_rem / base.scale.ratio_type"
+  lg_rem: "md_rem * base.scale.ratio_type"
+  xl_rem: "lg_rem * base.scale.ratio_type"
+line_height: {body: 1.45, headings: 1.20}
+tracking_em: {body: 0.00, caps: 0.02}
+
+space_rem:
+  xs: 0.25
+  sm: "xs * base.scale.ratio_space"
+  md: "sm * base.scale.ratio_space"
+  lg: "md * base.scale.ratio_space"
+  xl: "lg * base.scale.ratio_space"
+
+radius_px:
+  sm: 4
+  md: "sm * base.scale.ratio_radius"
+  lg: "md * base.scale.ratio_radius"
+
+border_px: {hair: 1, strong: 2}
+
+elev:  # offsets/blur/alpha escalan por φ_e (sin color)
+  lv0: {z:0, dx:0,   dy:0,                 blur:0,                   spread:0, alpha:0.00}
+  lv1: {z:1, dx:0,   dy:1,                 blur:2,                   spread:0, alpha:0.08}
+  lv2: {z:2, dx:"lv1.dx", dy:"lv1.dy*φ_e", blur:"lv1.blur*φ_e",      spread:0, alpha:"lv1.alpha*1.10"}
+  lv3: {z:3, dx:"lv2.dx", dy:"lv2.dy*φ_e", blur:"lv2.blur*φ_e",      spread:0, alpha:"lv2.alpha*1.10"}
+  φ_e: "=base.scale.ratio_elev"
+
+# ───────── NEUTRALES y ACENTOS (OKLCH numérico) ─────────
+neutral:
+  levels: [0,50,100,300,600,900]
+  L: "=base.okLCH.L_targets_neutral[level]"
+  C_max: "=base.okLCH.C_neutral_max"
+  h: "=base.okLCH.h_anchor_neutral"
+accent:
+  count: 4
+  L_window: [0.60, 0.78]   # rango permitido
+  C: "=base.okLCH.C_neutral_max * base.okLCH.C_accent_factor"
+  bands_h:
+    a1: "=base.okLCH.bands_accent.band_1_h"
+    a2: "=base.okLCH.bands_accent.band_2_h"
+    a3: "=base.okLCH.bands_accent.band_3_h"
+    a4: "=base.okLCH.bands_accent.band_4_h"
+
+# ───────── CONTRASTE (solo cálculo con luminancias) ─────────
+contrast:
+  ratio: "R=(Y1+0.05)/(Y2+0.05) con Y1>Y2"
+  approx_map: "usar Y≈L_normalizada cuando no haya conversión explícita"
+  checks:
+    - id: n900_on_n0
+      fg_L: "=neutral.L|level=900"
+      bg_L: "=neutral.L|level=0"
+      min:  "=base.limits.wcag_text"
+    - id: n0_on_n900
+      fg_L: "=neutral.L|level=0"
+      bg_L: "=neutral.L|level=900"
+      min:  "=base.limits.wcag_text"
+    - id: a*_on_n0_large
+      fg_L: "~mean(accent.L_window)"
+      bg_L: "=neutral.L|level=0"
+      min:  "=base.limits.wcag_large"
+
+# ───────── DUPLICIDAD (ΔE00) ─────────
+duplication:
+  metric: "ΔE00"
+  threshold: "=base.limits.deltaE00_dup"
+  pairs:
+    neutrals_adj: [[0,50],[50,100],[100,300],[300,600],[600,900]]
+    accents_all:  "todas las combinaciones i≠j en {1..4}"
+  rule: "ΔE00(par) ≥ threshold"
+
+# ───────── NOMBRES ABSTRACCIÓN (sin semántica textual) ─────────
+naming:
+  neutral: "neutral.{level}"    # level∈{0,50,100,300,600,900}
+  accent:  "accent.{i}"         # i∈{1,2,3,4}
+  tsize:   "type.size.{xs|sm|md|lg|xl}"
+  space:   "space.{xs|sm|md|lg|xl}"
+  radius:  "radius.{sm|md|lg}"
+  elev:    "elev.{lv0|lv1|lv2|lv3}"
+
+# ───────── EVALUADOR SOBERANO (métrico, sin código) ─────────
+evaluator:
+  measures:
+    f: "fitness = (#checks_ok / #checks_totales)"
+    σ: "incertidumbre agregada (0..L); estimador conforme a varianza de medidas)"
+    L: "cota superior operacional de σ"
+    S: "potencial total = peso_contraste*1 + peso_deltaE*1 + peso_bandas*1  (máx=1.0)"
+    A: "acumulado de mejoras normalizadas = Σ(ĝ·Δx)"
+    τ: "<0.90..0.98>"   # recomendación inicial
+    ĝ: "gradiente normalizado por regla ∈[-1,1]"
+    Δx: "magnitud de ajuste por token ∈[0,1]"
+  weights: {contraste: 0.50, deltaE: 0.25, bandas: 0.25}
+  gating:
+    condition: "𝕊=1⇔[(σ/L)≤1 ∧ f≥f_min ∧ (A/S)≥τ]"
+    f_min: 0.92
+  outputs: {S:"[0..1]", A:"[0..1]", A_star:"τ·S", pass:"𝕊∈{0,1}"}
+  audit_emit: "{S,A*,n*,𝕊,σ/L,f,UER,ART_p95,hash_algo}"
+  hash_algo: "BLAKE3"
+  UER: "tasa de error inesperado en verificaciones (0..1)"
+  ART_p95: "latencia operativa p95 (ms)"
+  actions:
+    if_pass:  "CROSS (congelar versión)"
+    if_hold:  "HOLD (revisar Δx con mayor μ)"
+  notes:
+    - "Si ΔE00(neutral_adj)<threshold ⇒ incrementar |Δx| sobre L o C (no h)."
+    - "Si R_contraste<min ⇒ ajustar L (primero) antes de C."
+    - "Si banda_h incumple ⇒ desplazar h dentro del intervalo asignado (sin renombrar)."
+
+# ───────── COMPAT (DTCG/W3C/SD) — especificación de forma (sin implementación) ─────────
+compat:
+  dtcg_shape:
+    type_keys: ["$type","$value"]  # valores numéricos/funcionales; sin etiquetas textuales
+    paths:
+      neutral: "tokens.color.neutral.{level}"
+      accent:  "tokens.color.accent.{i}"
+      size:    "tokens.typography.size.{k}"
+      space:   "tokens.spacing.{k}"
+      radius:  "tokens.radius.{k}"
+      elev:    "tokens.shadow.{lv}"
+  transforms_required:
+    - "oklch→sRGB→Y (para contraste) — definición matemática, no ejecutable"
+    - "ΔE00 (CIEDE2000) — definición métrica, no ejecutable"
+    - "redondeo magnitudes: L±0.005, C±0.005, h±1°"
+  export_guidance:
+    css_vars: "emitir magnitudes numéricas; conversión fuera de alcance"
+    mobile:   "escalar tamaños según dpi/pt; ratios se conservan"
+
+# ───────── CRITERIOS DE ACEPTACIÓN (cuantificables) ─────────
+acceptance:
+  - "Orden estricto: L(0)>L(50)>L(100)>L(300)>L(600)>L(900)"
+  - "∀n: C_neutral(n) ≤ C_neutral_max"
+  - "∀i: L_i ∈ [0.60,0.78] ∧ ΔE00(accent_i,accent_j)≥1.0 ∀i≠j"
+  - "Contraste: R(n900/n0)≥4.5 ∧ R(n0/n900)≥4.5 ∧ R(a*/n0)≥3.0"
+  - "Escalas geométricas respetadas: ratios φ_t, φ_s, φ_r, φ_e constantes"
+  - "Evaluador: f≥0.92 ∧ (σ/L)≤1 ∧ (A/S)≥τ ⇒ 𝕊=1 (CROSS); si no, HOLD"
+
+# ───────── PROMPTS (neural, solo números; sin nombres cromáticos ni tipografías) ─────────
+prompts:
+  generator:
+    system: "Emite SOLO un bloque DTCG con magnitudes numéricas. No incluyas nombres semánticos."
+    user: >
+      Usa targets L_neutral, C_max, h_anchor_neutral y bands_h. Deriva tamaños con ratio_type,
+      espaciado con ratio_space, radios con ratio_radius y elevación con ratio_elev.
+      Asegura checks de contraste y ΔE00 >= threshold. Devuelve neutral.{levels}, accent.{1..4},
+      type.size.{xs..xl}, space.{xs..xl}, radius.{sm..lg}, elev.{lv0..lv3} como números y fórmulas.
+  auditor:
+    system: "Devuelve SOLO métricas {f,σ/L,S,A,A*,𝕊} y checklist numérico."
+    user: >
+      Verifica orden de L, umbrales de contraste, ΔE00 y bandas_h. Calcula f con pesos,
+      S∈[0..1], A por acumulación de mejoras, A*=τS y 𝕊 según la regla. Emite {S,A*,n*,𝕊,σ/L,f,UER,ART_p95,hash}.
+

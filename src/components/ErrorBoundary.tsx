@@ -1,4 +1,5 @@
 import React from 'react';
+import { logAppError } from '../utils/telemetry';
 
 type Props = { children: React.ReactNode };
 type State = { hasError: boolean; err: Error | null };
@@ -17,6 +18,7 @@ export default class ErrorBoundary extends React.Component<Props, State> {
     if (import.meta.env.DEV) {
       console.error('ErrorBoundary caught:', error, errorInfo);
     }
+    logAppError(error, errorInfo);
   }
 
   render() {

@@ -53,7 +53,26 @@ module.exports = [
         }
       ],
       '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
-      'no-undef': 'off'
+      'no-undef': 'off',
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: 'framer-motion',
+              importNames: ['motion'],
+              message: 'Usa `m` con LazyMotion estricto en lugar de `motion`.'
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    files: ['**/__tests__/**/*', '**/*.test.*'],
+    rules: {
+      // Permitir mocks parciales que referencien `motion` en tests
+      'no-restricted-imports': 'off'
     }
   },
   {
@@ -88,6 +107,15 @@ module.exports = [
           alphabetize: { order: 'asc', caseInsensitive: true }
         }
       ]
+    }
+  },
+  {
+    files: ['scripts/**/*.{js,mjs,cjs}'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+        console: 'readonly'
+      }
     }
   },
   {

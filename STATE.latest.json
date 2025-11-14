@@ -1,0 +1,37 @@
+{
+  "date": "2025-11-07",
+  "version": "2025.11",
+  "status": "OK",
+  "summary": {
+    "motion": "LazyMotion + m.* consolidado; variantes centralizadas; PMR respetado",
+    "design": "Homologación visual 3D (interactivos) + trazo sutil (fijos); gradiente rosa/azul; negro detonante",
+    "tokens": "DTCG seed integrado; build local a CSS; lint de motion",
+    "ios": "Pantalla inicial visible (svh); tap fiable; progress sin bloquear eventos",
+    "dev": "Overlay de IDs numéricos (4 dígitos) con toggle en Preferencias"
+  },
+  "fixes": [
+    "Framer Motion: migrado a LazyMotion+m (estricto)",
+    "iOS: min-height → 100svh en hero y secciones",
+    "iOS: meta viewport-fit=cover",
+    "iOS: touch-action: manipulation en controles",
+    "PageProgress: pointer-events none (ya aplicado)"
+  ],
+  "files": [
+    "src/index.css",
+    "index.html",
+    "src/constants/animation.ts",
+    "src/hooks/useIntersectionObserver.ts",
+    "src/components/Header.tsx",
+    "src/components/QuickActionsModal.tsx",
+    "src/components/header/OverflowPanel.tsx",
+    "src/sections/Hero.tsx",
+    "scripts/tokens-build.mjs",
+    "tokens/core.json"
+  ],
+  "pending_options": [
+    "QA axe para overlays y PMR",
+    "Clickable whole card en Projects (si se decide 3D)",
+    "Lighthouse real device iPhone",
+    "Mapear completamente CSS vars → DTCG export"
+  ]
+}
