@@ -28,7 +28,7 @@ export default function FocusAreas() {
         {focus.items.map((item: FocusAreaItem, index: number) => (
           <m.article
             key={item.id}
-            className="focus-card"
+            className="card focus-card"
             data-dev-id={`300${index}`}
             role="listitem"
             initial={shouldReduceMotion ? undefined : { opacity: 0, y: 40 }}

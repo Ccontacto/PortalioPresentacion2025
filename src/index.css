@@ -20,12 +20,20 @@
   /* UI tokens */
   --progress-color: #A0E7E5;
 
-  /* Typography scale */
-  --fs-body: clamp(15px, 0.98rem + 0.15vw, 17px);
-  --fs-small: clamp(12px, 0.82rem + 0.05vw, 14px);
-  --fs-h1: clamp(32px, 2.2rem + 2.5vw, 48px);
-  --fs-h2: clamp(24px, 1.6rem + 1.2vw, 32px);
-  --fs-h3: clamp(18px, 1.1rem + 0.6vw, 24px);
+  /* Typography scale (tokens) */
+  --font-family-sans: system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
+  --font-size-display: clamp(2.6rem, 4vw, 3.4rem);
+  --font-size-h1: clamp(2rem, 3vw, 2.6rem);
+  --font-size-h2: clamp(1.6rem, 2.4vw, 2rem);
+  --font-size-body: 1rem;
+  --font-size-small: 0.875rem;
+  --line-height-tight: 1.1;
+  --line-height-normal: 1.5;
+  --fs-body: var(--font-size-body);
+  --fs-small: var(--font-size-small);
+  --fs-h1: var(--font-size-h1);
+  --fs-h2: var(--font-size-h2);
+  --fs-h3: clamp(1.3rem, 1.4vw, 1.6rem);
 
   /* Radius tokens */
   --radius-sm: 6px;
@@ -337,12 +345,12 @@ html {
 }
 
 body {
-  font-family: 'Manrope', sans-serif;
-  font-size: var(--fs-body);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-body);
   background: var(--surface-primary);
   color: var(--text-strong);
   font-weight: 500;
-  line-height: 1.6;
+  line-height: var(--line-height-normal);
   margin: 0;
   overflow-x: hidden;
   position: relative;
@@ -390,7 +398,7 @@ body::after {
 
 body::before,
 body::after {
-  transition: opacity 0.3s ease;
+  transition: opacity var(--motion-normal) var(--ease-standard);
 }
 
 .dock-container {
@@ -462,7 +470,7 @@ body::after {
 @media (prefers-reduced-motion: reduce) {
   .dock,
   .dock-item {
-    transition: none;
+    transition-duration: 0s;
   }
 }
 
@@ -799,12 +807,21 @@ h1, h2, h3 {
   letter-spacing: 0.02em;
 }
 
-h1 { font-size: var(--fs-h1); line-height: 1.15; }
-h2 { font-size: var(--fs-h2); line-height: 1.2; }
-h3 { font-size: var(--fs-h3); line-height: 1.25; }
+h1 {
+  font-size: var(--font-size-display);
+  line-height: var(--line-height-tight);
+}
+h2 {
+  font-size: var(--font-size-h1);
+  line-height: var(--line-height-tight);
+}
+h3 {
+  font-size: var(--font-size-h2);
+  line-height: var(--line-height-normal);
+}
 
 p, span, small {
-  font-family: 'Manrope', sans-serif;
+  font-family: var(--font-family-sans);
 }
 
 small { font-size: var(--fs-small); }
@@ -2485,7 +2502,8 @@ html[data-theme='dark'] .mobile-actions-modal {
   font-weight: 900;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  font-size: clamp(2.4rem, 4vw + 1rem, 3.9rem);
+  font-size: var(--font-size-display);
+  line-height: var(--line-height-tight);
   text-shadow:
     2px 2px 0 rgba(123, 0, 44, 0.55),
     -2px -2px 0 rgba(30, 77, 216, 0.55),
@@ -2511,13 +2529,13 @@ html[data-theme='dark'] .hero-title strong {
 }
 
 .hero-subtitle {
-  font-size: clamp(1.2rem, 2vw + 0.4rem, 1.85rem);
-  font-weight: 700;
+  font-size: var(--font-size-h2);
   text-align: center;
   color: #1f2937;
   letter-spacing: 0.015em;
   margin: 0 auto 1.25rem;
   max-width: 640px;
+  line-height: var(--line-height-normal);
 }
 
 html[data-theme='dark'] .hero-subtitle {
@@ -2562,7 +2580,7 @@ html[data-theme='dark'] .hero-subtitle span.gradient {
 
 .hero-tagline {
   display: inline-block;
-  font-size: clamp(1.25rem, 2.2vw + 0.3rem, 1.95rem);
+  font-size: var(--font-size-h2);
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -2588,11 +2606,12 @@ html[data-theme='dark'] .hero-tagline {
 }
 
 .hero-description {
-  font-size: 1.05rem;
+  font-size: var(--font-size-body);
   font-weight: 600;
   letter-spacing: 0.01em;
   color: #1f2937;
   max-width: 720px;
+  line-height: var(--line-height-normal);
 }
 
 html[data-theme='dark'] .hero-description {
@@ -2686,19 +2705,42 @@ html[data-theme='dark'] .contact-highlight:hover {
    CARDS
    ======================================== */
 .card {
-  padding: 32px;
+  border-radius: 18px;
   background: var(--surface-card);
-  border: 3px solid var(--border-strong);
-  border-radius: 22px;
-  box-shadow: 10px 10px 0 var(--shadow-strong);
+  border: 1px solid var(--border-muted);
+  box-shadow: var(--elev-1);
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
   transition:
-    transform var(--motion-normal) var(--ease-standard),
-    box-shadow var(--motion-normal) var(--ease-standard);
+    transform var(--motion-fast),
+    box-shadow var(--motion-fast),
+    background var(--motion-fast);
 }
 
-.card:hover {
-  transform: translate(-4px, -4px);
-  box-shadow: 14px 14px 0 var(--shadow-strong-hover);
+.card:hover,
+.card:focus-within {
+  transform: translateY(-2px);
+  box-shadow: var(--elev-2);
+  background: color-mix(in srgb, var(--surface-card) 92%, rgba(255, 255, 255, 0.06));
+}
+
+.card-title {
+  font-size: var(--font-size-h2);
+  line-height: var(--line-height-tight);
+  font-weight: 600;
+}
+
+.card-body {
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-normal);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    transition-duration: 0s;
+  }
 }
 
 /* ========================================
@@ -3600,17 +3642,19 @@ html[data-theme='konami'] .experience-header__eyebrow {
 }
 
 .experience-header__title {
-  font-size: clamp(2.25rem, 2.5vw + 1.5rem, 3rem);
+  font-size: var(--font-size-h1);
   font-weight: 900;
   letter-spacing: 0.03em;
   margin-bottom: 16px;
+  line-height: var(--line-height-tight);
 }
 
 .experience-header__subtitle {
-  font-size: 1.05rem;
+  font-size: var(--font-size-h2);
   max-width: 620px;
   margin: 0 auto;
   color: rgba(15, 23, 42, 0.72);
+  line-height: var(--line-height-normal);
 }
 
 html[data-theme='dark'] .experience-header__subtitle {
@@ -3741,13 +3785,13 @@ html[data-theme='dark'] .project-card__link:focus-visible {
 .experience-track--snap-bounce-left,
 .projects-track--bounce-left {
   transform: translateX(8px);
-  transition: transform 0.25s ease;
+  transition: transform var(--motion-normal) var(--ease-standard);
 }
 
 .experience-track--snap-bounce-right,
 .projects-track--bounce-right {
   transform: translateX(-8px);
-  transition: transform 0.25s ease;
+  transition: transform var(--motion-normal) var(--ease-standard);
 }
 
 .experience-track-wrapper,
@@ -3820,7 +3864,8 @@ html[data-theme='dark'] .project-card__link:focus-visible {
   align-self: stretch;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 1rem;
+  padding: clamp(1.25rem, 2vw, 1.75rem);
   height: 100%;
 }
 
@@ -3895,14 +3940,10 @@ html[data-theme='dark'] .project-card__link:focus-visible {
 
 .experience-node {
   position: relative;
-  border: 3px solid var(--border-strong);
-  border-radius: 26px;
-  background: var(--surface-card);
-  box-shadow: 14px 14px 0 var(--shadow-strong);
-  padding: 28px 28px 32px;
+  padding: clamp(1.25rem, 2vw, 1.75rem);
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 16px;
   overflow: hidden;
   height: 100%;
   max-width: clamp(320px, 70vw, 520px);
@@ -3953,12 +3994,10 @@ html[data-theme='dark'] .project-card__link:focus-visible {
 }
 
 html[data-theme='konami'] .experience-node {
-  background: rgba(6, 10, 24, 0.95);
-  border-color: rgba(113, 255, 178, 0.55);
+  color: #d6fff4;
   box-shadow:
     0 0 0 3px rgba(0, 255, 156, 0.28),
     0 22px 36px rgba(0, 0, 0, 0.5);
-  color: #d6fff4;
 }
 
 .experience-node::after {
@@ -4025,7 +4064,7 @@ html[data-theme='konami'] .experience-node__company {
 }
 
 .experience-node__role {
-  font-size: 1.35rem;
+  font-size: var(--font-size-h2);
   font-weight: 800;
   letter-spacing: 0.01em;
 }
@@ -4035,8 +4074,8 @@ html[data-theme='konami'] .experience-node__role {
 }
 
 .experience-node__description {
-  font-size: 0.98rem;
-  line-height: 1.7;
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-normal);
   max-width: 640px;
 }
 
@@ -4735,15 +4774,16 @@ html[data-theme='dark'] .hero-panel__tag:focus-visible {
 
 .focus-header__title {
   font-family: 'Outfit', sans-serif;
-  font-size: clamp(2rem, 3.2vw + 0.5rem, 2.8rem);
+  font-size: var(--font-size-h1);
+  line-height: var(--line-height-tight);
   font-weight: 800;
   color: var(--text-strong);
   text-shadow: 0 20px 45px rgba(0, 0, 0, 0.55);
 }
 
 .focus-header__subtitle {
-  font-size: 1.05rem;
-  line-height: 1.7;
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-normal);
   color: color-mix(in srgb, var(--text-strong) 76%, rgba(15, 23, 42, 0.3));
 }
 
@@ -4757,21 +4797,11 @@ html[data-theme='dark'] .hero-panel__tag:focus-visible {
 
 .focus-card {
   position: relative;
-  padding: 28px;
-  border-radius: 26px;
-  border: 1px solid color-mix(in srgb, var(--border-muted) 75%, transparent);
-  background: color-mix(in srgb, var(--surface-card) 92%, transparent);
-  box-shadow:
-    0 0 0 1px color-mix(in srgb, var(--sketch-graphite) 12%, transparent),
-    var(--solid-shadow);
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
+  padding: clamp(1.25rem, 2vw, 1.75rem);
+  border-radius: inherit;
+  gap: 0.75rem;
   overflow: hidden;
-  transition:
-    transform var(--motion-normal) var(--ease-standard),
-    box-shadow var(--motion-normal) var(--ease-standard),
-    border-color var(--motion-normal) var(--ease-standard);
+  transition: border-color var(--motion-normal), transform var(--motion-normal), box-shadow var(--motion-normal);
 }
 
 .focus-card::after {
@@ -4786,8 +4816,6 @@ html[data-theme='dark'] .hero-panel__tag:focus-visible {
 
 .focus-card:hover,
 .focus-card:focus-within {
-  transform: translateY(-6px);
-  box-shadow: 0 28px 60px rgba(15, 23, 42, 0.16);
   border-color: color-mix(in srgb, var(--gradient-brand-end) 65%, transparent);
 }
 
@@ -4805,14 +4833,15 @@ html[data-theme='dark'] .hero-panel__tag:focus-visible {
 }
 
 .focus-card__title {
-  font-size: 1.4rem;
+  font-size: var(--font-size-h2);
   font-weight: 800;
   color: var(--text-strong);
+  line-height: var(--line-height-tight);
 }
 
 .focus-card__description {
-  font-size: 0.98rem;
-  line-height: 1.65;
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-normal);
   color: color-mix(in srgb, var(--text-strong) 78%, rgba(15, 23, 42, 0.3));
 }
 
@@ -4827,9 +4856,10 @@ html[data-theme='dark'] .hero-panel__tag:focus-visible {
 .focus-card__list-item {
   position: relative;
   padding-left: 18px;
-  font-size: 0.9rem;
+  font-size: var(--font-size-small);
   font-weight: 600;
   color: color-mix(in srgb, var(--text-strong) 80%, rgba(15, 23, 42, 0.3));
+  line-height: var(--line-height-normal);
 }
 
 .focus-card__list-item::before {

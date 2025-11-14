@@ -65,7 +65,7 @@ export default function Experience() {
           {jobs.map((job: ExperienceJob, index: number) => (
             <m.article
               key={job.id}
-              className="experience-node"
+              className="card experience-node"
               data-dev-id={`400${index}`}
               role="listitem"
               initial={{ opacity: 0, y: 40 }}

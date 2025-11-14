@@ -32,25 +32,27 @@ export default function HamburgerMenu() {
 
   const lang = data?.lang === 'en' ? 'en' : 'es';
   const strings = useMemo(() => {
-    const isEnglish = lang === 'en';
+    const ui = data?.ui;
+    const isEnglish = data?.lang === 'en';
+    const fallback = (es: string, en: string) => (isEnglish ? en : es);
     return {
-      toggleOpen: isEnglish ? 'Open navigation menu' : 'Abrir menú de navegación',
-      toggleClose: isEnglish ? 'Close navigation menu' : 'Cerrar menú de navegación',
-      searchPlaceholder: isEnglish ? 'Search sections or actions' : 'Buscar secciones o acciones',
-      menuLabel: isEnglish ? 'Menu pages' : 'Páginas del menú',
-      sectionsTitle: isEnglish ? 'Sections' : 'Secciones',
-      sectionsSubtitle: isEnglish ? 'Jump anywhere instantly' : 'Explora cualquier sección',
-      actionsTitle: isEnglish ? 'Quick actions' : 'Acciones rápidas',
-      actionsSubtitle: isEnglish ? 'Instant preferences' : 'Preferencias instantáneas',
-      emptyTitle: isEnglish ? 'No matches' : 'Sin coincidencias',
-      emptySubtitle: isEnglish
-        ? 'Try another term or clear the filter.'
-        : 'Intenta con otro término o limpia el filtro.',
-      srHint: isEnglish
-        ? 'Use Tab/Shift+Tab to move between buttons and Esc to close the menu.'
-        : 'Usa Tab/Shift+Tab para moverte entre botones y Esc para cerrar el menú.'
+      toggleOpen: fallback('Abrir menú de navegación', 'Open navigation menu'),
+      toggleClose: fallback('Cerrar menú de navegación', 'Close navigation menu'),
+      searchPlaceholder: ui?.searchPlaceholder ?? fallback('Buscar secciones o acciones', 'Search sections or actions'),
+      menuLabel: ui?.quickActionsTitle ?? fallback('Accesos rápidos', 'Quick actions'),
+      sectionsTitle: ui?.quickSectionsLabel ?? fallback('Secciones', 'Sections'),
+      sectionsSubtitle: fallback('Explora cualquier sección', 'Jump anywhere instantly'),
+      actionsTitle: ui?.quickPreferencesLabel ?? fallback('Preferencias', 'Preferences'),
+      actionsSubtitle: fallback('Preferencias instantáneas', 'Instant preferences'),
+      emptyTitle: ui?.noMatchesTitle ?? fallback('Sin coincidencias', 'No matches'),
+      emptySubtitle:
+        ui?.noMatchesSubtitle ??
+        fallback('Intenta con otro término o limpia el filtro.', 'Try another term or clear the filter.'),
+      srHint:
+        ui?.searchAriaLabel ??
+        fallback('Usa Tab/Shift+Tab para moverte entre botones y Esc para cerrar el menú.', 'Use Tab/Shift+Tab to move between buttons and Esc to close the menu.')
     };
-  }, [lang]);
+  }, [data]);
 
   const navDescriptions = useMemo(() => {
     const isEnglish = lang === 'en';
