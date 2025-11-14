@@ -16,7 +16,7 @@ function buildPayload(error: Error, info?: ErrorInfo): Payload {
   return {
     message: error.message,
     stack: error.stack ?? undefined,
-    componentStack: info?.componentStack,
+    componentStack: info?.componentStack ?? undefined,
     url: typeof window !== 'undefined' ? window.location.href : undefined,
     userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : undefined,
     env: import.meta.env.MODE,
