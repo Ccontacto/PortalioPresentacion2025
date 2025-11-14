@@ -113,6 +113,7 @@ export const en: PortfolioData = {
     email_copy_success: 'Email copied ✓',
     email_copy_error: 'Couldn’t copy the email. Please try manually.',
     whatsapp_open: 'Opening WhatsApp...',
+    invalid_url: 'Link unavailable.',
     availability_available: 'Status updated: available',
     availability_listening: 'Status updated: open to proposals',
     availability_unavailable: 'Status updated: not available',

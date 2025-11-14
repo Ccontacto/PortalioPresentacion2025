@@ -79,7 +79,7 @@ export default function Projects() {
                     href={safeLink}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-sm font-bold hover:underline"
+                    className="project-card__link"
                   >
                     <ExternalLink size={24} aria-hidden="true" />
                     {data.lang === 'en' ? 'View project' : 'Ver proyecto'}

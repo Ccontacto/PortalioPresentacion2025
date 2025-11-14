@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { WhatsappGlyph } from '../components/icons/WhatsappGlyph';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useToast } from '../contexts/ToastContext';
+import { getSafeUrl, openSafeUrl } from '../utils/urlValidation';
 
 type FormStatus = 'idle' | 'sending' | 'success' | 'error';
 
@@ -13,6 +14,8 @@ export default function Contact() {
   const [status, setStatus] = useState<FormStatus>('idle');
   const linkedinUrl = data.social?.linkedin ?? '';
   const linkedinLabel = linkedinUrl.replace(/^https?:\/\//, '').replace(/\/$/, '');
+  const safeLinkedinUrl = linkedinUrl ? getSafeUrl(linkedinUrl) : null;
+  const invalidUrlMessage = data.toasts?.invalid_url ?? 'Enlace no disponible';
 
   const copyEmail = async () => {
     if (!navigator.clipboard) {
@@ -39,12 +42,15 @@ export default function Contact() {
 
   const openWhatsApp = () => {
     setStatus('sending');
-    window.open(
-      `https://wa.me/${data.whatsapp}?text=${encodeURIComponent('Hola José Carlos!')}`,
-      '_blank',
-      'noopener,noreferrer'
-    );
+    const message = encodeURIComponent('Hola José Carlos! Vi tu portfolio y me gustaría conversar.');
+    const whatsappUrl = `https://wa.me/${data.whatsapp}?text=${message}`;
+    if (!openSafeUrl(whatsappUrl)) {
+      showToast(invalidUrlMessage, 'error');
+      setStatus('error');
+      return;
+    }
     showToast(data.toasts.whatsapp_open, 'info');
+    setStatus('success');
   };
 
   const contactTitleHtml = data.sections.contact.title.replace(
@@ -135,11 +141,11 @@ export default function Contact() {
                 </dd>
               </div>
 
-              {linkedinUrl ? (
+              {safeLinkedinUrl ? (
                 <div className="contact-info__row">
                   <dt>LinkedIn</dt>
                   <dd>
-                    <a href={linkedinUrl} target="_blank" rel="noopener noreferrer">
+                    <a href={safeLinkedinUrl} target="_blank" rel="noopener noreferrer">
                       {linkedinLabel}
                     </a>
                   </dd>

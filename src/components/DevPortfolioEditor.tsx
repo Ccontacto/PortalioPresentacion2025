@@ -4,66 +4,9 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { createZip } from '../utils/zip';
 
 import type { PortfolioData } from '../types/portfolio';
-import type { CSSProperties } from 'react';
 
 const WATERMARK_TEXT = 'PortalioPresentacion2025 dev build';
 const PLACEHOLDER = '<<edita solo el valor>>';
-
-const buttonStyle: CSSProperties = {
-  position: 'fixed',
-  bottom: 16,
-  right: 16,
-  zIndex: 2000,
-  padding: '0.35rem 0.8rem',
-  fontSize: '0.85rem',
-  borderRadius: 999,
-  background: '#050505',
-  color: '#fff',
-  border: 'none',
-  cursor: 'pointer'
-};
-
-const overlayStyle: CSSProperties = {
-  position: 'fixed',
-  inset: 0,
-  backgroundColor: 'rgba(0,0,0,0.45)',
-  zIndex: 2100,
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center'
-};
-
-const panelStyle: CSSProperties = {
-  background: '#fff',
-  color: '#0f0f0f',
-  maxWidth: 720,
-  width: '90vw',
-  maxHeight: '80vh',
-  borderRadius: 12,
-  padding: 16,
-  display: 'flex',
-  flexDirection: 'column',
-  gap: 8,
-  boxShadow: '0 10px 30px rgba(0,0,0,0.4)',
-  overflow: 'hidden'
-};
-
-const textareaStyle: CSSProperties = {
-  width: '100%',
-  flex: 1,
-  minHeight: '240px',
-  fontFamily: 'monospace',
-  fontSize: '0.85rem',
-  padding: 8,
-  borderRadius: 6,
-  border: '1px solid rgba(0,0,0,0.15)'
-};
-
-const footerStyle: CSSProperties = {
-  display: 'flex',
-  gap: 8,
-  flexWrap: 'wrap'
-};
 
 function createTemplate(value: unknown): unknown {
   if (typeof value === 'string') {
@@ -157,40 +100,58 @@ export default function DevPortfolioEditor() {
 
   return (
     <>
-      <button style={buttonStyle} type="button" onClick={() => setOpen(true)} data-dev-id="dev-portafolio">
-        Editor Dev
+      <button
+        type="button"
+        className="dev-editor-trigger"
+        onClick={() => setOpen(true)}
+        data-dev-id="dev-portafolio"
+      >
+        EDITOR
       </button>
       {open ? (
-        <div style={overlayStyle} role="dialog" aria-label="Editor del portafolio">
-          <div style={panelStyle}>
-            <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <h3 style={{ margin: 0 }}>Editor en vivo</h3>
-              <button type="button" onClick={() => setOpen(false)} aria-label="Cerrar editor">
+        <div className="dev-editor-overlay" role="dialog" aria-label="Editor del portafolio" aria-modal="true">
+          <div className="dev-editor-panel" data-dev-id="dev-editor-panel">
+            <header className="dev-editor-panel__header">
+              <h3>Editor en vivo</h3>
+              <button
+                type="button"
+                className="dev-editor-panel__close"
+                onClick={() => setOpen(false)}
+                aria-label="Cerrar editor"
+              >
                 ✕
               </button>
             </header>
-            <p style={{ margin: 0, fontSize: '0.85rem' }}>
-              Edita los valores del JSON sin renombrar llaves y luego haz clic en aplicar. Este módulo solo está habilitado
-              en modo desarrollo.
+            <p className="dev-editor-panel__description">
+              Edita solo los valores y respeta la estructura JSON. Este módulo solo está habilitado en modo desarrollo.
             </p>
             <textarea
-              style={textareaStyle}
+              className="dev-editor-panel__textarea"
+              placeholder='{"llave": "<<edita solo el valor>>"}'
               aria-label="Overrides JSON"
               value={payload}
               onChange={event => setPayload(event.target.value)}
             />
-            <div style={footerStyle}>
-              <button type="button" onClick={applyOverrides}>
+            <div className="dev-editor-panel__footer">
+              <button type="button" className="dev-editor-panel__button" onClick={applyOverrides}>
                 Aplicar Overrides
               </button>
-              <button type="button" onClick={resetOverrides}>
+              <button
+                type="button"
+                className="dev-editor-panel__button dev-editor-panel__button--ghost"
+                onClick={resetOverrides}
+              >
                 Limpiar Overrides
               </button>
-              <button type="button" onClick={downloadZip}>
+              <button
+                type="button"
+                className="dev-editor-panel__button dev-editor-panel__button--accent"
+                onClick={downloadZip}
+              >
                 Generar ZIP (dev)
               </button>
             </div>
-            {status ? <p style={{ margin: 0, fontSize: '0.85rem' }}>{status}</p> : null}
+            {status ? <p className="dev-editor-panel__status">{status}</p> : null}
           </div>
         </div>
       ) : null}
