@@ -224,7 +224,7 @@ export default function Hero() {
             </div>
 
             <div className="hero-panel__card hero-panel__card--note fx-sketch-outline" data-dev-id="2004">
-              <span className="hero-panel__eyebrow">{note.title}</span>
+              <span className="hero-panel__eyebrow hero-note-title">{note.title}</span>
               <div className="hero-panel__tags" role="list">
                 {note.items.map((item: string) => (
                   <span key={item} className="hero-panel__tag" role="listitem">
