@@ -1,11 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { useLanguage } from '../contexts/LanguageContext';
 import { createZip } from '../utils/zip';
 
+import type { PortfolioData } from '../types/portfolio';
 import type { CSSProperties } from 'react';
 
 const WATERMARK_TEXT = 'PortalioPresentacion2025 dev build';
+const PLACEHOLDER = '<<edita solo el valor>>';
 
 const buttonStyle: CSSProperties = {
   position: 'fixed',
@@ -63,20 +65,65 @@ const footerStyle: CSSProperties = {
   flexWrap: 'wrap'
 };
 
+function createTemplate(value: unknown): unknown {
+  if (typeof value === 'string') {
+    return PLACEHOLDER;
+  }
+  if (typeof value === 'number' || typeof value === 'boolean' || value === null) {
+    return value;
+  }
+  if (Array.isArray(value)) {
+    return value.map(item => createTemplate(item));
+  }
+  if (typeof value === 'object' && value !== null) {
+    const result: Record<string, unknown> = {};
+    Object.entries(value).forEach(([key, val]) => {
+      result[key] = createTemplate(val);
+    });
+    return result;
+  }
+  return PLACEHOLDER;
+}
+
+function sanitizePatch(base: unknown, patch: unknown): unknown {
+  if (!patch || typeof patch !== 'object') {
+    return patch;
+  }
+  if (!base || typeof base !== 'object') {
+    return patch;
+  }
+  const result: Record<string, unknown> = {};
+  for (const [key, val] of Object.entries(patch as Record<string, unknown>)) {
+    if (key in (base as Record<string, unknown>)) {
+      const baseValue = (base as Record<string, unknown>)[key];
+      if (typeof val === 'object' && val !== null && typeof baseValue === 'object' && baseValue !== null) {
+        result[key] = sanitizePatch(baseValue, val);
+      } else if (typeof val !== 'object') {
+        result[key] = val;
+      }
+    }
+  }
+  return result;
+}
+
 export default function DevPortfolioEditor() {
   const { data, currentLang, overrides, updateOverrides } = useLanguage();
+  const template = useMemo(() => createTemplate(data) ?? {}, [data]);
   const [open, setOpen] = useState(false);
-  const [payload, setPayload] = useState(() => JSON.stringify(overrides[currentLang] ?? {}, null, 2));
+  const [payload, setPayload] = useState(() =>
+    JSON.stringify(overrides[currentLang] ?? template, null, 2)
+  );
   const [status, setStatus] = useState<string | null>(null);
 
   useEffect(() => {
-    setPayload(JSON.stringify(overrides[currentLang] ?? {}, null, 2));
-  }, [currentLang, overrides]);
+    setPayload(JSON.stringify(overrides[currentLang] ?? template, null, 2));
+  }, [currentLang, overrides, template]);
 
   const applyOverrides = () => {
     try {
       const parsed = payload ? JSON.parse(payload) : {};
-      updateOverrides(currentLang, parsed);
+      const sanitized = sanitizePatch(template, parsed);
+      updateOverrides(currentLang, sanitized as Partial<PortfolioData>);
       setStatus('Overrides aplicados.');
     } catch {
       setStatus('JSON inválido. Corrige y vuelve a aplicar.');
@@ -85,7 +132,7 @@ export default function DevPortfolioEditor() {
 
   const resetOverrides = () => {
     updateOverrides(currentLang, {});
-    setPayload('{}');
+    setPayload(JSON.stringify(template, null, 2));
     setStatus('Overrides reseteados.');
   };
 
@@ -123,8 +170,8 @@ export default function DevPortfolioEditor() {
               </button>
             </header>
             <p style={{ margin: 0, fontSize: '0.85rem' }}>
-              Edita el JSON de overrides para el idioma actual y haz clic en aplicar. Genera el ZIP para descargar tu
-              propia versión con marca de agua.
+              Edita los valores del JSON sin renombrar llaves y luego haz clic en aplicar. Este módulo solo está habilitado
+              en modo desarrollo.
             </p>
             <textarea
               style={textareaStyle}

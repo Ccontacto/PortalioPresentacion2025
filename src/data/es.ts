@@ -8,7 +8,7 @@ export const es: PortfolioData = {
   tagline: 'Integro IA generativa en productos iOS desde la visión hasta el lanzamiento',
   description:
     'Arquitecto de software y líder técnico iOS con 12+ años creando apps nativas, arquitecturas escalables y squads de alto desempeño. Especialista en Swift, SwiftUI, Clean Architecture y adopción de IA generativa (RAG, Core ML, LangChain).',
-  email: 'jctorresrivera@live.com',
+  email: 'jctorresrivera@gmail.com',
   phone: '+52 56 1172 7994',
   whatsapp: '5611727994',
   location: 'Centro, CDMX, México',
