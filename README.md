@@ -121,3 +121,10 @@ Portfolio React + Vite listo para desarrollo local, testing y despliegue en Clou
 > **Nota:** el script de deploy ejecuta `npm run build` y usa `wrangler` bajo el capó. Si no deseas exportar los secretos en la terminal, puedes ejecutarlo así: `CLOUDFLARE_API_TOKEN=... npm run deploy:cf`.
 
 Para ejecución continua, los workflows de GitHub Actions ya están listos; sólo asegúrate de registrar los secretos `CLOUDFLARE_API_TOKEN` y `CLOUDFLARE_ACCOUNT_ID` en el repositorio.
+
+## Utilidades y guardias introducidas
+- `src/utils/storage.ts` expone un helper `storage` que valida disponibilidad, protege con `try/catch` y se combina con `ensureStorageVersion` (invocado desde `src/main.tsx`) para purgar claves legacy antes de arrancar los contextos con nueva estructura.
+- `src/utils/urlValidation.ts` (más `src/utils/__tests__/urlValidation.test.ts`) formaliza la sanitización/normalización de enlaces externos; ahora `CommandPalette`, el listado de proyectos y cualquier futura apertura de URL pasan por esta capa para evitar `javascript:` o `file:` y forzamos `http[s]`.
+- `useCvDownload` usa el guard `isValidLang` antes de disparar `generatePdf` y ejecuta la generación con timeout (15 s) para no dejar al usuario esperando indefinidamente.
+- `ToastContext` mantiene como máximo cinco toasts en pantalla, utiliza IDs incrementales y limpia timers antiguos para evitar colisiones o leaks.
+- Las funciones `useFloatingPanelPlacement` y `useBodyScrollLock` ahora usan listeners pasivos y un singleton de lock, respectivamente, para garantizar compatibilidad en móviles y evitar efectos secundarios en scroll.

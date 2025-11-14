@@ -1,7 +1,8 @@
 import React, { createContext, useContext, useState, useCallback, useEffect, useRef } from 'react';
 
 const MAX_TOASTS = 5;
-const TOAST_TIMEOUT = 3000;
+const TOAST_DURATION_MS = 3500;
+let nextToastId = 0;
 
 type ToastType = 'info' | 'success' | 'error' | 'warning';
 type Toast = { id: number; message: string; type: ToastType };
@@ -25,25 +26,25 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
   const timersRef = useRef<Map<number, ReturnType<typeof setTimeout>>>(new Map());
 
   const showToast = useCallback((message: string, type: ToastType = 'info') => {
-    const id = Date.now() + Math.floor(Math.random() * 1000);
+    nextToastId += 1;
+    const id = nextToastId;
     setToasts(prev => {
-      const newToasts = [...prev, { id, message, type }];
-      if (newToasts.length > MAX_TOASTS) {
-        const oldestToast = newToasts.shift();
-        if (oldestToast) {
-          const timeoutId = timersRef.current.get(oldestToast.id);
-          if (timeoutId) {
-            clearTimeout(timeoutId);
-            timersRef.current.delete(oldestToast.id);
-          }
+      const next = [...prev, { id, message, type }];
+      if (next.length > MAX_TOASTS) {
+        const [removed, ...rest] = next;
+        const removedTimer = timersRef.current.get(removed.id);
+        if (removedTimer) {
+          clearTimeout(removedTimer);
+          timersRef.current.delete(removed.id);
         }
+        return rest;
       }
-      return newToasts;
+      return next;
     });
-    const timeoutId = window.setTimeout(() => {
+    const timeoutId = (typeof window !== 'undefined' ? window : globalThis).setTimeout(() => {
       setToasts(prev => prev.filter(t => t.id !== id));
       timersRef.current.delete(id);
-    }, TOAST_TIMEOUT);
+    }, TOAST_DURATION_MS);
     timersRef.current.set(id, timeoutId);
   }, []);
 

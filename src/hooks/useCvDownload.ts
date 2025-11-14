@@ -3,9 +3,15 @@ import { useCallback, useRef } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useToast } from '../contexts/ToastContext';
 import { generatePdf } from '../utils/pdfGenerator';
-import { isValidLang, type Lang } from '../utils/typeGuards';
 
 import type { PortfolioData } from '../types/portfolio';
+
+const VALID_LANGS = ['es', 'en'] as const;
+type Lang = (typeof VALID_LANGS)[number];
+
+const isValidLang = (value: unknown): value is Lang => {
+  return typeof value === 'string' && VALID_LANGS.includes(value as Lang);
+};
 
 export function useCvDownload() {
   const { showToast } = useToast();
@@ -35,13 +41,8 @@ export function useCvDownload() {
         return;
       }
 
-      const requestedLang = payload?.lang;
-      const fallbackLang = isValidLang(targetData.lang) ? targetData.lang : 'es';
-      const targetLang = isValidLang(requestedLang) ? requestedLang : fallbackLang;
-
-      if (requestedLang && !isValidLang(requestedLang) && import.meta.env.DEV) {
-        console.warn('Descarga de CV recibió un idioma no soportado:', requestedLang);
-      }
+      const rawLang = payload?.lang ?? targetData.lang;
+      const targetLang = isValidLang(rawLang) ? rawLang : 'es';
 
       showToast('Generando CV...', 'info');
       isGeneratingRef.current = true;

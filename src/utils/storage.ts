@@ -1,4 +1,5 @@
 const STORAGE_TEST_KEY = '__portfolio_storage_test__';
+const SCHEMA_VERSION_KEY = '__portfolio_storage_schema_version__';
 
 type Validator<T> = (value: unknown) => value is T;
 
@@ -71,4 +72,21 @@ class SafeStorage {
   }
 }
 
-export const storage = new SafeStorage();
+const storage = new SafeStorage();
+
+const isNumber = (value: unknown): value is number => typeof value === 'number';
+
+export function ensureStorageVersion(targetVersion: number, keysToReset: string[] = []) {
+  const currentVersion = storage.get<number>(SCHEMA_VERSION_KEY, -1, isNumber);
+  if (currentVersion === -1) {
+    storage.set(SCHEMA_VERSION_KEY, targetVersion);
+    return;
+  }
+  if (currentVersion >= targetVersion) {
+    return;
+  }
+  keysToReset.forEach(key => storage.remove(key));
+  storage.set(SCHEMA_VERSION_KEY, targetVersion);
+}
+
+export { storage };

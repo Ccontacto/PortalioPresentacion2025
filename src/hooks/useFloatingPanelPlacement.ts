@@ -76,13 +76,16 @@ export function useFloatingPanelPlacement(
     };
 
     const frame = window.requestAnimationFrame(compute);
-    const onResize = () => { if (open) compute(); };
-    window.addEventListener('resize', onResize);
-    window.addEventListener('orientationchange', onResize);
+    const onResize = () => {
+      if (open) compute();
+    };
+    const listenerOptions = { passive: true };
+    window.addEventListener('resize', onResize, listenerOptions);
+    window.addEventListener('orientationchange', onResize, listenerOptions);
     return () => {
       window.cancelAnimationFrame(frame);
-      window.removeEventListener('resize', onResize);
-      window.removeEventListener('orientationchange', onResize);
+      window.removeEventListener('resize', onResize, listenerOptions);
+      window.removeEventListener('orientationchange', onResize, listenerOptions);
     };
   }, [open, anchorRef, preferredWidth, gap, safe, minMaxHeight]);
 

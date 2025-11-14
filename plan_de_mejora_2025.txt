@@ -1,0 +1,105 @@
+# Plan Estratégico de Mejora de Diseño y Experiencia para el Portafolio (Visión 2025)
+
+Este documento presenta un plan estratégico para la evolución del portafolio digital. El objetivo es transformar el sitio de una presentación estática a una experiencia interactiva, memorable y alineada con las tendencias de diseño y tecnología más relevantes para 2025.
+
+El plan se divide en tres propuestas conceptuales distintas. Cada propuesta es independiente pero sus ideas pueden combinarse. Para cada una, se detalla el concepto, los componentes clave y un plan de implementación de alto nivel que puede ser ejecutado por cualquier desarrollador o modelo de IA con acceso al código base.
+
+---
+
+### PROPUESTA 1: EL PORTAFOLIO COMO "NARRATIVA INTELIGENTE"
+
+**Concepto Central:** Transformar el portafolio de un documento estático a un agente inteligente que personaliza la narrativa para cada visitante, demostrando proactivamente la experiencia en IA y mejorando la relevancia del contenido.
+
+**Componentes Clave:**
+
+1.  **Priorización Dinámica de Contenido:**
+    *   **Mecánica:** El sistema rastrea de forma anónima la interacción del usuario (tiempo de permanencia en cada sección, clics en proyectos, tecnologías filtradas). Esta información se almacena localmente en el navegador del usuario.
+    *   **Resultado:** En visitas posteriores, el portafolio utiliza estos datos para reordenar las secciones, mostrando primero lo que más le interesó al visitante. Por ejemplo, si un reclutador se centró en proyectos con "Swift" y "Seguridad", esas secciones ganarán prominencia visual automáticamente.
+
+2.  **Asistente de Contexto Proactivo:**
+    *   **Mecánica:** Un pequeño y discreto widget de chat ofrece ayuda contextual. En lugar de esperar a que el usuario pregunte, el asistente se anticipa basándose en la sección que el usuario está viendo.
+    *   **Ejemplo de Interacción:**
+        *   *En la sección "Habilidades":* "Veo que te interesa mi experiencia en IA. ¿Te gustaría que te muestre los proyectos donde apliqué RAG?"
+        *   *En la sección "Experiencia":* "Este rol fue clave para mi crecimiento en liderazgo. ¿Quieres que te detalle los resultados del proyecto de IA que lideré?"
+
+3.  **Búsqueda por Intención (Lenguaje Natural):**
+    *   **Mecánica:** Se evoluciona la búsqueda de palabras clave a un motor de búsqueda semántica. Esto implica convertir las descripciones de los proyectos y las consultas del usuario a vectores numéricos (embeddings) para encontrar coincidencias por significado, no solo por texto.
+    *   **Ejemplos de Búsqueda:** "¿Cuál es tu experiencia más relevante en el sector financiero?", "Muéstrame tus trabajos más recientes", "Compara tu rol en la empresa X con el de la empresa Y".
+
+**Plan de Implementación de Alto Nivel:**
+
+1.  **Capa de Datos de Interacción:** Implementar un sistema simple en el lado del cliente (usando `localStorage` y React Context) para registrar eventos clave como `view_section`, `click_project_tag`, etc.
+2.  **Lógica de Personalización:** Crear una función que, al cargar la página, lea los datos de interacción almacenados. Esta función calculará un "puntaje de interés" para cada sección y devolverá un array de secciones ordenado, que se usará para renderizar la aplicación.
+3.  **Integración del Asistente IA:**
+    *   Añadir un componente de UI para el chat.
+    *   Crear una función serverless (ej. en Vercel, Netlify o Firebase) que reciba el contexto de la sección actual y llame a una API de un modelo de lenguaje (como Gemini o GPT) para generar las sugerencias proactivas.
+4.  **Implementación de Búsqueda Semántica:**
+    *   **Paso Offline:** Generar "embeddings" (vectores) para el título y la descripción de cada proyecto usando una API de embeddings. Almacenar estos vectores en un archivo JSON junto a los datos de los proyectos.
+    *   **Paso Online:** Cuando el usuario busca, enviar su consulta a una función serverless que la convierte en un vector y calcula la similitud del coseno contra los vectores de los proyectos para devolver los resultados más relevantes.
+
+---
+
+### PROPUESTA 2: EL PORTAFOLIO COMO "ESPACIO TÁCTIL E INMERSIVO"
+
+**Concepto Central:** Convertir la página en un espacio digital explorable, utilizando profundidad, texturas y animaciones que responden al usuario para crear una experiencia memorable y sensorial que destaque la calidad del desarrollo.
+
+**Componentes Clave:**
+
+1.  **Hero Interactivo y Escultural:**
+    *   **Mecánica:** La sección principal presenta un objeto 3D abstracto (una "escultura digital") que el usuario puede rotar y manipular. Este objeto puede representar conceptos como "código", "arquitectura" o "ideas" a través de formas geométricas complejas o simulaciones de partículas.
+    *   **Efecto:** Genera una primera impresión impactante y comunica de forma no verbal la naturaleza creativa y técnica del perfil. La escultura puede reaccionar sutilmente al cambiar de sección, alterando su forma o color.
+
+2.  **"Bento UI" con Profundidad y Parallax:**
+    *   **Mecánica:** Se rediseñan las secciones de "Proyectos" y "Habilidades" con un layout de "Bento Grid". Al pasar el cursor sobre una tarjeta, esta se eleva ligeramente en el eje Z y se inclina hacia el puntero, creando un efecto de profundidad y destacando el elemento seleccionado.
+    *   **Efecto:** La interfaz se siente menos plana y más reactiva, invitando a la exploración. Las animaciones deben ser suaves, utilizando físicas de resorte (spring physics) para un movimiento natural.
+
+3.  **Micro-interacciones con Feedback Háptico-Visual:**
+    *   **Mecánica:** Cada elemento interactivo (botones, enlaces, toggles) ofrece una respuesta visual que simula una interacción física, haciendo la UI más intuitiva.
+    *   **Ejemplos:**
+        *   *Botones:* Al hacer clic, el botón no solo cambia de color, sino que se "hunde" visualmente con una sombra interna.
+        *   *Scroll:* Al llegar al final de un carrusel, en lugar de un tope brusco, la última tarjeta "rebota" suavemente.
+        *   *Acción Exitosa:* Al copiar un email, un ícono de "check" aparece y se "dibuja" a sí mismo animadamente.
+
+**Plan de Implementación de Alto Nivel:**
+
+1.  **Configuración 3D:** Integrar `react-three-fiber` y `drei` en el proyecto, que son los estándares de la industria para usar Three.js en React de forma declarativa.
+2.  **Componente Hero 3D:** Crear un nuevo componente que contenga el `<Canvas>` de `react-three-fiber`. Dentro, usar los helpers de `drei` para la escena, cámara y luces. Añadir un modelo 3D (importado o generado) y usar los eventos `onPointerOver` y `onPointerMove` para controlar su rotación.
+3.  **Componente Bento Grid:** Refactorizar las secciones de Proyectos/Habilidades para usar CSS Grid. Envolver cada tarjeta en un `motion.div` de Framer Motion y usar la prop `whileHover` para aplicar transformaciones 3D (`scale3d`, `translateZ`).
+4.  **Revisión de Micro-interacciones:** Auditar todos los elementos interactivos y aplicar animaciones sutiles usando las props `whileHover` y `whileTap` de Framer Motion para añadir feedback instantáneo.
+
+---
+
+### PROPUESTA 3: EL PORTAFOLIO COMO "LIENZO PERSONALIZABLE"
+
+**Concepto Central:** Empoderar al visitante dándole el control sobre la presentación visual del contenido. Esto posiciona el portafolio como una herramienta flexible y centrada en el usuario, demostrando un dominio avanzado de CSS y gestión de estado.
+
+**Componentes Clave:**
+
+1.  **Motor de Temas Avanzado:**
+    *   **Mecánica:** Ofrecer un panel de control de visualización donde el usuario puede elegir entre varios temas estéticos que alteran drásticamente la apariencia del sitio.
+    *   **Temas Propuestos:**
+        *   **"Glassmorphism":** Paneles translúcidos con efecto de vidrio esmerilado.
+        *   **"Neobrutalism":** Colores de alto contraste, sombras duras y tipografía fuerte.
+        *   **"Monochrome":** Un tema elegante en blanco y negro que se centra en la tipografía y la estructura.
+
+2.  **Selector de Disposición de Contenido (Layout Shifter):**
+    *   **Mecánica:** El usuario puede cambiar la estructura de las secciones principales con un solo clic. Por ejemplo, la sección de "Proyectos" podría alternar entre un carrusel horizontal, una cuadrícula vertical o una lista detallada.
+    *   **Efecto:** Permite que diferentes tipos de usuarios (un reclutador con prisa vs. un desarrollador curioso) consuman la información de la manera que les resulte más cómoda.
+
+3.  **"Modo Foco" Controlado por el Usuario:**
+    *   **Mecánica:** Se añade un ícono en cada título de sección que, al ser presionado, "atenúa" o colapsa todas las demás secciones.
+    *   **Beneficio:** Reduce el ruido visual y permite una lectura enfocada, ideal para visitantes que buscan información específica sobre un área.
+
+4.  **Personalización como Herramienta de Accesibilidad:**
+    *   **Mecánica:** Se enmarcan las opciones de personalización no solo como una preferencia estética, sino como una mejora de accesibilidad.
+    *   **Opciones Incluidas:** Control de tamaño de fuente, modo de alto contraste que supere los estándares WCAG AAA, y una opción para activar una fuente amigable para la dislexia.
+
+**Plan de Implementación de Alto Nivel:**
+
+1.  **Motor de Temas (CSS Variables):**
+    *   Definir todas las propiedades visuales (colores, fuentes, sombras) como variables CSS en `:root`.
+    *   Crear clases CSS para cada tema (ej. `.theme-glassmorphism`) que sobreescriban estas variables.
+    *   Usar el `ThemeContext` de React para aplicar la clase correspondiente al `document.documentElement` y cambiar el tema de forma global.
+2.  **Selector de Layout:** En los componentes de sección (`Projects`, `Skills`), gestionar el tipo de layout con un estado de React. Renderizar diferentes componentes o aplicar diferentes clases CSS basadas en ese estado.
+3.  **Modo Foco:** Implementar un estado global (en un nuevo `FocusContext` o en el `NavigationContext`). Cuando se activa, se añade una clase al contenedor principal de la app que, mediante CSS, oculta o reduce la opacidad de todas las secciones que no tengan una clase `.is-focused`.
+4.  **Opciones de Accesibilidad:** Añadir controles en el panel de personalización que modifiquen directamente las variables CSS globales correspondientes (ej. `--font-size-base`, `--main-text-color`).

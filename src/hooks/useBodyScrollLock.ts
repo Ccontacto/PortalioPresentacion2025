@@ -1,38 +1,44 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
-class BodyScrollLockManager {
-  private static lockCount = 0;
-  private static previousOverflow: string | null = null;
+class ScrollLockManager {
+  private locks = new Set<symbol>();
+  private originalOverflow: string | null = null;
 
-  static acquire() {
-    if (typeof document === 'undefined') return;
-
-    if (this.lockCount === 0) {
-      this.previousOverflow = document.body.style.overflow;
+  lock(): symbol {
+    const lockId = Symbol('body-scroll-lock');
+    if (this.locks.size === 0 && typeof document !== 'undefined') {
+      this.originalOverflow = document.body.style.overflow;
       document.body.style.overflow = 'hidden';
     }
-
-    this.lockCount += 1;
+    this.locks.add(lockId);
+    return lockId;
   }
 
-  static release() {
-    if (typeof document === 'undefined') return;
+  unlock(id: symbol) {
+    if (!this.locks.has(id)) return;
 
-    this.lockCount = Math.max(0, this.lockCount - 1);
-    if (this.lockCount === 0) {
-      document.body.style.overflow = this.previousOverflow ?? '';
-      this.previousOverflow = null;
+    this.locks.delete(id);
+    if (this.locks.size === 0 && typeof document !== 'undefined') {
+      document.body.style.overflow = this.originalOverflow ?? '';
+      this.originalOverflow = null;
     }
   }
 }
 
-export function useBodyScrollLock(locked: boolean) {
-  useEffect(() => {
-    if (!locked) return;
+const scrollLockManager = new ScrollLockManager();
 
-    BodyScrollLockManager.acquire();
+export function useBodyScrollLock(locked: boolean) {
+  const lockIdRef = useRef<symbol | null>(null);
+
+  useEffect(() => {
+    if (!locked || typeof document === 'undefined') return;
+
+    lockIdRef.current = scrollLockManager.lock();
     return () => {
-      BodyScrollLockManager.release();
+      if (lockIdRef.current) {
+        scrollLockManager.unlock(lockIdRef.current);
+        lockIdRef.current = null;
+      }
     };
   }, [locked]);
 }

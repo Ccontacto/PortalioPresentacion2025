@@ -10,6 +10,16 @@ const RIGHT_LINE_HEIGHT = 5.6;
 const LEFT_LINE_HEIGHT = 4.4;
 const SANITIZE_LIMIT = 600;
 
+const ACCENT_COLOR = { r: 15, g: 118, b: 110 };
+const HEADER_LINE_COLOR = { r: 226, g: 232, b: 240 };
+const LEFT_SECTION_BG = { r: 248, g: 250, b: 252 };
+const LEFT_SECTION_BORDER = { r: 219, g: 234, b: 254 };
+const LEFT_TITLE_COLOR = { r: 15, g: 23, b: 42 };
+const LEFT_TEXT_COLOR = { r: 63, g: 71, b: 82 };
+const HEADER_BASE_HEIGHT = 48;
+const HEADER_PADDING_X = 8;
+const HEADER_PADDING_TOP = 16;
+
 const sanitizeText = (value: string, limit: number = SANITIZE_LIMIT): string =>
   value.replace(/[<>"'&]/g, '').slice(0, limit).trim();
 
@@ -75,29 +85,43 @@ function drawHeader(doc: JsPdfInstance, data: PortfolioData, pageWidth: number):
   const subtitle = sanitizeText(data.subtitle);
   const tagline = sanitizeText(data.tagline);
   const contentWidth = pageWidth - PAGE_MARGIN * 2;
-  let cursorY = PAGE_MARGIN;
+  const taglineMaxWidth = contentWidth - HEADER_PADDING_X * 2;
 
+  doc.setFont('helvetica', 'italic');
+  doc.setFontSize(10);
+  const taglineLines = doc.splitTextToSize(tagline, taglineMaxWidth);
+
+  const headerBgHeight = HEADER_BASE_HEIGHT + taglineLines.length * 4.5;
+  doc.setFillColor(ACCENT_COLOR.r, ACCENT_COLOR.g, ACCENT_COLOR.b);
+  doc.roundedRect(PAGE_MARGIN, PAGE_MARGIN, contentWidth, headerBgHeight, 4, 4, 'F');
+
+  doc.setDrawColor(ACCENT_COLOR.r + 45, ACCENT_COLOR.g + 70, ACCENT_COLOR.b + 88);
+  doc.setLineWidth(0.6);
+  doc.roundedRect(PAGE_MARGIN, PAGE_MARGIN, contentWidth, headerBgHeight, 4, 4, 'S');
+
+  doc.setTextColor(255, 255, 255);
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(24);
-  doc.text(name, PAGE_MARGIN, cursorY);
-  cursorY += 8;
+  doc.text(name, PAGE_MARGIN + HEADER_PADDING_X, PAGE_MARGIN + HEADER_PADDING_TOP);
 
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(12);
-  doc.text(`${title} — ${subtitle}`, PAGE_MARGIN, cursorY);
-  cursorY += 7;
+  doc.text(`${title} • ${subtitle}`, PAGE_MARGIN + HEADER_PADDING_X, PAGE_MARGIN + HEADER_PADDING_TOP + 10);
 
   doc.setFont('helvetica', 'italic');
-  doc.setFontSize(11);
-  const taglineLines = doc.splitTextToSize(tagline, contentWidth);
-  doc.text(taglineLines, PAGE_MARGIN, cursorY);
-  cursorY += taglineLines.length * 5;
+  doc.setFontSize(10);
+  doc.text(taglineLines, PAGE_MARGIN + HEADER_PADDING_X, PAGE_MARGIN + HEADER_PADDING_TOP + 20);
 
-  doc.setDrawColor(180);
-  doc.setLineWidth(0.3);
-  doc.line(PAGE_MARGIN, cursorY, pageWidth - PAGE_MARGIN, cursorY);
+  const headerBottom = PAGE_MARGIN + headerBgHeight + 6;
+  doc.setDrawColor(HEADER_LINE_COLOR.r, HEADER_LINE_COLOR.g, HEADER_LINE_COLOR.b);
+  doc.setLineWidth(0.4);
+  doc.line(PAGE_MARGIN, headerBottom - 4, pageWidth - PAGE_MARGIN, headerBottom - 4);
 
-  return cursorY;
+  doc.setTextColor(0, 0, 0);
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(10);
+
+  return headerBottom;
 }
 
 function drawLeftColumn(
@@ -202,22 +226,43 @@ function drawRightColumn(
 function addLeftSection(doc: JsPdfInstance, title: string, lines: string[], columns: ColumnWriters) {
   if (!lines.length) return;
 
+  const sanitizedLines = lines.map(line => sanitizeText(line));
+
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(10);
+  const textBlocks = sanitizedLines.map(line => doc.splitTextToSize(line, LEFT_COLUMN_WIDTH));
+  const contentHeight = textBlocks.reduce(
+    (sum, block) => sum + block.length * LEFT_LINE_HEIGHT,
+    0
+  );
+
+  const sectionTop = columns.leftY;
+  const sectionHeight = 5 + contentHeight + 8;
+
+  doc.setFillColor(LEFT_SECTION_BG.r, LEFT_SECTION_BG.g, LEFT_SECTION_BG.b);
+  doc.roundedRect(PAGE_MARGIN - 2, sectionTop - 1.5, LEFT_COLUMN_WIDTH + 4, sectionHeight, 3, 3, 'F');
+  doc.setDrawColor(LEFT_SECTION_BORDER.r, LEFT_SECTION_BORDER.g, LEFT_SECTION_BORDER.b);
+  doc.setLineWidth(0.3);
+  doc.roundedRect(PAGE_MARGIN - 2, sectionTop - 1.5, LEFT_COLUMN_WIDTH + 4, sectionHeight, 3, 3, 'S');
+
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(11);
-  doc.text(title, PAGE_MARGIN, columns.leftY);
+  doc.setTextColor(LEFT_TITLE_COLOR.r, LEFT_TITLE_COLOR.g, LEFT_TITLE_COLOR.b);
+  doc.text(title, PAGE_MARGIN, columns.leftY + 4);
   columns.leftY += 5;
 
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(10);
+  doc.setTextColor(LEFT_TEXT_COLOR.r, LEFT_TEXT_COLOR.g, LEFT_TEXT_COLOR.b);
 
-  lines.forEach(line => {
-    const sanitized = sanitizeText(line);
-    const textLines = doc.splitTextToSize(sanitized, LEFT_COLUMN_WIDTH);
-    doc.text(textLines, PAGE_MARGIN, columns.leftY);
-    columns.leftY += textLines.length * LEFT_LINE_HEIGHT;
+  textBlocks.forEach(block => {
+    doc.text(block, PAGE_MARGIN, columns.leftY);
+    columns.leftY += block.length * LEFT_LINE_HEIGHT;
   });
 
-  columns.leftY += 4;
+  columns.leftY += 8;
+
+  doc.setTextColor(0, 0, 0);
 }
 
 function sanitizeUrl(url: string): string {

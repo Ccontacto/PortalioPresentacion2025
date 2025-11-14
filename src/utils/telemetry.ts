@@ -1,6 +1,6 @@
 import type { ErrorInfo } from 'react';
 
-const TELEMETRY_ENDPOINT = import.meta.env.VITE_TELEMETRY_ENDPOINT;
+const TELEMETRY_ENDPOINT = import.meta.env.VITE_TELEMETRY_ENDPOINT ?? '/api/errors';
 
 type Payload = {
   message: string;
@@ -20,12 +20,14 @@ function buildPayload(error: Error, info?: ErrorInfo): Payload {
     url: typeof window !== 'undefined' ? window.location.href : undefined,
     userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : undefined,
     env: import.meta.env.MODE,
-    timestamp: new Date().toISOString(),
+    timestamp: new Date().toISOString()
   };
 }
 
-function dispatchTelemetry(body: string) {
-  if (!TELEMETRY_ENDPOINT) return;
+function dispatchTelemetry(payload: Payload) {
+  if (!import.meta.env.PROD || !TELEMETRY_ENDPOINT) return;
+
+  const body = JSON.stringify(payload);
 
   try {
     if (typeof navigator !== 'undefined' && typeof navigator.sendBeacon === 'function') {
@@ -38,7 +40,7 @@ function dispatchTelemetry(body: string) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body,
-        keepalive: true,
+        keepalive: true
       });
     }
   } catch (err) {
@@ -55,11 +57,5 @@ export function logAppError(error: Error, info?: ErrorInfo) {
     console.error('Captured error via telemetry helper:', payload);
   }
 
-  try {
-    dispatchTelemetry(JSON.stringify(payload));
-  } catch (err) {
-    if (import.meta.env.DEV) {
-      console.warn('Failed to report error telemetry', err);
-    }
-  }
+  dispatchTelemetry(payload);
 }

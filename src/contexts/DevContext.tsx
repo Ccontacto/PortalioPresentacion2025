@@ -1,5 +1,7 @@
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
 
+import { storage } from '../utils/storage';
+
 type DevContextValue = {
   devIds: boolean;
   toggleDevIds: () => void;
@@ -15,11 +17,16 @@ export function useDev() {
 
 const STORAGE_KEY = 'portfolio_dev_ids';
 
+const isBooleanOrFlag = (value: unknown): value is boolean | '0' | '1' =>
+  value === true || value === false || value === '0' || value === '1';
+
+const getInitialDevIds = () => {
+  const saved = storage.get<boolean | '0' | '1'>(STORAGE_KEY, false, isBooleanOrFlag);
+  return saved === true || saved === '1';
+};
+
 export function DevProvider({ children }: { children: React.ReactNode }) {
-  const [devIds, setDevIds] = useState<boolean>(() => {
-    if (typeof window === 'undefined') return false;
-    return window.localStorage.getItem(STORAGE_KEY) === '1';
-  });
+  const [devIds, setDevIds] = useState<boolean>(getInitialDevIds);
 
   useEffect(() => {
     if (typeof document === 'undefined') return;
@@ -28,13 +35,10 @@ export function DevProvider({ children }: { children: React.ReactNode }) {
     } else {
       document.documentElement.removeAttribute('data-dev-ids');
     }
-    if (typeof window !== 'undefined') {
-      window.localStorage.setItem(STORAGE_KEY, devIds ? '1' : '0');
-    }
+    storage.set(STORAGE_KEY, devIds);
   }, [devIds]);
 
   const toggleDevIds = useCallback(() => setDevIds(v => !v), []);
 
   return <DevContext.Provider value={{ devIds, toggleDevIds }}>{children}</DevContext.Provider>;
 }
-
