@@ -1,5 +1,3 @@
-import type { PortfolioData } from '../types/portfolio';
-
 export const es = {
   lang: 'es',
   name: 'José Carlos Torres Rivera',
@@ -217,7 +215,7 @@ export const es = {
     welcome: '¡Bienvenido a mi portfolio! 👋',
     email_copy_success: 'Email copiado ✓',
     email_copy_error: 'No se pudo copiar el email. Intenta manualmente.',
-    whatsapp_open: 'Abriendo WhatsApp...',
+    whatsapp_open: 'Abriendo WhatsApp...', 
     availability_available: 'Estado actualizado: disponible',
     availability_listening: 'Estado actualizado: escuchando propuestas',
     availability_unavailable: 'Estado actualizado: no disponible',
@@ -241,6 +239,10 @@ export const es = {
     searchPlaceholderTech: 'Buscar por tecnología...',
     searchClearLabel: 'Limpiar búsqueda',
     searchSuggestionsAria: 'Sugerencias destacadas',
-    searchNoMatches: 'Sin coincidencias. Ajusta la búsqueda o lanza confetti.'
+    searchNoMatches: 'Sin coincidencias. Ajusta la búsqueda o lanza confetti.',
+    prevProjects: 'Ver proyectos anteriores',
+    nextProjects: 'Ver siguientes proyectos',
+    prevSkills: 'Ver habilidades anteriores',
+    nextSkills: 'Ver siguientes habilidades'
   }
-} as const satisfies PortfolioData;
+} as const;

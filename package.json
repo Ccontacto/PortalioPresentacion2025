@@ -27,13 +27,14 @@
     "audit:lh": "lighthouse http://localhost:5176 --only-categories=accessibility,seo,performance --output html --output-path ./logs/lh-report.html --quiet"
   },
   "dependencies": {
-    "@dataconnect/generated": "file:src/dataconnect-generated",
     "focus-trap-react": "^11.0.4",
     "framer-motion": "^12.23.24",
+    "jscpd": "^4.0.5",
     "jspdf": "^3.0.3",
     "lucide-react": "^0.552.0",
     "react": "^19.2.0",
-    "react-dom": "^19.2.0"
+    "react-dom": "^19.2.0",
+    "ts-prune": "^0.10.3"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.16",

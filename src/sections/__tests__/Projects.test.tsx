@@ -1,11 +1,12 @@
 import { render, screen, within } from '@testing-library/react';
+import '@testing-library/jest-dom/vitest';
 import { describe, it, expect, vi } from 'vitest';
 
 import { NavigationProvider } from '../../contexts/NavigationContext';
 import { ThemeProvider } from '../../contexts/ThemeContext';
+import { getSafeUrl } from '../../utils/urlValidation';
 import Projects from '../Projects';
 
-import '@testing-library/jest-dom/vitest';
 import type { ProjectItem } from '../../types/portfolio';
 
 // Mock the language data
@@ -72,7 +73,7 @@ describe('Projects Section', () => {
     expect(validProjectArticle).toBeInTheDocument();
     const link = within(validProjectArticle!).getByRole('link', { name: /Ver proyecto/i });
     expect(link).toBeInTheDocument();
-    expect(link).toHaveAttribute('href', 'https://example.com');
+    expect(link).toHaveAttribute('href', getSafeUrl('https://example.com'));
   });
 
   it('should not render a link for a project with an invalid (e.g., javascript:) url', () => {

@@ -1,0 +1,1758 @@
+{
+  "statistics": {
+    "detectionDate": "2025-11-14T06:14:59.319Z",
+    "formats": {
+      "javascript": {
+        "sources": {
+          "src/dataconnect-generated/react/esm/index.esm.js": {
+            "lines": 65,
+            "tokens": 875,
+            "sources": 1,
+            "clones": 5,
+            "duplicatedLines": 39,
+            "duplicatedTokens": 455,
+            "percentage": 60,
+            "percentageTokens": 52,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/dataconnect-generated/react/index.cjs.js": {
+            "lines": 65,
+            "tokens": 920,
+            "sources": 1,
+            "clones": 5,
+            "duplicatedLines": 39,
+            "duplicatedTokens": 455,
+            "percentage": 60,
+            "percentageTokens": 49.46,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/dataconnect-generated/esm/index.esm.js": {
+            "lines": 105,
+            "tokens": 1071,
+            "sources": 1,
+            "clones": 6,
+            "duplicatedLines": 36,
+            "duplicatedTokens": 507,
+            "percentage": 34.29,
+            "percentageTokens": 47.34,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/quick-actions/useQuickActionsData.tsx": {
+            "lines": 34,
+            "tokens": 327,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/icons/WhatsappGlyph.tsx": {
+            "lines": 0,
+            "tokens": 12,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/header/AvailabilityBadge.tsx": {
+            "lines": 3,
+            "tokens": 25,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/utils/navIcons.tsx": {
+            "lines": 10,
+            "tokens": 116,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/sections/Skills.tsx": {
+            "lines": 146,
+            "tokens": 1615,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/sections/Projects.tsx": {
+            "lines": 79,
+            "tokens": 776,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/sections/Hero.tsx": {
+            "lines": 103,
+            "tokens": 1130,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/sections/FocusAreas.tsx": {
+            "lines": 14,
+            "tokens": 206,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/sections/Experience.tsx": {
+            "lines": 66,
+            "tokens": 646,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/sections/Contact.tsx": {
+            "lines": 74,
+            "tokens": 604,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/dataconnect-generated/index.cjs.js": {
+            "lines": 115,
+            "tokens": 1189,
+            "sources": 1,
+            "clones": 6,
+            "duplicatedLines": 36,
+            "duplicatedTokens": 507,
+            "percentage": 31.3,
+            "percentageTokens": 42.64,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/contexts/ToastContext.tsx": {
+            "lines": 0,
+            "tokens": 9,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/contexts/ThemeContext.tsx": {
+            "lines": 0,
+            "tokens": 3,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/contexts/NavigationContext.tsx": {
+            "lines": 0,
+            "tokens": 9,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/contexts/LanguageContext.tsx": {
+            "lines": 0,
+            "tokens": 16,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/contexts/DevContext.tsx": {
+            "lines": 0,
+            "tokens": 7,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/ToastContainer.tsx": {
+            "lines": 37,
+            "tokens": 352,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/SearchBar.tsx": {
+            "lines": 165,
+            "tokens": 1371,
+            "sources": 1,
+            "clones": 1,
+            "duplicatedLines": 19,
+            "duplicatedTokens": 131,
+            "percentage": 11.52,
+            "percentageTokens": 9.56,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/RetroModeBanner.tsx": {
+            "lines": 0,
+            "tokens": 3,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/QuickActionsModal.tsx": {
+            "lines": 84,
+            "tokens": 739,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/HamburgerMenu.tsx": {
+            "lines": 123,
+            "tokens": 1243,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/ErrorBoundary.tsx": {
+            "lines": 0,
+            "tokens": 13,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/ConfettiCanvas.tsx": {
+            "lines": 0,
+            "tokens": 3,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/CommandPalette.tsx": {
+            "lines": 405,
+            "tokens": 3506,
+            "sources": 1,
+            "clones": 1,
+            "duplicatedLines": 19,
+            "duplicatedTokens": 131,
+            "percentage": 4.69,
+            "percentageTokens": 3.74,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/App.tsx": {
+            "lines": 36,
+            "tokens": 272,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          }
+        },
+        "total": {
+          "lines": 1729,
+          "tokens": 17058,
+          "sources": 28,
+          "clones": 12,
+          "duplicatedLines": 94,
+          "duplicatedTokens": 1093,
+          "percentage": 5.44,
+          "percentageTokens": 6.41,
+          "newDuplicatedLines": 0,
+          "newClones": 0
+        }
+      },
+      "json": {
+        "sources": {
+          "src/dataconnect-generated/react/package.json": {
+            "lines": 16,
+            "tokens": 96,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/dataconnect-generated/.guides/config.json": {
+            "lines": 8,
+            "tokens": 48,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/dataconnect-generated/package.json": {
+            "lines": 31,
+            "tokens": 186,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          }
+        },
+        "total": {
+          "lines": 55,
+          "tokens": 330,
+          "sources": 3,
+          "clones": 0,
+          "duplicatedLines": 0,
+          "duplicatedTokens": 0,
+          "percentage": 0,
+          "percentageTokens": 0,
+          "newDuplicatedLines": 0,
+          "newClones": 0
+        }
+      },
+      "typescript": {
+        "sources": {
+          "src/dataconnect-generated/react/index.d.ts": {
+            "lines": 32,
+            "tokens": 721,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/quick-actions/types.ts": {
+            "lines": 15,
+            "tokens": 116,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/utils/urlValidation.ts": {
+            "lines": 126,
+            "tokens": 1035,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/utils/typeGuards.ts": {
+            "lines": 13,
+            "tokens": 202,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/utils/telemetry.ts": {
+            "lines": 64,
+            "tokens": 563,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/utils/storage.ts": {
+            "lines": 73,
+            "tokens": 591,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/utils/pdfGenerator.ts": {
+            "lines": 343,
+            "tokens": 3554,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/types/portfolio.ts": {
+            "lines": 193,
+            "tokens": 1223,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/hooks/useReducedMotion.ts": {
+            "lines": 40,
+            "tokens": 337,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/hooks/useKonamiCode.ts": {
+            "lines": 65,
+            "tokens": 565,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/hooks/useKeyboardShortcuts.ts": {
+            "lines": 47,
+            "tokens": 523,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/hooks/useIntersectionObserver.ts": {
+            "lines": 44,
+            "tokens": 467,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/hooks/useHorizontalScroll.ts": {
+            "lines": 109,
+            "tokens": 1042,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/hooks/useFloatingPanelPlacement.ts": {
+            "lines": 89,
+            "tokens": 1096,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/hooks/useDeferredExitAction.ts": {
+            "lines": 45,
+            "tokens": 338,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/hooks/useCvDownload.ts": {
+            "lines": 59,
+            "tokens": 542,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/hooks/useConfettiCooldown.ts": {
+            "lines": 83,
+            "tokens": 780,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/hooks/useBodyScrollLock.ts": {
+            "lines": 39,
+            "tokens": 328,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/dataconnect-generated/index.d.ts": {
+            "lines": 248,
+            "tokens": 1954,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/data/es.ts": {
+            "lines": 245,
+            "tokens": 1808,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/data/en.ts": {
+            "lines": 140,
+            "tokens": 1102,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/constants/animation.ts": {
+            "lines": 46,
+            "tokens": 534,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          }
+        },
+        "total": {
+          "lines": 2158,
+          "tokens": 19421,
+          "sources": 22,
+          "clones": 0,
+          "duplicatedLines": 0,
+          "duplicatedTokens": 0,
+          "percentage": 0,
+          "percentageTokens": 0,
+          "newDuplicatedLines": 0,
+          "newClones": 0
+        }
+      },
+      "markdown": {
+        "sources": {
+          "src/dataconnect-generated/react/README.md": {
+            "lines": 949,
+            "tokens": 11319,
+            "sources": 1,
+            "clones": 8,
+            "duplicatedLines": 78,
+            "duplicatedTokens": 1436,
+            "percentage": 8.22,
+            "percentageTokens": 12.69,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/dataconnect-generated/.guides/usage.md": {
+            "lines": 101,
+            "tokens": 890,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/dataconnect-generated/.guides/setup.md": {
+            "lines": 58,
+            "tokens": 457,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          }
+        },
+        "total": {
+          "lines": 1108,
+          "tokens": 12666,
+          "sources": 3,
+          "clones": 4,
+          "duplicatedLines": 39,
+          "duplicatedTokens": 718,
+          "percentage": 3.52,
+          "percentageTokens": 5.67,
+          "newDuplicatedLines": 0,
+          "newClones": 0
+        }
+      },
+      "tsx": {
+        "sources": {
+          "src/components/quick-actions/useQuickActionsData.tsx": {
+            "lines": 102,
+            "tokens": 1162,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/icons/WhatsappGlyph.tsx": {
+            "lines": 18,
+            "tokens": 111,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/header/AvailabilityBadge.tsx": {
+            "lines": 40,
+            "tokens": 278,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/utils/navIcons.tsx": {
+            "lines": 19,
+            "tokens": 210,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/sections/Skills.tsx": {
+            "lines": 164,
+            "tokens": 1791,
+            "sources": 1,
+            "clones": 1,
+            "duplicatedLines": 28,
+            "duplicatedTokens": 172,
+            "percentage": 17.07,
+            "percentageTokens": 9.6,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/sections/Projects.tsx": {
+            "lines": 143,
+            "tokens": 1425,
+            "sources": 1,
+            "clones": 2,
+            "duplicatedLines": 38,
+            "duplicatedTokens": 262,
+            "percentage": 26.57,
+            "percentageTokens": 18.39,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/sections/Hero.tsx": {
+            "lines": 222,
+            "tokens": 2346,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/sections/FocusAreas.tsx": {
+            "lines": 53,
+            "tokens": 568,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/sections/Experience.tsx": {
+            "lines": 119,
+            "tokens": 1108,
+            "sources": 1,
+            "clones": 1,
+            "duplicatedLines": 10,
+            "duplicatedTokens": 90,
+            "percentage": 8.4,
+            "percentageTokens": 8.12,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/sections/Contact.tsx": {
+            "lines": 169,
+            "tokens": 1481,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/contexts/ToastContext.tsx": {
+            "lines": 55,
+            "tokens": 684,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/contexts/ThemeContext.tsx": {
+            "lines": 102,
+            "tokens": 1095,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/contexts/NavigationContext.tsx": {
+            "lines": 53,
+            "tokens": 509,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/contexts/LanguageContext.tsx": {
+            "lines": 69,
+            "tokens": 714,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/contexts/DevContext.tsx": {
+            "lines": 38,
+            "tokens": 408,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/ToastContainer.tsx": {
+            "lines": 52,
+            "tokens": 487,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/SkipToContent.tsx": {
+            "lines": 6,
+            "tokens": 52,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/SearchBar.tsx": {
+            "lines": 368,
+            "tokens": 3312,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/RetroModeBanner.tsx": {
+            "lines": 20,
+            "tokens": 199,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/QuickActionsModal.tsx": {
+            "lines": 214,
+            "tokens": 2016,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/PageProgress.tsx": {
+            "lines": 57,
+            "tokens": 533,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/LoadingScreen.tsx": {
+            "lines": 24,
+            "tokens": 221,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/HamburgerMenu.tsx": {
+            "lines": 302,
+            "tokens": 3084,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/ErrorBoundary.tsx": {
+            "lines": 51,
+            "tokens": 479,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/ConfettiCanvas.tsx": {
+            "lines": 167,
+            "tokens": 1829,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/CommandPalette.tsx": {
+            "lines": 560,
+            "tokens": 4943,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/main.tsx": {
+            "lines": 19,
+            "tokens": 118,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/App.tsx": {
+            "lines": 164,
+            "tokens": 1467,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          }
+        },
+        "total": {
+          "lines": 3370,
+          "tokens": 32630,
+          "sources": 28,
+          "clones": 2,
+          "duplicatedLines": 38,
+          "duplicatedTokens": 262,
+          "percentage": 1.13,
+          "percentageTokens": 0.8,
+          "newDuplicatedLines": 0,
+          "newClones": 0
+        }
+      }
+    },
+    "total": {
+      "lines": 8420,
+      "tokens": 82105,
+      "sources": 84,
+      "clones": 18,
+      "duplicatedLines": 171,
+      "duplicatedTokens": 2073,
+      "percentage": 2.03,
+      "percentageTokens": 2.52,
+      "newDuplicatedLines": 0,
+      "newClones": 0
+    }
+  },
+  "duplicates": [
+    {
+      "format": "javascript",
+      "lines": 9,
+      "fragment": "function useCreateMovie(dcOrOptions, options) {\n  const { dc: dcInstance, vars: inputOpts } = validateArgs(connectorConfig, dcOrOptions, options);\n  function refFactory(vars) {\n    return createMovieRef(dcInstance, vars);\n  }\n  return useDataConnectMutation(refFactory, inputOpts, CallerSdkTypeEnum.GeneratedReact);\n}\n\nexports",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src/dataconnect-generated/react/index.cjs.js",
+        "start": 5,
+        "end": 13,
+        "startLoc": {
+          "line": 5,
+          "column": 2,
+          "position": 91
+        },
+        "endLoc": {
+          "line": 13,
+          "column": 8,
+          "position": 180
+        }
+      },
+      "secondFile": {
+        "name": "src/dataconnect-generated/react/esm/index.esm.js",
+        "start": 5,
+        "end": 13,
+        "startLoc": {
+          "line": 5,
+          "column": 2,
+          "position": 78
+        },
+        "endLoc": {
+          "line": 13,
+          "column": 7,
+          "position": 167
+        }
+      }
+    },
+    {
+      "format": "javascript",
+      "lines": 9,
+      "fragment": "function useUpsertUser(dcOrOptions, options) {\n  const { dc: dcInstance, vars: inputOpts } = validateArgs(connectorConfig, dcOrOptions, options);\n  function refFactory(vars) {\n    return upsertUserRef(dcInstance, vars);\n  }\n  return useDataConnectMutation(refFactory, inputOpts, CallerSdkTypeEnum.GeneratedReact);\n}\n\nexports",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src/dataconnect-generated/react/index.cjs.js",
+        "start": 13,
+        "end": 21,
+        "startLoc": {
+          "line": 13,
+          "column": 2,
+          "position": 186
+        },
+        "endLoc": {
+          "line": 21,
+          "column": 8,
+          "position": 275
+        }
+      },
+      "secondFile": {
+        "name": "src/dataconnect-generated/react/esm/index.esm.js",
+        "start": 13,
+        "end": 21,
+        "startLoc": {
+          "line": 13,
+          "column": 2,
+          "position": 169
+        },
+        "endLoc": {
+          "line": 21,
+          "column": 7,
+          "position": 258
+        }
+      }
+    },
+    {
+      "format": "javascript",
+      "lines": 9,
+      "fragment": "function useAddReview(dcOrOptions, options) {\n  const { dc: dcInstance, vars: inputOpts } = validateArgs(connectorConfig, dcOrOptions, options);\n  function refFactory(vars) {\n    return addReviewRef(dcInstance, vars);\n  }\n  return useDataConnectMutation(refFactory, inputOpts, CallerSdkTypeEnum.GeneratedReact);\n}\n\nexports",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src/dataconnect-generated/react/index.cjs.js",
+        "start": 21,
+        "end": 29,
+        "startLoc": {
+          "line": 21,
+          "column": 2,
+          "position": 281
+        },
+        "endLoc": {
+          "line": 29,
+          "column": 8,
+          "position": 370
+        }
+      },
+      "secondFile": {
+        "name": "src/dataconnect-generated/react/esm/index.esm.js",
+        "start": 21,
+        "end": 29,
+        "startLoc": {
+          "line": 21,
+          "column": 2,
+          "position": 260
+        },
+        "endLoc": {
+          "line": 29,
+          "column": 7,
+          "position": 349
+        }
+      }
+    },
+    {
+      "format": "javascript",
+      "lines": 10,
+      "fragment": "function useDeleteReview(dcOrOptions, options) {\n  const { dc: dcInstance, vars: inputOpts } = validateArgs(connectorConfig, dcOrOptions, options);\n  function refFactory(vars) {\n    return deleteReviewRef(dcInstance, vars);\n  }\n  return useDataConnectMutation(refFactory, inputOpts, CallerSdkTypeEnum.GeneratedReact);\n}\n\n\nexports",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src/dataconnect-generated/react/index.cjs.js",
+        "start": 29,
+        "end": 38,
+        "startLoc": {
+          "line": 29,
+          "column": 2,
+          "position": 376
+        },
+        "endLoc": {
+          "line": 38,
+          "column": 8,
+          "position": 466
+        }
+      },
+      "secondFile": {
+        "name": "src/dataconnect-generated/react/esm/index.esm.js",
+        "start": 29,
+        "end": 38,
+        "startLoc": {
+          "line": 29,
+          "column": 2,
+          "position": 351
+        },
+        "endLoc": {
+          "line": 38,
+          "column": 7,
+          "position": 441
+        }
+      }
+    },
+    {
+      "format": "javascript",
+      "lines": 7,
+      "fragment": "function useGetMovieById(dcOrVars, varsOrOptions, options) {\n  const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateReactArgs(connectorConfig, dcOrVars, varsOrOptions, options, true, true);\n  const ref = getMovieByIdRef(dcInstance, inputVars);\n  return useDataConnectQuery(ref, inputOpts, CallerSdkTypeEnum.GeneratedReact);\n}\n\nexports",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src/dataconnect-generated/react/index.cjs.js",
+        "start": 56,
+        "end": 62,
+        "startLoc": {
+          "line": 56,
+          "column": 2,
+          "position": 721
+        },
+        "endLoc": {
+          "line": 62,
+          "column": 8,
+          "position": 819
+        }
+      },
+      "secondFile": {
+        "name": "src/dataconnect-generated/react/esm/index.esm.js",
+        "start": 56,
+        "end": 62,
+        "startLoc": {
+          "line": 56,
+          "column": 2,
+          "position": 680
+        },
+        "endLoc": {
+          "line": 62,
+          "column": 7,
+          "position": 778
+        }
+      }
+    },
+    {
+      "format": "markdown",
+      "lines": 22,
+      "fragment": " 1000 };\n  const query = useSearchMovie(searchMovieVars, options);\n  // If you'd like to provide options without providing any variables, you must\n  // pass `undefined` where you would normally pass the variables.\n  const query = useSearchMovie(undefined, options);\n\n  // You can also pass both a `DataConnect` instance and a `useDataConnectQueryOptions` object.\n  const dataConnect = getDataConnect(connectorConfig);\n  const options = { staleTime: 5 * 1000 };\n  const query = useSearchMovie(dataConnect, s",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src/dataconnect-generated/react/README.md",
+        "start": 525,
+        "end": 546,
+        "startLoc": {
+          "line": 525,
+          "column": 2,
+          "position": 6304
+        },
+        "endLoc": {
+          "line": 546,
+          "column": 4,
+          "position": 6440
+        }
+      },
+      "secondFile": {
+        "name": "src/dataconnect-generated/react/README.md",
+        "start": 176,
+        "end": 196,
+        "startLoc": {
+          "line": 176,
+          "column": 2,
+          "position": 2567
+        },
+        "endLoc": {
+          "line": 196,
+          "column": 4,
+          "position": 2702
+        }
+      }
+    },
+    {
+      "format": "markdown",
+      "lines": 7,
+      "fragment": "utationResult<UpsertUserData, UpsertUserVariables>;\n```\nYou can also pass in a `DataConnect` instance to the Mutation hook function.\n```javascript\nuseUpsertUser(dc: DataConnect, options?: useDataConnectMutationOptions<UpsertUserData, FirebaseError, UpsertUserVariables>): UseDataConnectMutationResult<UpsertUserData, UpsertUserVariables>;\n```\n\n### Variables\nThe `UpsertUser` Mutation requires an argument of type `UpsertUserVariables`, which is defined in [dataconnect-generated/index.d.ts](../index.d.ts). It has the following fields:\n\n```javascript\nexport interface UpsertUserVariables {\n  username: string;\n}\n```\n### Return Type\nRecall that calling the `UpsertUser` Mutation hook function returns a `UseMutationR",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src/dataconnect-generated/react/README.md",
+        "start": 686,
+        "end": 692,
+        "startLoc": {
+          "line": 686,
+          "column": 2,
+          "position": 8452
+        },
+        "endLoc": {
+          "line": 692,
+          "column": 13,
+          "position": 8646
+        }
+      },
+      "secondFile": {
+        "name": "src/dataconnect-generated/react/README.md",
+        "start": 590,
+        "end": 596,
+        "startLoc": {
+          "line": 590,
+          "column": 2,
+          "position": 7426
+        },
+        "endLoc": {
+          "line": 596,
+          "column": 14,
+          "position": 7620
+        }
+      }
+    },
+    {
+      "format": "markdown",
+      "lines": 7,
+      "fragment": "): UseDataConnectMutationResult<AddReviewData, AddReviewVariables>;\n```\nYou can also pass in a `DataConnect` instance to the Mutation hook function.\n```javascript\nuseAddReview(dc: DataConnect, options?: useDataConnectMutationOptions<AddReviewData, FirebaseError, AddReviewVariables>): UseDataConnectMutationResult<AddReviewData, AddReviewVariables>;\n```\n\n### Variables\nThe `AddReview` Mutation requires an argument of type `AddReviewVariables`, which is defined in [dataconnect-generated/index.d.ts](../index.d.ts). It has the following fields:\n\n```javascript\nexport interface AddReviewVariables {\n  movieId: UUIDString;\n  rating: number;\n  reviewText: string;\n}\n```\n### Return Type\nRecall that calling the `AddRev",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src/dataconnect-generated/react/README.md",
+        "start": 782,
+        "end": 788,
+        "startLoc": {
+          "line": 782,
+          "column": 2,
+          "position": 9476
+        },
+        "endLoc": {
+          "line": 788,
+          "column": 12,
+          "position": 9670
+        }
+      },
+      "secondFile": {
+        "name": "src/dataconnect-generated/react/README.md",
+        "start": 590,
+        "end": 596,
+        "startLoc": {
+          "line": 590,
+          "column": 2,
+          "position": 7426
+        },
+        "endLoc": {
+          "line": 596,
+          "column": 14,
+          "position": 7620
+        }
+      }
+    },
+    {
+      "format": "markdown",
+      "lines": 7,
+      "fragment": "ions<DeleteReviewData, FirebaseError, DeleteReviewVariables>): UseDataConnectMutationResult<DeleteReviewData, DeleteReviewVariables>;\n```\nYou can also pass in a `DataConnect` instance to the Mutation hook function.\n```javascript\nuseDeleteReview(dc: DataConnect, options?: useDataConnectMutationOptions<DeleteReviewData, FirebaseError, DeleteReviewVariables>): UseDataConnectMutationResult<DeleteReviewData, DeleteReviewVariables>;\n```\n\n### Variables\nThe `DeleteReview` Mutation requires an argument of type `DeleteReviewVariables`, which is defined in [dataconnect-generated/index.d.ts](../index.d.ts). It has the following fields:\n\n```javascript\nexport interface DeleteReviewVariables {\n  movieId: UUIDString;\n}\n```\n",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src/dataconnect-generated/react/README.md",
+        "start": 878,
+        "end": 884,
+        "startLoc": {
+          "line": 878,
+          "column": 2,
+          "position": 10502
+        },
+        "endLoc": {
+          "line": 884,
+          "column": 15,
+          "position": 10696
+        }
+      },
+      "secondFile": {
+        "name": "src/dataconnect-generated/react/README.md",
+        "start": 590,
+        "end": 596,
+        "startLoc": {
+          "line": 590,
+          "column": 2,
+          "position": 7426
+        },
+        "endLoc": {
+          "line": 596,
+          "column": 14,
+          "position": 7620
+        }
+      }
+    },
+    {
+      "format": "tsx",
+      "lines": 29,
+      "fragment": ")}\n          </div>\n\n          {canScrollLeft ? (\n            <button\n              type=\"button\"\n              className=\"projects-scroll-btn projects-scroll-btn--left\"\n              aria-label={prevLabel}\n              onClick={() => scrollByCard(-1)}\n            >\n              <ChevronLeft size={18} />\n            </button>\n          ) : null}\n\n          {canScrollRight ? (\n            <button\n              type=\"button\"\n              className=\"projects-scroll-btn projects-scroll-btn--right\"\n              aria-label={nextLabel}\n              onClick={() => scrollByCard(1)}\n            >\n              <ChevronRight size={18} />\n            </button>\n          ) : null}\n        </div>\n      </div>\n    </section>\n  );\n}",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src/sections/Projects.tsx",
+        "start": 116,
+        "end": 144,
+        "startLoc": {
+          "line": 116,
+          "column": 2,
+          "position": 1253
+        },
+        "endLoc": {
+          "line": 144,
+          "column": 2,
+          "position": 1425
+        }
+      },
+      "secondFile": {
+        "name": "src/sections/Skills.tsx",
+        "start": 137,
+        "end": 165,
+        "startLoc": {
+          "line": 137,
+          "column": 2,
+          "position": 1593
+        },
+        "endLoc": {
+          "line": 165,
+          "column": 2,
+          "position": 1791
+        }
+      }
+    },
+    {
+      "format": "tsx",
+      "lines": 11,
+      "fragment": "useEffect(() => {\n    const track = trackRef.current;\n    if (!track) return;\n    \n    if (typeof track.scrollTo === 'function') {\n      track.scrollTo({ left: 0 });\n    } else {\n      track.scrollLeft = 0;\n    }\n    \n    // Sincroniza visibilidad de botones después del frame",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src/sections/Experience.tsx",
+        "start": 23,
+        "end": 33,
+        "startLoc": {
+          "line": 23,
+          "column": 3,
+          "position": 227
+        },
+        "endLoc": {
+          "line": 33,
+          "column": 55,
+          "position": 317
+        }
+      },
+      "secondFile": {
+        "name": "src/sections/Projects.tsx",
+        "start": 33,
+        "end": 41,
+        "startLoc": {
+          "line": 33,
+          "column": 3,
+          "position": 367
+        },
+        "endLoc": {
+          "line": 41,
+          "column": 6,
+          "position": 453
+        }
+      }
+    },
+    {
+      "format": "javascript",
+      "lines": 7,
+      "fragment": "const createMovieRef = (dcOrVars, vars) => {\n  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);\n  dcInstance._useGeneratedSdk();\n  return mutationRef(dcInstance, 'CreateMovie', inputVars);\n}\ncreateMovieRef.operationName = 'CreateMovie';\nexports",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src/dataconnect-generated/index.cjs.js",
+        "start": 10,
+        "end": 16,
+        "startLoc": {
+          "line": 10,
+          "column": 1,
+          "position": 70
+        },
+        "endLoc": {
+          "line": 16,
+          "column": 8,
+          "position": 155
+        }
+      },
+      "secondFile": {
+        "name": "src/dataconnect-generated/esm/index.esm.js",
+        "start": 9,
+        "end": 16,
+        "startLoc": {
+          "line": 9,
+          "column": 2,
+          "position": 62
+        },
+        "endLoc": {
+          "line": 16,
+          "column": 7,
+          "position": 148
+        }
+      }
+    },
+    {
+      "format": "javascript",
+      "lines": 7,
+      "fragment": "const upsertUserRef = (dcOrVars, vars) => {\n  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);\n  dcInstance._useGeneratedSdk();\n  return mutationRef(dcInstance, 'UpsertUser', inputVars);\n}\nupsertUserRef.operationName = 'UpsertUser';\nexports",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src/dataconnect-generated/index.cjs.js",
+        "start": 22,
+        "end": 28,
+        "startLoc": {
+          "line": 22,
+          "column": 1,
+          "position": 202
+        },
+        "endLoc": {
+          "line": 28,
+          "column": 8,
+          "position": 287
+        }
+      },
+      "secondFile": {
+        "name": "src/dataconnect-generated/esm/index.esm.js",
+        "start": 20,
+        "end": 27,
+        "startLoc": {
+          "line": 20,
+          "column": 2,
+          "position": 182
+        },
+        "endLoc": {
+          "line": 27,
+          "column": 7,
+          "position": 268
+        }
+      }
+    },
+    {
+      "format": "javascript",
+      "lines": 7,
+      "fragment": "const addReviewRef = (dcOrVars, vars) => {\n  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);\n  dcInstance._useGeneratedSdk();\n  return mutationRef(dcInstance, 'AddReview', inputVars);\n}\naddReviewRef.operationName = 'AddReview';\nexports",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src/dataconnect-generated/index.cjs.js",
+        "start": 34,
+        "end": 40,
+        "startLoc": {
+          "line": 34,
+          "column": 1,
+          "position": 334
+        },
+        "endLoc": {
+          "line": 40,
+          "column": 8,
+          "position": 419
+        }
+      },
+      "secondFile": {
+        "name": "src/dataconnect-generated/esm/index.esm.js",
+        "start": 31,
+        "end": 38,
+        "startLoc": {
+          "line": 31,
+          "column": 2,
+          "position": 302
+        },
+        "endLoc": {
+          "line": 38,
+          "column": 7,
+          "position": 388
+        }
+      }
+    },
+    {
+      "format": "javascript",
+      "lines": 7,
+      "fragment": "const deleteReviewRef = (dcOrVars, vars) => {\n  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);\n  dcInstance._useGeneratedSdk();\n  return mutationRef(dcInstance, 'DeleteReview', inputVars);\n}\ndeleteReviewRef.operationName = 'DeleteReview';\nexports",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src/dataconnect-generated/index.cjs.js",
+        "start": 46,
+        "end": 52,
+        "startLoc": {
+          "line": 46,
+          "column": 1,
+          "position": 466
+        },
+        "endLoc": {
+          "line": 52,
+          "column": 8,
+          "position": 551
+        }
+      },
+      "secondFile": {
+        "name": "src/dataconnect-generated/esm/index.esm.js",
+        "start": 42,
+        "end": 49,
+        "startLoc": {
+          "line": 42,
+          "column": 2,
+          "position": 422
+        },
+        "endLoc": {
+          "line": 49,
+          "column": 7,
+          "position": 508
+        }
+      }
+    },
+    {
+      "format": "javascript",
+      "lines": 7,
+      "fragment": "const getMovieByIdRef = (dcOrVars, vars) => {\n  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);\n  dcInstance._useGeneratedSdk();\n  return queryRef(dcInstance, 'GetMovieById', inputVars);\n}\ngetMovieByIdRef.operationName = 'GetMovieById';\nexports",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src/dataconnect-generated/index.cjs.js",
+        "start": 94,
+        "end": 100,
+        "startLoc": {
+          "line": 94,
+          "column": 1,
+          "position": 931
+        },
+        "endLoc": {
+          "line": 100,
+          "column": 8,
+          "position": 1016
+        }
+      },
+      "secondFile": {
+        "name": "src/dataconnect-generated/esm/index.esm.js",
+        "start": 86,
+        "end": 93,
+        "startLoc": {
+          "line": 86,
+          "column": 2,
+          "position": 839
+        },
+        "endLoc": {
+          "line": 93,
+          "column": 7,
+          "position": 925
+        }
+      }
+    },
+    {
+      "format": "javascript",
+      "lines": 7,
+      "fragment": "const searchMovieRef = (dcOrVars, vars) => {\n  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars);\n  dcInstance._useGeneratedSdk();\n  return queryRef(dcInstance, 'SearchMovie', inputVars);\n}\nsearchMovieRef.operationName = 'SearchMovie';\nexports",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src/dataconnect-generated/index.cjs.js",
+        "start": 106,
+        "end": 112,
+        "startLoc": {
+          "line": 106,
+          "column": 1,
+          "position": 1063
+        },
+        "endLoc": {
+          "line": 112,
+          "column": 8,
+          "position": 1145
+        }
+      },
+      "secondFile": {
+        "name": "src/dataconnect-generated/esm/index.esm.js",
+        "start": 97,
+        "end": 104,
+        "startLoc": {
+          "line": 97,
+          "column": 2,
+          "position": 959
+        },
+        "endLoc": {
+          "line": 104,
+          "column": 7,
+          "position": 1042
+        }
+      }
+    },
+    {
+      "format": "javascript",
+      "lines": 20,
+      "fragment": "={false}\n      onExitComplete={onExitComplete}\n    >\n      {open ? (\n        <m.div\n          className=\"search-modal search-modal--command\"\n          data-dev-id=\"6500\"\n          variants={shouldReduceMotion ? undefined : OVERLAY_FADE}\n          initial={shouldReduceMotion ? undefined : 'hidden'}\n          animate={shouldReduceMotion ? undefined : 'show'}\n          exit={shouldReduceMotion ? undefined : 'exit'}\n          transition={shouldReduceMotion ? undefined : PANEL_TRANSITION}\n          role=\"presentation\"\n        >\n          <div\n            className=\"search-modal__backdrop\"\n            data-dev-id=\"6501\"\n            role=\"presentation\"\n            aria-hidden=\"true\"\n            onClick={closePalette",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src/components/CommandPalette.tsx",
+        "start": 407,
+        "end": 426,
+        "startLoc": {
+          "line": 407,
+          "column": 8,
+          "position": 3727
+        },
+        "endLoc": {
+          "line": 426,
+          "column": 13,
+          "position": 3858
+        }
+      },
+      "secondFile": {
+        "name": "src/components/SearchBar.tsx",
+        "start": 194,
+        "end": 210,
+        "startLoc": {
+          "line": 194,
+          "column": 8,
+          "position": 1863
+        },
+        "endLoc": {
+          "line": 210,
+          "column": 2,
+          "position": 1987
+        }
+      }
+    }
+  ],
+  "filename": "/Users/joseca/Documents/PortalioPresentacion2025/node_modules/@jscpd/html-reporter/dist/templates/main.pug"
+}

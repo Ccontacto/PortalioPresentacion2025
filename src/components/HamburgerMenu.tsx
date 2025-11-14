@@ -15,10 +15,12 @@ export default function HamburgerMenu() {
   const { navItems, preferenceItems } = useQuickActionsData();
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
+  const [currentPage, setCurrentPage] = useState(0);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const panelRef = useRef<HTMLDivElement | null>(null);
   const searchInputRef = useRef<HTMLInputElement | null>(null);
+  const regionRef = useRef<HTMLDivElement | null>(null);
   const helpId = useId();
   const shouldReduceMotion = useReducedMotion();
   const { panelStyle, panelMaxHeight, openUp, rightAnchored } = useFloatingPanelPlacement(open, buttonRef, {
@@ -119,7 +121,26 @@ export default function HamburgerMenu() {
       document.removeEventListener('mousedown', onPointer);
       document.removeEventListener('touchstart', onPointer);
     };
-  }, [open]);
+    }, [open]);
+
+  useEffect(() => {
+    if (!open) return;
+    const handleRegionKeyDown = (event: KeyboardEvent) => {
+      if (!regionRef.current || event.target !== regionRef.current) return;
+      const pageCount = Math.max(1, Number(hasNav) + Number(hasActions));
+      if (event.key === 'ArrowRight') {
+        setCurrentPage(prev => (prev + 1) % pageCount);
+      } else if (event.key === 'ArrowLeft') {
+        setCurrentPage(prev => (prev - 1 + pageCount) % pageCount);
+      } else if (event.key === 'Home') {
+        setCurrentPage(0);
+      }
+    };
+    window.addEventListener('keydown', handleRegionKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleRegionKeyDown);
+    };
+  }, [open, hasNav, hasActions]);
 
   const handleToggle = () => {
     setOpen(prev => !prev);
@@ -199,7 +220,14 @@ export default function HamburgerMenu() {
                 aria-label={strings.searchPlaceholder}
               />
             </div>
-            <div className="hamburger-menu__content" role="region" aria-label={strings.menuLabel} aria-describedby={srHintId}>
+            <div
+              className="hamburger-menu__content"
+              role="region"
+              aria-label={strings.menuLabel}
+              aria-describedby={srHintId}
+              data-current-page={currentPage}
+              ref={regionRef}
+            >
               <p id={srHintId} className="sr-only">
                 {strings.srHint}
               </p>

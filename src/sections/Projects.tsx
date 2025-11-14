@@ -1,10 +1,11 @@
 import { m } from 'framer-motion';
-import { ChevronLeft, ChevronRight, ExternalLink, Rocket } from 'lucide-react';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { ExternalLink, Rocket } from 'lucide-react';
+import { useMemo, useRef, useState } from 'react';
 
+import HorizontalScroller from '../components/HorizontalScroller';
 import SearchBar from '../components/SearchBar';
+import SectionHeader from '../components/SectionHeader';
 import { useLanguage } from '../contexts/LanguageContext';
-import { useHorizontalScroll } from '../hooks/useHorizontalScroll';
 import { getSafeUrl } from '../utils/urlValidation';
 
 import type { ProjectItem } from '../types/portfolio';
@@ -23,48 +24,14 @@ export default function Projects() {
     );
   }, [currentSearchTerm, data.sections.projects.items]);
 
-  const { trackRef, canScrollLeft, canScrollRight, scrollByCard, updateScrollButtons } = useHorizontalScroll({
-    bounceLeftClass: 'projects-track--bounce-left',
-    bounceRightClass: 'projects-track--bounce-right',
-    itemSelector: '.project-card',
-    itemCount: filteredProjects.length
-  });
-
-  useEffect(() => {
-    const track = trackRef.current;
-    if (!track) return;
-    if (typeof track.scrollTo === 'function') {
-      track.scrollTo({ left: 0 });
-    } else {
-      track.scrollLeft = 0;
-    }
-    const frame = requestAnimationFrame(updateScrollButtons);
-    return () => cancelAnimationFrame(frame);
-  }, [filteredProjects.length, trackRef, updateScrollButtons]);
-
-
-  const wrapperClass = [
-    'projects-track-wrapper',
-    canScrollLeft ? 'projects-track-wrapper--left' : '',
-    canScrollRight ? 'projects-track-wrapper--right' : ''
-  ]
-    .filter(Boolean)
-    .join(' ');
-
-  const prevLabel = data.lang === 'en' ? 'View previous projects' : 'Ver proyectos anteriores';
-  const nextLabel = data.lang === 'en' ? 'View next projects' : 'Ver siguientes proyectos';
-
   return (
     <section ref={sectionRef} id="projects" className="page-section" aria-labelledby="projects-heading" data-dev-id="5000">
-      <header className="experience-header" data-dev-id="5001">
-        <span className="experience-header__eyebrow">Casos reales</span>
-        <h2 id="projects-heading" className="experience-header__title">
-          {data.sections.projects.title}
-        </h2>
-        <p className="experience-header__subtitle">
-          Lanzamientos y prototipos donde combiné iOS, liderazgo técnico e IA aplicada.
-        </p>
-      </header>
+      <SectionHeader
+        id="projects-heading"
+        eyebrow="Casos reales"
+        title={data.sections.projects.title}
+        subtitle="Lanzamientos y prototipos donde combiné iOS, liderazgo técnico e IA aplicada."
+      />
 
       <div className="page-section__body" data-dev-id="5003">
         <SearchBar
@@ -73,9 +40,17 @@ export default function Projects() {
           resultCount={filteredProjects.length}
         />
 
-        <div className={wrapperClass} data-dev-id="5002">
-          <div className="projects-track" role="list" ref={trackRef} onScroll={updateScrollButtons}>
-            {filteredProjects.map((proj: ProjectItem, index: number) => (
+        <HorizontalScroller
+          itemCount={filteredProjects.length}
+          itemSelector=".project-card"
+          bounceLeftClass="projects-track--bounce-left"
+          bounceRightClass="projects-track--bounce-right"
+          prevLabelKey="prevProjects"
+          nextLabelKey="nextProjects"
+        >
+          {filteredProjects.map((proj: ProjectItem, index: number) => {
+            const safeLink = proj.link ? getSafeUrl(proj.link) : null;
+            return (
               <m.article
                 key={proj.id}
                 className="card project-card"
@@ -92,15 +67,15 @@ export default function Projects() {
                 <h3 className="text-xl font-bold mb-3">{proj.title}</h3>
                 <p className="text-sm mb-4">{proj.description}</p>
                 <div className="project-tags" role="list" aria-label="Tecnologías del proyecto">
-        {proj.tags.map(tag => (
+                  {proj.tags.map(tag => (
                     <span key={tag} className="skill-badge" role="listitem">
                       {tag}
                     </span>
                   ))}
                 </div>
-                {proj.link && getSafeUrl(proj.link) && (
+                {safeLink ? (
                   <a
-                    href={getSafeUrl(proj.link) ?? undefined}
+                    href={safeLink}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-2 text-sm font-bold hover:underline"
@@ -108,33 +83,11 @@ export default function Projects() {
                     <ExternalLink size={24} aria-hidden="true" />
                     {data.lang === 'en' ? 'View project' : 'Ver proyecto'}
                   </a>
-                )}
+                ) : null}
               </m.article>
-            ))}
-          </div>
-
-          {canScrollLeft ? (
-            <button
-              type="button"
-              className="projects-scroll-btn projects-scroll-btn--left"
-              aria-label={prevLabel}
-              onClick={() => scrollByCard(-1)}
-            >
-              <ChevronLeft size={18} />
-            </button>
-          ) : null}
-
-          {canScrollRight ? (
-            <button
-              type="button"
-              className="projects-scroll-btn projects-scroll-btn--right"
-              aria-label={nextLabel}
-              onClick={() => scrollByCard(1)}
-            >
-              <ChevronRight size={18} />
-            </button>
-          ) : null}
-        </div>
+            );
+          })}
+        </HorizontalScroller>
       </div>
     </section>
   );

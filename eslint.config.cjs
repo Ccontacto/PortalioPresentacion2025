@@ -119,6 +119,6 @@ module.exports = [
     }
   },
   {
-    ignores: ['dist', 'coverage', 'node_modules', 'src/dataconnect-generated']
+    ignores: ['dist', 'coverage', 'node_modules', 'src/dataconnect-generated', '.gemini']
   }
 ];

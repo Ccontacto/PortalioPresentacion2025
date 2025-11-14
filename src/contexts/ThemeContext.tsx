@@ -3,10 +3,8 @@ import React, { createContext, useContext, useEffect, useState, useCallback, use
 import { storage } from '../utils/storage';
 
 type BaseTheme = 'light' | 'dark';
-export type Theme = BaseTheme | 'konami';
-
 type ThemeContextValue = {
-  theme: Theme;
+  theme: BaseTheme | 'konami';
   baseTheme: BaseTheme;
   isKonami: boolean;
   toggleTheme: () => void;

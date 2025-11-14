@@ -1,5 +1,4 @@
-import { FocusTrap } from 'focus-trap-react';
-import { AnimatePresence, m } from 'framer-motion';
+import { m } from 'framer-motion';
 import { ArrowRight, Eraser, Search, Sparkles, X } from 'lucide-react';
 import {
   useCallback,
@@ -10,15 +9,14 @@ import {
   useState,
   type MouseEvent
 } from 'react';
-import { createPortal } from 'react-dom';
 
-import { DIALOG_VARIANTS, OVERLAY_FADE, PANEL_TRANSITION } from '../constants/animation';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useNavigation } from '../contexts/NavigationContext';
 import { useBodyScrollLock } from '../hooks/useBodyScrollLock';
 import { useDeferredExitAction } from '../hooks/useDeferredExitAction';
-import { useReducedMotion } from '../hooks/useReducedMotion';
 import { launchConfetti } from '../utils/confetti';
+
+import Modal from './Modal';
 
 import type { ProjectItem } from '../types/portfolio';
 
@@ -57,7 +55,6 @@ export default function SearchBar({
   const panelId = useId();
   const { navigateTo } = useNavigation();
   const { data } = useLanguage();
-  const shouldReduceMotion = useReducedMotion();
 
   const tagOccurrences = useMemo(() => {
     const map = new Map<ProjectTag, number>();
@@ -190,154 +187,116 @@ export default function SearchBar({
 
   const renderModal = () => {
     if (!mountedRef.current) return null;
-    return createPortal(
-      <AnimatePresence initial={false} onExitComplete={onExitComplete}>
-        {isModalOpen ? (
-          <m.div
-            className="search-modal"
-            variants={shouldReduceMotion ? undefined : OVERLAY_FADE}
-            initial={shouldReduceMotion ? undefined : 'hidden'}
-            animate={shouldReduceMotion ? undefined : 'show'}
-            exit={shouldReduceMotion ? undefined : 'exit'}
-            transition={shouldReduceMotion ? undefined : PANEL_TRANSITION}
-            role="presentation"
-            data-dev-id="6002"
+    return (
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => handleCloseModal()}
+        onExitComplete={onExitComplete}
+        titleId={titleId}
+        descriptionId={descriptionId}
+        panelId={panelId}
+        initialFocusRef={inputRef}
+      >
+        <header className="search-modal__header">
+          <div>
+            <h3 id={titleId} className="search-modal__title">
+              {data.ui.searchFilterTitle ?? (data.lang === 'es' ? 'Filtrar proyectos' : 'Filter projects')}
+            </h3>
+            <p id={descriptionId} className="search-modal__subtitle">
+              {data.ui.searchFilterSubtitle ?? (data.lang === 'es' ? 'Escribe una tecnología o selecciona una de las sugerencias.' : 'Type a technology or pick one of the suggestions.')}
+            </p>
+          </div>
+          <button
+            type="button"
+            className="search-modal__close"
+            onClick={() => handleCloseModal()}
+            aria-label="Cerrar buscador"
           >
-            <div
-              className="search-modal__backdrop"
-              role="presentation"
-              aria-hidden="true"
-              onClick={() => handleCloseModal()}
-            />
-            <FocusTrap
-              active
-              focusTrapOptions={{
-                initialFocus: () => inputRef.current ?? false,
-                escapeDeactivates: false,
-                allowOutsideClick: true,
-                clickOutsideDeactivates: false,
-                returnFocusOnDeactivate: false
-              }}
+            <X size={20} aria-hidden="true" />
+          </button>
+        </header>
+
+        <div className="search-modal__input-group">
+          <Search size={20} aria-hidden="true" className="search-modal__input-icon" />
+          <input
+            ref={inputRef}
+            type="search"
+            value={searchTerm}
+            onChange={(event) => handleSearchInput(event.target.value)}
+            placeholder={data.ui.searchPlaceholderTech ?? (data.lang === 'es' ? 'Buscar por tecnología...' : 'Search by technology...')}
+            className="search-modal__input"
+            autoCapitalize="none"
+            autoComplete="off"
+            spellCheck={false}
+          />
+          {searchTerm && (
+            <button
+              type="button"
+              className="search-modal__clear"
+              onClick={() => handleSearchInput('')}
+              aria-label={data.ui.searchClearLabel ?? (data.lang === 'es' ? 'Limpiar búsqueda' : 'Clear search')}
             >
-              <m.div
-                className="search-modal__panel"
-                role="dialog"
-                aria-modal="true"
-                aria-labelledby={titleId}
-                aria-describedby={descriptionId}
-                id={panelId}
-                variants={shouldReduceMotion ? undefined : DIALOG_VARIANTS}
-                initial={shouldReduceMotion ? undefined : 'hidden'}
-                animate={shouldReduceMotion ? undefined : 'show'}
-                exit={shouldReduceMotion ? undefined : 'exit'}
-                transition={shouldReduceMotion ? undefined : PANEL_TRANSITION}
-                data-dev-id="6001"
+              <Eraser size={16} aria-hidden="true" />
+            </button>
+          )}
+        </div>
+
+        {suggestedTags.length > 0 && (
+          <div className="search-modal__suggestions" aria-label={data.ui.searchSuggestionsAria ?? (data.lang === 'es' ? 'Sugerencias destacadas' : 'Featured suggestions')}>
+            {suggestedTags.map(tag => (
+              <button
+                key={tag}
+                type="button"
+                className="search-modal__chip"
+                onMouseDown={(event) => event.preventDefault()}
+                onClick={(event) => handleSuggestionClick(tag, event)}
               >
-                <header className="search-modal__header">
-                  <div>
-                    <h3 id={titleId} className="search-modal__title">
-                      {data.ui.searchFilterTitle ?? (data.lang === 'es' ? 'Filtrar proyectos' : 'Filter projects')}
-                    </h3>
-                    <p id={descriptionId} className="search-modal__subtitle">
-                      {data.ui.searchFilterSubtitle ?? (data.lang === 'es' ? 'Escribe una tecnología o selecciona una de las sugerencias.' : 'Type a technology or pick one of the suggestions.')}
-                    </p>
-                  </div>
-                  <button
-                    type="button"
-                    className="search-modal__close"
-                    onClick={() => handleCloseModal()}
-                    aria-label="Cerrar buscador"
-                  >
-                    <X size={20} aria-hidden="true" />
-                  </button>
-                </header>
+                {tag}
+              </button>
+            ))}
+          </div>
+        )}
 
-                <div className="search-modal__input-group">
-                  <Search size={20} aria-hidden="true" className="search-modal__input-icon" />
-                  <input
-                    ref={inputRef}
-                    type="search"
-                    value={searchTerm}
-                    onChange={(event) => handleSearchInput(event.target.value)}
-                    placeholder={data.ui.searchPlaceholderTech ?? (data.lang === 'es' ? 'Buscar por tecnología...' : 'Search by technology...')}
-                    className="search-modal__input"
-                    autoCapitalize="none"
-                    autoComplete="off"
-                    spellCheck={false}
-                  />
-                  {searchTerm && (
-                    <button
-                      type="button"
-                      className="search-modal__clear"
-                      onClick={() => handleSearchInput('')}
-                      aria-label={data.ui.searchClearLabel ?? (data.lang === 'es' ? 'Limpiar búsqueda' : 'Clear search')}
-                    >
-                      <Eraser size={16} aria-hidden="true" />
-                    </button>
-                  )}
-                </div>
+        <div className="search-modal__tag-list" role="list">
+          {filteredTags.length > 0 ? (
+            filteredTags.map(tag => (
+              <button
+                type="button"
+                key={tag}
+                className={`search-modal__tag ${searchTerm.trim().toLowerCase() === tag.toLowerCase() ? 'search-modal__tag--active' : ''}`}
+                onClick={(event) => handleSuggestionClick(tag, event)}
+              >
+                {tag}
+              </button>
+            ))
+          ) : (
+            <p className="search-modal__empty">{data.ui.searchNoMatches ?? (data.lang === 'es' ? 'Sin coincidencias. Ajusta la búsqueda o lanza confetti.' : 'No matches. Adjust your query or launch confetti.')}</p>
+          )}
+        </div>
 
-                {suggestedTags.length > 0 && (
-                  <div className="search-modal__suggestions" aria-label={data.ui.searchSuggestionsAria ?? (data.lang === 'es' ? 'Sugerencias destacadas' : 'Featured suggestions')}>
-                    {suggestedTags.map(tag => (
-                      <button
-                        key={tag}
-                        type="button"
-                        className="search-modal__chip"
-                        onMouseDown={(event) => event.preventDefault()}
-                        onClick={(event) => handleSuggestionClick(tag, event)}
-                      >
-                        {tag}
-                      </button>
-                    ))}
-                  </div>
-                )}
+        <div className="search-modal__actions">
+          <button
+            type="button"
+            className="search-modal__apply"
+            onClick={handleNavigateProjects}
+            data-retro-sfx
+          >
+            <ArrowRight size={18} aria-hidden="true" />
+            {data.ui.viewProjects}
+          </button>
+        </div>
 
-                <div className="search-modal__tag-list" role="list">
-                  {filteredTags.length > 0 ? (
-                    filteredTags.map(tag => (
-                      <button
-                        type="button"
-                        key={tag}
-                        className={`search-modal__tag ${searchTerm.trim().toLowerCase() === tag.toLowerCase() ? 'search-modal__tag--active' : ''}`}
-                        onClick={(event) => handleSuggestionClick(tag, event)}
-                      >
-                        {tag}
-                      </button>
-                    ))
-                  ) : (
-                    <p className="search-modal__empty">{data.ui.searchNoMatches ?? (data.lang === 'es' ? 'Sin coincidencias. Ajusta la búsqueda o lanza confetti.' : 'No matches. Adjust your query or launch confetti.')}</p>
-                  )}
-                </div>
-
-                <div className="search-modal__actions">
-                  <button
-                    type="button"
-                    className="search-modal__apply"
-                    onClick={handleNavigateProjects}
-                    data-retro-sfx
-                  >
-                    <ArrowRight size={18} aria-hidden="true" />
-                    {data.ui.viewProjects}
-                  </button>
-                </div>
-
-                {typeof resultCount === 'number' && resultCount === 0 && confettiAvailable && (
-                  <button
-                    type="button"
-                    className="search-modal__confetti"
-                    onClick={handleConfetti}
-                  >
-                    <Sparkles size={18} aria-hidden="true" />
-                    confetti
-                  </button>
-                )}
-              </m.div>
-            </FocusTrap>
-          </m.div>
-        ) : null}
-      </AnimatePresence>,
-      document.body
+        {typeof resultCount === 'number' && resultCount === 0 && confettiAvailable && (
+          <button
+            type="button"
+            className="search-modal__confetti"
+            onClick={handleConfetti}
+          >
+            <Sparkles size={18} aria-hidden="true" />
+            confetti
+          </button>
+        )}
+      </Modal>
     );
   };
 

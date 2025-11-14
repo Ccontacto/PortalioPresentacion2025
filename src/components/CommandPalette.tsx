@@ -1,5 +1,3 @@
-import { FocusTrap } from 'focus-trap-react';
-import { AnimatePresence, m } from 'framer-motion';
 import {
   Copy as CopyIcon,
   Download,
@@ -23,9 +21,7 @@ import {
   type KeyboardEvent as ReactKeyboardEvent,
   type ReactNode
 } from 'react';
-import { createPortal } from 'react-dom';
 
-import { DIALOG_VARIANTS, OVERLAY_FADE, PANEL_TRANSITION } from '../constants/animation';
 import { KONAMI_DISABLE_MESSAGE, KONAMI_ENABLE_MESSAGE } from '../constants/konami';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useNavigation } from '../contexts/NavigationContext';
@@ -34,10 +30,10 @@ import { useToast } from '../contexts/ToastContext';
 import { useBodyScrollLock } from '../hooks/useBodyScrollLock';
 import { useCvDownload } from '../hooks/useCvDownload';
 import { useDeferredExitAction } from '../hooks/useDeferredExitAction';
-import { useReducedMotion } from '../hooks/useReducedMotion';
 import { openSafeUrl } from '../utils/urlValidation';
 
 import { WhatsappGlyph } from './icons/WhatsappGlyph';
+import Modal from './Modal';
 
 type CommandGroup = string;
 
@@ -69,7 +65,6 @@ export default function CommandPalette() {
 
   const inputRef = useRef<HTMLInputElement | null>(null);
   const listRef = useRef<HTMLDivElement | null>(null);
-  const shouldReduceMotion = useReducedMotion();
 
   const titleId = useId();
   const descriptionId = useId();
@@ -282,6 +277,7 @@ export default function CommandPalette() {
     activateKonami,
     baseTheme,
     closePalette,
+    tryOpenExternal,
     currentLang,
     data,
     deactivateKonami,
@@ -402,160 +398,119 @@ export default function CommandPalette() {
 
   if (!mounted) return null;
 
-  return createPortal(
-    <AnimatePresence
-      initial={false}
+  return (
+    <Modal
+      isOpen={open}
+      onClose={closePalette}
       onExitComplete={onExitComplete}
+      titleId={titleId}
+      descriptionId={descriptionId}
+      panelId={listId}
+      className="search-modal--command"
+      initialFocusRef={inputRef}
     >
-      {open ? (
-        <m.div
-          className="search-modal search-modal--command"
-          data-dev-id="6500"
-          variants={shouldReduceMotion ? undefined : OVERLAY_FADE}
-          initial={shouldReduceMotion ? undefined : 'hidden'}
-          animate={shouldReduceMotion ? undefined : 'show'}
-          exit={shouldReduceMotion ? undefined : 'exit'}
-          transition={shouldReduceMotion ? undefined : PANEL_TRANSITION}
-          role="presentation"
+      <header className="search-modal__header">
+        <div>
+          <h3 id={titleId} className="search-modal__title">
+            Explorar acciones
+          </h3>
+          <p id={descriptionId} className="search-modal__subtitle">
+            Accede a secciones, contactos y ajustes desde un solo lugar.
+          </p>
+        </div>
+        <button
+          type="button"
+          className="search-modal__close"
+          onClick={closePalette}
+          aria-label="Cerrar buscador de acciones"
         >
-          <div
-            className="search-modal__backdrop"
-            data-dev-id="6501"
-            role="presentation"
-            aria-hidden="true"
-            onClick={closePalette}
-          />
-          <FocusTrap
-            active
-            focusTrapOptions={{
-              initialFocus: () => inputRef.current ?? false,
-              allowOutsideClick: true,
-              clickOutsideDeactivates: true,
-              returnFocusOnDeactivate: true
-            }}
+          <X size={20} aria-hidden="true" />
+        </button>
+      </header>
+
+      <div className="search-modal__input-group">
+        <Search size={20} aria-hidden="true" className="search-modal__input-icon" />
+        <input
+          ref={inputRef}
+          type="search"
+          value={query}
+          onChange={event => setQuery(event.target.value)}
+          onKeyDown={handleInputKeyDown}
+          placeholder="Buscar acciones, secciones o redes…"
+          className="search-modal__input"
+          autoCapitalize="none"
+          autoComplete="off"
+          spellCheck={false}
+          role="searchbox"
+          aria-controls={listId}
+          aria-activedescendant={
+            filteredItems[activeIndex] ? `command-option-${filteredItems[activeIndex].id}` : undefined
+          }
+        />
+        {query ? (
+          <button
+            type="button"
+            className="search-modal__clear"
+            onClick={() => setQuery('')}
+            aria-label="Limpiar búsqueda"
           >
-            <m.div
-              className="search-modal__panel search-modal__panel--command"
-              data-dev-id="6502"
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby={titleId}
-              aria-describedby={descriptionId}
-              aria-controls={listId}
-              variants={shouldReduceMotion ? undefined : DIALOG_VARIANTS}
-              initial={shouldReduceMotion ? undefined : 'hidden'}
-              animate={shouldReduceMotion ? undefined : 'show'}
-              exit={shouldReduceMotion ? undefined : 'exit'}
-              transition={shouldReduceMotion ? undefined : PANEL_TRANSITION}
-              onClick={event => event.stopPropagation()}
-            >
-              <header className="search-modal__header">
-                <div>
-                  <h3 id={titleId} className="search-modal__title">
-                    Explorar acciones
-                  </h3>
-                  <p id={descriptionId} className="search-modal__subtitle">
-                    Accede a secciones, contactos y ajustes desde un solo lugar.
-                  </p>
-                </div>
-                <button
-                  type="button"
-                  className="search-modal__close"
-                  onClick={closePalette}
-                  aria-label="Cerrar buscador de acciones"
-                >
-                  <X size={20} aria-hidden="true" />
-                </button>
-              </header>
+            <X size={16} aria-hidden="true" />
+          </button>
+        ) : null}
+      </div>
 
-              <div className="search-modal__input-group">
-                <Search size={20} aria-hidden="true" className="search-modal__input-icon" />
-                <input
-                  ref={inputRef}
-                  type="search"
-                  value={query}
-                  onChange={event => setQuery(event.target.value)}
-                  onKeyDown={handleInputKeyDown}
-                  placeholder="Buscar acciones, secciones o redes…"
-                  className="search-modal__input"
-                  autoCapitalize="none"
-                  autoComplete="off"
-                  spellCheck={false}
-                  role="searchbox"
-                  aria-controls={listId}
-                  aria-activedescendant={
-                    filteredItems[activeIndex] ? `command-option-${filteredItems[activeIndex].id}` : undefined
-                  }
-                />
-                {query ? (
-                  <button
-                    type="button"
-                    className="search-modal__clear"
-                    onClick={() => setQuery('')}
-                    aria-label="Limpiar búsqueda"
-                  >
-                    <X size={16} aria-hidden="true" />
-                  </button>
-                ) : null}
-              </div>
-
-              <div
-                className="command-modal__list"
-                role="listbox"
-                id={listId}
-                aria-labelledby={titleId}
-                ref={listRef}
+      <div
+        className="command-modal__list"
+        role="listbox"
+        id={listId}
+        aria-labelledby={titleId}
+        ref={listRef}
+      >
+        {filteredItems.length > 0 ? (
+          filteredItems.map((item, index) => {
+            const optionId = `command-option-${item.id}`;
+            const isActive = index === activeIndex;
+            return (
+              <button
+                key={item.id}
+                id={optionId}
+                data-index={index}
+                type="button"
+                role="option"
+                aria-selected={isActive}
+                className={`command-modal__option${isActive ? ' is-active' : ''}`}
+                onClick={() => handleSelect(item)}
+                onMouseEnter={() => setActiveIndex(index)}
               >
-                {filteredItems.length > 0 ? (
-                  filteredItems.map((item, index) => {
-                    const optionId = `command-option-${item.id}`;
-                    const isActive = index === activeIndex;
-                    return (
-                      <button
-                        key={item.id}
-                        id={optionId}
-                        data-index={index}
-                        type="button"
-                        role="option"
-                        aria-selected={isActive}
-                        className={`command-modal__option${isActive ? ' is-active' : ''}`}
-                        onClick={() => handleSelect(item)}
-                        onMouseEnter={() => setActiveIndex(index)}
-                      >
-                        {item.icon ? (
-                          <span className="command-modal__option-icon" aria-hidden="true">
-                            {item.icon}
-                          </span>
-                        ) : null}
-                        <span className="command-modal__option-body">
-                          <span className="command-modal__option-header">
-                            <span className="command-modal__option-label">{item.label}</span>
-                            <span className="command-modal__option-group">{item.group}</span>
-                          </span>
-                          {item.description ? (
-                            <span className="command-modal__option-description">{item.description}</span>
-                          ) : null}
-                        </span>
-                      </button>
-                    );
-                  })
-                ) : (
-                  <div className="command-modal__empty" role="status">
-                    <p className="command-modal__empty-title">Sin coincidencias</p>
-                    <p className="command-modal__empty-subtitle">Prueba con otro término o explora manualmente.</p>
-                  </div>
-                )}
-              </div>
+                {item.icon ? (
+                  <span className="command-modal__option-icon" aria-hidden="true">
+                    {item.icon}
+                  </span>
+                ) : null}
+                <span className="command-modal__option-body">
+                  <span className="command-modal__option-header">
+                    <span className="command-modal__option-label">{item.label}</span>
+                    <span className="command-modal__option-group">{item.group}</span>
+                  </span>
+                  {item.description ? (
+                    <span className="command-modal__option-description">{item.description}</span>
+                  ) : null}
+                </span>
+              </button>
+            );
+          })
+        ) : (
+          <div className="command-modal__empty" role="status">
+            <p className="command-modal__empty-title">Sin coincidencias</p>
+            <p className="command-modal__empty-subtitle">Prueba con otro término o explora manualmente.</p>
+          </div>
+        )}
+      </div>
 
-              <footer className="command-modal__footer" aria-hidden="true">
-                <span>Cmd ⌘ / Ctrl ⌃ + K</span>
-                <span>• Esc para cerrar</span>
-              </footer>
-            </m.div>
-          </FocusTrap>
-        </m.div>
-      ) : null}
-    </AnimatePresence>,
-    document.body
+      <footer className="command-modal__footer" aria-hidden="true">
+        <span>Cmd ⌘ / Ctrl ⌃ + K</span>
+        <span>• Esc para cerrar</span>
+      </footer>
+    </Modal>
   );
 }

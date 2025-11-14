@@ -1,7 +1,5 @@
 import { es } from './es';
 
-import type { PortfolioData } from '../types/portfolio';
-
 export const en = {
   ...es,
   lang: 'en',
@@ -136,6 +134,10 @@ export const en = {
     searchPlaceholderTech: 'Search by technology...',
     searchClearLabel: 'Clear search',
     searchSuggestionsAria: 'Featured suggestions',
-    searchNoMatches: 'No matches. Adjust your query or launch confetti.'
+    searchNoMatches: 'No matches. Adjust your query or launch confetti.',
+    prevProjects: 'View previous projects',
+    nextProjects: 'View next projects',
+    prevSkills: 'View previous skills',
+    nextSkills: 'View next skills'
   }
-} as const satisfies PortfolioData;
+} as const;

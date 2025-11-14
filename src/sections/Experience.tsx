@@ -2,6 +2,7 @@ import { m } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 
+import SectionHeader from '../components/SectionHeader';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useHorizontalScroll } from '../hooks/useHorizontalScroll';
 
@@ -46,15 +47,12 @@ export default function Experience() {
 
   return (
     <section ref={sectionRef} id="experience" className="page-section" aria-labelledby="experience-heading" data-dev-id="4000">
-      <header className="experience-header" data-dev-id="4001">
-        <span className="experience-header__eyebrow">Trayectoria destacada</span>
-        <h2 id="experience-heading" className="experience-header__title">
-          {data.sections.experience.title}
-        </h2>
-        <p className="experience-header__subtitle">
-          Dirección técnica, liderazgo de squads y exploración de IA generativa aplicadas a productos reales.
-        </p>
-      </header>
+      <SectionHeader
+        id="experience-heading"
+        eyebrow="Trayectoria destacada"
+        title={data.sections.experience.title}
+        subtitle="Dirección técnica, liderazgo de squads y exploración de IA generativa aplicadas a productos reales."
+      />
 
       <div className={wrapperClass}>
         <div

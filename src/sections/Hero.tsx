@@ -1,6 +1,6 @@
-import { Fragment, useEffect, useState } from 'react';
 import { m } from 'framer-motion';
 import { MapPin } from 'lucide-react';
+import { Fragment, useEffect, useState } from 'react';
 
 import { AvailabilityBadge } from '../components/header/AvailabilityBadge';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -78,9 +78,6 @@ export default function Hero() {
     const currentIndex = availabilityCycle.indexOf(availability);
     const next = availabilityCycle[(currentIndex + 1) % availabilityCycle.length];
     setAvailability(next);
-    if (typeof window !== 'undefined') {
-      window.localStorage.setItem('portfolio_availability', next);
-    }
     const toastKey = toastKeyMap[next];
     const toastMessage = toastKey ? data.toasts?.[toastKey] : null;
     if (toastMessage) {
@@ -91,8 +88,6 @@ export default function Hero() {
   useEffect(() => {
     storage.set(AVAILABILITY_STORAGE_KEY, availability);
   }, [availability]);
-  };
-
 
   return (
     <section id="home" className="page-section page-section--hero fx-chaos-bg" aria-labelledby="hero-heading" data-dev-id="2001">
