@@ -148,8 +148,8 @@ function AppContent() {
 
 export default function App() {
   return (
-    <ToastProvider>
-      <LanguageProvider>
+    <LanguageProvider>
+      <ToastProvider>
         <ThemeProvider>
           <NavigationProvider>
             <DevProvider>
@@ -159,7 +159,7 @@ export default function App() {
             </DevProvider>
           </NavigationProvider>
         </ThemeProvider>
-      </LanguageProvider>
-    </ToastProvider>
+      </ToastProvider>
+    </LanguageProvider>
   );
 }

@@ -27,19 +27,20 @@ export function useKeyboardShortcuts(shortcuts: Shortcut[] = []) {
         return;
       }
 
-      shortcuts.forEach(s => {
+      const shortcut = shortcuts.find(s => {
         const keyOk = s.keys.some(k => e.key.toLowerCase() === k.toLowerCase());
         const modsOk =
           (s.ctrlKey === undefined || s.ctrlKey === e.ctrlKey) &&
           (s.altKey === undefined || s.altKey === e.altKey) &&
           (s.shiftKey === undefined || s.shiftKey === e.shiftKey) &&
           (s.metaKey === undefined || s.metaKey === e.metaKey);
-
-        if (keyOk && modsOk) {
-          e.preventDefault();
-          s.callback(e);
-        }
+        return keyOk && modsOk;
       });
+
+      if (shortcut) {
+        e.preventDefault();
+        shortcut.callback(e);
+      }
     };
 
     window.addEventListener('keydown', handler);

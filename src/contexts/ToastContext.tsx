@@ -1,5 +1,8 @@
 import React, { createContext, useContext, useState, useCallback, useEffect, useRef } from 'react';
 
+const MAX_TOASTS = 5;
+const TOAST_TIMEOUT = 3000;
+
 type ToastType = 'info' | 'success' | 'error' | 'warning';
 type Toast = { id: number; message: string; type: ToastType };
 
@@ -23,11 +26,24 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
 
   const showToast = useCallback((message: string, type: ToastType = 'info') => {
     const id = Date.now() + Math.floor(Math.random() * 1000);
-    setToasts(prev => [...prev, { id, message, type }]);
+    setToasts(prev => {
+      const newToasts = [...prev, { id, message, type }];
+      if (newToasts.length > MAX_TOASTS) {
+        const oldestToast = newToasts.shift();
+        if (oldestToast) {
+          const timeoutId = timersRef.current.get(oldestToast.id);
+          if (timeoutId) {
+            clearTimeout(timeoutId);
+            timersRef.current.delete(oldestToast.id);
+          }
+        }
+      }
+      return newToasts;
+    });
     const timeoutId = window.setTimeout(() => {
       setToasts(prev => prev.filter(t => t.id !== id));
       timersRef.current.delete(id);
-    }, 3500);
+    }, TOAST_TIMEOUT);
     timersRef.current.set(id, timeoutId);
   }, []);
 

@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 
 class BodyScrollLockManager {
-  private lockCount = 0;
-  private previousOverflow: string | null = null;
+  private static lockCount = 0;
+  private static previousOverflow: string | null = null;
 
-  acquire() {
+  static acquire() {
     if (typeof document === 'undefined') return;
 
     if (this.lockCount === 0) {
@@ -15,7 +15,7 @@ class BodyScrollLockManager {
     this.lockCount += 1;
   }
 
-  release() {
+  static release() {
     if (typeof document === 'undefined') return;
 
     this.lockCount = Math.max(0, this.lockCount - 1);
@@ -26,15 +26,13 @@ class BodyScrollLockManager {
   }
 }
 
-const manager = new BodyScrollLockManager();
-
 export function useBodyScrollLock(locked: boolean) {
   useEffect(() => {
     if (!locked) return;
 
-    manager.acquire();
+    BodyScrollLockManager.acquire();
     return () => {
-      manager.release();
+      BodyScrollLockManager.release();
     };
   }, [locked]);
 }
