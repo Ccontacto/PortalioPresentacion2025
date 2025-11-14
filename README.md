@@ -128,3 +128,4 @@ Para ejecución continua, los workflows de GitHub Actions ya están listos; sól
 - `useCvDownload` usa el guard `isValidLang` antes de disparar `generatePdf` y ejecuta la generación con timeout (15 s) para no dejar al usuario esperando indefinidamente.
 - `ToastContext` mantiene como máximo cinco toasts en pantalla, utiliza IDs incrementales y limpia timers antiguos para evitar colisiones o leaks.
 - Las funciones `useFloatingPanelPlacement` y `useBodyScrollLock` ahora usan listeners pasivos y un singleton de lock, respectivamente, para garantizar compatibilidad en móviles y evitar efectos secundarios en scroll.
+- En modo desarrollo aparece un botón “Editor Dev” (abajo a la derecha). Permite editar overrides en tiempo real, aplicar los cambios con `LanguageContext.updateOverrides` y descargar un ZIP con el portafolio completo + un archivo `watermark.txt` (solo `import.meta.env.DEV` habilita el flujo).

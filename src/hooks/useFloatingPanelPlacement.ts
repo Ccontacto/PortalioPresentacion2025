@@ -79,7 +79,7 @@ export function useFloatingPanelPlacement(
     const onResize = () => {
       if (open) compute();
     };
-    const listenerOptions = { passive: true };
+    const listenerOptions: AddEventListenerOptions = { passive: true };
     window.addEventListener('resize', onResize, listenerOptions);
     window.addEventListener('orientationchange', onResize, listenerOptions);
     return () => {

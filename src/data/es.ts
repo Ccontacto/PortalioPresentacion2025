@@ -1,4 +1,6 @@
-export const es = {
+import type { PortfolioData } from '../types/portfolio';
+
+export const es: PortfolioData = {
   lang: 'es',
   name: 'José Carlos Torres Rivera',
   title: 'Líder Técnico iOS & Arquitecto de IA',

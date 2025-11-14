@@ -1,6 +1,8 @@
 import { es } from './es';
 
-export const en = {
+import type { PortfolioData } from '../types/portfolio';
+
+export const en: PortfolioData = {
   ...es,
   lang: 'en',
   title: 'iOS Tech Lead & AI Architect',

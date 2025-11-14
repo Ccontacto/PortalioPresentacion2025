@@ -24,7 +24,7 @@ import type { ProjectItem } from '../types/portfolio';
 type ProjectTag = ProjectItem['tags'][number];
 
 interface SearchBarProps {
-  projectItems: ProjectItem[];
+  projectItems: readonly ProjectItem[];
   onSearch: (searchTerm: string) => void;
   resultCount?: number;
   variant?: 'button' | 'icon';
@@ -195,7 +195,7 @@ export default function SearchBar({
         titleId={titleId}
         descriptionId={descriptionId}
         panelId={panelId}
-        initialFocusRef={inputRef}
+        initialFocusRef={inputRef as React.RefObject<HTMLElement>}
       >
         <header className="search-modal__header">
           <div>

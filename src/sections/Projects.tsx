@@ -16,13 +16,14 @@ export default function Projects() {
   const sectionRef = useRef<HTMLElement | null>(null);
 
   const filteredProjects = useMemo(() => {
+    const allItems = data.sections.projects.items;
     if (!currentSearchTerm) {
-      return data.sections.projects.items;
+      return allItems;
     }
-    return data.sections.projects.items.filter((proj: ProjectItem) =>
+    return allItems.filter((proj: ProjectItem) =>
       proj.tags.some(tag => tag.toLowerCase().includes(currentSearchTerm.toLowerCase()))
     );
-  }, [currentSearchTerm, data.sections.projects.items]);
+  }, [currentSearchTerm, data.sections.projects.items]) as readonly ProjectItem[];
 
   return (
     <section ref={sectionRef} id="projects" className="page-section" aria-labelledby="projects-heading" data-dev-id="5000">

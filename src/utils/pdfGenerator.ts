@@ -20,8 +20,8 @@ const HEADER_BASE_HEIGHT = 48;
 const HEADER_PADDING_X = 8;
 const HEADER_PADDING_TOP = 16;
 
-const sanitizeText = (value: string, limit: number = SANITIZE_LIMIT): string =>
-  value.replace(/[<>"'&]/g, '').slice(0, limit).trim();
+const sanitizeText = (value: string | undefined, limit: number = SANITIZE_LIMIT): string =>
+  (value ?? '').replace(/[<>"'&]/g, '').slice(0, limit).trim();
 
 const FALLBACK = {
   profile: 'Profile',
@@ -203,14 +203,14 @@ function drawRightColumn(
 
   if (data.sections?.experience?.jobs?.length) {
     addSectionTitle(sanitizeText(data.sections.experience.title));
-    data.sections.experience.jobs.forEach(job => {
+    data.sections.experience.jobs.forEach((job: ExperienceJob) => {
       addExperienceEntry(doc, job, ensureSpace, rightColumnX, rightColumnWidth, columns);
     });
   }
 
   if (data.sections?.projects?.items?.length) {
     addSectionTitle(translations.projects);
-    data.sections.projects.items.forEach(project => {
+    data.sections.projects.items.forEach((project: ProjectItem) => {
       addProjectEntry(doc, project, ensureSpace, rightColumnX, rightColumnWidth, columns);
     });
   }
@@ -278,7 +278,7 @@ function formatStatLine(stat: Stat): string {
   return `${sanitizeText(stat.value)} — ${sanitizeText(stat.label)}`;
 }
 
-function buildSkillLines(categories: SkillCategory[]): string[] {
+function buildSkillLines(categories: readonly SkillCategory[]): string[] {
   return categories.map(category => {
     const items = category.items.map(item => sanitizeText(item)).join(' • ');
     return `${sanitizeText(category.title)}: ${items}`;

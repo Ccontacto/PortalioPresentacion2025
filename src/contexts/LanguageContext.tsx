@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
+import React, { createContext, useContext, useEffect, useMemo, useState, useCallback } from 'react';
 
 import { en } from '../data/en';
 import { es } from '../data/es';
@@ -13,6 +13,8 @@ type LanguageContextValue = {
   currentLang: Lang;
   toggleLanguage: () => void;
   t: (key: string) => string;
+  overrides: OverridesRecord;
+  updateOverrides: (lang: Lang, patch: Partial<PortfolioData>) => void;
 };
 
 const LanguageContext = createContext<LanguageContextValue | null>(null);
@@ -28,9 +30,77 @@ const dict: Record<Lang, Data> = { es, en };
 // MEJORA 6: RTL languages support
 const rtlLanguages: Lang[] = [];
 const STORAGE_KEY = 'portfolio_lang';
+const OVERRIDES_KEY = 'portfolio_overrides';
+
+const isPlainObject = (value: unknown): value is Record<string, unknown> =>
+  typeof value === 'object' && value !== null;
+
+function deepMerge<T>(target: T, source?: Partial<T>): T {
+  if (!source || Object.keys(source).length === 0) return target;
+  if (Array.isArray(target) || Array.isArray(source)) {
+    return (source as T) ?? target;
+  }
+  if (!isPlainObject(target)) {
+    return (source as T) ?? target;
+  }
+  const result = { ...(target as Record<string, unknown>) } as T;
+  for (const key of Object.keys(source)) {
+    const overrideValue = source[key as keyof T];
+    if (overrideValue === undefined) continue;
+    const currentValue = target[key as keyof T];
+    if (
+      isPlainObject(currentValue) &&
+      isPlainObject(overrideValue) &&
+      !Array.isArray(currentValue) &&
+      !Array.isArray(overrideValue)
+    ) {
+      (result as Record<string, unknown>)[key] = deepMerge(
+        currentValue,
+        overrideValue as Partial<typeof currentValue>
+      );
+    } else {
+      (result as Record<string, unknown>)[key] = overrideValue;
+    }
+  }
+  return result;
+}
+
+function mergePartial<T>(base: Partial<T>, override: Partial<T>): Partial<T> {
+  if (!override || Object.keys(override).length === 0) return base;
+  const result = { ...base } as Partial<T>;
+  for (const key of Object.keys(override)) {
+    const overrideValue = override[key as keyof T];
+    if (overrideValue === undefined) continue;
+    const baseValue = base[key as keyof T];
+    if (
+      isPlainObject(baseValue) &&
+      isPlainObject(overrideValue) &&
+      !Array.isArray(baseValue) &&
+      !Array.isArray(overrideValue)
+    ) {
+      (result as Record<string, unknown>)[key] = mergePartial(
+        baseValue as Partial<T[keyof T]>,
+        overrideValue as Partial<T[keyof T]>
+      );
+    } else {
+      (result as Record<string, unknown>)[key] = overrideValue;
+    }
+  }
+  return result;
+}
+
+type OverridesRecord = Record<Lang, Partial<PortfolioData>>;
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [currentLang, setCurrentLang] = useState<Lang>(() => storage.get(STORAGE_KEY, 'es', isValidLang));
+  const [overrides, setOverrides] = useState<OverridesRecord>(() => {
+    const raw =
+      storage.get<Record<string, Partial<PortfolioData>>>(OVERRIDES_KEY, {}, isRecord) ?? {};
+    return {
+      es: raw.es ?? {},
+      en: raw.en ?? {}
+    };
+  });
 
   // MEJORA 6: RTL direction setup
   useEffect(() => {
@@ -45,6 +115,18 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const toggleLanguage = useCallback(() => {
     setCurrentLang(prev => (prev === 'es' ? 'en' : 'es'));
   }, []);
+
+  const updateOverrides = useCallback((lang: Lang, patch: Partial<PortfolioData>) => {
+    setOverrides(prev => {
+      const existing = prev[lang] ?? {};
+      const nextLangOverrides = mergePartial(existing, patch);
+      const next = { ...prev, [lang]: nextLangOverrides };
+      storage.set(OVERRIDES_KEY, next);
+      return next;
+    });
+  }, []);
+
+  const mergedData = useMemo(() => deepMerge(dict[currentLang], overrides[currentLang]), [currentLang, overrides]);
 
   const t = useCallback(
     (key: string) => {
@@ -63,7 +145,16 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   );
 
   return (
-    <LanguageContext.Provider value={{ data: dict[currentLang], currentLang, toggleLanguage, t }}>
+    <LanguageContext.Provider
+      value={{
+        data: mergedData,
+        currentLang,
+        toggleLanguage,
+        t,
+        overrides,
+        updateOverrides
+      }}
+    >
       {children}
     </LanguageContext.Provider>
   );

@@ -17,6 +17,12 @@ import type {
   Stat
 } from '../types/portfolio';
 
+const DOMAIN_HINTS: Record<string, string> = {
+  'portalio-presentacion-2025.pages.dev': 'Hola desde Cloudflare Pages!',
+  localhost: 'Modo local activo para pruebas',
+  '127.0.0.1': 'Pruebas locales habilitadas'
+};
+
 type AvailabilityState = 'available' | 'listening' | 'unavailable';
 const AVAILABILITY_STORAGE_KEY = 'portfolio_availability';
 const isAvailability = (value: unknown): value is AvailabilityState =>
@@ -47,13 +53,16 @@ export default function Hero() {
     []
   );
 
-  const titleSegments: HeroTitleSegment[] = heroCopy.titleSegments?.length
-    ? heroCopy.titleSegments
-    : [{ text: data.title }];
+  const defaultTitleSegments: readonly HeroTitleSegment[] = [{ text: data.title }];
+  const defaultDescriptionSegments: readonly HeroDescriptionSegment[] = [{ text: data.description }];
 
-  const descriptionSegments: HeroDescriptionSegment[] = heroCopy.descriptionSegments?.length
+  const titleSegments: readonly HeroTitleSegment[] = heroCopy.titleSegments?.length
+    ? heroCopy.titleSegments
+    : defaultTitleSegments;
+
+  const descriptionSegments: readonly HeroDescriptionSegment[] = heroCopy.descriptionSegments?.length
     ? heroCopy.descriptionSegments
-    : [{ text: data.description }];
+    : defaultDescriptionSegments;
 
   const tagline = heroCopy.tagline ?? data.tagline ?? '';
   const taglineSegments = tagline.split(/(IA generativa|iOS)/gi);
@@ -73,6 +82,15 @@ export default function Hero() {
     listening: 'info',
     unavailable: 'warning'
   };
+
+  const [domainHint, setDomainHint] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const host = window.location.hostname;
+    const message = DOMAIN_HINTS[host] ?? `Bienvenido desde ${host}`;
+    setDomainHint(message);
+  }, []);
 
   const handleToggleAvailability = () => {
     const currentIndex = availabilityCycle.indexOf(availability);
@@ -114,7 +132,7 @@ export default function Hero() {
             <div className="hero-title-wrap" aria-hidden="false">
               <div className="hero-title-rays" aria-hidden="true" />
               <h1 id="hero-heading" className="hero-title">
-              {titleSegments.map((segment, index) =>
+            {titleSegments.map((segment: HeroTitleSegment, index: number) =>
                 segment.accent ? (
                   <span
                     key={`${segment.text}-${index}`}
@@ -129,7 +147,7 @@ export default function Hero() {
               </h1>
             </div>
             <p className="hero-tagline">
-              {taglineSegments.map((segment, index) => {
+              {taglineSegments.map((segment: string, index: number) => {
                 if (!segment) {
                   return null;
                 }
@@ -157,7 +175,7 @@ export default function Hero() {
               </div>
             ) : null}
             <p className="hero-description">
-              {descriptionSegments.map((segment, index) =>
+              {descriptionSegments.map((segment: HeroDescriptionSegment, index: number) =>
                 segment.accent === 'gradient' ? (
                   <span key={`${segment.text}-${index}`} className="hero-description__accent">
                     {segment.text}
@@ -167,6 +185,11 @@ export default function Hero() {
                 )
               )}
             </p>
+            {domainHint ? (
+              <p className="hero-domain" data-dev-id="hero-domain">
+                {domainHint}
+              </p>
+            ) : null}
 
             <div className="hero-actions">
               <a className="hero-action hero-action--primary" href="#projects">
@@ -203,7 +226,7 @@ export default function Hero() {
             <div className="hero-panel__card hero-panel__card--note fx-sketch-outline" data-dev-id="2004">
               <span className="hero-panel__eyebrow">{note.title}</span>
               <div className="hero-panel__tags" role="list">
-                {note.items.map(item => (
+                {note.items.map((item: string) => (
                   <span key={item} className="hero-panel__tag" role="listitem">
                     {item}
                   </span>

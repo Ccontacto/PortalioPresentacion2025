@@ -48,6 +48,11 @@ type CommandItem = {
   predicate?: () => boolean;
 };
 
+type NavItem = {
+  id: string;
+  label: string;
+};
+
 const DEBOUNCE_MS = 160;
 
 export default function CommandPalette() {
@@ -106,7 +111,7 @@ export default function CommandPalette() {
   const { queue, onExitComplete } = useDeferredExitAction();
 
   const items = useMemo<CommandItem[]>(() => {
-    const navItems: CommandItem[] = data.nav.map(navItem => ({
+    const navItems: CommandItem[] = data.nav.map((navItem: NavItem) => ({
       id: `nav-${navItem.id}`,
       label: navItem.label,
       group: 'Secciones',
@@ -117,6 +122,10 @@ export default function CommandPalette() {
         closePalette();
       }
     }));
+
+    const linkedinUrl = data.social?.linkedin;
+    const githubUrl = data.social?.github;
+    const portfolioUrl = data.social?.portfolio;
 
     const contactItems: CommandItem[] = [
       {
@@ -170,7 +179,7 @@ export default function CommandPalette() {
     ];
 
     const socialItems: CommandItem[] = [
-      ...(data.social?.linkedin
+      ...(linkedinUrl
         ? [
             {
               id: 'social-linkedin',
@@ -179,12 +188,12 @@ export default function CommandPalette() {
               icon: <Globe size={22} aria-hidden="true" />,
               keywords: ['linkedin', 'networking'],
               action: () => {
-                tryOpenExternal(data.social.linkedin);
+                tryOpenExternal(linkedinUrl);
               }
             }
           ]
         : []),
-      ...(data.social?.github
+      ...(githubUrl
         ? [
             {
               id: 'social-github',
@@ -193,12 +202,12 @@ export default function CommandPalette() {
               icon: <Github size={22} aria-hidden="true" />,
               keywords: ['repositorio', 'code'],
               action: () => {
-                tryOpenExternal(data.social.github);
+                tryOpenExternal(githubUrl);
               }
             }
           ]
         : []),
-      ...(data.social?.portfolio
+      ...(portfolioUrl
         ? [
             {
               id: 'social-portfolio',
@@ -207,7 +216,7 @@ export default function CommandPalette() {
               icon: <Globe size={22} aria-hidden="true" />,
               keywords: ['portfolio', 'sitio', 'web'],
               action: () => {
-                tryOpenExternal(data.social.portfolio);
+                tryOpenExternal(portfolioUrl);
               }
             }
           ]
@@ -407,7 +416,7 @@ export default function CommandPalette() {
       descriptionId={descriptionId}
       panelId={listId}
       className="search-modal--command"
-      initialFocusRef={inputRef}
+              initialFocusRef={inputRef as React.RefObject<HTMLElement>}
     >
       <header className="search-modal__header">
         <div>

@@ -3,14 +3,16 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useHorizontalScroll } from '../hooks/useHorizontalScroll';
 
+import type { UIStrings } from '../types/portfolio';
+
 type HorizontalScrollerProps = {
   children: React.ReactNode;
   itemCount: number;
   itemSelector: string;
   bounceLeftClass?: string;
   bounceRightClass?: string;
-  prevLabelKey: string;
-  nextLabelKey: string;
+  prevLabelKey: keyof UIStrings;
+  nextLabelKey: keyof UIStrings;
 };
 
 export default function HorizontalScroller({
@@ -24,8 +26,8 @@ export default function HorizontalScroller({
 }: HorizontalScrollerProps) {
   const { data } = useLanguage();
   const { trackRef, canScrollLeft, canScrollRight, scrollByCard, updateScrollButtons } = useHorizontalScroll({
-    bounceLeftClass,
-    bounceRightClass,
+    bounceLeftClass: bounceLeftClass ?? '',
+    bounceRightClass: bounceRightClass ?? '',
     itemSelector,
     itemCount,
   });
@@ -38,8 +40,9 @@ export default function HorizontalScroller({
     .filter(Boolean)
     .join(' ');
 
-  const prevLabel = data.ui?.[prevLabelKey] || 'View previous items';
-  const nextLabel = data.ui?.[nextLabelKey] || 'View next items';
+  const safeUi = data.ui ?? ({} as UIStrings);
+  const prevLabel: string = safeUi[prevLabelKey] ?? 'View previous items';
+  const nextLabel: string = safeUi[nextLabelKey] ?? 'View next items';
 
   return (
     <div className={wrapperClass}>

@@ -1,6 +1,7 @@
 import { LazyMotion, domAnimation, m } from 'framer-motion';
 import { useCallback, useEffect, useMemo, useRef, lazy, Suspense } from 'react';
 
+import DevPortfolioEditor from './components/DevPortfolioEditor';
 import HamburgerMenu from './components/HamburgerMenu';
 import LoadingScreen from './components/LoadingScreen';
 import PageProgress from './components/PageProgress';
@@ -135,6 +136,7 @@ function AppContent() {
           <Contact />
         </main>
         <ToastContainer />
+        <DevPortfolioEditor />
         <Suspense fallback={null}>
           <ConfettiCanvas />
         </Suspense>
