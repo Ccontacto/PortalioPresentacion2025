@@ -1,12 +1,10 @@
 import { m } from 'framer-motion';
-import { useEffect, useRef, useState, useCallback } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { Smartphone, Bot, Cloud, Cpu } from 'lucide-react';
+import { Bot, ChevronLeft, ChevronRight, Cloud, Cpu, Smartphone } from 'lucide-react';
+import { useCallback, useEffect, useRef, useState, type ReactElement } from 'react';
 
 import { useLanguage } from '../contexts/LanguageContext';
 
 import type { SkillCategory } from '../types/portfolio';
-import type { ReactElement } from 'react';
 
 type SkillItem = SkillCategory['items'][number];
 

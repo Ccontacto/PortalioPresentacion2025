@@ -1,8 +1,8 @@
 import { LazyMotion, domAnimation, m } from 'framer-motion';
 import { useCallback, useEffect, useMemo, useRef, lazy, Suspense } from 'react';
 
-import LoadingScreen from './components/LoadingScreen';
 import HamburgerMenu from './components/HamburgerMenu';
+import LoadingScreen from './components/LoadingScreen';
 import PageProgress from './components/PageProgress';
 import { RetroModeBanner } from './components/RetroModeBanner';
 import SkipToContent from './components/SkipToContent';
@@ -84,7 +84,9 @@ function AppContent() {
       // Fallbacks para navegadores específicos
       document.documentElement.scrollTop = 0;
       document.body.scrollTop = 0;
-    } catch {}
+    } catch (error) {
+      console.error('Error resetting scroll position', error);
+    }
   }, []);
 
   useEffect(() => {

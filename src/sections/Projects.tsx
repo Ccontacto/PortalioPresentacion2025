@@ -5,17 +5,9 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import SearchBar from '../components/SearchBar';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useHorizontalScroll } from '../hooks/useHorizontalScroll';
+import { getSafeUrl } from '../utils/urlValidation';
 
 import type { ProjectItem } from '../types/portfolio';
-
-const isValidHttpUrl = (value: string): boolean => {
-  try {
-    const url = new URL(value);
-    return url.protocol === 'http:' || url.protocol === 'https:';
-  } catch {
-    return false;
-  }
-};
 
 export default function Projects() {
   const { data } = useLanguage();
@@ -48,7 +40,7 @@ export default function Projects() {
     }
     const frame = requestAnimationFrame(updateScrollButtons);
     return () => cancelAnimationFrame(frame);
-  }, [filteredProjects.length, updateScrollButtons]);
+  }, [filteredProjects.length, trackRef, updateScrollButtons]);
 
 
   const wrapperClass = [
@@ -100,15 +92,15 @@ export default function Projects() {
                 <h3 className="text-xl font-bold mb-3">{proj.title}</h3>
                 <p className="text-sm mb-4">{proj.description}</p>
                 <div className="project-tags" role="list" aria-label="Tecnologías del proyecto">
-                  {proj.tags.map(tag => (
+        {proj.tags.map(tag => (
                     <span key={tag} className="skill-badge" role="listitem">
                       {tag}
                     </span>
                   ))}
                 </div>
-                {proj.link && isValidHttpUrl(proj.link) && (
+                {proj.link && getSafeUrl(proj.link) && (
                   <a
-                    href={proj.link}
+                    href={getSafeUrl(proj.link) ?? undefined}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-2 text-sm font-bold hover:underline"

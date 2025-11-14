@@ -1,4 +1,5 @@
 import { Briefcase, Contact, Home, Layers, Package, Sparkles } from 'lucide-react';
+
 import type { ReactElement } from 'react';
 
 export function navIconFor(id: string): ReactElement {

@@ -39,7 +39,7 @@ export function useIntersectionObserver<T extends HTMLElement>(
     // Chequeo adicional tras carga (iOS tarda en pintar)
     window.addEventListener('load', checkNow, { once: true });
     return () => observer.disconnect();
-  }, [options?.root, options?.rootMargin, options?.threshold]);
+  }, [options]);
 
   return [ref as RefObject<T>, isIntersecting];
 }

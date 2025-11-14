@@ -1,12 +1,12 @@
+import { Fragment, useEffect, useState } from 'react';
 import { m } from 'framer-motion';
-import { Fragment, useState } from 'react';
 import { MapPin } from 'lucide-react';
 
 import { AvailabilityBadge } from '../components/header/AvailabilityBadge';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useToast } from '../contexts/ToastContext';
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
-// motion reducido no condiciona visibilidad del héroe
+import { storage } from '../utils/storage';
 
 import type {
   AvailabilityKey,
@@ -17,18 +17,17 @@ import type {
   Stat
 } from '../types/portfolio';
 
+type AvailabilityState = 'available' | 'listening' | 'unavailable';
+const AVAILABILITY_STORAGE_KEY = 'portfolio_availability';
+const isAvailability = (value: unknown): value is AvailabilityState =>
+  value === 'available' || value === 'listening' || value === 'unavailable';
+const getStoredAvailability = () => storage.get(AVAILABILITY_STORAGE_KEY, 'listening', isAvailability);
+
 export default function Hero() {
   const { data } = useLanguage();
   const [ref] = useIntersectionObserver<HTMLDivElement>({ threshold: 0.3 });
   const { showToast } = useToast();
-  const [availability, setAvailability] = useState<'available' | 'listening' | 'unavailable'>(() => {
-    if (typeof window !== 'undefined') {
-      const v = window.localStorage.getItem('portfolio_availability');
-      if (v === 'available' || v === 'listening' || v === 'unavailable') return v;
-    }
-    // Estado inicial: escuchando propuestas
-    return 'listening';
-  });
+  const [availability, setAvailability] = useState<AvailabilityState>(getStoredAvailability);
 
   const heroCopy = data.hero;
 
@@ -87,6 +86,11 @@ export default function Hero() {
     if (toastMessage) {
       showToast(toastMessage, toastTypeMap[next]);
     }
+  };
+
+  useEffect(() => {
+    storage.set(AVAILABILITY_STORAGE_KEY, availability);
+  }, [availability]);
   };
 
 

@@ -16,8 +16,8 @@ import { DIALOG_VARIANTS, OVERLAY_FADE, PANEL_TRANSITION } from '../constants/an
 import { useLanguage } from '../contexts/LanguageContext';
 import { useNavigation } from '../contexts/NavigationContext';
 import { useBodyScrollLock } from '../hooks/useBodyScrollLock';
-import { useReducedMotion } from '../hooks/useReducedMotion';
 import { useDeferredExitAction } from '../hooks/useDeferredExitAction';
+import { useReducedMotion } from '../hooks/useReducedMotion';
 import { launchConfetti } from '../utils/confetti';
 
 import type { ProjectItem } from '../types/portfolio';

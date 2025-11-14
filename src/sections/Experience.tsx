@@ -1,6 +1,6 @@
 import { m } from 'framer-motion';
-import { useEffect, useRef } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useEffect, useRef } from 'react';
 
 import { useLanguage } from '../contexts/LanguageContext';
 import { useHorizontalScroll } from '../hooks/useHorizontalScroll';
@@ -33,7 +33,7 @@ export default function Experience() {
     // Sincroniza visibilidad de botones después del frame
     const raf = requestAnimationFrame(updateScrollButtons);
     return () => cancelAnimationFrame(raf);
-  }, [jobs.length, updateScrollButtons]);
+  }, [jobs.length, trackRef, updateScrollButtons]);
 
 
   const wrapperClass = [

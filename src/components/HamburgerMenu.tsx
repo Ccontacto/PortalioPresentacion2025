@@ -3,10 +3,11 @@ import { useEffect, useId, useMemo, useRef, useState } from 'react';
 
 import { useLanguage } from '../contexts/LanguageContext';
 import { useNavigation } from '../contexts/NavigationContext';
-import { useReducedMotion } from '../hooks/useReducedMotion';
 import { useFloatingPanelPlacement } from '../hooks/useFloatingPanelPlacement';
-import { useQuickActionsData } from './quick-actions/useQuickActionsData';
+import { useReducedMotion } from '../hooks/useReducedMotion';
 import { navIconFor } from '../utils/navIcons';
+
+import { useQuickActionsData } from './quick-actions/useQuickActionsData';
 
 export default function HamburgerMenu() {
   const { data } = useLanguage();
@@ -267,7 +268,7 @@ export default function HamburgerMenu() {
                         </div>
                       ) : null}
                       {secondaryActions.length ? (
-                        <ul className="hamburger-menu__action-list" role="list">
+                <ul className="hamburger-menu__action-list">
                           {secondaryActions.map(action => (
                             <li key={action.key} className="hamburger-menu__action-item">
                               <button

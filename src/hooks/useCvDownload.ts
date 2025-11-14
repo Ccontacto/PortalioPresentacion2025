@@ -3,12 +3,9 @@ import { useCallback, useRef } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useToast } from '../contexts/ToastContext';
 import { generatePdf } from '../utils/pdfGenerator';
+import { isValidLang, type Lang } from '../utils/typeGuards';
 
 import type { PortfolioData } from '../types/portfolio';
-
-type Lang = 'es' | 'en';
-
-const isValidLang = (lang: unknown): lang is Lang => lang === 'es' || lang === 'en';
 
 export function useCvDownload() {
   const { showToast } = useToast();

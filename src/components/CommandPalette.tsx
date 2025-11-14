@@ -32,9 +32,10 @@ import { useNavigation } from '../contexts/NavigationContext';
 import { useTheme } from '../contexts/ThemeContext';
 import { useToast } from '../contexts/ToastContext';
 import { useBodyScrollLock } from '../hooks/useBodyScrollLock';
-import { useDeferredExitAction } from '../hooks/useDeferredExitAction';
 import { useCvDownload } from '../hooks/useCvDownload';
+import { useDeferredExitAction } from '../hooks/useDeferredExitAction';
 import { useReducedMotion } from '../hooks/useReducedMotion';
+import { openSafeUrl } from '../utils/urlValidation';
 
 import { WhatsappGlyph } from './icons/WhatsappGlyph';
 
@@ -90,6 +91,22 @@ export default function CommandPalette() {
   const closePalette = useCallback(() => {
     setOpen(false);
   }, []);
+
+  const invalidUrlToastMessage = data.toasts?.invalid_url ?? 'Enlace no disponible';
+  const tryOpenExternal = useCallback(
+    (url: string, successToast?: string) => {
+      if (!openSafeUrl(url)) {
+        showToast(invalidUrlToastMessage, 'error');
+        return false;
+      }
+      if (successToast) {
+        showToast(successToast, 'info');
+      }
+      closePalette();
+      return true;
+    },
+    [closePalette, invalidUrlToastMessage, showToast]
+  );
 
   const { queue, onExitComplete } = useDeferredExitAction();
 
@@ -147,15 +164,10 @@ export default function CommandPalette() {
               icon: <WhatsappGlyph className="h-[22px] w-[22px]" aria-hidden="true" />,
               keywords: ['whatsapp', 'mensaje', 'contacto'],
               action: () => {
-                window.open(
-                  `https://wa.me/${data.whatsapp}?text=${encodeURIComponent(
-                    'Hola José Carlos! Vi tu portfolio y me gustaría conversar.'
-                  )}`,
-                  '_blank',
-                  'noopener,noreferrer'
-                );
-                showToast(data.toasts.whatsapp_open, 'info');
-                closePalette();
+                const whatsappUrl = `https://wa.me/${data.whatsapp}?text=${encodeURIComponent(
+                  'Hola José Carlos! Vi tu portfolio y me gustaría conversar.'
+                )}`;
+                tryOpenExternal(whatsappUrl, data.toasts.whatsapp_open);
               }
             }
           ]
@@ -172,8 +184,7 @@ export default function CommandPalette() {
               icon: <Globe size={22} aria-hidden="true" />,
               keywords: ['linkedin', 'networking'],
               action: () => {
-                window.open(data.social.linkedin, '_blank', 'noopener,noreferrer');
-                closePalette();
+                tryOpenExternal(data.social.linkedin);
               }
             }
           ]
@@ -187,8 +198,7 @@ export default function CommandPalette() {
               icon: <Github size={22} aria-hidden="true" />,
               keywords: ['repositorio', 'code'],
               action: () => {
-                window.open(data.social.github, '_blank', 'noopener,noreferrer');
-                closePalette();
+                tryOpenExternal(data.social.github);
               }
             }
           ]
@@ -202,8 +212,7 @@ export default function CommandPalette() {
               icon: <Globe size={22} aria-hidden="true" />,
               keywords: ['portfolio', 'sitio', 'web'],
               action: () => {
-                window.open(data.social.portfolio, '_blank', 'noopener,noreferrer');
-                closePalette();
+                tryOpenExternal(data.social.portfolio);
               }
             }
           ]
@@ -368,7 +377,7 @@ export default function CommandPalette() {
         closePalette();
       }
     },
-    [closePalette]
+    [closePalette, queue]
   );
 
   const handleInputKeyDown = useCallback(

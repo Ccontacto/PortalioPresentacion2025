@@ -2,12 +2,12 @@ import React, { createContext, useContext, useState, useCallback, useEffect } fr
 
 import { en } from '../data/en';
 import { es } from '../data/es';
+import { storage } from '../utils/storage';
+import { isRecord, isValidLang, type Lang } from '../utils/typeGuards';
 
 import type { PortfolioData } from '../types/portfolio';
 
 type Data = PortfolioData;
-type Lang = 'es' | 'en';
-
 type LanguageContextValue = {
   data: Data;
   currentLang: Lang;
@@ -29,15 +29,8 @@ const dict: Record<Lang, Data> = { es, en };
 const rtlLanguages: Lang[] = [];
 const STORAGE_KEY = 'portfolio_lang';
 
-const isRecord = (value: unknown): value is Record<string, unknown> =>
-  typeof value === 'object' && value !== null;
-
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [currentLang, setCurrentLang] = useState<Lang>(() => {
-    if (typeof window === 'undefined') return 'es';
-    const stored = window.localStorage.getItem(STORAGE_KEY) as Lang | null;
-    return stored === 'en' ? 'en' : 'es';
-  });
+  const [currentLang, setCurrentLang] = useState<Lang>(() => storage.get(STORAGE_KEY, 'es', isValidLang));
 
   // MEJORA 6: RTL direction setup
   useEffect(() => {
@@ -46,9 +39,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
       document.documentElement.setAttribute('dir', isRTL ? 'rtl' : 'ltr');
       document.documentElement.setAttribute('lang', currentLang);
     }
-    if (typeof window !== 'undefined') {
-      window.localStorage.setItem(STORAGE_KEY, currentLang);
-    }
+    storage.set(STORAGE_KEY, currentLang);
   }, [currentLang]);
 
   const toggleLanguage = useCallback(() => {

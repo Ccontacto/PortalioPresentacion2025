@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { logAppError } from '../utils/telemetry';
 
 type Props = { children: React.ReactNode };

@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useEffect, useState, useCallback, useMemo } from 'react';
 
+import { storage } from '../utils/storage';
+
 type BaseTheme = 'light' | 'dark';
 export type Theme = BaseTheme | 'konami';
 
@@ -25,24 +27,27 @@ export const useTheme = () => {
 const THEME_STORAGE_KEY = 'portfolio_theme';
 const KONAMI_STORAGE_KEY = 'portfolio_theme_konami';
 
-const getStoredBaseTheme = (): BaseTheme => {
-  if (typeof window === 'undefined') return 'light';
-  const stored = window.localStorage.getItem(THEME_STORAGE_KEY) as BaseTheme | null;
-  if (stored === 'light' || stored === 'dark') {
-    return stored;
-  }
-  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  return prefersDark ? 'dark' : 'light';
+const isBaseTheme = (value: unknown): value is BaseTheme => value === 'light' || value === 'dark';
+const isKonamiValue = (value: unknown): value is boolean | '0' | '1' =>
+  value === true || value === false || value === '0' || value === '1';
+
+const getInitialBaseTheme = (): BaseTheme => {
+  const prefersDark =
+    typeof window !== 'undefined' ? window.matchMedia('(prefers-color-scheme: dark)').matches : false;
+  const defaultTheme: BaseTheme = prefersDark ? 'dark' : 'light';
+  return storage.get(THEME_STORAGE_KEY, defaultTheme, isBaseTheme);
 };
 
-const getStoredKonami = (): boolean => {
-  if (typeof window === 'undefined') return false;
-  return window.localStorage.getItem(KONAMI_STORAGE_KEY) === '1';
+const getInitialKonami = (): boolean => {
+  const stored = storage.get<boolean | '0' | '1'>(KONAMI_STORAGE_KEY, false, isKonamiValue);
+  if (stored === '1') return true;
+  if (stored === '0') return false;
+  return stored === true;
 };
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [baseTheme, setBaseThemeState] = useState<BaseTheme>(getStoredBaseTheme);
-  const [isKonami, setIsKonami] = useState<boolean>(getStoredKonami);
+  const [baseTheme, setBaseThemeState] = useState<BaseTheme>(getInitialBaseTheme);
+  const [isKonami, setIsKonami] = useState<boolean>(getInitialKonami);
 
   const theme = useMemo<Theme>(() => (isKonami ? 'konami' : baseTheme), [isKonami, baseTheme]);
 
@@ -52,15 +57,11 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   }, [theme]);
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      window.localStorage.setItem(THEME_STORAGE_KEY, baseTheme);
-    }
+    storage.set(THEME_STORAGE_KEY, baseTheme);
   }, [baseTheme]);
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      window.localStorage.setItem(KONAMI_STORAGE_KEY, isKonami ? '1' : '0');
-    }
+    storage.set(KONAMI_STORAGE_KEY, isKonami);
   }, [isKonami]);
 
   const toggleTheme = useCallback(() => {

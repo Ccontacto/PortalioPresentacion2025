@@ -1,3 +1,4 @@
+import { Download, Languages, Moon, PartyPopper, Sparkles, Sun, Wrench } from 'lucide-react';
 import { useCallback, useMemo } from 'react';
 
 import { KONAMI_DISABLE_MESSAGE, KONAMI_ENABLE_MESSAGE } from '../../constants/konami';
@@ -7,7 +8,6 @@ import { useTheme } from '../../contexts/ThemeContext';
 import { useToast } from '../../contexts/ToastContext';
 import { useConfettiCooldown } from '../../hooks/useConfettiCooldown';
 import { useCvDownload } from '../../hooks/useCvDownload';
-import { Download, Languages, Moon, PartyPopper, Sparkles, Sun, Wrench } from 'lucide-react';
 
 import type { QuickAction } from './types';
 
@@ -101,4 +101,3 @@ export function useQuickActionsData() {
     preferenceItems
   };
 }
-

@@ -8,9 +8,9 @@ import { DIALOG_VARIANTS, OVERLAY_FADE, PANEL_TRANSITION } from '../constants/an
 import { KONAMI_ENABLE_MESSAGE } from '../constants/konami';
 import { useTheme } from '../contexts/ThemeContext';
 import { useToast } from '../contexts/ToastContext';
-import { useReducedMotion } from '../hooks/useReducedMotion';
 import { useBodyScrollLock } from '../hooks/useBodyScrollLock';
 import { useDeferredExitAction } from '../hooks/useDeferredExitAction';
+import { useReducedMotion } from '../hooks/useReducedMotion';
 
 import type { QuickAction, QuickActionGroup } from './quick-actions/types';
 
