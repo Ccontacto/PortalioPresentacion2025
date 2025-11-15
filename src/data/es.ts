@@ -34,6 +34,7 @@ export const es: PortfolioData = {
     { id: 'home', label: 'Inicio' },
     { id: 'experience', label: 'Experiencia' },
     { id: 'skills', label: 'Habilidades' },
+    { id: 'focus', label: 'Enfoque' },
     { id: 'projects', label: 'Proyectos' },
     { id: 'contact', label: 'Contacto' }
   ],
