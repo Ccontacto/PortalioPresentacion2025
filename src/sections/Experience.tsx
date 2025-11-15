@@ -5,6 +5,7 @@ import { useEffect, useRef } from 'react';
 import SectionHeader from '../components/SectionHeader';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useHorizontalScroll } from '../hooks/useHorizontalScroll';
+import { useSectionTelemetry } from '../hooks/useSectionTelemetry';
 
 import type { ExperienceJob } from '../types/portfolio';
 
@@ -12,6 +13,7 @@ export default function Experience() {
   const { data } = useLanguage();
   const jobs = data.sections.experience.jobs as ExperienceJob[];
   const sectionRef = useRef<HTMLElement | null>(null);
+  useSectionTelemetry('experience');
   
   const { trackRef, canScrollLeft, canScrollRight, scrollByCard, updateScrollButtons } = useHorizontalScroll({
     bounceLeftClass: 'experience-track--snap-bounce-left',

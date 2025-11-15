@@ -5,6 +5,7 @@ import { type ReactElement } from 'react';
 import HorizontalScroller from '../components/HorizontalScroller';
 import SectionHeader from '../components/SectionHeader';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useSectionTelemetry } from '../hooks/useSectionTelemetry';
 
 import type { SkillCategory } from '../types/portfolio';
 
@@ -18,6 +19,7 @@ const iconMap: Record<string, ReactElement> = {
 
 export default function Skills() {
   const { data } = useLanguage();
+  useSectionTelemetry('skills');
 
   return (
     <section id="skills" className="page-section" aria-labelledby="skills-heading" data-dev-id="3100">

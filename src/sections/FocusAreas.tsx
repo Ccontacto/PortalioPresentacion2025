@@ -2,6 +2,7 @@ import { m } from 'framer-motion';
 
 import { useLanguage } from '../contexts/LanguageContext';
 import { useReducedMotion } from '../hooks/useReducedMotion';
+import { useSectionTelemetry } from '../hooks/useSectionTelemetry';
 
 import type { FocusAreaItem } from '../types/portfolio';
 
@@ -9,6 +10,7 @@ export default function FocusAreas() {
   const { data } = useLanguage();
   const focus = data.sections.focus;
   const shouldReduceMotion = useReducedMotion();
+  useSectionTelemetry('focus');
 
   if (!focus) {
     return null;

@@ -6,6 +6,7 @@ import { AvailabilityBadge } from '../components/header/AvailabilityBadge';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useToast } from '../contexts/ToastContext';
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
+import { useSectionTelemetry } from '../hooks/useSectionTelemetry';
 import { storage } from '../utils/storage';
 
 import type {
@@ -34,6 +35,7 @@ export default function Hero() {
   const [ref] = useIntersectionObserver<HTMLDivElement>({ threshold: 0.3 });
   const { showToast } = useToast();
   const [availability, setAvailability] = useState<AvailabilityState>(getStoredAvailability);
+  useSectionTelemetry('home');
 
   const heroCopy = data.hero;
 

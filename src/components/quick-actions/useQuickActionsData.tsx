@@ -6,18 +6,17 @@ import {
   Link2,
   Mail,
   MessageSquare,
-  Moon,
   PartyPopper,
   Sparkles,
-  Sun,
   Wrench
 } from 'lucide-react';
 import { useCallback, useMemo } from 'react';
 
 import { KONAMI_DISABLE_MESSAGE, KONAMI_ENABLE_MESSAGE } from '../../constants/konami';
+import { THEME_META, getThemeLabel } from '../../constants/themeMeta';
 import { useDev } from '../../contexts/DevContext';
 import { useLanguage } from '../../contexts/LanguageContext';
-import { useTheme } from '../../contexts/ThemeContext';
+import { BASE_THEME_ORDER, useTheme } from '../../contexts/ThemeContext';
 import { useToast } from '../../contexts/ToastContext';
 import { useConfettiCooldown } from '../../hooks/useConfettiCooldown';
 import { useCvDownload } from '../../hooks/useCvDownload';
@@ -157,6 +156,13 @@ export function useQuickActionsData() {
         : [])
     ];
 
+    const currentThemeIndex = BASE_THEME_ORDER.indexOf(baseTheme);
+    const nextTheme = BASE_THEME_ORDER[(currentThemeIndex + 1) % BASE_THEME_ORDER.length];
+    const nextThemeCopy =
+      data?.lang === 'en'
+        ? `Switch to ${getThemeLabel('en', nextTheme)}`
+        : `Cambiar a ${getThemeLabel('es', nextTheme)}`;
+
     const systemActions: QuickAction[] = [
       {
         key: 'pdf',
@@ -167,10 +173,10 @@ export function useQuickActionsData() {
       },
       {
         key: 'theme',
-        label: baseTheme === 'dark' ? 'Modo claro' : 'Modo oscuro',
+        label: nextThemeCopy,
         action: toggleTheme,
         immediate: true,
-        icon: baseTheme === 'dark' ? <Sun size={18} aria-hidden /> : <Moon size={18} aria-hidden />
+        icon: THEME_META[nextTheme].icon
       },
       {
         key: 'language',

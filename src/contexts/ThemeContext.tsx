@@ -2,7 +2,9 @@ import React, { createContext, useContext, useEffect, useState, useCallback, use
 
 import { storage } from '../utils/storage';
 
-type BaseTheme = 'light' | 'dark';
+const BASE_THEME_SEQUENCE = ['light', 'dark', 'oled', 'high-contrast'] as const;
+export const BASE_THEME_ORDER: readonly BaseTheme[] = [...BASE_THEME_SEQUENCE];
+export type BaseTheme = (typeof BASE_THEME_SEQUENCE)[number];
 type Theme = BaseTheme | 'konami';
 type ThemeContextValue = {
   theme: Theme;
@@ -26,14 +28,25 @@ export const useTheme = () => {
 const THEME_STORAGE_KEY = 'portfolio_theme';
 const KONAMI_STORAGE_KEY = 'portfolio_theme_konami';
 
-const isBaseTheme = (value: unknown): value is BaseTheme => value === 'light' || value === 'dark';
+const isBaseTheme = (value: unknown): value is BaseTheme =>
+  typeof value === 'string' && BASE_THEME_SEQUENCE.includes(value as BaseTheme);
 const isKonamiValue = (value: unknown): value is boolean | '0' | '1' =>
   value === true || value === false || value === '0' || value === '1';
 
+const detectSystemTheme = (): BaseTheme => {
+  if (typeof window === 'undefined') {
+    return 'light';
+  }
+  const prefersHighContrast = window.matchMedia('(prefers-contrast: more)').matches;
+  if (prefersHighContrast) {
+    return 'high-contrast';
+  }
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  return prefersDark ? 'dark' : 'light';
+};
+
 const getInitialBaseTheme = (): BaseTheme => {
-  const prefersDark =
-    typeof window !== 'undefined' ? window.matchMedia('(prefers-color-scheme: dark)').matches : false;
-  const defaultTheme: BaseTheme = prefersDark ? 'dark' : 'light';
+  const defaultTheme = detectSystemTheme();
   return storage.get(THEME_STORAGE_KEY, defaultTheme, isBaseTheme);
 };
 
@@ -65,7 +78,11 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   const toggleTheme = useCallback(() => {
     setIsKonami(false);
-    setBaseThemeState(prev => (prev === 'light' ? 'dark' : 'light'));
+    setBaseThemeState(prev => {
+      const currentIndex = BASE_THEME_SEQUENCE.indexOf(prev);
+      const nextIndex = (currentIndex + 1) % BASE_THEME_SEQUENCE.length;
+      return BASE_THEME_SEQUENCE[nextIndex];
+    });
   }, []);
 
   const setBaseTheme = useCallback((next: BaseTheme) => {
