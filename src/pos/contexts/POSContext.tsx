@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext } from 'react';
-import { POSContextType, Order, Client, Address, OrderItem } from '../types';
+import type { Address, Client, Order, OrderItem, POSContextType } from '../types';
 
 const POSContext = createContext<POSContextType | undefined>(undefined);
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { usePOS } from '../contexts/POSContext';
-import { OrderItem } from '../types';
+import type { OrderItem } from '../types';
 
 const OrderStep: React.FC = () => {
   const { order, addItem, removeItem, updateItemQuantity } = usePOS();

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { usePOS } from '../contexts/POSContext';
-import { Client } from '../types';
+import type { Client } from '../types';
 
 const ClientStep: React.FC = () => {
   const [search, setSearch] = useState('');

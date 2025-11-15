@@ -1,6 +1,5 @@
 import React from 'react';
 import { usePOS } from '../contexts/POSContext';
-import { Address } from '../types';
 
 const AddressStep: React.FC = () => {
   const { order, setAddress } = usePOS();
