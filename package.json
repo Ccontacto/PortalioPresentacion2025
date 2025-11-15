@@ -24,7 +24,8 @@
     "tokens:watch": "node scripts/tokens-build.mjs && chokidar \"tokens/**/*.json\" -c \"node scripts/tokens-build.mjs\"",
     "tokens:lint": "node scripts/token-lint.mjs",
     "audit:a11y": "vitest run --reporter=dot __tests__/a11y.*.test.tsx src/components/__tests__/a11y.*.test.tsx",
-    "audit:lh": "lighthouse http://localhost:5176 --only-categories=accessibility,seo,performance --output html --output-path ./logs/lh-report.html --quiet"
+    "audit:lh": "lighthouse http://localhost:5176 --only-categories=accessibility,seo,performance --output html --output-path ./logs/lh-report.html --quiet",
+    "server": "json-server --watch db.json --port 3001"
   },
   "dependencies": {
     "@dataconnect/generated": "file:src/dataconnect-generated",
@@ -59,6 +60,7 @@
     "eslint-plugin-react-refresh": "^0.4.7",
     "jest-axe": "^9.0.0",
     "jsdom": "^27.0.1",
+    "json-server": "^1.0.0-beta.3",
     "lighthouse": "^12.0.0",
     "postcss": "^8.5.6",
     "prettier": "^3.3.2",

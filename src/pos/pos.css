@@ -1,0 +1,135 @@
+:root {
+  --meta-name: UNI·Master · Semantics Full v1.0;
+  --meta-tax: atom→molecule→organism→template→page (compacto sin pérdida);
+  --brand-name: UNI·Master;
+  --brand-tagline: Comunidad simple y segura;
+  --brand-logo-full: asset://brand/logo-full.svg;
+  --brand-logo-mark: asset://brand/logo-mark.svg;
+  --brand-logo-mono: asset://brand/logo-mono.svg;
+  --brand-logo-safeArea: 0.12;
+  --c-sp-0: 0;
+  --c-sp-2: 2px;
+  --c-sp-4: 4px;
+  --c-sp-8: 8px;
+  --c-sp-12: 12px;
+  --c-sp-16: 16px;
+  --c-sp-20: 20px;
+  --c-sp-24: 24px;
+  --c-sp-32: 32px;
+  --c-sp-40: 40px;
+  --c-sp-48: 48px;
+  --c-sp-56: 56px;
+  --c-sp-64: 64px;
+  --c-sp-72: 72px;
+  --c-sp-80: 80px;
+  --c-sp-96: 96px;
+  --c-sp-128: 128px;
+  --c-sp-160: 160px;
+  --c-rad-xs: 4px;
+  --c-rad-sm: 8px;
+  --c-rad-md: 12px;
+  --c-rad-lg: 16px;
+  --c-rad-xl: 24px;
+  --c-rad-full: 9999px;
+  --c-bd-w-hair: 1px;
+  --c-bd-w-thin: 2px;
+  --c-bd-w-thk: 3px;
+  --c-bd-s-sol: solid;
+  --c-bd-s-dash: dashed;
+  --c-sh-xs: [object Object];
+  --c-sh-sm: [object Object];
+  --c-sh-md: [object Object];
+  --c-sh-lg: [object Object];
+  --c-bp-sm: 600px;
+  --c-bp-md: 904px;
+  --c-bp-lg: 1240px;
+  --c-z-dd: 1000;
+  --c-z-st: 1100;
+  --c-z-md: 1300;
+  --c-z-pp: 1400;
+  --c-z-tt: 1500;
+  --c-mo-dur-fast: 100ms;
+  --c-mo-dur-base: 200ms;
+  --c-mo-dur-slow: 320ms;
+  --c-mo-ease-std: 0.2, 0, 0, 1;
+  --c-mo-ease-dec: 0.05, 0.7, 0.1, 1;
+  --c-mo-ease-acc: 0.3, 0, 0.8, 0.15;
+  --c-ty-fam-sans: -apple-system, Inter, Segoe UI, Roboto, system-ui;
+  --c-ty-fam-mono: SF Mono, Menlo, monospace;
+  --c-ty-sz-xs: 12px;
+  --c-ty-sz-sm: 14px;
+  --c-ty-sz-md: 16px;
+  --c-ty-sz-lg: 18px;
+  --c-ty-sz-xl: 20px;
+  --c-ty-sz-2xl: 24px;
+  --c-ty-sz-3xl: 30px;
+  --c-ty-sz-4xl: 36px;
+  --c-ty-lh-t: 1.2;
+  --c-ty-lh-n: 1.5;
+  --c-ty-lh-r: 1.7;
+  --c-ty-wt-r: 400;
+  --c-ty-wt-m: 500;
+  --c-ty-wt-s: 600;
+  --c-ty-wt-b: 700;
+  --c-grid-cols: 12;
+  --c-grid-gutter: 24px;
+  --c-grid-margin: 16px;
+  --c-grid-max: 1280px;
+  --c-op-disabled: 0.38;
+  --c-op-hover: 0.08;
+  --c-op-focusRing: 1;
+  --c-op-scrimLight: 0.4;
+  --c-op-scrimDark: 0.6;
+  --c-icon-family: lucide;
+  --c-icon-size-xs: 12px;
+  --c-icon-size-sm: 16px;
+  --c-icon-size-md: 20px;
+  --c-icon-size-lg: 24px;
+  --c-icon-size-xl: 32px;
+  --c-icon-size-2xl: 48px;
+  --c-icon-stroke: 1.5px;
+  --c-illus-style: duotone;
+  --c-illus-ratio: 16:9;
+  --c-clr-i-pri: oklch(59% 0.14 230);
+  --c-clr-i-sec: oklch(59% 0.12 280);
+  --c-clr-i-scc: oklch(59% 0.14 145);
+  --c-clr-i-wrn: oklch(60% 0.14 85);
+  --c-clr-i-err: oklch(54% 0.17 25);
+  --c-clr-i-inf: oklch(59% 0.13 250);
+  --c-clr-i-neu: oklch(59% 0 0);
+}
+
+body {
+  font-family: var(--c-ty-fam-sans);
+  background-color: oklch(98% 0.03 230);
+  color: oklch(35% 0.09 230);
+}
+
+.pos-container {
+  padding: var(--c-sp-32);
+}
+
+.pos-title {
+  font-size: var(--c-ty-sz-3xl);
+  font-weight: var(--c-ty-wt-b);
+  margin-bottom: var(--c-sp-32);
+}
+
+.pos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--c-sp-24);
+}
+
+.pos-step {
+  background-color: oklch(99% 0.00 250);
+  padding: var(--c-sp-24);
+  border-radius: var(--c-rad-lg);
+  box-shadow: 0 4px 12px 0 #0004;
+}
+
+.pos-step h2 {
+    font-size: var(--c-ty-sz-xl);
+    font-weight: var(--c-ty-wt-s);
+    margin-bottom: var(--c-sp-16);
+}

@@ -64,8 +64,11 @@ export default function Hero() {
     ? heroCopy.descriptionSegments
     : defaultDescriptionSegments;
 
-  const tagline = heroCopy.tagline ?? data.tagline ?? '';
-  const taglineSegments = tagline.split(/(IA generativa|iOS)/gi);
+  const heroValueHighlights = [
+    'IA generativa segura con RAG, Core ML y guardrails medibles',
+    'Squads iOS y backend alineados con Clean Architecture',
+    'Entrega continua con CI/CD móvil y métricas claras'
+  ];
   const status = heroCopy.status;
   const note = heroCopy.note;
 
@@ -146,29 +149,6 @@ export default function Hero() {
               )}
               </h1>
             </div>
-            <p className="hero-tagline">
-              {taglineSegments.map((segment: string, index: number) => {
-                if (!segment) {
-                  return null;
-                }
-                const normalized = segment.toLowerCase();
-                if (normalized === 'ia generativa') {
-                  return (
-                    <span key={`tagline-ia-${index}`} className="hero-tagline__accent">
-                      {segment}
-                    </span>
-                  );
-                }
-                if (normalized === 'ios') {
-                  return (
-                    <span key={`tagline-ios-${index}`} className="hero-tagline__accent hero-tagline__accent--ios">
-                      {segment}
-                    </span>
-                  );
-                }
-                return <Fragment key={`tagline-text-${index}`}>{segment}</Fragment>;
-              })}
-            </p>
             {data.name ? (
               <div className="hero-name" aria-label={`Nombre del autor: ${data.name}`}>
                 {data.name.toUpperCase()}
@@ -217,25 +197,43 @@ export default function Hero() {
             </div>
           </div>
 
-          <aside className="hero-panel" aria-label={data.lang === 'en' ? 'Current focus' : 'Foco actual'}>
-            <div className="hero-panel__card hero-panel__card--status" data-dev-id="2002">
-              <span className="hero-panel__eyebrow">{status.title}</span>
-              <p className="hero-panel__description">{status.description}</p>
-            </div>
-
-            <div className="hero-panel__card hero-panel__card--note fx-sketch-outline" data-dev-id="2004">
-              <span className="hero-panel__eyebrow hero-note-title">{note.title}</span>
-              <div className="hero-panel__tags" role="list">
-                {note.items.map((item: string) => (
-                  <span key={item} className="hero-panel__tag" role="listitem">
+          <div className="hero-right">
+            {domainHint ? (
+              <div className="hero-domain-pill">{domainHint}</div>
+            ) : null}
+            <div className="hero-value-card" aria-label="Propuesta de valor">
+              <p className="hero-value-card__role">{data.title}</p>
+              <p className="hero-value-card__description">
+                Arquitecto de software y líder técnico iOS con 12+ años diseñando productos nativos con IA generativa y equipos autónomos.
+              </p>
+              <ul className="hero-value-card__list">
+                {heroValueHighlights.map(item => (
+                  <li key={item} className="hero-value-card__list-item">
                     {item}
-                  </span>
+                  </li>
                 ))}
-              </div>
+              </ul>
             </div>
-          </aside>
+            <aside className="hero-panel" aria-label={data.lang === 'en' ? 'Current focus' : 'Foco actual'}>
+              <div className="hero-panel__card hero-panel__card--status" data-dev-id="2002">
+                <span className="hero-panel__eyebrow">{status.title}</span>
+                <p className="hero-panel__description">{status.description}</p>
+              </div>
+
+              <div className="hero-panel__card hero-panel__card--note fx-sketch-outline" data-dev-id="2004">
+                <span className="hero-panel__eyebrow hero-note-title">{note.title}</span>
+                <div className="hero-panel__tags" role="list">
+                  {note.items.map((item: string) => (
+                    <span key={item} className="hero-panel__tag" role="listitem">
+                      {item}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </aside>
+          </div>
         </div>
-      </m.div>
+    </m.div>
     </section>
   );
 }
