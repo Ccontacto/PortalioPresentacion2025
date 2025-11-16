@@ -1,0 +1,575 @@
+/* AUTO-GENERATED FILE — DO NOT EDIT MANUALLY.
+   Run `npm run spec:build` after updating specs/portfolio-spec.json */
+
+export const portfolioSpec = {
+  "id": "PORTFOLIO_JC_IOS_SPEC_v1_1",
+  "meta": {
+    "brand": "José Carlos · iOS Portfolio",
+    "description": "Portafolio dark-tech para dev iOS / frontend, 2025+",
+    "modes": [
+      "dark",
+      "light"
+    ],
+    "baseMode": "dark",
+    "placeholders": true
+  },
+  "tokens": {
+    "color": {
+      "mode": {
+        "dark": {
+          "bg": {
+            "canvas": "#020617",
+            "surface": "#020617",
+            "elevated": "#0B1120",
+            "muted": "#020617"
+          },
+          "fg": {
+            "primary": "#F9FAFB",
+            "secondary": "#E5E7EB",
+            "muted": "#9CA3AF",
+            "inverse": "#020617"
+          },
+          "accent": {
+            "primary": "#38BDF8",
+            "secondary": "#A855F7",
+            "tertiary": "#22C55E",
+            "soft": "#0EA5E933"
+          },
+          "semantic": {
+            "success": "#22C55E",
+            "warning": "#F97316",
+            "error": "#EF4444",
+            "info": "#3B82F6"
+          },
+          "border": {
+            "subtle": "#1E293B",
+            "strong": "#334155",
+            "accent": "#38BDF8"
+          },
+          "overlay": {
+            "backdrop": "rgba(15,23,42,0.75)",
+            "hover": "rgba(148,163,184,0.12)",
+            "active": "rgba(148,163,184,0.18)"
+          }
+        },
+        "light": {
+          "bg": {
+            "canvas": "#F9FAFB",
+            "surface": "#FFFFFF",
+            "elevated": "#F3F4F6",
+            "muted": "#E5E7EB"
+          },
+          "fg": {
+            "primary": "#020617",
+            "secondary": "#111827",
+            "muted": "#6B7280",
+            "inverse": "#F9FAFB"
+          },
+          "accent": {
+            "primary": "#0284C7",
+            "secondary": "#7C3AED",
+            "tertiary": "#16A34A",
+            "soft": "#0EA5E91F"
+          },
+          "semantic": {
+            "success": "#16A34A",
+            "warning": "#EA580C",
+            "error": "#DC2626",
+            "info": "#2563EB"
+          },
+          "border": {
+            "subtle": "#E5E7EB",
+            "strong": "#D1D5DB",
+            "accent": "#0284C7"
+          },
+          "overlay": {
+            "backdrop": "rgba(15,23,42,0.55)",
+            "hover": "rgba(15,23,42,0.04)",
+            "active": "rgba(15,23,42,0.08)"
+          }
+        }
+      },
+      "neutral": {
+        "0": "#020617",
+        "50": "#020617",
+        "100": "#0F172A",
+        "200": "#1E293B",
+        "300": "#334155",
+        "400": "#475569",
+        "500": "#64748B",
+        "600": "#94A3B8",
+        "700": "#CBD5F5",
+        "800": "#E5E7EB",
+        "900": "#F9FAFB"
+      }
+    },
+    "typography": {
+      "family": {
+        "sans": "system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter', sans-serif",
+        "mono": "'SF Mono', ui-monospace, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace"
+      },
+      "size": {
+        "xs": "0.75rem",
+        "sm": "0.875rem",
+        "md": "1rem",
+        "lg": "1.125rem",
+        "xl": "1.25rem",
+        "2xl": "1.5rem",
+        "3xl": "1.875rem",
+        "4xl": "2.25rem"
+      },
+      "weight": {
+        "regular": 400,
+        "medium": 500,
+        "semibold": 600,
+        "bold": 700
+      },
+      "lineHeight": {
+        "tight": 1.1,
+        "snug": 1.25,
+        "normal": 1.5,
+        "relaxed": 1.7
+      },
+      "tracking": {
+        "tight": -0.02,
+        "normal": 0,
+        "wide": 0.04
+      }
+    },
+    "space": {
+      "0": "0px",
+      "1": "4px",
+      "2": "8px",
+      "3": "12px",
+      "4": "16px",
+      "5": "20px",
+      "6": "24px",
+      "8": "32px",
+      "10": "40px",
+      "12": "48px",
+      "16": "64px",
+      "20": "80px"
+    },
+    "size": {
+      "contentWidth": {
+        "sm": "640px",
+        "md": "768px",
+        "lg": "960px",
+        "xl": "1120px"
+      },
+      "avatar": {
+        "sm": "32px",
+        "md": "48px",
+        "lg": "64px"
+      },
+      "icon": {
+        "sm": "16px",
+        "md": "20px",
+        "lg": "24px"
+      }
+    },
+    "radius": {
+      "none": "0px",
+      "xs": "0.25rem",
+      "sm": "0.375rem",
+      "md": "0.75rem",
+      "lg": "1rem",
+      "xl": "1.5rem",
+      "pill": "9999px"
+    },
+    "border": {
+      "width": {
+        "hairline": "1px",
+        "thin": "1px",
+        "thick": "2px",
+        "extra": "3px"
+      },
+      "style": {
+        "subtle": "solid",
+        "accent": "solid",
+        "focus": "solid"
+      }
+    },
+    "shadow": {
+      "none": "none",
+      "subtle": "0 8px 20px rgba(15,23,42,0.45)",
+      "soft": "0 18px 45px rgba(0,0,0,0.55)",
+      "focusRing": "0 0 0 2px rgba(56,189,248,0.35)"
+    },
+    "motion": {
+      "duration": {
+        "xs": "80ms",
+        "sm": "140ms",
+        "md": "200ms",
+        "lg": "280ms"
+      },
+      "easing": {
+        "standard": "cubic-bezier(0.2, 0.8, 0.2, 1)",
+        "entrance": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "exit": "cubic-bezier(0.7, 0, 0.84, 0)"
+      }
+    },
+    "breakpoint": {
+      "xs": "360px",
+      "sm": "480px",
+      "md": "768px",
+      "lg": "1024px",
+      "xl": "1280px"
+    },
+    "layout": {
+      "page": {
+        "maxWidth": "1120px",
+        "paddingX": {
+          "mobile": "16px",
+          "desktop": "32px"
+        },
+        "paddingY": {
+          "mobile": "24px",
+          "desktop": "48px"
+        }
+      },
+      "grid": {
+        "columns": {
+          "mobile": 4,
+          "tablet": 8,
+          "desktop": 12
+        },
+        "gutter": {
+          "mobile": "12px",
+          "tablet": "16px",
+          "desktop": "24px"
+        }
+      },
+      "section": {
+        "gapY": {
+          "tight": "32px",
+          "normal": "48px",
+          "loose": "64px"
+        }
+      }
+    }
+  },
+  "components": {
+    "appShell": {
+      "bg": "{tokens.color.mode.dark.bg.canvas}",
+      "fg": "{tokens.color.mode.dark.fg.primary}",
+      "maxWidth": "{tokens.layout.page.maxWidth}",
+      "paddingX.mobile": "{tokens.layout.page.paddingX.mobile}",
+      "paddingX.desktop": "{tokens.layout.page.paddingX.desktop}",
+      "paddingY.mobile": "{tokens.layout.page.paddingY.mobile}",
+      "paddingY.desktop": "{tokens.layout.page.paddingY.desktop}"
+    },
+    "navbar": {
+      "height": "64px",
+      "bg": "transparent",
+      "borderBottomColor": "{tokens.color.mode.dark.border.subtle}",
+      "linkColor": "{tokens.color.mode.dark.fg.muted}",
+      "linkColorActive": "{tokens.color.mode.dark.fg.primary}",
+      "gap": "{tokens.space.4}"
+    },
+    "card": {
+      "bg": "{tokens.color.mode.dark.bg.elevated}",
+      "borderColor": "{tokens.color.mode.dark.border.subtle}",
+      "borderWidth": "{tokens.border.width.hairline}",
+      "radius": "{tokens.radius.lg}",
+      "shadow": "{tokens.shadow.subtle}",
+      "padding": "{tokens.space.6}",
+      "gap": "{tokens.space.3}"
+    },
+    "button.primary": {
+      "bg": "{tokens.color.mode.dark.accent.primary}",
+      "fg": "{tokens.color.mode.dark.fg.inverse}",
+      "bgHover": "#0EA5E9",
+      "bgActive": "#0369A1",
+      "radius": "{tokens.radius.pill}",
+      "paddingX": "{tokens.space.4}",
+      "paddingY": "{tokens.space.2}",
+      "fontSize": "{tokens.typography.size.sm}",
+      "fontWeight": "{tokens.typography.weight.semibold}",
+      "shadow": "{tokens.shadow.soft}"
+    },
+    "button.ghost": {
+      "bg": "transparent",
+      "fg": "{tokens.color.mode.dark.fg.secondary}",
+      "bgHover": "{tokens.color.mode.dark.overlay.hover}",
+      "bgActive": "{tokens.color.mode.dark.overlay.active}",
+      "radius": "{tokens.radius.pill}",
+      "paddingX": "{tokens.space.3}",
+      "paddingY": "{tokens.space.2}",
+      "borderColor": "{tokens.color.mode.dark.border.subtle}",
+      "borderWidth": "{tokens.border.width.hairline}"
+    },
+    "tag": {
+      "bg": "{tokens.color.mode.dark.overlay.hover}",
+      "fg": "{tokens.color.mode.dark.fg.secondary}",
+      "radius": "{tokens.radius.pill}",
+      "paddingX": "{tokens.space.2}",
+      "paddingY": "2px",
+      "fontSize": "{tokens.typography.size.xs}",
+      "fontWeight": "{tokens.typography.weight.medium}"
+    },
+    "badge.highlight": {
+      "bg": "{tokens.color.mode.dark.accent.soft}",
+      "fg": "{tokens.color.mode.dark.accent.primary}",
+      "radius": "{tokens.radius.pill}",
+      "paddingX": "{tokens.space.2}",
+      "paddingY": "2px",
+      "fontSize": "{tokens.typography.size.xs}"
+    },
+    "chip.tech": {
+      "bg": "{tokens.color.mode.dark.bg.elevated}",
+      "borderColor": "{tokens.color.mode.dark.border.subtle}",
+      "borderWidth": "{tokens.border.width.hairline}",
+      "radius": "{tokens.radius.pill}",
+      "paddingX": "{tokens.space.3}",
+      "paddingY": "4px",
+      "gap": "{tokens.space.1}",
+      "fontSize": "{tokens.typography.size.xs}",
+      "iconSize": "{tokens.size.icon.sm}"
+    },
+    "section.header": {
+      "titleSize": "{tokens.typography.size.2xl}",
+      "titleWeight": "{tokens.typography.weight.semibold}",
+      "subtitleSize": "{tokens.typography.size.md}",
+      "subtitleColor": "{tokens.color.mode.dark.fg.muted}",
+      "gap": "{tokens.space.2}"
+    },
+    "hero": {
+      "titleSize": "{tokens.typography.size.4xl}",
+      "titleWeight": "{tokens.typography.weight.bold}",
+      "titleTracking": "{tokens.typography.tracking.tight}",
+      "subtitleSize": "{tokens.typography.size.lg}",
+      "subtitleColor": "{tokens.color.mode.dark.fg.muted}",
+      "avatarSize": "{tokens.size.avatar.lg}"
+    },
+    "form.control": {
+      "bg": "{tokens.color.mode.dark.bg.surface}",
+      "fg": "{tokens.color.mode.dark.fg.primary}",
+      "borderColor": "{tokens.color.mode.dark.border.subtle}",
+      "borderRadius": "{tokens.radius.md}",
+      "paddingX": "{tokens.space.3}",
+      "paddingY": "{tokens.space.2}",
+      "fontSize": "{tokens.typography.size.sm}",
+      "labelColor": "{tokens.color.mode.dark.fg.secondary}",
+      "helperColor": "{tokens.color.mode.dark.fg.muted}",
+      "errorColor": "{tokens.color.mode.dark.semantic.error}",
+      "focusShadow": "{tokens.shadow.focusRing}"
+    }
+  },
+  "structure": {
+    "pages": [
+      {
+        "id": "home",
+        "path": "/",
+        "layout": "AppShell",
+        "sections": [
+          "hero",
+          "about",
+          "featuredProjects",
+          "skills",
+          "contact"
+        ]
+      },
+      {
+        "id": "projects",
+        "path": "/projects",
+        "layout": "AppShell",
+        "sections": [
+          "projectsList"
+        ]
+      },
+      {
+        "id": "projectDetail",
+        "path": "/projects/:slug",
+        "layout": "AppShell",
+        "sections": [
+          "projectDetail"
+        ]
+      }
+    ]
+  },
+  "contentPlaceholders": {
+    "hero": {
+      "title": "{HERO_TITLE: José Carlos · iOS & Frontend Developer}",
+      "subtitle": "{HERO_SUBTITLE: Construyo productos mobile-first con arquitectura clara, diseño cuidado y obsesión por los detalles.}",
+      "primaryCtaLabel": "{HERO_PRIMARY_CTA_LABEL: Ver proyectos destacados}",
+      "primaryCtaHref": "{HERO_PRIMARY_CTA_HREF: /projects}",
+      "secondaryCtaLabel": "{HERO_SECONDARY_CTA_LABEL: Descargar CV}",
+      "secondaryCtaHref": "{HERO_SECONDARY_CTA_HREF: https://.../cv.pdf}",
+      "avatarSrc": "{HERO_AVATAR_SRC: /public/avatar-jc.png}",
+      "badgeText": "{HERO_BADGE_TEXT: Disponible para proyectos iOS / Frontend}"
+    },
+    "about": {
+      "title": "{ABOUT_TITLE: Sobre mí}",
+      "body": "{ABOUT_BODY: Texto de 2–3 párrafos describiendo experiencia en iOS, frontend, arquitectura, RAG, etc.}",
+      "highlights": [
+        "{ABOUT_HIGHLIGHT_1: +X años desarrollando apps iOS (Swift / SwiftUI / UIKit)}",
+        "{ABOUT_HIGHLIGHT_2: Experiencia en arquitectura limpia, patrones MVVM y SwiftData}",
+        "{ABOUT_HIGHLIGHT_3: Enfoque en performance, accesibilidad y diseño de producto}"
+      ]
+    },
+    "featuredProjects": {
+      "title": "{FP_TITLE: Proyectos destacados}",
+      "subtitle": "{FP_SUBTITLE: Selección de trabajo real donde se ve cómo pienso, diseño y construyo.}",
+      "maxItems": "{FP_MAX_ITEMS: 3}"
+    },
+    "skills": {
+      "title": "{SKILLS_TITLE: Stack y enfoque}",
+      "columns": [
+        {
+          "title": "{SKILLS_COL1_TITLE: iOS / Mobile}",
+          "items": [
+            "{SKILLS_COL1_ITEM1: Swift, SwiftUI, UIKit}",
+            "{SKILLS_COL1_ITEM2: SwiftData, CoreData}",
+            "{SKILLS_COL1_ITEM3: Arquitecturas limpias (MVVM, coordinators)}"
+          ]
+        },
+        {
+          "title": "{SKILLS_COL2_TITLE: Frontend / Web}",
+          "items": [
+            "{SKILLS_COL2_ITEM1: React, TypeScript, Vite}",
+            "{SKILLS_COL2_ITEM2: Design systems, tokens, Tailwind}",
+            "{SKILLS_COL2_ITEM3: Accesibilidad (WCAG 2.2), performance}"
+          ]
+        },
+        {
+          "title": "{SKILLS_COL3_TITLE: Extra}",
+          "items": [
+            "{SKILLS_COL3_ITEM1: RAG / LLMs, prompts avanzados}",
+            "{SKILLS_COL3_ITEM2: Automatización, CI/CD, GitHub Actions}"
+          ]
+        }
+      ]
+    },
+    "contact": {
+      "title": "{CONTACT_TITLE: Contacto}",
+      "subtitle": "{CONTACT_SUBTITLE: ¿Proyecto, colaboración o simplemente platicar de arquitectura? Escríbeme.}",
+      "email": "{CONTACT_EMAIL: tu-correo@ejemplo.com}",
+      "links": [
+        {
+          "type": "github",
+          "label": "{CONTACT_GITHUB_LABEL: GitHub}",
+          "href": "{CONTACT_GITHUB_HREF: https://github.com/tu_usuario}"
+        },
+        {
+          "type": "linkedin",
+          "label": "{CONTACT_LINKEDIN_LABEL: LinkedIn}",
+          "href": "{CONTACT_LINKEDIN_HREF: https://linkedin.com/in/tu_usuario}"
+        }
+      ]
+    }
+  },
+  "projectModel": {
+    "typeScriptType": "Project",
+    "shape": {
+      "id": "string",
+      "slug": "string",
+      "name": "string",
+      "shortDescription": "string",
+      "role": "string",
+      "timeframe": "string",
+      "tech": "string[]",
+      "highlight": "boolean",
+      "links": {
+        "github": "string?",
+        "appStore": "string?",
+        "testFlight": "string?",
+        "demo": "string?"
+      },
+      "coverImage": "string?",
+      "summary": "string",
+      "problem": "string",
+      "solution": "string",
+      "impact": "string",
+      "challenges": "string[]"
+    },
+    "samplePlaceholders": [
+      {
+        "id": "{PROJ_1_ID: app-ios-finanzas}",
+        "slug": "{PROJ_1_SLUG: app-ios-finanzas}",
+        "name": "{PROJ_1_NAME: App de finanzas personales iOS}",
+        "shortDescription": "{PROJ_1_SHORT: Dashboard de gastos con sincronización segura y animaciones suaves en SwiftUI.}",
+        "role": "{PROJ_1_ROLE: iOS Developer · Arquitectura & UI}",
+        "timeframe": "{PROJ_1_TIMEFRAME: 2024}",
+        "tech": [
+          "SwiftUI",
+          "Combine",
+          "SwiftData",
+          "iOS-Architecture"
+        ],
+        "highlight": true,
+        "links": {
+          "github": "{PROJ_1_GITHUB: https://github.com/...}",
+          "appStore": "{PROJ_1_APPSTORE: https://apps.apple.com/...}"
+        },
+        "coverImage": "{PROJ_1_COVER: /public/screenshots/finanzas.png}",
+        "summary": "{PROJ_1_SUMMARY: Resumen en 3–4 líneas del proyecto, tu rol y el resultado.}",
+        "problem": "{PROJ_1_PROBLEM: Problema de usuario que atacaste.}",
+        "solution": "{PROJ_1_SOLUTION: Cómo lo resolviste desde la arquitectura y la UX.}",
+        "impact": "{PROJ_1_IMPACT: Impacto, métricas o aprendizajes principales.}",
+        "challenges": [
+          "{PROJ_1_CHALLENGE_1: Reto técnico importante 1}",
+          "{PROJ_1_CHALLENGE_2: Reto técnico importante 2}"
+        ]
+      }
+    ]
+  },
+  "forms": {
+    "contactForm": {
+      "id": "contact",
+      "title": "{FORM_CONTACT_TITLE: Envíame un mensaje}",
+      "description": "{FORM_CONTACT_DESC: Completa el formulario y te respondo lo antes posible.}",
+      "layout": {
+        "columns": 1,
+        "gapY": "{tokens.space.4}"
+      },
+      "fields": [
+        {
+          "id": "name",
+          "label": "{FORM_NAME_LABEL: Nombre}",
+          "placeholder": "{FORM_NAME_PH: Tu nombre completo}",
+          "type": "text",
+          "required": true,
+          "minLength": 2,
+          "maxLength": 80
+        },
+        {
+          "id": "email",
+          "label": "{FORM_EMAIL_LABEL: Email}",
+          "placeholder": "{FORM_EMAIL_PH: tu-correo@ejemplo.com}",
+          "type": "email",
+          "required": true,
+          "validation": "email"
+        },
+        {
+          "id": "topic",
+          "label": "{FORM_TOPIC_LABEL: Motivo}",
+          "placeholder": "{FORM_TOPIC_PH: Proyecto iOS, colaboración, duda...}",
+          "type": "select",
+          "required": true,
+          "options": [
+            "{FORM_TOPIC_OPT1: Proyecto iOS}",
+            "{FORM_TOPIC_OPT2: Frontend / Web}",
+            "{FORM_TOPIC_OPT3: Consultoría / Arquitectura}",
+            "{FORM_TOPIC_OPT4: Otro}"
+          ]
+        },
+        {
+          "id": "message",
+          "label": "{FORM_MESSAGE_LABEL: Mensaje}",
+          "placeholder": "{FORM_MESSAGE_PH: Cuéntame brevemente qué necesitas.}",
+          "type": "textarea",
+          "required": true,
+          "minLength": 20,
+          "maxLength": 2000
+        }
+      ],
+      "submit": {
+        "label": "{FORM_SUBMIT_LABEL: Enviar mensaje}",
+        "successMessage": "{FORM_SUCCESS_MSG: Gracias por tu mensaje. Te responderé pronto.}",
+        "errorMessage": "{FORM_ERROR_MSG: Ocurrió un error al enviar. Intenta de nuevo.}"
+      }
+    }
+  }
+} as const;
+export type PortfolioSpec = typeof portfolioSpec;

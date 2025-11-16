@@ -23,6 +23,7 @@
     "tokens:build": "node scripts/tokens-build.mjs",
     "tokens:watch": "node scripts/tokens-build.mjs && chokidar \"tokens/**/*.json\" -c \"node scripts/tokens-build.mjs\"",
     "tokens:lint": "node scripts/token-lint.mjs",
+    "spec:build": "node scripts/build-portfolio-spec.mjs",
     "audit:a11y": "vitest run --reporter=dot __tests__/a11y.*.test.tsx src/components/__tests__/a11y.*.test.tsx",
     "audit:lh": "lighthouse http://localhost:5176 --only-categories=accessibility,seo,performance --output html --output-path ./logs/lh-report.html --quiet"
   },
