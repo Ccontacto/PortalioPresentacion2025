@@ -6,6 +6,7 @@ import HorizontalScroller from '../components/HorizontalScroller';
 import SearchBar from '../components/SearchBar';
 import SectionHeader from '../components/SectionHeader';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useSectionTelemetry } from '../hooks/useSectionTelemetry';
 import { getSafeUrl } from '../utils/urlValidation';
 
 import type { ProjectItem } from '../types/portfolio';
@@ -14,6 +15,7 @@ export default function Projects() {
   const { data } = useLanguage();
   const [currentSearchTerm, setCurrentSearchTerm] = useState('');
   const sectionRef = useRef<HTMLElement | null>(null);
+  useSectionTelemetry('projects');
 
   const filteredProjects = useMemo(() => {
     const allItems = data.sections.projects.items;

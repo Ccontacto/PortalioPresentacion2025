@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { WhatsappGlyph } from '../components/icons/WhatsappGlyph';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useToast } from '../contexts/ToastContext';
+import { useSectionTelemetry } from '../hooks/useSectionTelemetry';
 import { getSafeUrl, openSafeUrl } from '../utils/urlValidation';
 
 type FormStatus = 'idle' | 'sending' | 'success' | 'error';
@@ -12,6 +13,7 @@ export default function Contact() {
   const { data } = useLanguage();
   const { showToast } = useToast();
   const [status, setStatus] = useState<FormStatus>('idle');
+  useSectionTelemetry('contact');
   const linkedinUrl = data.social?.linkedin ?? '';
   const linkedinLabel = linkedinUrl.replace(/^https?:\/\//, '').replace(/\/$/, '');
   const safeLinkedinUrl = linkedinUrl ? getSafeUrl(linkedinUrl) : null;

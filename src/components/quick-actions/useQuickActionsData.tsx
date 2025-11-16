@@ -20,6 +20,7 @@ import { BASE_THEME_ORDER, useTheme } from '../../contexts/ThemeContext';
 import { useToast } from '../../contexts/ToastContext';
 import { useConfettiCooldown } from '../../hooks/useConfettiCooldown';
 import { useCvDownload } from '../../hooks/useCvDownload';
+import { useTelemetryNavOrder } from '../../hooks/useTelemetryNavOrder';
 
 import type { QuickAction } from './types';
 
@@ -36,11 +37,12 @@ export function useQuickActionsData() {
   });
   const downloadCv = useCvDownload();
 
-  const navItems = useMemo<NavEntry[]>(() => {
+  const baseNavItems = useMemo<NavEntry[]>(() => {
     return Array.isArray(data?.nav)
       ? data.nav.filter((item): item is NavEntry => Boolean(item?.id && item?.label))
       : [];
   }, [data?.nav]);
+  const navItems = useTelemetryNavOrder(baseNavItems);
 
   const tooltips = useMemo(() => {
     return {

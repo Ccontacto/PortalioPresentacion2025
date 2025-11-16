@@ -1,15 +1,16 @@
 import { storage } from './storage';
 import { isRecord } from './typeGuards';
 
-type SectionMetrics = {
+export type SectionMetrics = {
   views: number;
   totalMs: number;
   lastViewed: number | null;
 };
 
-type MetricsRecord = Record<string, SectionMetrics>;
+export type MetricsRecord = Record<string, SectionMetrics>;
 
 const STORAGE_KEY = 'portfolio_section_metrics';
+const TELEMETRY_EVENT = 'telemetry:section-metrics';
 
 const isSectionMetrics = (value: unknown): value is SectionMetrics => {
   if (!isRecord(value)) {
@@ -32,8 +33,16 @@ const isMetricsRecord = (value: unknown): value is MetricsRecord => {
 const getMetrics = (): MetricsRecord =>
   storage.get<MetricsRecord>(STORAGE_KEY, {}, isMetricsRecord) ?? {};
 
+const dispatchTelemetryEvent = (metrics: MetricsRecord) => {
+  if (typeof window === 'undefined' || typeof window.dispatchEvent !== 'function') {
+    return;
+  }
+  window.dispatchEvent(new CustomEvent<MetricsRecord>(TELEMETRY_EVENT, { detail: metrics }));
+};
+
 const saveMetrics = (next: MetricsRecord) => {
   storage.set(STORAGE_KEY, next);
+  dispatchTelemetryEvent(next);
 };
 
 const ensureEntry = (metrics: MetricsRecord, sectionId: string): SectionMetrics => {
@@ -67,6 +76,22 @@ export const addSectionDuration = (sectionId: string, deltaMs: number) => {
 };
 
 export const getSectionMetrics = (): MetricsRecord => getMetrics();
+
+export const subscribeToTelemetry = (listener: (metrics: MetricsRecord) => void): (() => void) => {
+  if (typeof window === 'undefined' || typeof window.addEventListener !== 'function') {
+    return () => {};
+  }
+
+  const handler = (event: Event) => {
+    const detail = (event as CustomEvent<MetricsRecord>).detail;
+    listener(detail ?? getSectionMetrics());
+  };
+
+  window.addEventListener(TELEMETRY_EVENT, handler as EventListener);
+  return () => {
+    window.removeEventListener(TELEMETRY_EVENT, handler as EventListener);
+  };
+};
 
 export const reorderItemsByTelemetry = <T extends { id: string }>(items: readonly T[]): T[] => {
   const metrics = getMetrics();
