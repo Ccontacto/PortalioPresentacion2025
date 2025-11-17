@@ -55,7 +55,6 @@ export default function Hero() {
   const note = heroCopy.note;
   const focusItems = Array.isArray(note?.items) ? note.items : [];
   const noteFocusList = focusItems;
-  const heroEyebrow = heroCopy.eyebrow ?? data.tagline ?? '';
   const statusTitle = status?.title ?? (data.lang === 'en' ? 'Now' : 'Ahora');
   const statusDescription = status?.description ?? heroCopy.tagline ?? data.tagline ?? '';
 
@@ -113,7 +112,6 @@ export default function Hero() {
         <div className="hero-grid">
           <div className="hero-content">
             <div className="hero-availability-row">
-              {heroEyebrow ? <span className="hero-availability-row__pill">{heroEyebrow}</span> : null}
               <AvailabilityBadge
                 availability={availability}
                 badgeClass={`availability-${availability}`}

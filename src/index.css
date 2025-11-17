@@ -3912,13 +3912,14 @@ html[data-theme='konami'] .experience-header__subtitle {
   gap: 0.5rem;
   padding: 0.65rem 1.1rem;
   border-radius: 999px;
+  border: 2px solid #050505;
   font-size: 0.9rem;
   font-weight: 700;
-  letter-spacing: 0.06em;
-  background: linear-gradient(135deg, rgba(248, 250, 252, 0.95), rgba(222, 226, 255, 0.45));
-  color: var(--text-strong);
+  letter-spacing: 0.08em;
+  background: #ffffff;
+  color: #050505;
   text-decoration: none;
-  box-shadow: 0 16px 40px rgba(255, 255, 255, 0.4);
+  box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.18);
   transition:
     transform var(--motion-normal) var(--ease-standard),
     box-shadow var(--motion-normal) var(--ease-standard),
@@ -3928,13 +3929,16 @@ html[data-theme='konami'] .experience-header__subtitle {
 .project-card__link:hover,
 .project-card__link:focus-visible {
   transform: translate(-3px, -4px);
-  box-shadow: 0 32px 60px rgba(0, 0, 0, 0.55);
+  background: #050505;
+  color: #ffffff;
+  box-shadow: 14px 14px 0 rgba(0, 0, 0, 0.45);
   text-decoration: none;
 }
 
 html[data-theme='dark'] .project-card__link {
   background: linear-gradient(135deg, rgba(31, 41, 55, 0.95), rgba(15, 23, 42, 0.9));
   color: #fff;
+  border-color: rgba(255, 255, 255, 0.8);
   box-shadow: 0 18px 44px rgba(255, 255, 255, 0.22);
 }
 
@@ -4646,20 +4650,20 @@ html[data-theme='dark'] .hero-name {
 }
 
 .hero-panel__card--status {
-  background: linear-gradient(180deg, #07070a 0%, #191a20 100%);
-  color: #f7f8fb;
-  box-shadow: 0 32px 60px rgba(7, 7, 10, 0.55);
+  background: linear-gradient(180deg, #ffffff 0%, #f5f5f5 100%);
+  color: #050505;
+  box-shadow: 0 25px 45px rgba(5, 5, 5, 0.18);
 }
 
 .hero-panel__card--status .hero-panel__eyebrow {
-  color: #ffffff;
+  color: #050505;
   font-weight: 900;
 }
 
 .hero-panel__card--status .hero-panel__description {
-  color: #ffffff;
+  color: #050505;
   font-weight: 700;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+  text-shadow: none;
 }
 
 .hero-panel__card--note {
@@ -4696,14 +4700,10 @@ html[data-theme='dark'] .hero-name {
   color: rgba(5, 5, 5, 0.65);
 }
 
-.hero-panel__card--status .hero-panel__eyebrow {
-  color: rgba(255, 255, 255, 0.8);
-}
-
 .hero-panel__description {
   font-size: 1rem;
   line-height: 1.6;
-  color: rgba(247, 247, 247, 0.9);
+  color: rgba(5, 5, 5, 0.78);
 }
 
 .hero-panel__card--note .hero-panel__description {
@@ -4748,6 +4748,31 @@ html[data-theme='dark'] .hero-name {
 .hero-panel__card--stats {
   background: linear-gradient(180deg, #fefefe 0%, #eeeeee 100%);
   box-shadow: 0 25px 45px rgba(5, 5, 5, 0.15);
+}
+
+/* ========================================
+   CARD REUSE FOR HOME SECTIONS
+   ======================================== */
+.focus-card .ds-card,
+.experience-node__card,
+.skills-card .ds-card,
+.project-card .ds-card,
+.contact-form-card,
+.contact-info {
+  border: 2px solid #050505;
+  border-radius: 32px;
+  background: #ffffff;
+  box-shadow: 14px 14px 0 rgba(0, 0, 0, 0.18);
+  padding: clamp(1.25rem, 2vw, 1.75rem);
+}
+
+.focus-card .ds-card,
+.skills-card .ds-card,
+.project-card .ds-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  height: 100%;
 }
 
 .hero-panel__stats {
@@ -4825,11 +4850,9 @@ html[data-theme='dark'] .hero-name {
 
 .focus-card {
   position: relative;
-  padding: clamp(1.25rem, 2vw, 1.75rem);
-  border-radius: inherit;
-  gap: 0.75rem;
-  overflow: hidden;
-  transition: border-color var(--motion-normal), transform var(--motion-normal), box-shadow var(--motion-normal);
+  border-radius: 32px;
+  overflow: visible;
+  transition: transform var(--motion-normal) var(--ease-standard);
 }
 
 .focus-card::after {
@@ -4840,16 +4863,6 @@ html[data-theme='dark'] .hero-name {
   background: radial-gradient(60% 60% at 50% 50%, rgba(160, 231, 229, 0.35), transparent 70%);
   opacity: 0;
   transition: opacity var(--motion-normal) var(--ease-standard);
-}
-
-.focus-card:hover,
-.focus-card:focus-within {
-  border-color: color-mix(in srgb, var(--gradient-brand-end) 65%, transparent);
-}
-
-.focus-card:hover::after,
-.focus-card:focus-within::after {
-  opacity: 1;
 }
 
 .focus-card__eyebrow {
@@ -5404,3 +5417,16 @@ html[data-theme='konami'] :where(button,[role="button"],.icon-btn,.header-panel-
 
 html[data-theme='dark'] .hamburger-menu__caret { background: var(--surface-panel); }
 html[data-theme='konami'] .hamburger-menu__caret { background: rgba(6,10,24,.95); }
+.focus-card:hover::after,
+.focus-card:focus-within::after {
+  opacity: 1;
+}
+
+.focus-card:hover .ds-card,
+.focus-card:focus-within .ds-card,
+.skills-card:hover .ds-card,
+.project-card:hover .ds-card,
+.experience-node:hover .experience-node__card {
+  transform: translate(-3px, -3px);
+  box-shadow: 18px 18px 0 rgba(0, 0, 0, 0.25);
+}
