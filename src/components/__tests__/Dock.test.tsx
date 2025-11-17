@@ -49,3 +49,6 @@ describe('Dock', () => {
     expect(mockNavigate).toHaveBeenCalledWith('focus');
   });
 });
+vi.mock('../ThemeSwitcher', () => ({
+  default: () => null
+}));

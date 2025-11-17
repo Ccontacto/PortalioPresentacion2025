@@ -7,6 +7,10 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { useToast } from '../contexts/ToastContext';
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
 import { useSectionTelemetry } from '../hooks/useSectionTelemetry';
+import { Badge } from '../design-system/primitives/Badge';
+import { Card } from '../design-system/primitives/Card';
+import { Chip } from '../design-system/primitives/Chip';
+import { SectionWrapper } from '../design-system/primitives/SectionWrapper';
 import { storage } from '../utils/storage';
 
 import type {
@@ -110,15 +114,14 @@ export default function Hero() {
   }, [availability]);
 
   return (
-    <section id="home" className="page-section page-section--hero fx-chaos-bg" aria-labelledby="hero-heading" data-dev-id="2001">
-      <m.div
-        ref={ref}
-        className="hero-shell"
-        /* Evitar gating de visibilidad en iOS: héroe siempre visible al inicio */
-        initial={undefined}
-        animate={undefined}
-      >
-        <div className="hero-backdrop" aria-hidden="true"></div>
+    <SectionWrapper
+      id="home"
+      className="page-section page-section--hero fx-chaos-bg"
+      aria-labelledby="hero-heading"
+      data-dev-id="2001"
+    >
+      <m.div ref={ref} className="hero-shell" initial={undefined} animate={undefined}>
+        <div className="hero-backdrop" aria-hidden="true" />
         <div className="hero-grid">
           <div className="hero-content">
             <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
@@ -210,34 +213,34 @@ export default function Hero() {
               ) : null}
               <div className="hero-stat-chips" role="list" aria-label={data.lang === 'en' ? 'Impact metrics' : 'Métricas de impacto'}>
                 {data.stats.map((stat: Stat) => (
-                  <div key={stat.id} className="hero-stat-chip" role="listitem">
+                  <Chip key={stat.id} className="hero-stat-chip" role="listitem">
                     <span className="hero-stat-chip__value">{stat.value}</span>
                     <span className="hero-stat-chip__label">{stat.label}</span>
-                  </div>
+                  </Chip>
                 ))}
               </div>
             </div>
           </div>
 
           <aside className="hero-panel" aria-label={data.lang === 'en' ? 'Current focus' : 'Foco actual'}>
-            <div className="hero-panel__card hero-panel__card--status" data-dev-id="2002">
+            <Card as="div" className="hero-panel__card hero-panel__card--status" data-dev-id="2002">
               <span className="hero-panel__eyebrow">{status.title}</span>
               <p className="hero-panel__description">{status.description}</p>
-            </div>
+            </Card>
 
-            <div className="hero-panel__card hero-panel__card--note fx-sketch-outline" data-dev-id="2004">
+            <Card as="div" className="hero-panel__card hero-panel__card--note fx-sketch-outline" data-dev-id="2004">
               <span className="hero-panel__eyebrow hero-note-title">{note.title}</span>
               <div className="hero-panel__tags" role="list">
                 {note.items.map((item: string) => (
-                  <span key={item} className="hero-panel__tag" role="listitem">
+                  <Chip key={item} className="hero-panel__tag" role="listitem">
                     {item}
-                  </span>
+                  </Chip>
                 ))}
               </div>
-            </div>
+            </Card>
           </aside>
         </div>
       </m.div>
-    </section>
+    </SectionWrapper>
   );
 }

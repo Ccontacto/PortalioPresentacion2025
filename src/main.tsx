@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 
 import App from './App';
 import ErrorBoundary from './components/ErrorBoundary';
+import { PortfolioSpecProvider } from './contexts/PortfolioSpecContext';
 import { ensureStorageVersion } from './utils/storage';
 import './index.css';
 
@@ -23,7 +24,9 @@ ensureStorageVersion(1, [
 ReactDOM.createRoot(rootElement).render(
   <React.StrictMode>
     <ErrorBoundary>
-      <App />
+      <PortfolioSpecProvider>
+        <App />
+      </PortfolioSpecProvider>
     </ErrorBoundary>
   </React.StrictMode>
 );

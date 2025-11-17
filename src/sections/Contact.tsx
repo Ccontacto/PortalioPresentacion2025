@@ -6,6 +6,10 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { useToast } from '../contexts/ToastContext';
 import { useSectionTelemetry } from '../hooks/useSectionTelemetry';
 import { getSafeUrl, openSafeUrl } from '../utils/urlValidation';
+import { usePortfolioContent } from '../contexts/PortfolioSpecContext';
+import { Card } from '../design-system/primitives/Card';
+import { SectionHeader } from '../design-system/primitives/SectionHeader';
+import { FormRenderer } from '../design-system/primitives/FormRenderer';
 
 type FormStatus = 'idle' | 'sending' | 'success' | 'error';
 
@@ -14,6 +18,7 @@ export default function Contact() {
   const { showToast } = useToast();
   const [status, setStatus] = useState<FormStatus>('idle');
   useSectionTelemetry('contact');
+  const contactSpec = usePortfolioContent('contact');
   const linkedinUrl = data.social?.linkedin ?? '';
   const linkedinLabel = linkedinUrl.replace(/^https?:\/\//, '').replace(/\/$/, '');
   const safeLinkedinUrl = linkedinUrl ? getSafeUrl(linkedinUrl) : null;
@@ -160,6 +165,13 @@ export default function Contact() {
               <span>{data.sections.contact.signature}</span>
             </footer>
           </section>
+          <Card className="contact-form-card" as="div">
+            <SectionHeader
+              title={stripBraces(contactSpec?.title) || 'Contacto'}
+              subtitle={stripBraces(contactSpec?.subtitle) || 'Envíame un mensaje'}
+            />
+            <FormRenderer formId="contactForm" />
+          </Card>
         </div>
       </section>
 
@@ -175,4 +187,9 @@ export default function Contact() {
       </footer>
     </>
   );
+}
+
+function stripBraces(value?: string) {
+  if (!value) return '';
+  return value.replace(/^\{|\}$/g, '').replace(/^[^:]+:\s*/, '');
 }

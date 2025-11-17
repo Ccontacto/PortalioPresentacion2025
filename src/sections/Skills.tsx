@@ -3,8 +3,13 @@ import { Bot, Cloud, Cpu, Smartphone } from 'lucide-react';
 import { type ReactElement } from 'react';
 
 import HorizontalScroller from '../components/HorizontalScroller';
-import SectionHeader from '../components/SectionHeader';
 import { useLanguage } from '../contexts/LanguageContext';
+import { usePortfolioContent } from '../contexts/PortfolioSpecContext';
+import { Badge } from '../design-system/primitives/Badge';
+import { Card } from '../design-system/primitives/Card';
+import { Chip } from '../design-system/primitives/Chip';
+import { SectionHeader as DsSectionHeader } from '../design-system/primitives/SectionHeader';
+import { SectionWrapper } from '../design-system/primitives/SectionWrapper';
 import { useSectionTelemetry } from '../hooks/useSectionTelemetry';
 
 import type { SkillCategory } from '../types/portfolio';
@@ -19,28 +24,30 @@ const iconMap: Record<string, ReactElement> = {
 
 export default function Skills() {
   const { data } = useLanguage();
+  const skillsSpec = usePortfolioContent('skills');
   useSectionTelemetry('skills');
+  const sectionTitle = data.sections.skills.title || stripBraces(skillsSpec?.title);
+  const sectionSubtitle =
+    'Herramientas y frameworks con los que construyo soluciones móviles e IA de forma integral.';
 
   return (
-    <section id="skills" className="page-section" aria-labelledby="skills-heading" data-dev-id="3100">
-      <SectionHeader
-        id="skills-heading"
-        eyebrow="Stack principal"
-        title={data.sections.skills.title}
-        subtitle="Herramientas y frameworks con los que construyo soluciones móviles e IA de forma integral."
-      />
+    <SectionWrapper id="skills" aria-labelledby="skills-heading" data-dev-id="3100">
+      <div className="ds-stack">
+        <Badge>{stripBraces(skillsSpec?.title) || 'Stack principal'}</Badge>
+        <DsSectionHeader title={sectionTitle} subtitle={sectionSubtitle} />
+      </div>
 
       <div className="page-section__body" data-dev-id="3103">
         <HorizontalScroller
           itemCount={data.sections.skills.categories.length}
-          itemSelector=".card"
+          itemSelector=".skills-card"
           prevLabelKey="prevSkills"
           nextLabelKey="nextSkills"
         >
           {data.sections.skills.categories.map((cat: SkillCategory) => (
             <m.article
               key={cat.id}
-              className="card"
+              className="skills-card card"
               data-dev-id={`310${String(cat.id ?? '').slice(-1) || '5'}`}
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -48,21 +55,28 @@ export default function Skills() {
               whileHover={{ y: -8 }}
               role="listitem"
             >
-              <div className="skill-card__icon" aria-hidden="true">
-                {iconMap[cat.icon] ?? <Cpu size={32} />}
-              </div>
-              <h3 className="text-lg font-bold mb-4">{cat.title}</h3>
-              <div className="skill-card__chips" role="list" aria-label={`Habilidades de ${cat.title}`}>
-                {cat.items.map((item: SkillItem) => (
-                  <span key={item} className="skill-badge" role="listitem">
-                    {item}
-                  </span>
-                ))}
-              </div>
+              <Card as="div">
+                <div className="skill-card__icon" aria-hidden="true">
+                  {iconMap[cat.icon] ?? <Cpu size={32} />}
+                </div>
+                <h3 className="text-lg font-bold mb-4">{cat.title}</h3>
+                <ul className="skill-card__chips" aria-label={`Habilidades de ${cat.title}`} role="list">
+                  {cat.items.map((item: SkillItem) => (
+                    <li key={item}>
+                      <Chip>{item}</Chip>
+                    </li>
+                  ))}
+                </ul>
+              </Card>
             </m.article>
           ))}
         </HorizontalScroller>
       </div>
-    </section>
+    </SectionWrapper>
   );
+}
+
+function stripBraces(value?: string) {
+  if (!value) return '';
+  return value.replace(/^\{|\}$/g, '').replace(/^[^:]+:\s*/, '');
 }

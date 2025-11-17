@@ -3372,6 +3372,11 @@ html[data-theme='konami'] .skill-card__icon {
   align-items: center;
 }
 
+.contact-form-card {
+  width: 100%;
+  max-width: 720px;
+}
+
 .contact-hero {
   text-align: center;
   display: flex;
