@@ -8,6 +8,7 @@ import { useToast } from '../contexts/ToastContext';
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
 import { useSectionTelemetry } from '../telemetry/useSectionTelemetry';
 import { Badge } from '../design-system/primitives/Badge';
+import { Button } from '../design-system/primitives/Button';
 import { Card } from '../design-system/primitives/Card';
 import { Chip } from '../design-system/primitives/Chip';
 import { SectionWrapper } from '../design-system/primitives/SectionWrapper';
@@ -197,12 +198,12 @@ export default function Hero() {
             ) : null}
 
             <div className="hero-actions">
-              <a className="hero-action hero-action--primary" href="#projects">
-                {data.ui.viewProjects}
-              </a>
-              <a className="hero-action hero-action--ghost" href="#contact">
-                {data.ui.bookCall}
-              </a>
+              <Button asChild>
+                <a href="#projects">{data.ui.viewProjects}</a>
+              </Button>
+              <Button variant="ghost" asChild>
+                <a href="#contact">{data.ui.bookCall}</a>
+              </Button>
             </div>
             <div className="hero-locale" data-dev-id="2001-locale">
               {resolvedMeta.length ? (

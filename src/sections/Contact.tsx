@@ -9,6 +9,7 @@ import { getSafeUrl, openSafeUrl } from '../utils/urlValidation';
 import { usePortfolioContent } from '../contexts/PortfolioSpecContext';
 import { Card } from '../design-system/primitives/Card';
 import { SectionHeader } from '../design-system/primitives/SectionHeader';
+import { SectionWrapper } from '../design-system/primitives/SectionWrapper';
 import { FormRenderer } from '../design-system/primitives/FormRenderer';
 
 type FormStatus = 'idle' | 'sending' | 'success' | 'error';
@@ -70,8 +71,8 @@ export default function Contact() {
     .replace('iOS', '<span class="contact-hero__accent">iOS</span>');
 
   return (
-    <>
-      <section id="contact" className="page-section" aria-labelledby="contact-heading" data-dev-id="9000">
+    <> 
+      <SectionWrapper id="contact" aria-labelledby="contact-heading" data-dev-id="9000">
         <div className="contact-wrapper" data-dev-id="9001">
           <header className="contact-hero" data-dev-id="9002">
             <span className="contact-hero__eyebrow">Conectemos</span>
@@ -173,7 +174,7 @@ export default function Contact() {
             <FormRenderer formId="contactForm" />
           </Card>
         </div>
-      </section>
+      </SectionWrapper>
 
       {/* MEJORA 1: footer con role="contentinfo" */}
       <footer

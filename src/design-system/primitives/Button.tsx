@@ -1,36 +1,28 @@
-import type { ButtonHTMLAttributes } from 'react';
+import { cloneElement, isValidElement } from 'react';
+import type { ButtonHTMLAttributes, ReactElement, ReactNode } from 'react';
 
-import { portfolioComponents } from '../tokens';
 import { cx } from '../../utils/cx';
-import { resolveSpecValue } from '../utils/resolveSpecValue';
 import './styles.css';
 
-type ButtonVariant = 'primary' | 'ghost';
-
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant?: ButtonVariant;
+  variant?: 'primary' | 'ghost';
+  asChild?: boolean;
+  children?: ReactNode;
 };
 
-const primarySpec = portfolioComponents['button.primary'];
-const ghostSpec = portfolioComponents['button.ghost'];
+export function Button({ variant = 'primary', className, asChild = false, children, ...rest }: ButtonProps) {
+  const classes = cx('ds-button', variant === 'primary' ? 'ds-button--primary' : 'ds-button--ghost', className);
 
-const getSpecForVariant = (variant: ButtonVariant) => (variant === 'ghost' ? ghostSpec : primarySpec);
+  if (asChild && isValidElement(children)) {
+    return cloneElement(children as ReactElement, {
+      className: cx(children.props.className, classes),
+      ...rest
+    });
+  }
 
-export function Button({ variant = 'primary', className, style, ...rest }: ButtonProps) {
-  const spec = getSpecForVariant(variant);
-  const mergedStyle: React.CSSProperties = {
-    background: resolveSpecValue(spec.bg),
-    color: resolveSpecValue(spec.fg),
-    borderRadius: resolveSpecValue(spec.radius),
-    padding: `${resolveSpecValue(spec.paddingY)} ${resolveSpecValue(spec.paddingX)}`,
-    fontSize: resolveSpecValue(spec.fontSize),
-    fontWeight: resolveSpecValue(spec.fontWeight),
-    boxShadow: resolveSpecValue(spec.shadow),
-    borderColor: resolveSpecValue(spec.borderColor),
-    borderWidth: resolveSpecValue(spec.borderWidth),
-    ...style
-  };
   return (
-    <button className={cx('ds-button', variant === 'primary' ? 'ds-button--primary' : 'ds-button--ghost', className)} style={mergedStyle} {...rest} />
+    <button className={classes} {...rest}>
+      {children}
+    </button>
   );
 }
