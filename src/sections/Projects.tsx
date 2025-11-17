@@ -4,15 +4,21 @@ import { useMemo, useRef, useState } from 'react';
 
 import HorizontalScroller from '../components/HorizontalScroller';
 import SearchBar from '../components/SearchBar';
-import SectionHeader from '../components/SectionHeader';
 import { useLanguage } from '../contexts/LanguageContext';
-import { useSectionTelemetry } from '../hooks/useSectionTelemetry';
+import { usePortfolioContent } from '../contexts/PortfolioSpecContext';
+import { Badge } from '../design-system/primitives/Badge';
+import { Card } from '../design-system/primitives/Card';
+import { Chip } from '../design-system/primitives/Chip';
+import { SectionHeader as DsSectionHeader } from '../design-system/primitives/SectionHeader';
+import { SectionWrapper } from '../design-system/primitives/SectionWrapper';
+import { useSectionTelemetry } from '../telemetry/useSectionTelemetry';
 import { getSafeUrl } from '../utils/urlValidation';
 
 import type { ProjectItem } from '../types/portfolio';
 
 export default function Projects() {
   const { data } = useLanguage();
+  const projectsSpec = usePortfolioContent('featuredProjects');
   const [currentSearchTerm, setCurrentSearchTerm] = useState('');
   const sectionRef = useRef<HTMLElement | null>(null);
   useSectionTelemetry('projects');
@@ -28,13 +34,14 @@ export default function Projects() {
   }, [currentSearchTerm, data.sections.projects.items]) as readonly ProjectItem[];
 
   return (
-    <section ref={sectionRef} id="projects" className="page-section" aria-labelledby="projects-heading" data-dev-id="5000">
-      <SectionHeader
-        id="projects-heading"
-        eyebrow="Casos reales"
-        title={data.sections.projects.title}
-        subtitle="Lanzamientos y prototipos donde combiné iOS, liderazgo técnico e IA aplicada."
-      />
+    <SectionWrapper ref={sectionRef} id="projects" aria-labelledby="projects-heading" data-dev-id="5000">
+      <div className="ds-stack">
+        <Badge>{projectsSpec?.title ? stripBraces(projectsSpec.title) : 'Casos reales'}</Badge>
+        <DsSectionHeader
+          title={data.sections.projects.title}
+          subtitle="Lanzamientos y prototipos donde combiné iOS, liderazgo técnico e IA aplicada."
+        />
+      </div>
 
       <div className="page-section__body" data-dev-id="5003">
         <SearchBar
@@ -56,7 +63,7 @@ export default function Projects() {
             return (
               <m.article
                 key={proj.id}
-                className="card project-card"
+                className="project-card"
                 data-dev-id={`500${index}`}
                 role="listitem"
                 initial={{ opacity: 0, y: 50 }}
@@ -64,34 +71,36 @@ export default function Projects() {
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.08 }}
               >
-                <div className="project-thumb" aria-hidden="true">
-                  <Rocket size={56} />
-                </div>
-                <h3 className="text-xl font-bold mb-3">{proj.title}</h3>
-                <p className="text-sm mb-4">{proj.description}</p>
-                <div className="project-tags" role="list" aria-label="Tecnologías del proyecto">
-                  {proj.tags.map(tag => (
-                    <span key={tag} className="skill-badge" role="listitem">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-                {safeLink ? (
-                  <a
-                    href={safeLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="project-card__link"
-                  >
-                    <ExternalLink size={24} aria-hidden="true" />
-                    {data.lang === 'en' ? 'View project' : 'Ver proyecto'}
-                  </a>
-                ) : null}
+                <Card as="div">
+                  <div className="project-thumb" aria-hidden="true">
+                    <Rocket size={56} />
+                  </div>
+                  <h3 className="text-xl font-bold mb-3">{proj.title}</h3>
+                  <p className="text-sm mb-4">{proj.description}</p>
+                  <ul className="project-tags" role="list" aria-label="Tecnologías del proyecto">
+                    {proj.tags.map(tag => (
+                      <li key={tag}>
+                        <Chip className="skill-badge">{tag}</Chip>
+                      </li>
+                    ))}
+                  </ul>
+                  {safeLink ? (
+                    <a href={safeLink} target="_blank" rel="noopener noreferrer" className="project-card__link">
+                      <ExternalLink size={24} aria-hidden="true" />
+                      {data.lang === 'en' ? 'View project' : 'Ver proyecto'}
+                    </a>
+                  ) : null}
+                </Card>
               </m.article>
             );
           })}
         </HorizontalScroller>
       </div>
-    </section>
+    </SectionWrapper>
   );
+}
+
+function stripBraces(value?: string) {
+  if (!value) return '';
+  return value.replace(/^\{|\}$/g, '').replace(/^[^:]+:\s*/, '');
 }

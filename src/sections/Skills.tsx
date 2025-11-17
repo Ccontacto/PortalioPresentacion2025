@@ -10,7 +10,7 @@ import { Card } from '../design-system/primitives/Card';
 import { Chip } from '../design-system/primitives/Chip';
 import { SectionHeader as DsSectionHeader } from '../design-system/primitives/SectionHeader';
 import { SectionWrapper } from '../design-system/primitives/SectionWrapper';
-import { useSectionTelemetry } from '../hooks/useSectionTelemetry';
+import { useSectionTelemetry } from '../telemetry/useSectionTelemetry';
 
 import type { SkillCategory } from '../types/portfolio';
 

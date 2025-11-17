@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { reorderItemsByTelemetry, subscribeToTelemetry } from '../utils/telemetry';
+import { reorderItemsByTelemetry, subscribeToTelemetry } from './metrics';
 
 const haveSameOrder = <T extends { id: string }>(prev: readonly T[], next: readonly T[]) => {
   if (prev.length !== next.length) {

@@ -20,7 +20,7 @@ import { BASE_THEME_ORDER, useTheme } from '../../contexts/ThemeContext';
 import { useToast } from '../../contexts/ToastContext';
 import { useConfettiCooldown } from '../../hooks/useConfettiCooldown';
 import { useCvDownload } from '../../hooks/useCvDownload';
-import { useTelemetryNavOrder } from '../../hooks/useTelemetryNavOrder';
+import { useTelemetryNavOrder } from '../../telemetry/useTelemetryNavOrder';
 
 import type { QuickAction } from './types';
 

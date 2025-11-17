@@ -6,7 +6,7 @@ import { AvailabilityBadge } from '../components/header/AvailabilityBadge';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useToast } from '../contexts/ToastContext';
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
-import { useSectionTelemetry } from '../hooks/useSectionTelemetry';
+import { useSectionTelemetry } from '../telemetry/useSectionTelemetry';
 import { Badge } from '../design-system/primitives/Badge';
 import { Card } from '../design-system/primitives/Card';
 import { Chip } from '../design-system/primitives/Chip';

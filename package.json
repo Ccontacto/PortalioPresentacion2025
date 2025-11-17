@@ -26,7 +26,10 @@
     "spec:build": "node scripts/build-portfolio-spec.mjs",
     "spec:watch": "npm run spec:build && node scripts/spec-watch.mjs",
     "audit:a11y": "vitest run --reporter=dot __tests__/a11y.*.test.tsx src/components/__tests__/a11y.*.test.tsx",
-    "audit:lh": "lighthouse http://localhost:5176 --only-categories=accessibility,seo,performance --output html --output-path ./logs/lh-report.html --quiet"
+    "audit:lh": "lighthouse http://localhost:5176 --only-categories=accessibility,seo,performance --output html --output-path ./logs/lh-report.html --quiet",
+    "storybook": "storybook dev -p 6006",
+    "storybook:build": "storybook build",
+    "storybook:lint": "eslint stories --ext .tsx,.ts"
   },
   "dependencies": {
     "@dataconnect/generated": "file:src/dataconnect-generated",

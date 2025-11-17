@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { WhatsappGlyph } from '../components/icons/WhatsappGlyph';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useToast } from '../contexts/ToastContext';
-import { useSectionTelemetry } from '../hooks/useSectionTelemetry';
+import { useSectionTelemetry } from '../telemetry/useSectionTelemetry';
 import { getSafeUrl, openSafeUrl } from '../utils/urlValidation';
 import { usePortfolioContent } from '../contexts/PortfolioSpecContext';
 import { Card } from '../design-system/primitives/Card';

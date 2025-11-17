@@ -7,7 +7,7 @@ import { Chip } from '../design-system/primitives/Chip';
 import { SectionHeader as DsSectionHeader } from '../design-system/primitives/SectionHeader';
 import { SectionWrapper } from '../design-system/primitives/SectionWrapper';
 import { useReducedMotion } from '../hooks/useReducedMotion';
-import { useSectionTelemetry } from '../hooks/useSectionTelemetry';
+import { useSectionTelemetry } from '../telemetry/useSectionTelemetry';
 
 import type { FocusAreaItem } from '../types/portfolio';
 
