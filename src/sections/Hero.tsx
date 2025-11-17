@@ -1,26 +1,18 @@
 import { m } from 'framer-motion';
 import { MapPin } from 'lucide-react';
-import { Fragment, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { AvailabilityBadge } from '../components/header/AvailabilityBadge';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useToast } from '../contexts/ToastContext';
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
 import { useSectionTelemetry } from '../telemetry/useSectionTelemetry';
-import { Badge } from '../design-system/primitives/Badge';
 import { Button } from '../design-system/primitives/Button';
 import { Card } from '../design-system/primitives/Card';
 import { SectionWrapper } from '../design-system/primitives/SectionWrapper';
 import { storage } from '../utils/storage';
 
-import type {
-  AvailabilityKey,
-  HeroDescriptionSegment,
-  HeroMetaItem,
-  HeroTitleSegment,
-  PortfolioToasts,
-  Stat
-} from '../types/portfolio';
+import type { AvailabilityKey, HeroMetaItem, PortfolioToasts, Stat } from '../types/portfolio';
 
 const DOMAIN_HINTS: Record<string, string> = {
   'portalio-presentacion-2025.pages.dev': 'Hola desde Cloudflare Pages!',
@@ -59,22 +51,10 @@ export default function Hero() {
     []
   );
 
-  const defaultTitleSegments: readonly HeroTitleSegment[] = [{ text: data.title }];
-  const defaultDescriptionSegments: readonly HeroDescriptionSegment[] = [{ text: data.description }];
-
-  const titleSegments: readonly HeroTitleSegment[] = heroCopy.titleSegments?.length
-    ? heroCopy.titleSegments
-    : defaultTitleSegments;
-
-  const descriptionSegments: readonly HeroDescriptionSegment[] = heroCopy.descriptionSegments?.length
-    ? heroCopy.descriptionSegments
-    : defaultDescriptionSegments;
-
-  const tagline = heroCopy.tagline ?? data.tagline ?? '';
-  const taglineSegments = tagline.split(/(IA generativa|iOS)/gi);
   const status = heroCopy.status;
   const note = heroCopy.note;
   const focusItems = Array.isArray(note?.items) ? note.items : [];
+  const focusList = focusItems.slice(1);
 
   const availabilityLabel = data.availability?.status?.[availability] ?? availability;
   const availabilityToggleLabel = data.availability?.toggle?.[availability] ?? 'Cambiar disponibilidad';
@@ -138,83 +118,31 @@ export default function Hero() {
                 onToggle={handleToggleAvailability}
               />
             </div>
-            <div className="hero-role-banner" aria-label="Rol principal">
-              <span className="hero-role-banner__eyebrow">{heroCopy.eyebrow ?? 'Liderazgo iOS · IA generativa'}</span>
-              <div className="hero-role-banner__headline">
-                <span className="hero-role-banner__headline-part">{primaryRole}</span>
+            <div className="hero-role-stack" aria-labelledby="hero-heading">
+              <span className="hero-role-stack__eyebrow">
+                {heroCopy.eyebrow ?? 'Liderazgo iOS · IA generativa'}
+              </span>
+              <h1 id="hero-heading" className="hero-role-stack__title">
+                <span className="hero-role-stack__title-part">{primaryRole}</span>
                 {secondaryRole ? (
                   <>
-                    <span className="hero-role-banner__divider" aria-hidden="true">
+                    <span className="hero-role-stack__divider" aria-hidden="true">
                       •
                     </span>
-                    <span className="hero-role-banner__headline-part hero-role-banner__headline-part--accent">
+                    <span className="hero-role-stack__title-part hero-role-stack__title-part--accent">
                       {secondaryRole}
                     </span>
                   </>
                 ) : null}
-              </div>
-            </div>
-            <div className="hero-title-wrap" aria-hidden="false">
-              <div className="hero-title-rays" aria-hidden="true" />
-              <h1 id="hero-heading" className="hero-title">
-                {titleSegments.map((segment: HeroTitleSegment, index: number) =>
-                  segment.accent ? (
-                    <span
-                      key={`${segment.text}-${index}`}
-                      className={`hero-title__accent hero-title__accent--${segment.accent}`}
-                    >
-                      {segment.text}
-                    </span>
-                  ) : (
-                    <Fragment key={`${segment.text}-${index}`}>{segment.text}</Fragment>
-                  )
-                )}
               </h1>
             </div>
-            {(heroCopy.subtitle ?? data.subtitle) ? (
-              <p className="hero-subheadline">{heroCopy.subtitle ?? data.subtitle}</p>
-            ) : null}
-            <p className="hero-tagline">
-              {taglineSegments.map((segment: string, index: number) => {
-                if (!segment) {
-                  return null;
-                }
-                const normalized = segment.toLowerCase();
-                if (normalized === 'ia generativa') {
-                  return (
-                    <span key={`tagline-ia-${index}`} className="hero-tagline__accent">
-                      {segment}
-                    </span>
-                  );
-                }
-                if (normalized === 'ios') {
-                  return (
-                    <span key={`tagline-ios-${index}`} className="hero-tagline__accent hero-tagline__accent--ios">
-                      {segment}
-                    </span>
-                  );
-                }
-                return <Fragment key={`tagline-text-${index}`}>{segment}</Fragment>;
-              })}
-            </p>
-            <p className="hero-description">
-              {descriptionSegments.map((segment: HeroDescriptionSegment, index: number) =>
-                segment.accent === 'gradient' ? (
-                  <span key={`${segment.text}-${index}`} className="hero-description__accent">
-                    {segment.text}
-                  </span>
-                ) : (
-                  <Fragment key={`${segment.text}-${index}`}>{segment.text}</Fragment>
-                )
-              )}
-            </p>
-            {focusItems.length ? (
+            {focusList.length ? (
               <ul
                 className="hero-focus-grid"
                 role="list"
                 aria-label={data.lang === 'en' ? 'Active focus areas' : 'Frentes activos'}
               >
-                {focusItems.map(item => (
+                {focusList.map(item => (
                   <li key={item} className="hero-focus-chip" role="listitem">
                     <span aria-hidden="true">▹</span>
                     {item}
@@ -231,6 +159,12 @@ export default function Hero() {
               </Button>
             </div>
             <div className="hero-meta-bar" role="list">
+              <span
+                className={`hero-meta-chip hero-meta-chip--status hero-meta-chip--${availability}`}
+                role="listitem"
+              >
+                {availabilityLabel}
+              </span>
               {resolvedMeta.length ? (
                 <span className="hero-meta-chip" role="listitem">
                   <MapPin size={16} aria-hidden="true" />
