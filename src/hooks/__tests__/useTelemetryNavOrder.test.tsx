@@ -1,7 +1,7 @@
 import { renderHook, act } from '@testing-library/react';
 import { describe, expect, it, beforeEach, vi } from 'vitest';
 
-import { useTelemetryNavOrder } from '../useTelemetryNavOrder';
+import { useTelemetryNavOrder } from '../../telemetry/useTelemetryNavOrder';
 
 const subscribers: Array<() => void> = [];
 const reorderMock = vi.fn();
@@ -15,7 +15,7 @@ const subscribeMock = vi.fn((callback: () => void) => {
   };
 });
 
-vi.mock('../../utils/telemetry', () => ({
+vi.mock('../../telemetry/metrics', () => ({
   reorderItemsByTelemetry: (items: Array<{ id: string }>) => reorderMock(items),
   subscribeToTelemetry: (callback: () => void) => subscribeMock(callback)
 }));

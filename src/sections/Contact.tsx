@@ -135,7 +135,7 @@ export default function Contact() {
           <section className="contact-info" data-dev-id="9004">
             <header className="contact-info__header" data-dev-id="9005">
               <h3 className="contact-info__title">{data.name}</h3>
-              <p className="contact-info__tagline">Líder Técnico iOS · Arquitectura IA</p>
+              <p className="contact-info__tagline">{data.title}</p>
               <span className="contact-info__location">Basado en {data.location}</span>
             </header>
 

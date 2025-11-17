@@ -10,7 +10,6 @@ import { useSectionTelemetry } from '../telemetry/useSectionTelemetry';
 import { Badge } from '../design-system/primitives/Badge';
 import { Button } from '../design-system/primitives/Button';
 import { Card } from '../design-system/primitives/Card';
-import { Chip } from '../design-system/primitives/Chip';
 import { SectionWrapper } from '../design-system/primitives/SectionWrapper';
 import { storage } from '../utils/storage';
 
@@ -75,6 +74,7 @@ export default function Hero() {
   const taglineSegments = tagline.split(/(IA generativa|iOS)/gi);
   const status = heroCopy.status;
   const note = heroCopy.note;
+  const focusItems = Array.isArray(note?.items) ? note.items : [];
 
   const availabilityLabel = data.availability?.status?.[availability] ?? availability;
   const availabilityToggleLabel = data.availability?.toggle?.[availability] ?? 'Cambiar disponibilidad';
@@ -91,6 +91,10 @@ export default function Hero() {
   };
 
   const [domainHint, setDomainHint] = useState<string | null>(null);
+  const heroTitleLine = data.title ?? heroCopy.eyebrow ?? '';
+  const roleSegments = heroTitleLine.split('&').map(segment => segment.trim()).filter(Boolean);
+  const primaryRole = roleSegments[0] ?? heroTitleLine;
+  const secondaryRole = roleSegments[1] ?? '';
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -134,24 +138,42 @@ export default function Hero() {
                 onToggle={handleToggleAvailability}
               />
             </div>
-            <span className="hero-eyebrow">{heroCopy.eyebrow}</span>
+            <div className="hero-role-banner" aria-label="Rol principal">
+              <span className="hero-role-banner__eyebrow">{heroCopy.eyebrow ?? 'Liderazgo iOS · IA generativa'}</span>
+              <div className="hero-role-banner__headline">
+                <span className="hero-role-banner__headline-part">{primaryRole}</span>
+                {secondaryRole ? (
+                  <>
+                    <span className="hero-role-banner__divider" aria-hidden="true">
+                      •
+                    </span>
+                    <span className="hero-role-banner__headline-part hero-role-banner__headline-part--accent">
+                      {secondaryRole}
+                    </span>
+                  </>
+                ) : null}
+              </div>
+            </div>
             <div className="hero-title-wrap" aria-hidden="false">
               <div className="hero-title-rays" aria-hidden="true" />
               <h1 id="hero-heading" className="hero-title">
-            {titleSegments.map((segment: HeroTitleSegment, index: number) =>
-                segment.accent ? (
-                  <span
-                    key={`${segment.text}-${index}`}
-                    className={`hero-title__accent hero-title__accent--${segment.accent}`}
-                  >
-                    {segment.text}
-                  </span>
-                ) : (
-                  <Fragment key={`${segment.text}-${index}`}>{segment.text}</Fragment>
-                )
-              )}
+                {titleSegments.map((segment: HeroTitleSegment, index: number) =>
+                  segment.accent ? (
+                    <span
+                      key={`${segment.text}-${index}`}
+                      className={`hero-title__accent hero-title__accent--${segment.accent}`}
+                    >
+                      {segment.text}
+                    </span>
+                  ) : (
+                    <Fragment key={`${segment.text}-${index}`}>{segment.text}</Fragment>
+                  )
+                )}
               </h1>
             </div>
+            {(heroCopy.subtitle ?? data.subtitle) ? (
+              <p className="hero-subheadline">{heroCopy.subtitle ?? data.subtitle}</p>
+            ) : null}
             <p className="hero-tagline">
               {taglineSegments.map((segment: string, index: number) => {
                 if (!segment) {
@@ -175,11 +197,6 @@ export default function Hero() {
                 return <Fragment key={`tagline-text-${index}`}>{segment}</Fragment>;
               })}
             </p>
-            {data.name ? (
-              <div className="hero-name" aria-label={`Nombre del autor: ${data.name}`}>
-                {data.name.toUpperCase()}
-              </div>
-            ) : null}
             <p className="hero-description">
               {descriptionSegments.map((segment: HeroDescriptionSegment, index: number) =>
                 segment.accent === 'gradient' ? (
@@ -191,13 +208,21 @@ export default function Hero() {
                 )
               )}
             </p>
-            {domainHint ? (
-              <p className="hero-domain" data-dev-id="hero-domain">
-                {domainHint}
-              </p>
+            {focusItems.length ? (
+              <ul
+                className="hero-focus-grid"
+                role="list"
+                aria-label={data.lang === 'en' ? 'Active focus areas' : 'Frentes activos'}
+              >
+                {focusItems.map(item => (
+                  <li key={item} className="hero-focus-chip" role="listitem">
+                    <span aria-hidden="true">▹</span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
             ) : null}
-
-            <div className="hero-actions">
+            <div className="hero-cta-row">
               <Button asChild>
                 <a href="#projects">{data.ui.viewProjects}</a>
               </Button>
@@ -205,21 +230,21 @@ export default function Hero() {
                 <a href="#contact">{data.ui.bookCall}</a>
               </Button>
             </div>
-            <div className="hero-locale" data-dev-id="2001-locale">
+            <div className="hero-meta-bar" role="list">
               {resolvedMeta.length ? (
-                <div className="hero-location-chip">
-                  <MapPin size={18} aria-hidden="true" />
-                  <span>{resolvedMeta[0].value}</span>
-                </div>
+                <span className="hero-meta-chip" role="listitem">
+                  <MapPin size={16} aria-hidden="true" />
+                  {resolvedMeta[0].value}
+                </span>
               ) : null}
-              <div className="hero-stat-chips" role="list" aria-label={data.lang === 'en' ? 'Impact metrics' : 'Métricas de impacto'}>
-                {data.stats.map((stat: Stat) => (
-                  <Chip key={stat.id} className="hero-stat-chip" role="listitem">
-                    <span className="hero-stat-chip__value">{stat.value}</span>
-                    <span className="hero-stat-chip__label">{stat.label}</span>
-                  </Chip>
-                ))}
-              </div>
+              <span className="hero-meta-chip" role="listitem">
+                {data.email}
+              </span>
+              {domainHint ? (
+                <span className="hero-meta-chip" role="listitem">
+                  {domainHint}
+                </span>
+              ) : null}
             </div>
           </div>
 
@@ -229,15 +254,20 @@ export default function Hero() {
               <p className="hero-panel__description">{status.description}</p>
             </Card>
 
-            <Card as="div" className="hero-panel__card hero-panel__card--note fx-sketch-outline" data-dev-id="2004">
-              <span className="hero-panel__eyebrow hero-note-title">{note.title}</span>
-              <div className="hero-panel__tags" role="list">
-                {note.items.map((item: string) => (
-                  <Chip key={item} className="hero-panel__tag" role="listitem">
-                    {item}
-                  </Chip>
+            <Card as="div" className="hero-panel__card hero-panel__card--stats" data-dev-id="2003">
+              <span className="hero-panel__eyebrow">{data.lang === 'en' ? 'Measured impact' : 'Impacto medible'}</span>
+              <ul
+                className="hero-panel__stats"
+                role="list"
+                aria-label={data.lang === 'en' ? 'Impact metrics' : 'Métricas de impacto'}
+              >
+                {data.stats.map((stat: Stat) => (
+                  <li key={stat.id} role="listitem">
+                    <span className="hero-panel__stat-value">{stat.value}</span>
+                    <span className="hero-panel__stat-label">{stat.label}</span>
+                  </li>
                 ))}
-              </div>
+              </ul>
             </Card>
           </aside>
         </div>

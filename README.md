@@ -26,6 +26,41 @@ Portfolio React + Vite listo para desarrollo local, testing y despliegue en Clou
 - `npm run format`: Prettier a todo el repo.
 - `npm run check:ci`: flujo completo usado en CI (lint + tests con cobertura + build).
 
+## Capa de telemetría
+- Hooks y utilidades viven en `src/telemetry`:  
+  - `useSectionTelemetry(sectionId, { threshold })` registra vistas/duración vía `IntersectionObserver`.  
+  - `useTelemetryNavOrder(navItems)` reordena navegación y escucha `telemetry:section-metrics`.  
+  - `logAppError(error, info)` (desde `src/telemetry/errors.ts`) serializa y envía errores al endpoint configurado en `VITE_TELEMETRY_ENDPOINT`.
+- Ejemplo de uso:
+  ```ts
+  import { useSectionTelemetry } from '../telemetry/useSectionTelemetry';
+  import { logAppError } from '../telemetry';
+
+  export function Projects() {
+    useSectionTelemetry('projects');
+    // ...
+  }
+
+  try {
+    render();
+  } catch (error) {
+    logAppError(error as Error);
+  }
+  ```
+- Para pruebas unitarias, mockea `../../telemetry/metrics` en lugar del path legado `utils/telemetry`.
+
+## Storybook 10 + Vite (reinstalación limpia)
+Storybook quedó atado a Vite 7. Para evitar mezclas de versiones, usa siempre este flujo cuando cambies dependencias:
+```bash
+rm -rf node_modules package-lock.json .storybook/storybook-cache
+npm install
+npm run storybook
+```
+- Requisito: Node 20+ (lo mismo que `package.json` exige).  
+- `.storybook/main.ts` usa `@storybook/react-vite` como framework y sirve los tokens desde `public/spec-tokens.css`.  
+- Si el puerto 6006 está ocupado, arranca con `PORT=6007 npm run storybook`.  
+- `npm run storybook:build` genera la versión estática para CI/CD; agrégalo al pipeline cuando necesites publicar documentación del DS.
+
 ## Notas Tailwind v4
 - `src/index.css` usa `@theme` solo con variables planas y custom props.
 - @layer utilities declara clases semánticas (`bg-surface-base`, `hit-44`, etc.).
