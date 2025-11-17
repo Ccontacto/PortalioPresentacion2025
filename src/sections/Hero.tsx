@@ -54,7 +54,10 @@ export default function Hero() {
   const status = heroCopy.status;
   const note = heroCopy.note;
   const focusItems = Array.isArray(note?.items) ? note.items : [];
-  const focusList = focusItems.slice(1);
+  const noteFocusList = focusItems;
+  const heroEyebrow = heroCopy.eyebrow ?? data.tagline ?? '';
+  const statusTitle = status?.title ?? (data.lang === 'en' ? 'Now' : 'Ahora');
+  const statusDescription = status?.description ?? heroCopy.tagline ?? data.tagline ?? '';
 
   const availabilityLabel = data.availability?.status?.[availability] ?? availability;
   const availabilityToggleLabel = data.availability?.toggle?.[availability] ?? 'Cambiar disponibilidad';
@@ -109,7 +112,8 @@ export default function Hero() {
         <div className="hero-backdrop" aria-hidden="true" />
         <div className="hero-grid">
           <div className="hero-content">
-            <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
+            <div className="hero-availability-row">
+              {heroEyebrow ? <span className="hero-availability-row__pill">{heroEyebrow}</span> : null}
               <AvailabilityBadge
                 availability={availability}
                 badgeClass={`availability-${availability}`}
@@ -136,19 +140,17 @@ export default function Hero() {
                 ) : null}
               </h1>
             </div>
-            {focusList.length ? (
-              <ul
-                className="hero-focus-grid"
-                role="list"
-                aria-label={data.lang === 'en' ? 'Active focus areas' : 'Frentes activos'}
-              >
-                {focusList.map(item => (
-                  <li key={item} className="hero-focus-chip" role="listitem">
-                    <span aria-hidden="true">▹</span>
-                    {item}
-                  </li>
+            {Array.isArray(heroCopy.descriptionSegments) && heroCopy.descriptionSegments.length ? (
+              <p className="hero-description">
+                {heroCopy.descriptionSegments.map((segment, index) => (
+                  <span
+                    key={`${segment.text}-${index}`}
+                    className={segment.accent === 'gradient' ? 'highlight' : undefined}
+                  >
+                    {segment.text}
+                  </span>
                 ))}
-              </ul>
+              </p>
             ) : null}
             <div className="hero-cta-row">
               <Button asChild>
@@ -159,21 +161,12 @@ export default function Hero() {
               </Button>
             </div>
             <div className="hero-meta-bar" role="list">
-              <span
-                className={`hero-meta-chip hero-meta-chip--status hero-meta-chip--${availability}`}
-                role="listitem"
-              >
-                {availabilityLabel}
-              </span>
               {resolvedMeta.length ? (
                 <span className="hero-meta-chip" role="listitem">
                   <MapPin size={16} aria-hidden="true" />
                   {resolvedMeta[0].value}
                 </span>
               ) : null}
-              <span className="hero-meta-chip" role="listitem">
-                {data.email}
-              </span>
               {domainHint ? (
                 <span className="hero-meta-chip" role="listitem">
                   {domainHint}
@@ -184,9 +177,22 @@ export default function Hero() {
 
           <aside className="hero-panel" aria-label={data.lang === 'en' ? 'Current focus' : 'Foco actual'}>
             <Card as="div" className="hero-panel__card hero-panel__card--status" data-dev-id="2002">
-              <span className="hero-panel__eyebrow">{status.title}</span>
-              <p className="hero-panel__description">{status.description}</p>
+              <span className="hero-panel__eyebrow">{statusTitle}</span>
+              <p className="hero-panel__description">{statusDescription}</p>
             </Card>
+
+            {noteFocusList.length ? (
+              <Card as="div" className="hero-panel__card hero-panel__card--note" data-dev-id="2004">
+                <span className="hero-panel__eyebrow">{note?.title ?? 'Frentes activos'}</span>
+                <div className="hero-panel__note-chips" role="list">
+                  {noteFocusList.map(item => (
+                    <span key={item} className="hero-note-chip" role="listitem">
+                      {item}
+                    </span>
+                  ))}
+                </div>
+              </Card>
+            ) : null}
 
             <Card as="div" className="hero-panel__card hero-panel__card--stats" data-dev-id="2003">
               <span className="hero-panel__eyebrow">{data.lang === 'en' ? 'Measured impact' : 'Impacto medible'}</span>

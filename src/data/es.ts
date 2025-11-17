@@ -5,7 +5,7 @@ export const es: PortfolioData = {
   name: 'José Carlos Torres Rivera',
   title: 'Líder Técnico iOS & Arquitecto de IA',
   subtitle: 'IA generativa segura en ecosistemas iOS',
-  tagline: 'Integro IA generativa en productos iOS desde la visión hasta el lanzamiento',
+  tagline: 'Arquitectura iOS con IA medible de punta a punta',
   description:
     'Arquitecto de software y líder técnico iOS con 12+ años creando apps nativas, arquitecturas escalables y squads de alto desempeño. Especialista en Swift, SwiftUI, Clean Architecture y adopción de IA generativa (RAG, Core ML, LangChain).',
   email: 'jctorresrivera@gmail.com',
@@ -44,7 +44,7 @@ export const es: PortfolioData = {
     { id: 's3', value: '85%', label: 'Cobertura de pruebas' }
   ],
   hero: {
-    eyebrow: 'Liderazgo iOS · IA generativa',
+    eyebrow: 'Estrategia iOS · IA confiable',
     titleSegments: [
       { text: 'Líder Técnico iOS', accent: 'primary' },
       { text: ' & ' },
@@ -53,25 +53,24 @@ export const es: PortfolioData = {
     descriptionSegments: [
       {
         text:
-          'Arquitecto de software y líder técnico iOS con 12+ años creando apps nativas, arquitecturas escalables y squads de alto desempeño. Especialista en '
+          'Conecto visión de producto y ejecución móvil para lanzar features respaldados por '
       },
       { text: 'Swift · SwiftUI', accent: 'gradient' },
-      { text: ', Clean Architecture y adopción de ' },
-      { text: 'IA generativa', accent: 'gradient' },
-      { text: ' (RAG, Core ML, LangChain).' }
+      { text: ' y ' },
+      { text: 'IA medible (RAG + Core ML)', accent: 'gradient' },
+      { text: '. Mentor squads senior para llevar IA segura directo al dispositivo.' }
     ],
     status: {
       title: 'Ahora',
-      description:
-        'Acompaño squads para lanzar experiencias nativas con IA generativa segura y medible.'
+      description: 'Mentoreo squads para aterrizar IA en apps nativas y medir impacto sin riesgos.'
     },
     // Evitar duplicidad (la disponibilidad ya vive como badge y el enfoque en su sección)
     meta: [{ label: 'Ubicación', field: 'location' }],
     note: {
       title: 'En lo que estoy trabajando',
-      items: ['IA en dispositivo', 'Playbooks RAG', 'CI/CD móvil']
+      items: ['IA en dispositivo', 'Playbooks RAG', 'CI/CD móvil', 'Lanzamientos medibles']
     },
-    tagline: 'Integro IA generativa en productos iOS desde la visión hasta el lanzamiento'
+    tagline: 'Arquitecturas nativas con IA segura y medible.'
   },
   sections: {
     experience: {
