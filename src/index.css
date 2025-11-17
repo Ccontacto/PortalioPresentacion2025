@@ -140,6 +140,7 @@
   --gradient-brand-end: var(--dt-color-brand-accent-500, #6EE7B7);
   --gradient-hero-start: color-mix(in srgb, var(--gradient-brand-start) 65%, white);
   --gradient-hero-end: color-mix(in srgb, var(--gradient-brand-end) 72%, white);
+  --home-gradient: linear-gradient(120deg, #F9A8D4 0%, #C4B5FD 50%, #BAE6FD 100%);
   --hero-dark-accent-start: var(--dt-color-brand-primary-400, #38bdf8);
   --hero-dark-accent-end: color-mix(in srgb, var(--dt-color-brand-amber-500, #fb7185) 90%, white);
   --hero-retro-accent-start: #00ffd9;
@@ -2779,13 +2780,12 @@ html[data-theme='dark'] .hero-description {
 }
 
 .hero-description .highlight {
-  background: linear-gradient(135deg, #ffb7dd, #a0e7e5);
+  background: var(--home-gradient);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  -webkit-text-stroke: 1px rgba(15, 23, 42, 0.2);
   background-clip: text;
+  color: transparent;
   font-weight: 800;
-  -webkit-text-stroke: 0.8px rgba(15, 23, 42, 0.18);
 }
 
    HERO ENHANCEMENTS
@@ -3437,29 +3437,24 @@ html[data-theme='dark'] .contact-hero__accent {
   min-width: 210px;
   padding: 18px 26px;
   border-radius: 28px;
-  border: 2px solid rgba(0, 0, 0, 0.65);
-  background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(239, 244, 255, 0.9)),
-    linear-gradient(145deg, rgba(15, 23, 42, 0.08), rgba(15, 23, 42, 0.05));
-  color: #0f172a;
-  text-shadow: 0 2px 4px rgba(255, 255, 255, 0.65);
-  box-shadow:
-    0 24px 50px rgba(0, 0, 0, 0.55),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+  border: 2px solid #050505;
+  background: var(--home-gradient);
+  color: #050505;
+  box-shadow: 14px 14px 0 rgba(0, 0, 0, 0.38);
   transition:
     transform var(--motion-normal) var(--ease-standard),
     box-shadow var(--motion-normal) var(--ease-standard),
     border-color var(--motion-normal) var(--ease-standard),
-    background var(--motion-normal) var(--ease-standard);
+    background var(--motion-normal) var(--ease-standard),
+    color var(--motion-normal) var(--ease-standard);
 }
 
 .contact-cta:hover {
   transform: translate(-3px, -5px);
-  box-shadow:
-    0 36px 78px rgba(0, 0, 0, 0.9),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.35);
-  border-color: rgba(0, 0, 0, 0.7);
-  color: var(--text-strong);
+  box-shadow: 18px 18px 0 rgba(0, 0, 0, 0.55);
+  border-color: #050505;
+  background: #ffffff;
+  color: #050505;
 }
 
 .contact-cta__icon {
@@ -3487,54 +3482,16 @@ html[data-theme='dark'] .contact-hero__accent {
 .contact-cta--whatsapp,
 .contact-cta--email,
 .contact-cta--copy {
-  background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.6)),
-    linear-gradient(135deg, var(--gradient-brand-start), var(--gradient-brand-end));
-  border-color: rgba(0, 0, 0, 0.4);
-}
-/* Specific tints layered over brand gradient */
-.contact-cta--whatsapp {
-  background:
-    linear-gradient(175deg, rgba(22, 163, 74, 0.35), rgba(4, 120, 87, 0.25)),
-    linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.4));
-  color: #064e3b;
-  border-color: rgba(0, 0, 0, 0.45);
-}
-.contact-cta--email {
-  background:
-    linear-gradient(175deg, rgba(59, 130, 246, 0.4), rgba(37, 99, 235, 0.2)),
-    linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.45));
-  color: #1e3a8a;
-  border-color: rgba(0, 0, 0, 0.45);
-}
-.contact-cta--copy {
-  background:
-    linear-gradient(175deg, rgba(239, 68, 68, 0.4), rgba(185, 28, 28, 0.35)),
-    linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.45));
-  color: #7f1d1d;
-  border-color: rgba(0, 0, 0, 0.45);
+  background: var(--home-gradient);
+  color: #050505;
+  border-color: #050505;
 }
 
-/* Sub‑identidad sutil por tinta del texto en hover */
 .contact-cta--whatsapp:hover,
 .contact-cta--email:hover,
 .contact-cta--copy:hover {
-  border-color: rgba(255, 255, 255, 0.65);
-  box-shadow:
-    0 40px 85px rgba(0, 0, 0, 0.95),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.4);
-}
-
-.contact-cta--whatsapp:hover {
-  color: #0f3d2d;
-}
-
-.contact-cta--email:hover {
-  color: #1e3a8a;
-}
-
-.contact-cta--copy:hover {
-  color: #7f1d1d;
+  background: #ffffff;
+  color: #050505;
 }
 
 html[data-theme='dark'] .contact-cta {
@@ -3916,22 +3873,23 @@ html[data-theme='konami'] .experience-header__subtitle {
   font-size: 0.9rem;
   font-weight: 700;
   letter-spacing: 0.08em;
-  background: #ffffff;
+  background: var(--home-gradient);
   color: #050505;
   text-decoration: none;
-  box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.18);
+  box-shadow: 12px 12px 0 rgba(0, 0, 0, 0.24);
   transition:
     transform var(--motion-normal) var(--ease-standard),
     box-shadow var(--motion-normal) var(--ease-standard),
-    background var(--motion-normal) var(--ease-standard);
+    background var(--motion-normal) var(--ease-standard),
+    color var(--motion-normal) var(--ease-standard);
 }
 
 .project-card__link:hover,
 .project-card__link:focus-visible {
   transform: translate(-3px, -4px);
-  background: #050505;
-  color: #ffffff;
-  box-shadow: 14px 14px 0 rgba(0, 0, 0, 0.45);
+  background: #ffffff;
+  color: #050505;
+  box-shadow: 16px 16px 0 rgba(0, 0, 0, 0.35);
   text-decoration: none;
 }
 
@@ -4500,22 +4458,28 @@ html[data-theme='dark'] .hero-name {
 
 .hero-role-stack__title-part {
   font-weight: 800;
+  color: #050505;
 }
 
 .hero-role-stack__title-part--accent {
   position: relative;
+  color: #050505;
 }
 
 .hero-role-stack__title-part--accent::after {
   content: '';
   position: absolute;
-  left: -6px;
-  right: -6px;
-  bottom: -5px;
-  height: 9px;
-  border-radius: 999px;
-  background: linear-gradient(120deg, rgba(244, 114, 182, 0.35), rgba(96, 165, 250, 0.35), rgba(110, 231, 183, 0.35));
+  inset: -4px;
+  border-radius: 16px;
+  border: 2px solid transparent;
+  background: var(--home-gradient) border-box;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) padding-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
   z-index: -1;
+  box-shadow: 0 8px 20px rgba(249, 168, 212, 0.35), 0 12px 30px rgba(186, 230, 253, 0.45);
 }
 
 .hero-role-stack__divider {
@@ -4543,7 +4507,7 @@ html[data-theme='dark'] .hero-name {
   border-radius: 999px;
   border: 2px solid #050505;
   padding: 0.58rem 1.9rem;
-  background: linear-gradient(120deg, #5f5bff, #a35cff, #4ff2e2);
+  background: var(--home-gradient);
   color: #050505;
   font-weight: 900;
   letter-spacing: 0.12em;
