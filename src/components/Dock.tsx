@@ -6,6 +6,8 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { useNavigation } from '../contexts/NavigationContext';
 import { useReducedMotion } from '../hooks/useReducedMotion';
 
+import ThemeSwitcher from './ThemeSwitcher';
+
 const icons: Record<string, JSX.Element> = {
   home: <Home size={24} aria-hidden="true" />,
   experience: <Briefcase size={24} aria-hidden="true" />,
@@ -130,6 +132,7 @@ export default function Dock() {
             {icons[item.id] || <Home size={24} aria-hidden="true" />}
           </button>
         ))}
+        <ThemeSwitcher />
       </m.nav>
     </div>
   );

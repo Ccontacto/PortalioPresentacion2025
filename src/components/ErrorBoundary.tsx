@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { logAppError } from '../utils/telemetry';
+import { logAppError } from '../telemetry';
 
 type Props = { children: React.ReactNode };
 type State = { hasError: boolean; err: Error | null };

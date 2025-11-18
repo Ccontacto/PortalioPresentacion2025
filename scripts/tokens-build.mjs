@@ -2,7 +2,8 @@
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import path from 'node:path';
 
-const SRC = new URL('../tokens/core.json', import.meta.url);
+const CORE_SRC = new URL('../tokens/core.json', import.meta.url);
+const DTCG_SRC = new URL('../tokens/dtcg-system-2025.json', import.meta.url);
 
 const toOklch = (obj) => `oklch(${obj.L} ${obj.C} ${obj.h})`;
 const toOklchFromSpace = (v) =>
@@ -14,13 +15,160 @@ const tokenVal = (entry) => (entry?.$value ?? entry?.value ?? entry);
 
 const rem = (n) => `calc(1rem * ${Number(n).toFixed(4)})`;
 const px = (n) => `${Math.round(Number(n))}px`;
+const shadowStr = (dx, dy, blur, alpha) =>
+  `${Math.round(dx)}px ${Math.round(dy)}px ${Math.round(blur)}px rgba(0,0,0,${alpha})`;
 
-const shadowStr = (dx, dy, blur, alpha) => `${Math.round(dx)}px ${Math.round(dy)}px ${Math.round(blur)}px rgba(0,0,0,${alpha})`;
+const normalizeVarName = (pathStr) =>
+  `--dt-${pathStr.replace(/[^a-zA-Z0-9]+/g, '-').replace(/-+/g, '-').toLowerCase()}`;
+
+const flattenDtcg = (node, prefix = [], target = new Map()) => {
+  if (!node || typeof node !== 'object') return target;
+  for (const [key, value] of Object.entries(node)) {
+    if (key.startsWith('$') || key === 'meta' || key === 'description') continue;
+    if (!value || typeof value !== 'object') continue;
+    if ('$value' in value) {
+      const tokenPath = [...prefix, key].join('.');
+      target.set(tokenPath, { value: value.$value, type: value.$type ?? null });
+      continue;
+    }
+    flattenDtcg(value, [...prefix, key], target);
+  }
+  return target;
+};
+
+const REF_REGEX = /^\{(.+)\}$/;
+
+const resolveTokenValue = (path, baseMap, overrideMap, stack = new Set()) => {
+  const entry = overrideMap?.get(path) ?? baseMap.get(path);
+  if (!entry) return undefined;
+  const resolveValue = (raw) => {
+    if (typeof raw === 'string') {
+      const match = raw.match(REF_REGEX);
+      if (match) {
+        const refPath = match[1].trim();
+        if (stack.has(refPath)) return raw;
+        stack.add(refPath);
+        const resolved = resolveTokenValue(refPath, baseMap, overrideMap, stack);
+        stack.delete(refPath);
+        return resolved ?? raw;
+      }
+      return raw;
+    }
+    if (Array.isArray(raw)) {
+      return raw.map((item) => resolveValue(item));
+    }
+    if (raw && typeof raw === 'object') {
+      const result = {};
+      for (const [k, v] of Object.entries(raw)) {
+        result[k] = resolveValue(v);
+      }
+      return result;
+    }
+    return raw;
+  };
+  return resolveValue(entry.value);
+};
+
+const formatShadow = (value) => {
+  if (Array.isArray(value)) {
+    return value.map((entry) => formatShadow(entry)).join(', ');
+  }
+  if (value && typeof value === 'object') {
+    const parts = [];
+    if (value.inset) parts.push('inset');
+    parts.push(value.offsetX ?? '0px');
+    parts.push(value.offsetY ?? '0px');
+    parts.push(value.blur ?? '0px');
+    if (value.spread !== undefined) parts.push(value.spread);
+    parts.push(value.color ?? 'rgba(0,0,0,0.25)');
+    return parts.join(' ');
+  }
+  return String(value);
+};
+
+const formatForCss = (value, type) => {
+  if (type === 'shadow') {
+    return formatShadow(value);
+  }
+  if (type === 'fontFamily' && Array.isArray(value)) {
+    return value
+      .map((item) => {
+        if (typeof item !== 'string') return String(item);
+        return item.includes(' ') && !item.includes('"') && !item.includes("'") ? `"${item}"` : item;
+      })
+      .join(', ');
+  }
+  if (type === 'cubicBezier' && Array.isArray(value)) {
+    return `cubic-bezier(${value.join(',')})`;
+  }
+  if (Array.isArray(value)) {
+    return value.map((item) => formatForCss(item)).join(', ');
+  }
+  if (value && typeof value === 'object') {
+    return JSON.stringify(value);
+  }
+  if (typeof value === 'boolean') {
+    return value ? '1' : '0';
+  }
+  return String(value);
+};
+
+const buildDtcgBlocks = (dtcgJson) => {
+  const baseTokens = flattenDtcg(dtcgJson);
+  const modes = dtcgJson?.$extensions?.modes ?? {};
+  const modeOverrides = new Map();
+
+  for (const [modeName, modeConfig] of Object.entries(modes)) {
+    const overrides = new Map();
+    const rawOverrides = modeConfig?.overrides ?? {};
+    for (const [rawPath, rawValue] of Object.entries(rawOverrides)) {
+      const cleanedPath = rawPath.replace(/\.?\$value$/, '');
+      overrides.set(cleanedPath, {
+        value: rawValue,
+        type: baseTokens.get(cleanedPath)?.type ?? null
+      });
+    }
+    if (overrides.size) {
+      modeOverrides.set(modeName, overrides);
+    }
+  }
+
+  const baseLines = [];
+  const resolvedBase = new Map();
+
+  for (const [path, entry] of baseTokens.entries()) {
+    const resolved = resolveTokenValue(path, baseTokens, null, new Set());
+    if (resolved === undefined) continue;
+    resolvedBase.set(path, resolved);
+    const cssValue = formatForCss(resolved, entry.type);
+    baseLines.push(`  ${normalizeVarName(path)}: ${cssValue};`);
+  }
+
+  const modeBlocks = [];
+  for (const [modeName, overrides] of modeOverrides.entries()) {
+    const blockLines = [];
+    for (const [path, entry] of overrides.entries()) {
+      const resolved = resolveTokenValue(path, baseTokens, overrides, new Set());
+      if (resolved === undefined) continue;
+      const cssValue = formatForCss(resolved, entry.type ?? baseTokens.get(path)?.type);
+      blockLines.push(`  ${normalizeVarName(path)}: ${cssValue};`);
+    }
+    if (blockLines.length) {
+      modeBlocks.push(`[data-theme='${modeName}']{\n${blockLines.join('\n')}\n}`);
+    }
+  }
+
+  return { baseLines, modeBlocks };
+};
 
 const emit = async () => {
-  const raw = await readFile(SRC, 'utf8');
-  const json = JSON.parse(raw);
-  const t = json.tokens ?? json;
+  const coreRaw = await readFile(CORE_SRC, 'utf8');
+  const coreJson = JSON.parse(coreRaw);
+  const t = coreJson.tokens ?? coreJson;
+
+  const dtcgRaw = await readFile(DTCG_SRC, 'utf8');
+  const dtcgJson = JSON.parse(dtcgRaw);
+  const dtcgBlocks = buildDtcgBlocks(dtcgJson);
 
   const lines = [];
   lines.push(':root{');
@@ -35,7 +183,6 @@ const emit = async () => {
       const alt = toOklchFromSpace(v);
       lines.push(`  --neutral-${k}: ${alt ?? v};`);
     }
-    // prefijo opcional
     const vv = isObj(v) ? (toOklchFromSpace(v) ?? (('L' in v) ? toOklch(v) : v)) : v;
     lines.push(`  --u-color-neutral-${k}: ${vv};`);
   }
@@ -58,7 +205,7 @@ const emit = async () => {
   const roles = t?.roles ?? {};
   const roleSets = {};
   for (const setKey of Object.keys(roles)) {
-    if (String(setKey).startsWith('$')) continue; // ignora metadatos
+    if (String(setKey).startsWith('$')) continue;
     const set = roles[setKey];
     if (!isObj(set)) continue;
     roleSets[setKey] = {};
@@ -72,7 +219,6 @@ const emit = async () => {
     }
   }
 
-  // Alias de roles activos (t0 por defecto)
   if (roleSets['t0']) {
     const r = roleSets['t0'];
     if (r.bg) lines.push(`  --u-role-bg: ${r.bg};`);
@@ -123,20 +269,23 @@ const emit = async () => {
   const motion = t?.motion ?? {};
   const dur = motion?.duration ?? {};
   for (const k of Object.keys(dur)) {
+    if (k.startsWith('$')) continue;
     const v = String(tokenVal(dur[k]));
     const ms = v.endsWith('ms') ? v : `${v}`;
     lines.push(`  --motion-${k}: ${ms};`);
   }
   const easing = motion?.easing ?? {};
   for (const k of Object.keys(easing)) {
+    if (k.startsWith('$')) continue;
     const val = tokenVal(easing[k]);
     const ease = Array.isArray(val) ? `cubic-bezier(${val.join(',')})` : String(val);
     lines.push(`  --ease-${k}: ${ease};`);
   }
 
+  // Append resolved DTCG tokens
+  lines.push(...dtcgBlocks.baseLines);
   lines.push('}');
 
-  // Overrides para dark mode: mapea alias a t1 si existe
   if (roleSets['t1']) {
     const r1 = roleSets['t1'];
     const dark = [];
@@ -151,8 +300,11 @@ const emit = async () => {
     }
   }
 
-  const css = lines.join('\n') + '\n';
+  if (dtcgBlocks.modeBlocks.length) {
+    lines.push(...dtcgBlocks.modeBlocks);
+  }
 
+  const css = lines.join('\n') + '\n';
   const targets = [
     path.resolve(path.dirname(new URL(import.meta.url).pathname), '../public/tokens.css'),
     path.resolve(path.dirname(new URL(import.meta.url).pathname), '../build/web/tokens.css')
@@ -166,4 +318,7 @@ const emit = async () => {
   console.log('tokens-build: generated public/tokens.css and build/web/tokens.css');
 };
 
-emit().catch((e) => { console.error(e); process.exit(1); });
+emit().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});

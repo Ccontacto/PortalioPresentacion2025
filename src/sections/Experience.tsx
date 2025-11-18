@@ -2,9 +2,14 @@ import { m } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 
-import SectionHeader from '../components/SectionHeader';
 import { useLanguage } from '../contexts/LanguageContext';
+import { Badge } from '../design-system/primitives/Badge';
+import { Card } from '../design-system/primitives/Card';
+import { Chip } from '../design-system/primitives/Chip';
+import { SectionHeader as DsSectionHeader } from '../design-system/primitives/SectionHeader';
+import { SectionWrapper } from '../design-system/primitives/SectionWrapper';
 import { useHorizontalScroll } from '../hooks/useHorizontalScroll';
+import { useSectionTelemetry } from '../telemetry/useSectionTelemetry';
 
 import type { ExperienceJob } from '../types/portfolio';
 
@@ -12,6 +17,7 @@ export default function Experience() {
   const { data } = useLanguage();
   const jobs = data.sections.experience.jobs as ExperienceJob[];
   const sectionRef = useRef<HTMLElement | null>(null);
+  useSectionTelemetry('experience');
   
   const { trackRef, canScrollLeft, canScrollRight, scrollByCard, updateScrollButtons } = useHorizontalScroll({
     bounceLeftClass: 'experience-track--snap-bounce-left',
@@ -46,13 +52,14 @@ export default function Experience() {
     .join(' ');
 
   return (
-    <section ref={sectionRef} id="experience" className="page-section" aria-labelledby="experience-heading" data-dev-id="4000">
-      <SectionHeader
-        id="experience-heading"
-        eyebrow="Trayectoria destacada"
-        title={data.sections.experience.title}
-        subtitle="Dirección técnica, liderazgo de squads y exploración de IA generativa aplicadas a productos reales."
-      />
+    <SectionWrapper ref={sectionRef} id="experience" aria-labelledby="experience-heading" data-dev-id="4000">
+      <div className="ds-stack">
+        <Badge>Trayectoria destacada</Badge>
+        <DsSectionHeader
+          title={data.sections.experience.title}
+          subtitle="Dirección técnica, liderazgo de squads y exploración de IA generativa aplicadas a productos reales."
+        />
+      </div>
 
       <div className={wrapperClass}>
         <div
@@ -65,7 +72,7 @@ export default function Experience() {
           {jobs.map((job: ExperienceJob, index: number) => (
             <m.article
               key={job.id}
-              className="card experience-node"
+              className="experience-node"
               data-dev-id={`400${index}`}
               role="listitem"
               initial={{ opacity: 0, y: 40 }}
@@ -73,22 +80,24 @@ export default function Experience() {
               viewport={{ once: true }}
               transition={{ delay: index * 0.08 }}
             >
-              <aside className="experience-node__meta">
-                <time className="experience-node__period">{job.period}</time>
-                <span className="experience-node__company">{job.company}</span>
-              </aside>
+              <Card as="div" className="experience-node__card">
+                <aside className="experience-node__meta">
+                  <time className="experience-node__period">{job.period}</time>
+                  <span className="experience-node__company">{job.company}</span>
+                </aside>
 
-              <div className="experience-node__body">
-                <h3 className="experience-node__role">{job.role}</h3>
-                <p className="experience-node__description">{job.description}</p>
-                <div className="experience-node__tags" role="list" aria-label="Tecnologías utilizadas">
-                  {job.tags.map(tag => (
-                    <span key={tag} className="skill-badge experience-node__tag" role="listitem">
-                      {tag}
-                    </span>
-                  ))}
+                <div className="experience-node__body">
+                  <h3 className="experience-node__role">{job.role}</h3>
+                  <p className="experience-node__description">{job.description}</p>
+                  <ul className="experience-node__tags" role="list" aria-label="Tecnologías utilizadas">
+                    {job.tags.map(tag => (
+                      <li key={tag}>
+                        <Chip className="experience-node__tag">{tag}</Chip>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-              </div>
+              </Card>
             </m.article>
           ))}
         </div>
@@ -113,6 +122,6 @@ export default function Experience() {
           </button>
         ) : null}
       </div>
-    </section>
+    </SectionWrapper>
   );
 }
