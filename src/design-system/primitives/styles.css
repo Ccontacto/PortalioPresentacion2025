@@ -58,6 +58,20 @@
   text-align: left;
 }
 
+.ds-section-header__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.35rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--dt-component-badge-highlight-radius, var(--dt-radius-pill));
+  border: var(--dt-component-badge-highlight-border, 1px solid currentColor);
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
 .ds-section-header__title {
   font-size: var(--dt-components-section-header-titlesize, clamp(2.2rem, 4vw, 3.4rem));
   line-height: 1.15;

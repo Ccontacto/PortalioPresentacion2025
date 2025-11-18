@@ -28,6 +28,9 @@ export function FormRenderer({ formId }: FormRendererProps) {
 
   if (!formSpec) return null;
 
+  const hasMinLength = (field: ContactField): field is ContactField & { minLength: number } =>
+    Object.prototype.hasOwnProperty.call(field, 'minLength') && typeof (field as Record<string, unknown>).minLength === 'number';
+
   const validate = () => {
     const nextErrors: Record<string, string> = {};
     formSpec.fields.forEach(field => {
@@ -35,7 +38,7 @@ export function FormRenderer({ formId }: FormRendererProps) {
       if (field.required && !value) {
         nextErrors[field.id] = 'Este campo es requerido';
       }
-      if (field.minLength && value.length < field.minLength) {
+      if (hasMinLength(field) && value.length < field.minLength) {
         nextErrors[field.id] = `Mínimo ${field.minLength} caracteres`;
       }
       if (field.type === 'email' && value) {
@@ -62,15 +65,17 @@ export function FormRenderer({ formId }: FormRendererProps) {
     <form className="ds-form" aria-describedby={`${formIdAttr}-status`} onSubmit={handleSubmit}>
       {formSpec.fields.map(field => {
           const error = errors[field.id];
+          const minLengthProps = hasMinLength(field) ? { minLength: field.minLength } : {};
           const sharedProps = {
             id: `${formIdAttr}-${field.id}`,
             name: field.id,
             value: values[field.id],
             onChange: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
               setValues(prev => ({ ...prev, [field.id]: event.target.value })),
-          'aria-invalid': Boolean(error),
-          'aria-describedby': error ? `${formIdAttr}-${field.id}-error` : undefined,
-          required: field.required
+            'aria-invalid': Boolean(error),
+            'aria-describedby': error ? `${formIdAttr}-${field.id}-error` : undefined,
+          required: field.required,
+          ...minLengthProps
         };
         return (
           <div className="ds-form__field" key={field.id}>

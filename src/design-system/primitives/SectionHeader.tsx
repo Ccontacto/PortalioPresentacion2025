@@ -8,22 +8,38 @@ import './styles.css';
 type SectionHeaderProps = {
   title: string;
   subtitle?: string;
+  eyebrow?: string;
   className?: string;
 };
 
 const sectionSpec = portfolioComponents['section.header'];
 
-export function SectionHeader({ title, subtitle, className }: SectionHeaderProps) {
+export function SectionHeader({ title, subtitle, eyebrow, className }: SectionHeaderProps) {
+  const resolvedTitleSize = resolveSpecValue(sectionSpec.titleSize);
+  const resolvedTitleWeight = resolveSpecValue(sectionSpec.titleWeight);
+  const resolvedSubtitleSize = resolveSpecValue(sectionSpec.subtitleSize);
+  const resolvedSubtitleColor = resolveSpecValue(sectionSpec.subtitleColor);
+  const resolvedGap = resolveSpecValue(sectionSpec.gap);
+
   const titleStyle: CSSProperties = {
-    fontSize: resolveSpecValue(sectionSpec.titleSize),
-    fontWeight: resolveSpecValue(sectionSpec.titleWeight)
+    fontSize: typeof resolvedTitleSize === 'string' || typeof resolvedTitleSize === 'number' ? resolvedTitleSize : undefined,
+    fontWeight:
+      typeof resolvedTitleWeight === 'string' || typeof resolvedTitleWeight === 'number' ? resolvedTitleWeight : undefined
   };
+
   const subtitleStyle: CSSProperties = {
-    fontSize: resolveSpecValue(sectionSpec.subtitleSize),
-    color: resolveSpecValue(sectionSpec.subtitleColor)
+    fontSize:
+      typeof resolvedSubtitleSize === 'string' || typeof resolvedSubtitleSize === 'number' ? resolvedSubtitleSize : undefined,
+    color: typeof resolvedSubtitleColor === 'string' ? resolvedSubtitleColor : undefined
   };
+
+  const containerStyle: CSSProperties = {
+    gap: typeof resolvedGap === 'string' || typeof resolvedGap === 'number' ? resolvedGap : undefined
+  };
+
   return (
-    <div className={cx('ds-section-header', className)} style={{ gap: resolveSpecValue(sectionSpec.gap) }}>
+    <div className={cx('ds-section-header', className)} style={containerStyle}>
+      {eyebrow ? <span className="ds-section-header__eyebrow">{eyebrow}</span> : null}
       <h2 className="ds-section-header__title" style={titleStyle}>
         {title}
       </h2>

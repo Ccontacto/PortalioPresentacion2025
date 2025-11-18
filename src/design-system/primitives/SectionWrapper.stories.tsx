@@ -25,7 +25,7 @@ export const Default: Story = {};
 export const WithHeader: Story = {
   render: args => (
     <SectionWrapper {...args}>
-      <SectionHeader eyebrow="Portfolio" title="Sección destacada" description="Wrapper con layout responsivo" />
+      <SectionHeader eyebrow="Portfolio" title="Sección destacada" subtitle="Wrapper con layout responsivo" />
       <Card>
         <p>Usa SectionWrapper para alinear las secciones principales del sitio.</p>
       </Card>
