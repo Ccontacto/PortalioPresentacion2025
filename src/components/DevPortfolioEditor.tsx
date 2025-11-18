@@ -128,40 +128,46 @@ export default function DevPortfolioEditor() {
                 ✕
               </button>
             </header>
-            <p className="dev-editor-panel__description">
-              Edita solo los valores y respeta la estructura JSON. Este módulo solo está habilitado en modo desarrollo.
-            </p>
-            <textarea
-              className="dev-editor-panel__textarea"
-              placeholder='{"llave": "<<edita solo el valor>>"}'
-              aria-label="Overrides JSON"
-              value={payload}
-              onChange={event => setPayload(event.target.value)}
-            />
-            <div className="dev-editor-panel__footer">
-              <button type="button" className="dev-editor-panel__button" onClick={applyOverrides}>
-                Aplicar Overrides
-              </button>
-              <button
-                type="button"
-                className="dev-editor-panel__button dev-editor-panel__button--ghost"
-                onClick={resetOverrides}
-              >
-                Limpiar Overrides
-              </button>
-              <button
-                type="button"
-                className="dev-editor-panel__button dev-editor-panel__button--accent"
-                onClick={downloadZip}
-              >
-                Generar ZIP (dev)
-              </button>
-            </div>
-            {status ? (
-              <p className={`dev-editor-panel__status${statusVariant ? ` dev-editor-panel__status--${statusVariant}` : ''}`}>
-                {status}
+            <div className="dev-editor-panel__body">
+              <p className="dev-editor-panel__description">
+                Edita solo los valores y respeta la estructura JSON. Este módulo solo está habilitado en modo desarrollo.
               </p>
-            ) : null}
+              <textarea
+                className="dev-editor-panel__textarea"
+                placeholder='{"llave": "<<edita solo el valor>>"}'
+                aria-label="Overrides JSON"
+                value={payload}
+                onChange={event => setPayload(event.target.value)}
+              />
+              <div className="dev-editor-panel__footer">
+                <button type="button" className="dev-editor-panel__button" onClick={applyOverrides}>
+                  Aplicar Overrides
+                </button>
+                <button
+                  type="button"
+                  className="dev-editor-panel__button dev-editor-panel__button--ghost"
+                  onClick={resetOverrides}
+                >
+                  Limpiar Overrides
+                </button>
+                <button
+                  type="button"
+                  className="dev-editor-panel__button dev-editor-panel__button--accent"
+                  onClick={downloadZip}
+                >
+                  Generar ZIP (dev)
+                </button>
+              </div>
+              {status ? (
+                <p
+                  className={`dev-editor-panel__status${
+                    statusVariant ? ` dev-editor-panel__status--${statusVariant}` : ''
+                  }`}
+                >
+                  {status}
+                </p>
+              ) : null}
+            </div>
           </div>
         </div>
       ) : null}
