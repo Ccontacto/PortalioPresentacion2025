@@ -1,18 +1,22 @@
+import { en } from '@data/en';
+import { es } from '@data/es';
+import { getUiString } from '@i18n/ui';
+import { storage } from '@utils/storage';
+import { isRecord, isValidLang } from '@utils/typeGuards';
 import React, { createContext, useContext, useEffect, useMemo, useState, useCallback } from 'react';
 
-import { en } from '../data/en';
-import { es } from '../data/es';
-import { storage } from '../utils/storage';
-import { isRecord, isValidLang, type Lang } from '../utils/typeGuards';
+import type { UiKey, UiNamespace } from '@i18n/ui';
 
-import type { PortfolioData } from '../types/portfolio';
-
+type PortfolioData = import('@portfolio-types').PortfolioData;
+type Lang = import('@utils/typeGuards').Lang;
 type Data = PortfolioData;
+type TranslateFn = <N extends UiNamespace>(namespace: N, key: UiKey<N>) => string;
 type LanguageContextValue = {
   data: Data;
   currentLang: Lang;
+  setLanguage: (lang: Lang) => void;
   toggleLanguage: () => void;
-  t: (key: string) => string;
+  t: TranslateFn;
   overrides: OverridesRecord;
   updateOverrides: (lang: Lang, patch: Partial<PortfolioData>) => void;
 };
@@ -112,6 +116,10 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     storage.set(STORAGE_KEY, currentLang);
   }, [currentLang]);
 
+  const setLanguage = useCallback((lang: Lang) => {
+    setCurrentLang(lang);
+  }, []);
+
   const toggleLanguage = useCallback(() => {
     setCurrentLang(prev => (prev === 'es' ? 'en' : 'es'));
   }, []);
@@ -128,18 +136,9 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
   const mergedData = useMemo(() => deepMerge(dict[currentLang], overrides[currentLang]), [currentLang, overrides]);
 
-  const t = useCallback(
-    (key: string) => {
-      const keys = key.split('.');
-      let result: unknown = dict[currentLang];
-      for (const k of keys) {
-        if (isRecord(result) && k in result) {
-          result = result[k];
-        } else {
-          return key;
-        }
-      }
-      return typeof result === 'string' ? result : key;
+  const t = useCallback<TranslateFn>(
+    (namespace, key) => {
+      return getUiString(currentLang, namespace, key);
     },
     [currentLang]
   );
@@ -149,6 +148,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
       value={{
         data: mergedData,
         currentLang,
+        setLanguage,
         toggleLanguage,
         t,
         overrides,

@@ -1,31 +1,32 @@
+import DevPortfolioEditor from '@components/DevPortfolioEditor';
+import Dock from '@components/Dock';
+import HamburgerMenu from '@components/HamburgerMenu';
+import LoadingScreen from '@components/LoadingScreen';
+import PageProgress from '@components/PageProgress';
+import { RetroModeBanner } from '@components/RetroModeBanner';
+import SkipToContent from '@components/SkipToContent';
+import { TelemetryConsent } from '@components/TelemetryConsent';
+import ToastContainer from '@components/ToastContainer';
+import { KONAMI_DISABLE_MESSAGE, KONAMI_ENABLE_MESSAGE } from '@constants/konami';
+import { DevProvider } from '@contexts/DevContext';
+import { LanguageProvider, useLanguage } from '@contexts/LanguageContext';
+import { NavigationProvider } from '@contexts/NavigationContext';
+import { TelemetryProvider } from '@contexts/TelemetryContext';
+import { ThemeProvider, useTheme } from '@contexts/ThemeContext';
+import { ToastProvider, useToast } from '@contexts/ToastContext';
+import { useKeyboardShortcuts } from '@hooks/useKeyboardShortcuts';
+import { useKonamiCode } from '@hooks/useKonamiCode';
+import { useReducedMotion } from '@hooks/useReducedMotion';
+import Contact from '@sections/Contact';
+import Experience from '@sections/Experience';
+import FocusAreas from '@sections/FocusAreas';
+import Hero from '@sections/Hero';
+import Projects from '@sections/Projects';
+import Skills from '@sections/Skills';
 import { LazyMotion, domAnimation, m } from 'framer-motion';
 import { useCallback, useEffect, useMemo, useRef, lazy, Suspense } from 'react';
-
-import DevPortfolioEditor from './components/DevPortfolioEditor';
-import Dock from './components/Dock';
-import HamburgerMenu from './components/HamburgerMenu';
-import LoadingScreen from './components/LoadingScreen';
-import PageProgress from './components/PageProgress';
-import { RetroModeBanner } from './components/RetroModeBanner';
-import SkipToContent from './components/SkipToContent';
-import ToastContainer from './components/ToastContainer';
-import { KONAMI_DISABLE_MESSAGE, KONAMI_ENABLE_MESSAGE } from './constants/konami';
-import { DevProvider } from './contexts/DevContext';
-import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
-import { NavigationProvider } from './contexts/NavigationContext';
-import { ThemeProvider, useTheme } from './contexts/ThemeContext';
-import { ToastProvider, useToast } from './contexts/ToastContext';
-import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
-import { useKonamiCode } from './hooks/useKonamiCode';
-import { useReducedMotion } from './hooks/useReducedMotion';
-const ConfettiCanvas = lazy(() => import('./components/ConfettiCanvas'));
-const CommandPalette = lazy(() => import('./components/CommandPalette'));
-import Contact from './sections/Contact';
-import Experience from './sections/Experience';
-import FocusAreas from './sections/FocusAreas';
-import Hero from './sections/Hero';
-import Projects from './sections/Projects';
-import Skills from './sections/Skills';
+const ConfettiCanvas = lazy(() => import('@components/ConfettiCanvas'));
+const CommandPalette = lazy(() => import('@components/CommandPalette'));
 
 function AppContent() {
   const { showToast } = useToast();
@@ -124,6 +125,7 @@ function AppContent() {
       >
         <PageProgress />
         <SkipToContent />
+        <TelemetryConsent />
         <HamburgerMenu />
         {/* Header/TopBar removidos por solicitud: contenido inicia directo */}
         {isKonami ? <RetroModeBanner onExitRetro={exitKonamiMode} /> : null}
@@ -155,13 +157,15 @@ export default function App() {
     <LanguageProvider>
       <ToastProvider>
         <ThemeProvider>
-          <NavigationProvider>
-            <DevProvider>
-              <LazyMotion features={domAnimation} strict>
-                <AppContent />
-              </LazyMotion>
-            </DevProvider>
-          </NavigationProvider>
+          <TelemetryProvider>
+            <NavigationProvider>
+              <DevProvider>
+                <LazyMotion features={domAnimation} strict>
+                  <AppContent />
+                </LazyMotion>
+              </DevProvider>
+            </NavigationProvider>
+          </TelemetryProvider>
         </ThemeProvider>
       </ToastProvider>
     </LanguageProvider>

@@ -12,3 +12,5 @@ export const SectionWrapper = forwardRef<HTMLElement, SectionWrapperProps>(({ ch
     <div className="ds-section__inner">{children}</div>
   </section>
 ));
+
+SectionWrapper.displayName = 'SectionWrapper';

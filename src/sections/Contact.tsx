@@ -1,21 +1,22 @@
+
+import { WhatsappGlyph } from '@components/icons/WhatsappGlyph';
+import { PrivacyPanel } from '@components/PrivacyPanel';
+import { useLanguage } from '@contexts/LanguageContext';
+import { usePortfolioContent } from '@contexts/PortfolioSpecContext';
+import { useToast } from '@contexts/ToastContext';
+import { Card } from '@design-system/primitives/Card';
+import { FormRenderer } from '@design-system/primitives/FormRenderer';
+import { SectionHeader } from '@design-system/primitives/SectionHeader';
+import { SectionWrapper } from '@design-system/primitives/SectionWrapper';
+import { useSectionTelemetry } from '@telemetry/useSectionTelemetry';
+import { getSafeUrl, openSafeUrl } from '@utils/urlValidation';
 import { Copy, Mail } from 'lucide-react';
 import { useState } from 'react';
-
-import { WhatsappGlyph } from '../components/icons/WhatsappGlyph';
-import { useLanguage } from '../contexts/LanguageContext';
-import { useToast } from '../contexts/ToastContext';
-import { useSectionTelemetry } from '../telemetry/useSectionTelemetry';
-import { getSafeUrl, openSafeUrl } from '../utils/urlValidation';
-import { usePortfolioContent } from '../contexts/PortfolioSpecContext';
-import { Card } from '../design-system/primitives/Card';
-import { SectionHeader } from '../design-system/primitives/SectionHeader';
-import { SectionWrapper } from '../design-system/primitives/SectionWrapper';
-import { FormRenderer } from '../design-system/primitives/FormRenderer';
 
 type FormStatus = 'idle' | 'sending' | 'success' | 'error';
 
 export default function Contact() {
-  const { data } = useLanguage();
+  const { data, t } = useLanguage();
   const { showToast } = useToast();
   const [status, setStatus] = useState<FormStatus>('idle');
   useSectionTelemetry('contact');
@@ -179,18 +180,14 @@ export default function Contact() {
             />
             <FormRenderer formId="contactForm" />
           </Card>
+          <PrivacyPanel />
         </div>
       </SectionWrapper>
 
       {/* MEJORA 1: footer con role="contentinfo" */}
-      <footer
-        role="contentinfo"
-        className="py-8 text-center text-sm border-t-2 border-black dark:border-white"
-      >
-        <p className="mb-2">© 2025 José Carlos Torres Rivera. Todos los derechos reservados.</p>
-        <p className="text-xs opacity-70">
-          Desarrollado con React, TypeScript, Tailwind CSS y Framer Motion
-        </p>
+      <footer role="contentinfo" className="py-8 text-center text-sm border-t-2 border-black dark:border-white">
+        <p className="mb-2">{t('footer', 'rights')}</p>
+        <p className="text-xs opacity-70">{t('footer', 'builtWith')}</p>
       </footer>
     </>
   );

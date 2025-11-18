@@ -16,6 +16,22 @@
     "moduleDetection": "force",
     "noEmit": true,
     "jsx": "react-jsx",
+    "baseUrl": "./src",
+    "paths": {
+      "@app/*": ["*"],
+      "@components/*": ["components/*"],
+      "@contexts/*": ["contexts/*"],
+      "@constants/*": ["constants/*"],
+      "@content/*": ["content/*"],
+      "@data/*": ["data/*"],
+      "@design-system/*": ["design-system/*"],
+      "@i18n/*": ["i18n/*"],
+      "@hooks/*": ["hooks/*"],
+      "@sections/*": ["sections/*"],
+      "@telemetry/*": ["telemetry/*"],
+      "@portfolio-types": ["types/portfolio.ts"],
+      "@utils/*": ["utils/*"]
+    },
 
     /* Linting */
     "strict": true,

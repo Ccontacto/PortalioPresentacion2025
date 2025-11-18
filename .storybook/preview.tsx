@@ -2,6 +2,7 @@ import type { Preview } from '@storybook/react';
 
 import { StorybookProviders } from '../src/storybook/StorybookProviders';
 
+
 import '../src/index.css';
 
 const ensureSpecTokens = () => {

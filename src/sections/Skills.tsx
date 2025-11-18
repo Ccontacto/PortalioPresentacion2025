@@ -1,18 +1,18 @@
+
+import HorizontalScroller from '@components/HorizontalScroller';
+import { useLanguage } from '@contexts/LanguageContext';
+import { usePortfolioContent } from '@contexts/PortfolioSpecContext';
+import { Badge } from '@design-system/primitives/Badge';
+import { Card } from '@design-system/primitives/Card';
+import { Chip } from '@design-system/primitives/Chip';
+import { SectionHeader as DsSectionHeader } from '@design-system/primitives/SectionHeader';
+import { SectionWrapper } from '@design-system/primitives/SectionWrapper';
+import { useSectionTelemetry } from '@telemetry/useSectionTelemetry';
 import { m } from 'framer-motion';
 import { Bot, Cloud, Cpu, Smartphone } from 'lucide-react';
 import { type ReactElement } from 'react';
 
-import HorizontalScroller from '../components/HorizontalScroller';
-import { useLanguage } from '../contexts/LanguageContext';
-import { usePortfolioContent } from '../contexts/PortfolioSpecContext';
-import { Badge } from '../design-system/primitives/Badge';
-import { Card } from '../design-system/primitives/Card';
-import { Chip } from '../design-system/primitives/Chip';
-import { SectionHeader as DsSectionHeader } from '../design-system/primitives/SectionHeader';
-import { SectionWrapper } from '../design-system/primitives/SectionWrapper';
-import { useSectionTelemetry } from '../telemetry/useSectionTelemetry';
-
-import type { SkillCategory } from '../types/portfolio';
+import type { SkillCategory } from '@portfolio-types';
 
 type SkillItem = SkillCategory['items'][number];
 
@@ -60,7 +60,7 @@ export default function Skills() {
                   {iconMap[cat.icon] ?? <Cpu size={32} />}
                 </div>
                 <h3 className="text-lg font-bold mb-4">{cat.title}</h3>
-                <ul className="skill-card__chips" aria-label={`Habilidades de ${cat.title}`} role="list">
+                <ul className="skill-card__chips" aria-label={`Habilidades de ${cat.title}`}>
                   {cat.items.map((item: SkillItem) => (
                     <li key={item}>
                       <Chip>{item}</Chip>

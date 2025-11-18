@@ -49,7 +49,15 @@ module.exports = [
         {
           groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index', 'object', 'type'],
           'newlines-between': 'always',
-          alphabetize: { order: 'asc', caseInsensitive: true }
+          alphabetize: { order: 'asc', caseInsensitive: true },
+          pathGroups: [
+            {
+              pattern: '@**/*',
+              group: 'internal',
+              position: 'before'
+            }
+          ],
+          pathGroupsExcludedImportTypes: ['builtin', 'external']
         }
       ],
       '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
@@ -104,7 +112,15 @@ module.exports = [
         {
           groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index', 'object'],
           'newlines-between': 'always',
-          alphabetize: { order: 'asc', caseInsensitive: true }
+          alphabetize: { order: 'asc', caseInsensitive: true },
+          pathGroups: [
+            {
+              pattern: '@**/*',
+              group: 'internal',
+              position: 'before'
+            }
+          ],
+          pathGroupsExcludedImportTypes: ['builtin', 'external']
         }
       ]
     }
@@ -119,6 +135,6 @@ module.exports = [
     }
   },
   {
-    ignores: ['dist', 'coverage', 'node_modules', 'src/dataconnect-generated', '.gemini']
+    ignores: ['dist', 'coverage', 'node_modules', 'src/dataconnect-generated', '.gemini', 'build', 'storybook-static']
   }
 ];

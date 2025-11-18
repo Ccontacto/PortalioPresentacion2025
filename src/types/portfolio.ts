@@ -107,6 +107,8 @@ export interface UIStrings {
   nextProjects: string;
   prevSkills: string;
   nextSkills: string;
+  themeSwitcherLabel?: string;
+  themeSwitcherSubtitle?: string;
 }
 
 export interface FocusSection {

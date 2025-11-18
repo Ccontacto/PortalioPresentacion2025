@@ -1,4 +1,3 @@
-import type { PropsWithChildren } from 'react';
 
 import { DevProvider } from '../contexts/DevContext';
 import { LanguageProvider } from '../contexts/LanguageContext';
@@ -6,6 +5,8 @@ import { NavigationProvider } from '../contexts/NavigationContext';
 import { PortfolioSpecProvider } from '../contexts/PortfolioSpecContext';
 import { ThemeProvider } from '../contexts/ThemeContext';
 import { ToastProvider } from '../contexts/ToastContext';
+
+import type { PropsWithChildren } from 'react';
 
 /**
  * Agrupa los providers críticos de la aplicación para reutilizarlos en Storybook.

@@ -1,8 +1,8 @@
 import { renderHook, act } from '@testing-library/react';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 
-import { BASE_THEME_ORDER, ThemeProvider, useTheme } from '../ThemeContext';
 import { storage } from '../../utils/storage';
+import { BASE_THEME_ORDER, ThemeProvider, useTheme } from '../ThemeContext';
 
 describe('ThemeProvider', () => {
   let getSpy: ReturnType<typeof vi.spyOn>;

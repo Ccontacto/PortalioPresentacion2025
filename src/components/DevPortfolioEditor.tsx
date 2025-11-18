@@ -1,10 +1,10 @@
+import { useLanguage } from '@contexts/LanguageContext';
+import { createZip } from '@utils/zip';
 import { PenSquare } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 
-import { useLanguage } from '../contexts/LanguageContext';
-import { createZip } from '../utils/zip';
 
-import type { PortfolioData } from '../types/portfolio';
+import type { PortfolioData } from '@portfolio-types';
 
 const WATERMARK_TEXT = 'PortalioPresentacion2025 dev build';
 const PLACEHOLDER = '<<edita solo el valor>>';

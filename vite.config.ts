@@ -1,3 +1,5 @@
+import path from 'node:path';
+
 import tailwindcss from '@tailwindcss/postcss';
 import react from '@vitejs/plugin-react';
 import autoprefixer from 'autoprefixer';
@@ -29,6 +31,21 @@ export default defineConfig({
     }
   },
   resolve: {
+    alias: {
+      '@app': path.resolve(__dirname, 'src'),
+      '@components': path.resolve(__dirname, 'src/components'),
+      '@contexts': path.resolve(__dirname, 'src/contexts'),
+      '@constants': path.resolve(__dirname, 'src/constants'),
+      '@content': path.resolve(__dirname, 'src/content'),
+      '@data': path.resolve(__dirname, 'src/data'),
+      '@design-system': path.resolve(__dirname, 'src/design-system'),
+      '@i18n': path.resolve(__dirname, 'src/i18n'),
+      '@hooks': path.resolve(__dirname, 'src/hooks'),
+      '@sections': path.resolve(__dirname, 'src/sections'),
+      '@telemetry': path.resolve(__dirname, 'src/telemetry'),
+      '@portfolio-types': path.resolve(__dirname, 'src/types/portfolio.ts'),
+      '@utils': path.resolve(__dirname, 'src/utils')
+    },
     dedupe: ['react', 'react-dom']
   },
   test: {

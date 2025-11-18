@@ -1,6 +1,7 @@
+import { cx } from '../../utils/cx';
+
 import type { HTMLAttributes } from 'react';
 
-import { cx } from '../../utils/cx';
 import './styles.css';
 
 type BadgeVariant = 'highlight';

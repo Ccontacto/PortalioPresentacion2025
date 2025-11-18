@@ -1,4 +1,5 @@
-import{j as s}from"./iframe-Dk93WtSj.js";import{B as t}from"./Button-auj1VVWt.js";import"./preload-helper-PPVm8Dsz.js";import"./styles-CLsdkOxy.js";const m={title:"Design/Button",component:t,args:{children:"Acción principal"}},r={args:{variant:"primary"}},a={args:{variant:"ghost",children:"Ghost action"}},e={render:o=>s.jsx(t,{...o,asChild:!0,children:s.jsx("a",{href:"https://portalio-presentacion-2025.pages.dev",target:"_blank",rel:"noreferrer",children:"Ir al sitio"})})};r.parameters={...r.parameters,docs:{...r.parameters?.docs,source:{originalSource:`{
+import{B as t}from"./Button-auj1VVWt.js";
+import{j as s}from"./iframe-Dk93WtSj.js";import"./preload-helper-PPVm8Dsz.js";import"./styles-CLsdkOxy.js";const m={title:"Design/Button",component:t,args:{children:"Acción principal"}},r={args:{variant:"primary"}},a={args:{variant:"ghost",children:"Ghost action"}},e={render:o=>s.jsx(t,{...o,asChild:!0,children:s.jsx("a",{href:"https://portalio-presentacion-2025.pages.dev",target:"_blank",rel:"noreferrer",children:"Ir al sitio"})})};r.parameters={...r.parameters,docs:{...r.parameters?.docs,source:{originalSource:`{
   args: {
     variant: 'primary'
   }

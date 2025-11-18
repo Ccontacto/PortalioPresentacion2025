@@ -1,11 +1,15 @@
+import { useTelemetry } from '@contexts/TelemetryContext';
 import { useEffect } from 'react';
+
 
 import { addSectionDuration, incrementSectionView } from './metrics';
 
 export function useSectionTelemetry(sectionId: string, options: { threshold?: number } = {}) {
   const { threshold = 0.4 } = options;
+  const { preference } = useTelemetry();
 
   useEffect(() => {
+    if (preference !== 'granted') return;
     if (typeof window === 'undefined' || typeof document === 'undefined') return;
     if (typeof IntersectionObserver === 'undefined') return;
     const target = document.getElementById(sectionId);
@@ -37,5 +41,5 @@ export function useSectionTelemetry(sectionId: string, options: { threshold?: nu
         addSectionDuration(sectionId, duration);
       }
     };
-  }, [sectionId, threshold]);
+  }, [preference, sectionId, threshold]);
 }

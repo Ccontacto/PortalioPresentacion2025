@@ -1,10 +1,11 @@
-import type { ChangeEvent, FormEvent, InputHTMLAttributes, SelectHTMLAttributes, TextareaHTMLAttributes } from 'react';
 import { useId, useState } from 'react';
 
 import { portfolioSpec } from '../../content/portfolioSpec';
 import { usePortfolioForm } from '../../contexts/PortfolioSpecContext';
-import { resolveSpecValue } from '../utils/resolveSpecValue';
+
 import { Button } from './Button';
+
+import type { ChangeEvent, FormEvent, InputHTMLAttributes, SelectHTMLAttributes, TextareaHTMLAttributes } from 'react';
 import './styles.css';
 
 type FieldValue = string;

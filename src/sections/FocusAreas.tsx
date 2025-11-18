@@ -1,15 +1,15 @@
+
+import { useLanguage } from '@contexts/LanguageContext';
+import { Badge } from '@design-system/primitives/Badge';
+import { Card } from '@design-system/primitives/Card';
+import { Chip } from '@design-system/primitives/Chip';
+import { SectionHeader as DsSectionHeader } from '@design-system/primitives/SectionHeader';
+import { SectionWrapper } from '@design-system/primitives/SectionWrapper';
+import { useReducedMotion } from '@hooks/useReducedMotion';
+import { useSectionTelemetry } from '@telemetry/useSectionTelemetry';
 import { m } from 'framer-motion';
 
-import { useLanguage } from '../contexts/LanguageContext';
-import { Badge } from '../design-system/primitives/Badge';
-import { Card } from '../design-system/primitives/Card';
-import { Chip } from '../design-system/primitives/Chip';
-import { SectionHeader as DsSectionHeader } from '../design-system/primitives/SectionHeader';
-import { SectionWrapper } from '../design-system/primitives/SectionWrapper';
-import { useReducedMotion } from '../hooks/useReducedMotion';
-import { useSectionTelemetry } from '../telemetry/useSectionTelemetry';
-
-import type { FocusAreaItem } from '../types/portfolio';
+import type { FocusAreaItem } from '@portfolio-types';
 
 export default function FocusAreas() {
   const { data } = useLanguage();

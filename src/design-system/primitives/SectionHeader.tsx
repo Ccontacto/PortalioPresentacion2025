@@ -1,8 +1,9 @@
-import type { CSSProperties } from 'react';
 
-import { portfolioComponents } from '../tokens';
 import { cx } from '../../utils/cx';
+import { portfolioComponents } from '../tokens';
 import { resolveSpecValue } from '../utils/resolveSpecValue';
+
+import type { CSSProperties } from 'react';
 import './styles.css';
 
 type SectionHeaderProps = {

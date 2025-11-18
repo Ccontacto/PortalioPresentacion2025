@@ -37,6 +37,11 @@ const saveMetrics = (next: Record<string, SectionMetrics>) => {
   dispatchTelemetryEvent(next);
 };
 
+export const resetTelemetryMetrics = () => {
+  storage.remove(STORAGE_KEY);
+  dispatchTelemetryEvent({});
+};
+
 const ensureEntry = (metrics: Record<string, SectionMetrics>, sectionId: string): SectionMetrics => {
   if (!metrics[sectionId]) {
     metrics[sectionId] = { views: 0, totalMs: 0, lastViewed: null };

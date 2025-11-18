@@ -1,10 +1,11 @@
+
+import App from '@app/App';
+import ErrorBoundary from '@components/ErrorBoundary';
+import { PortfolioSpecProvider } from '@contexts/PortfolioSpecContext';
+import { logger } from '@utils/logger';
+import { ensureStorageVersion } from '@utils/storage';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-
-import App from './App';
-import ErrorBoundary from './components/ErrorBoundary';
-import { PortfolioSpecProvider } from './contexts/PortfolioSpecContext';
-import { ensureStorageVersion } from './utils/storage';
 import './index.css';
 
 const rootElement = document.getElementById('root');
@@ -30,3 +31,11 @@ ReactDOM.createRoot(rootElement).render(
     </ErrorBoundary>
   </React.StrictMode>
 );
+
+if ('serviceWorker' in navigator && import.meta.env.PROD) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch(error => {
+      logger.warn('Service worker registration failed', error);
+    });
+  });
+}

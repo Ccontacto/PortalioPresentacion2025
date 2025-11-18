@@ -1,20 +1,20 @@
+
+import HorizontalScroller from '@components/HorizontalScroller';
+import SearchBar from '@components/SearchBar';
+import { useLanguage } from '@contexts/LanguageContext';
+import { usePortfolioContent } from '@contexts/PortfolioSpecContext';
+import { Badge } from '@design-system/primitives/Badge';
+import { Card } from '@design-system/primitives/Card';
+import { Chip } from '@design-system/primitives/Chip';
+import { SectionHeader as DsSectionHeader } from '@design-system/primitives/SectionHeader';
+import { SectionWrapper } from '@design-system/primitives/SectionWrapper';
+import { useSectionTelemetry } from '@telemetry/useSectionTelemetry';
+import { getSafeUrl } from '@utils/urlValidation';
 import { m } from 'framer-motion';
 import { ExternalLink, Rocket } from 'lucide-react';
 import { useMemo, useRef, useState } from 'react';
 
-import HorizontalScroller from '../components/HorizontalScroller';
-import SearchBar from '../components/SearchBar';
-import { useLanguage } from '../contexts/LanguageContext';
-import { usePortfolioContent } from '../contexts/PortfolioSpecContext';
-import { Badge } from '../design-system/primitives/Badge';
-import { Card } from '../design-system/primitives/Card';
-import { Chip } from '../design-system/primitives/Chip';
-import { SectionHeader as DsSectionHeader } from '../design-system/primitives/SectionHeader';
-import { SectionWrapper } from '../design-system/primitives/SectionWrapper';
-import { useSectionTelemetry } from '../telemetry/useSectionTelemetry';
-import { getSafeUrl } from '../utils/urlValidation';
-
-import type { ProjectItem } from '../types/portfolio';
+import type { ProjectItem } from '@portfolio-types';
 
 export default function Projects() {
   const { data } = useLanguage();
@@ -77,7 +77,7 @@ export default function Projects() {
                   </div>
                   <h3 className="text-xl font-bold mb-3">{proj.title}</h3>
                   <p className="text-sm mb-4">{proj.description}</p>
-                  <ul className="project-tags" role="list" aria-label="Tecnologías del proyecto">
+                  <ul className="project-tags" aria-label="Tecnologías del proyecto">
                     {proj.tags.map(tag => (
                       <li key={tag}>
                         <Chip className="skill-badge">{tag}</Chip>

@@ -1,0 +1,17 @@
+{
+  "name": "Portalio Presentación 2025",
+  "short_name": "Portafolio",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#050509",
+  "theme_color": "#050509",
+  "description": "Portafolio iOS + IA de José Carlos Torres Rivera",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "maskable any"
+    }
+  ]
+}

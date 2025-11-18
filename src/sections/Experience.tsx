@@ -1,17 +1,17 @@
+
+import { useLanguage } from '@contexts/LanguageContext';
+import { Badge } from '@design-system/primitives/Badge';
+import { Card } from '@design-system/primitives/Card';
+import { Chip } from '@design-system/primitives/Chip';
+import { SectionHeader as DsSectionHeader } from '@design-system/primitives/SectionHeader';
+import { SectionWrapper } from '@design-system/primitives/SectionWrapper';
+import { useHorizontalScroll } from '@hooks/useHorizontalScroll';
+import { useSectionTelemetry } from '@telemetry/useSectionTelemetry';
 import { m } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 
-import { useLanguage } from '../contexts/LanguageContext';
-import { Badge } from '../design-system/primitives/Badge';
-import { Card } from '../design-system/primitives/Card';
-import { Chip } from '../design-system/primitives/Chip';
-import { SectionHeader as DsSectionHeader } from '../design-system/primitives/SectionHeader';
-import { SectionWrapper } from '../design-system/primitives/SectionWrapper';
-import { useHorizontalScroll } from '../hooks/useHorizontalScroll';
-import { useSectionTelemetry } from '../telemetry/useSectionTelemetry';
-
-import type { ExperienceJob } from '../types/portfolio';
+import type { ExperienceJob } from '@portfolio-types';
 
 export default function Experience() {
   const { data } = useLanguage();
@@ -89,7 +89,7 @@ export default function Experience() {
                 <div className="experience-node__body">
                   <h3 className="experience-node__role">{job.role}</h3>
                   <p className="experience-node__description">{job.description}</p>
-                  <ul className="experience-node__tags" role="list" aria-label="Tecnologías utilizadas">
+                  <ul className="experience-node__tags" aria-label="Tecnologías utilizadas">
                     {job.tags.map(tag => (
                       <li key={tag}>
                         <Chip className="experience-node__tag">{tag}</Chip>

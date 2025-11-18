@@ -1,6 +1,7 @@
+import { cx } from '../../utils/cx';
+
 import type { ComponentPropsWithRef, ElementType, ReactNode } from 'react';
 
-import { cx } from '../../utils/cx';
 import './styles.css';
 
 type CardProps<T extends ElementType> = {

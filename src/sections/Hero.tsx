@@ -1,18 +1,18 @@
+
+import { AvailabilityBadge } from '@components/header/AvailabilityBadge';
+import { useLanguage } from '@contexts/LanguageContext';
+import { useToast } from '@contexts/ToastContext';
+import { Button } from '@design-system/primitives/Button';
+import { Card } from '@design-system/primitives/Card';
+import { SectionWrapper } from '@design-system/primitives/SectionWrapper';
+import { useIntersectionObserver } from '@hooks/useIntersectionObserver';
+import { useSectionTelemetry } from '@telemetry/useSectionTelemetry';
+import { storage } from '@utils/storage';
 import { m } from 'framer-motion';
 import { MapPin } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
-import { AvailabilityBadge } from '../components/header/AvailabilityBadge';
-import { useLanguage } from '../contexts/LanguageContext';
-import { useToast } from '../contexts/ToastContext';
-import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
-import { useSectionTelemetry } from '../telemetry/useSectionTelemetry';
-import { Button } from '../design-system/primitives/Button';
-import { Card } from '../design-system/primitives/Card';
-import { SectionWrapper } from '../design-system/primitives/SectionWrapper';
-import { storage } from '../utils/storage';
-
-import type { AvailabilityKey, HeroMetaItem, PortfolioToasts, Stat } from '../types/portfolio';
+import type { AvailabilityKey, HeroMetaItem, PortfolioToasts, Stat } from '@portfolio-types';
 
 const DOMAIN_HINTS: Record<string, string> = {
   'portalio-presentacion-2025.pages.dev': 'Hola desde Cloudflare Pages!',
@@ -158,19 +158,15 @@ export default function Hero() {
                 <a href="#contact">{data.ui.bookCall}</a>
               </Button>
             </div>
-            <div className="hero-meta-bar" role="list">
+            <ul className="hero-meta-bar">
               {resolvedMeta.length ? (
-                <span className="hero-meta-chip" role="listitem">
+                <li className="hero-meta-chip">
                   <MapPin size={16} aria-hidden="true" />
                   {resolvedMeta[0].value}
-                </span>
+                </li>
               ) : null}
-              {domainHint ? (
-                <span className="hero-meta-chip" role="listitem">
-                  {domainHint}
-                </span>
-              ) : null}
-            </div>
+              {domainHint ? <li className="hero-meta-chip">{domainHint}</li> : null}
+            </ul>
           </div>
 
           <aside className="hero-panel" aria-label={data.lang === 'en' ? 'Current focus' : 'Foco actual'}>
@@ -182,25 +178,21 @@ export default function Hero() {
             {noteFocusList.length ? (
               <Card as="div" className="hero-panel__card hero-panel__card--note" data-dev-id="2004">
                 <span className="hero-panel__eyebrow">{note?.title ?? 'Frentes activos'}</span>
-                <div className="hero-panel__note-chips" role="list">
+                <ul className="hero-panel__note-chips">
                   {noteFocusList.map(item => (
-                    <span key={item} className="hero-note-chip" role="listitem">
+                    <li key={item} className="hero-note-chip">
                       {item}
-                    </span>
+                    </li>
                   ))}
-                </div>
+                </ul>
               </Card>
             ) : null}
 
             <Card as="div" className="hero-panel__card hero-panel__card--stats" data-dev-id="2003">
               <span className="hero-panel__eyebrow">{data.lang === 'en' ? 'Measured impact' : 'Impacto medible'}</span>
-              <ul
-                className="hero-panel__stats"
-                role="list"
-                aria-label={data.lang === 'en' ? 'Impact metrics' : 'Métricas de impacto'}
-              >
+              <ul className="hero-panel__stats" aria-label={data.lang === 'en' ? 'Impact metrics' : 'Métricas de impacto'}>
                 {data.stats.map((stat: Stat) => (
-                  <li key={stat.id} role="listitem">
+                  <li key={stat.id}>
                     <span className="hero-panel__stat-value">{stat.value}</span>
                     <span className="hero-panel__stat-label">{stat.label}</span>
                   </li>

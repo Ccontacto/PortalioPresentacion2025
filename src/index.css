@@ -141,6 +141,17 @@
   --gradient-hero-start: color-mix(in srgb, var(--gradient-brand-start) 65%, white);
   --gradient-hero-end: color-mix(in srgb, var(--gradient-brand-end) 72%, white);
   --home-gradient: linear-gradient(120deg, #F9A8D4 0%, #C4B5FD 50%, #BAE6FD 100%);
+  --hero-cta-gradient: linear-gradient(
+    130deg,
+    oklch(0.92 0.08 20) 0%,
+    oklch(0.89 0.09 330) 46%,
+    oklch(0.86 0.05 260) 100%
+  );
+  --hero-chip-gradient: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--home-card-bg) 92%, #ffffff) 0%,
+    var(--home-card-bg-muted) 100%
+  );
   --home-shadow: 0 24px 50px rgba(15, 23, 42, 0.18);
   --home-shadow-hover: 0 32px 60px rgba(15, 23, 42, 0.28);
   --home-bg-gradient: linear-gradient(180deg, #fdfdff 0%, #f6f7ff 52%, #fbf3ff 100%);
@@ -230,6 +241,17 @@
 html[data-theme='dark'] {
   color-scheme: dark;
   --home-gradient: linear-gradient(120deg, #9333ea 0%, #38bdf8 50%, #22d3ee 100%);
+  --hero-cta-gradient: linear-gradient(
+    135deg,
+    oklch(0.60 0.10 280) 0%,
+    oklch(0.57 0.08 310) 46%,
+    oklch(0.54 0.06 330) 100%
+  );
+  --hero-chip-gradient: linear-gradient(
+    180deg,
+    rgba(14, 20, 38, 0.92) 0%,
+    rgba(6, 9, 20, 0.82) 100%
+  );
   --home-shadow: 0 24px 55px rgba(0, 0, 0, 0.55);
   --home-shadow-hover: 0 32px 70px rgba(0, 0, 0, 0.75);
   --home-bg-gradient: linear-gradient(180deg, #050509 0%, #0b1120 55%, #111827 100%);
@@ -323,6 +345,17 @@ html[data-theme='dark'] {
 html[data-theme='oled'] {
   color-scheme: dark;
   --home-gradient: linear-gradient(120deg, #0ea5e9 0%, #a855f7 55%, #f472b6 100%);
+  --hero-cta-gradient: linear-gradient(
+    138deg,
+    oklch(0.56 0.12 265) 0%,
+    oklch(0.49 0.10 308) 48%,
+    oklch(0.45 0.09 338) 100%
+  );
+  --hero-chip-gradient: linear-gradient(
+    180deg,
+    rgba(5, 8, 18, 0.95) 0%,
+    rgba(2, 3, 10, 0.88) 100%
+  );
   --home-shadow: 0 28px 70px rgba(0, 0, 0, 0.75);
   --home-shadow-hover: 0 36px 85px rgba(0, 0, 0, 0.9);
   --home-bg-gradient: linear-gradient(180deg, #020205 0%, #03050a 70%, #05070d 100%);
@@ -333,6 +366,36 @@ html[data-theme='oled'] {
   --home-text-muted: rgba(248, 250, 252, 0.7);
   --home-border: rgba(248, 250, 252, 0.55);
   --home-inverse-text: #050505;
+  --surface-card: color-mix(in srgb, #05070d 94%, #010104);
+  --surface-panel: color-mix(in srgb, var(--surface-card) 82%, rgba(255, 255, 255, 0.03));
+  --surface-card-gradient-right: linear-gradient(
+    to right,
+    color-mix(in srgb, var(--surface-card) 75%, transparent),
+    transparent
+  );
+  --surface-card-gradient-left: linear-gradient(
+    to left,
+    color-mix(in srgb, var(--surface-card) 75%, transparent),
+    transparent
+  );
+  --surface-card-radial-top: rgba(14, 165, 233, 0.22);
+  --surface-card-radial-bottom: rgba(244, 114, 182, 0.2);
+  --surface-card-radial-overlay: radial-gradient(
+      circle 140px at top right,
+      var(--surface-card-radial-top),
+      transparent 60%
+    ),
+    radial-gradient(circle 140px at bottom left, var(--surface-card-radial-bottom), transparent 60%);
+  --surface-card-radial-overlay-wide: radial-gradient(
+      circle 200px at 110% 0%,
+      color-mix(in srgb, var(--surface-card-radial-top) 92%, transparent),
+      transparent 60%
+    ),
+    radial-gradient(
+      circle 200px at -10% 100%,
+      color-mix(in srgb, var(--surface-card-radial-bottom) 92%, transparent),
+      transparent 60%
+    );
   --progress-color: color-mix(
     in srgb,
     var(--dt-color-brand-primary-500, #5b7cff) 65%,
@@ -355,6 +418,8 @@ html[data-theme='oled'] {
 html[data-theme='high-contrast'] {
   color-scheme: dark;
   --home-gradient: linear-gradient(120deg, #ffffff, #ffffff);
+  --hero-cta-gradient: linear-gradient(120deg, #ffffff 0%, #ffffff 100%);
+  --hero-chip-gradient: linear-gradient(120deg, #000000 0%, #000000 100%);
   --home-shadow: 0 0 0 rgba(0, 0, 0, 0);
   --home-shadow-hover: 0 0 0 rgba(0, 0, 0, 0);
   --home-bg-gradient: #000000;
@@ -737,14 +802,23 @@ html[data-theme='dark'] .dock-item:focus-visible {
 }
 
 html[data-theme='dark'] .page-section,
+html[data-theme='oled'] .page-section,
 html[data-theme='dark'] .card,
+html[data-theme='oled'] .card,
 html[data-theme='dark'] .focus-card,
+html[data-theme='oled'] .focus-card,
 html[data-theme='dark'] .project-card,
+html[data-theme='oled'] .project-card,
 html[data-theme='dark'] .skill-card,
+html[data-theme='oled'] .skill-card,
 html[data-theme='dark'] .contact-wrapper,
+html[data-theme='oled'] .contact-wrapper,
 html[data-theme='dark'] .hero-shell,
+html[data-theme='oled'] .hero-shell,
 html[data-theme='dark'] .search-modal__panel,
-html[data-theme='dark'] .command-modal__option {
+html[data-theme='oled'] .search-modal__panel,
+html[data-theme='dark'] .command-modal__option,
+html[data-theme='oled'] .command-modal__option {
   background: color-mix(in srgb, var(--surface-card) 92%, rgba(255, 255, 255, 0.11));
   box-shadow: 0 22px 45px rgba(2, 6, 23, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -811,6 +885,22 @@ html[data-theme='konami'] body::after {
     radial-gradient(circle at 60% 25%, color-mix(in srgb, rgba(255, 0, 229, 0.7) 55%, rgba(0, 198, 255, 0.6)) 0 2px, transparent 5px),
     radial-gradient(circle at 85% 55%, color-mix(in srgb, rgba(255, 255, 255, 0.3) 60%, rgba(0, 255, 156, 0.4)) 0 3px, transparent 6px);
   opacity: 0.7;
+}
+
+html[data-theme='oled'] body::before {
+  background-image:
+    radial-gradient(circle at 10% 26%, rgba(94, 234, 212, 0.65) 0 1px, transparent 3px),
+    radial-gradient(circle at 42% 52%, rgba(14, 165, 233, 0.6) 0 2px, transparent 4px),
+    radial-gradient(circle at 78% 24%, rgba(168, 85, 247, 0.45) 0 1px, transparent 3px);
+  opacity: 0.7;
+}
+
+html[data-theme='oled'] body::after {
+  background:
+    radial-gradient(circle at 22% 32%, color-mix(in srgb, rgba(14, 165, 233, 0.65) 60%, rgba(5, 5, 5, 0.2)) 0 2px, transparent 5px),
+    radial-gradient(circle at 58% 68%, color-mix(in srgb, rgba(236, 72, 153, 0.55) 55%, rgba(14, 165, 233, 0.4)) 0 3px, transparent 6px),
+    radial-gradient(circle at 82% 46%, color-mix(in srgb, rgba(45, 212, 191, 0.6) 55%, rgba(5, 5, 5, 0.2)) 0 3px, transparent 6px);
+  opacity: 0.62;
 }
 
 @keyframes starPulse {
@@ -1028,7 +1118,8 @@ html[data-theme='dark'] .dev-editor-panel__close {
   color: #b91c1c;
 }
 
-html[data-theme='dark'] .dev-editor-panel {
+html[data-theme='dark'] .dev-editor-panel,
+html[data-theme='oled'] .dev-editor-panel {
   background: #07090f;
   border-color: rgba(255, 255, 255, 0.2);
   box-shadow:
@@ -1036,17 +1127,20 @@ html[data-theme='dark'] .dev-editor-panel {
     0 38px 90px rgba(0, 0, 0, 0.85);
 }
 
-html[data-theme='dark'] .dev-editor-panel__textarea {
+html[data-theme='dark'] .dev-editor-panel__textarea,
+html[data-theme='oled'] .dev-editor-panel__textarea {
   background: rgba(15, 23, 42, 0.85);
   border-color: rgba(248, 250, 252, 0.25);
   color: #f8fafc;
 }
 
-html[data-theme='dark'] .dev-editor-panel__button {
+html[data-theme='dark'] .dev-editor-panel__button,
+html[data-theme='oled'] .dev-editor-panel__button {
   box-shadow: 0 20px 45px rgba(255, 255, 255, 0.25);
 }
 
-html[data-theme='dark'] .dev-editor-panel__button--ghost {
+html[data-theme='dark'] .dev-editor-panel__button--ghost,
+html[data-theme='oled'] .dev-editor-panel__button--ghost {
   box-shadow: 0 20px 45px rgba(255, 255, 255, 0.15);
 }
 
@@ -2751,6 +2845,148 @@ html[data-theme='dark'] .mobile-actions-modal {
 
 .page-section__body .search-bar {
   margin-bottom: 0;
+}
+
+.telemetry-consent {
+  width: min(960px, 100%);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 1.5rem auto;
+  padding: clamp(1rem, 3vw, 1.25rem);
+  border: 2px solid var(--home-border);
+  border-radius: 28px;
+  background: linear-gradient(180deg, var(--home-card-bg), var(--home-card-bg-muted));
+  box-shadow: var(--home-shadow);
+}
+
+.telemetry-consent__body {
+  flex: 1;
+  min-width: 220px;
+}
+
+.telemetry-consent__title {
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--home-text);
+}
+
+.telemetry-consent__text {
+  margin-top: 0.3rem;
+  font-size: 0.9rem;
+  color: var(--home-text-muted);
+}
+
+.telemetry-consent__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.telemetry-consent__button {
+  border-radius: 999px;
+  border: 2px solid var(--home-border);
+  padding: 0.5rem 1.4rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  background: var(--home-gradient);
+  color: var(--home-inverse-text);
+  transition:
+    transform var(--motion-fast) var(--ease-standard),
+    box-shadow var(--motion-fast) var(--ease-standard);
+}
+
+.telemetry-consent__button:hover,
+.telemetry-consent__button:focus-visible {
+  transform: translate(-2px, -2px);
+  box-shadow: var(--home-shadow-hover);
+}
+
+.telemetry-consent__button--ghost {
+  background: transparent;
+  color: var(--home-text);
+}
+
+.privacy-panel {
+  width: min(960px, 100%);
+  margin: clamp(24px, 4vw, 40px) auto 0;
+  padding: clamp(20px, 3vw, 28px);
+  border-radius: 28px;
+  border: 2px solid var(--home-border);
+  background: var(--hero-chip-gradient);
+  box-shadow: var(--home-shadow);
+  display: grid;
+  gap: 1.25rem;
+}
+
+.privacy-panel__title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--home-text);
+}
+
+.privacy-panel__text {
+  margin-top: 0.35rem;
+  color: var(--home-text-muted);
+}
+
+.privacy-panel__group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.privacy-panel__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.privacy-panel__button {
+  border-radius: 999px;
+  border: 2px solid var(--home-border);
+  padding: 0.4rem 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  background: var(--hero-cta-gradient);
+  color: var(--home-inverse-text);
+  transition:
+    transform var(--motion-fast) var(--ease-standard),
+    box-shadow var(--motion-fast) var(--ease-standard);
+}
+
+.privacy-panel__button--ghost {
+  background: transparent;
+  color: var(--home-text);
+}
+
+.privacy-panel__button:hover,
+.privacy-panel__button:focus-visible {
+  transform: translate(-2px, -2px);
+  box-shadow: var(--home-shadow-hover);
+}
+
+.privacy-panel__select {
+  min-width: 160px;
+  border-radius: 16px;
+  border: 2px solid var(--home-border);
+  padding: 0.4rem 0.8rem;
+  background: var(--home-card-bg);
+  color: var(--home-text);
+}
+
+.privacy-panel__status {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--home-text-muted);
 }
 
 
@@ -4594,8 +4830,8 @@ html[data-theme='dark'] .hero-name {
   border-radius: 999px;
   border: 2px solid var(--home-border);
   padding: 0.58rem 1.9rem;
-  background: var(--home-gradient);
-  color: var(--home-text);
+  background: var(--hero-cta-gradient);
+  color: var(--home-inverse-text);
   font-weight: 900;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -4635,7 +4871,9 @@ html[data-theme='dark'] .hero-name {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-top: clamp(0.4rem, 0.9vw, 0.8rem);
+  margin: clamp(0.4rem, 0.9vw, 0.8rem) 0 0;
+  padding: 0;
+  list-style: none;
 }
 
 .hero-meta-chip {
@@ -4650,7 +4888,7 @@ html[data-theme='dark'] .hero-name {
   letter-spacing: 0.16em;
   font-weight: 800;
   color: var(--home-text);
-  background: linear-gradient(180deg, var(--home-card-bg), var(--home-card-bg-muted));
+  background: var(--hero-chip-gradient);
   box-shadow: 0 18px 30px rgba(15, 23, 42, 0.15);
 }
 
@@ -4726,7 +4964,9 @@ html[data-theme='dark'] .hero-name {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
-  margin-top: 0.85rem;
+  margin: 0.85rem 0 0;
+  padding: 0;
+  list-style: none;
 }
 
 .hero-note-chip {
@@ -5075,6 +5315,76 @@ html[data-theme='dark'] .focus-header__title {
 
 html[data-theme='dark'] .focus-card__list-item::before {
   background: linear-gradient(120deg, rgba(165, 228, 220, 0.8), rgba(218, 183, 255, 0.8));
+}
+
+html[data-theme='oled'] .page-section--hero {
+  background: radial-gradient(circle at 50% 0%, rgba(15, 23, 42, 0.35), transparent 65%), #010104;
+}
+
+html[data-theme='oled'] .hero-shell {
+  background: rgba(1, 2, 6, 0.96);
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 36px 120px rgba(0, 0, 0, 0.85);
+  filter: none;
+}
+
+html[data-theme='oled'] .hero-role-stack {
+  background: rgba(3, 6, 15, 0.95);
+  border-color: rgba(255, 255, 255, 0.22);
+  box-shadow: 0 36px 95px rgba(0, 0, 0, 0.8);
+}
+
+html[data-theme='oled'] .hero-role-stack__title {
+  color: rgba(248, 250, 252, 0.98);
+  text-shadow:
+    0 0 14px rgba(14, 165, 233, 0.45),
+    0 18px 36px rgba(0, 0, 0, 0.8);
+}
+
+html[data-theme='oled'] .hero-role-stack__title-part--accent::after {
+  background: linear-gradient(120deg, rgba(14, 165, 233, 0.75), rgba(244, 114, 182, 0.65));
+}
+
+html[data-theme='oled'] .hero-backdrop {
+  background:
+    radial-gradient(180% 160% at 18% 20%, rgba(14, 165, 233, 0.35), transparent 60%),
+    radial-gradient(160% 150% at 72% 25%, rgba(244, 114, 182, 0.28), transparent 65%),
+    radial-gradient(160% 140% at 48% 80%, rgba(45, 212, 191, 0.25), transparent 55%),
+    radial-gradient(circle, rgba(255, 255, 255, 0.45) 0 1px, transparent 1px 5px);
+  background-size: 100% 100%, 100% 100%, 100% 100%, 6px 6px;
+  background-blend-mode: screen;
+  mix-blend-mode: screen;
+  filter: blur(32px) contrast(120%);
+  opacity: 0.48;
+}
+
+html[data-theme='oled'] .hero-action--ghost {
+  background: rgba(6, 9, 20, 0.78);
+  border-color: rgba(255, 255, 255, 0.18);
+  color: var(--home-text);
+  box-shadow: 0 30px 75px rgba(0, 0, 0, 0.75);
+}
+
+html[data-theme='oled'] .hero-action--primary {
+  background: var(--home-gradient);
+  color: var(--home-inverse-text);
+  box-shadow: 0 26px 70px rgba(14, 165, 233, 0.4);
+}
+
+html[data-theme='oled'] .hero-meta__item,
+html[data-theme='oled'] .hero-stat,
+html[data-theme='oled'] .focus-card {
+  background: rgba(6, 10, 24, 0.78);
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.8);
+}
+
+html[data-theme='oled'] .focus-header__title {
+  text-shadow: 0 30px 70px rgba(0, 0, 0, 0.9);
+}
+
+html[data-theme='oled'] .focus-card__list-item::before {
+  background: linear-gradient(120deg, rgba(14, 165, 233, 0.9), rgba(244, 114, 182, 0.75));
 }
 
 html[data-theme='konami'] .page-section--hero {
