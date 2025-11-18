@@ -111,11 +111,11 @@
     radial-gradient(circle 200px at -10% 100%, var(--surface-card-radial-bottom), transparent 60%);
   --surface-strong: var(--dt-color-semantic-bg-inverse, #111827);
 
-  --text-strong: var(--dt-color-semantic-text-default, var(--color-text-light));
-  --text-inverse: var(--dt-color-semantic-text-inverse, #f5f5f5);
-  --text-cta: var(--dt-component-button-primary-rest-text, #111827);
+  --text-strong: var(--home-text);
+  --text-inverse: var(--home-inverse-text);
+  --text-cta: var(--home-text);
   --logo-text: var(--text-strong);
-  --text-on-brand: var(--dt-component-button-primary-rest-text, #111827);
+  --text-on-brand: var(--home-inverse-text);
   --micro-shadow: 0 20px 35px rgba(0, 0, 0, 0.4);
   --micro-shadow-dark: 0 25px 45px rgba(255, 255, 255, 0.25);
   --micro-shadow-retro: 0 30px 60px rgba(0, 0, 0, 0.65);
@@ -143,6 +143,14 @@
   --home-gradient: linear-gradient(120deg, #F9A8D4 0%, #C4B5FD 50%, #BAE6FD 100%);
   --home-shadow: 0 24px 50px rgba(15, 23, 42, 0.18);
   --home-shadow-hover: 0 32px 60px rgba(15, 23, 42, 0.28);
+  --home-bg-gradient: linear-gradient(180deg, #fdfdff 0%, #f6f7ff 52%, #fbf3ff 100%);
+  --home-surface: #f7f7f7;
+  --home-card-bg: #ffffff;
+  --home-card-bg-muted: #f5f5f5;
+  --home-text: #050505;
+  --home-text-muted: rgba(5, 5, 5, 0.65);
+  --home-border: #050505;
+  --home-inverse-text: #ffffff;
   --hero-dark-accent-start: var(--dt-color-brand-primary-400, #38bdf8);
   --hero-dark-accent-end: color-mix(in srgb, var(--dt-color-brand-amber-500, #fb7185) 90%, white);
   --hero-retro-accent-start: #00ffd9;
@@ -221,6 +229,17 @@
 
 html[data-theme='dark'] {
   color-scheme: dark;
+  --home-gradient: linear-gradient(120deg, #9333ea 0%, #38bdf8 50%, #22d3ee 100%);
+  --home-shadow: 0 24px 55px rgba(0, 0, 0, 0.55);
+  --home-shadow-hover: 0 32px 70px rgba(0, 0, 0, 0.75);
+  --home-bg-gradient: linear-gradient(180deg, #050509 0%, #0b1120 55%, #111827 100%);
+  --home-surface: #0b1120;
+  --home-card-bg: #111827;
+  --home-card-bg-muted: #1f2937;
+  --home-text: #f8fafc;
+  --home-text-muted: rgba(248, 250, 252, 0.75);
+  --home-border: rgba(248, 250, 252, 0.45);
+  --home-inverse-text: #050505;
   --surface-card: color-mix(in srgb, var(--dt-color-neutral-surface-dark, #090b11) 92%, #05070d);
   --surface-panel: color-mix(in srgb, var(--surface-card) 75%, rgba(255, 255, 255, 0.04));
   --surface-card-gradient-right: linear-gradient(
@@ -470,8 +489,8 @@ html {
 body {
   font-family: var(--font-family-sans);
   font-size: var(--font-size-body);
-  background: linear-gradient(180deg, #f6f6f6 0%, #ececec 100%);
-  color: var(--text-strong);
+  background: var(--home-bg-gradient);
+  color: var(--home-text);
   font-weight: 500;
   line-height: var(--line-height-normal);
   margin: 0;
@@ -815,12 +834,15 @@ html[data-theme='dark'] .micro-solid:focus-visible {
   padding: 0.6rem 1.4rem;
   border-radius: 999px;
   border: 3px solid var(--border-strong);
-  background: linear-gradient(135deg, var(--gradient-brand-start), var(--gradient-brand-end));
+  background: var(--home-gradient);
   color: var(--text-on-brand);
   font-weight: 800;
-  letter-spacing: 0.25em;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
-  box-shadow: 8px 8px 0 var(--shadow-strong);
+  box-shadow: var(--home-shadow);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
   transition:
     transform var(--motion-fast) var(--ease-standard),
     box-shadow var(--motion-fast) var(--ease-standard);
@@ -829,7 +851,11 @@ html[data-theme='dark'] .micro-solid:focus-visible {
 .dev-editor-trigger:hover,
 .dev-editor-trigger:focus-visible {
   transform: translate(-3px, -3px);
-  box-shadow: 12px 12px 0 var(--shadow-strong-hover);
+  box-shadow: var(--home-shadow-hover);
+}
+
+.dev-editor-trigger svg {
+  flex-shrink: 0;
 }
 
 .dev-editor-overlay {
@@ -3452,9 +3478,9 @@ html[data-theme='dark'] .contact-hero__accent {
   min-width: 210px;
   padding: 18px 26px;
   border-radius: 28px;
-  border: 2px solid #050505;
+  border: 2px solid var(--home-border);
   background: var(--home-gradient);
-  color: #050505;
+  color: var(--home-text);
   box-shadow: var(--home-shadow);
   transition:
     transform var(--motion-normal) var(--ease-standard),
@@ -3467,9 +3493,9 @@ html[data-theme='dark'] .contact-hero__accent {
 .contact-cta:hover {
   transform: translate(-3px, -5px);
   box-shadow: var(--home-shadow-hover);
-  border-color: #050505;
+  border-color: var(--home-border);
   background: #ffffff;
-  color: #050505;
+  color: var(--home-text);
 }
 
 .contact-cta__icon {
@@ -3694,10 +3720,10 @@ html[data-theme='konami'] .contact-info__location {
 }
 
 .contact-info__row--primary {
-  border: 2px solid #050505;
+  border: 2px solid var(--home-border);
   border-radius: 20px;
   padding: 12px 16px;
-  background: linear-gradient(180deg, #ffffff, #f5f5f5);
+  background: linear-gradient(180deg, var(--home-card-bg), var(--home-card-bg-muted));
   box-shadow: var(--home-shadow);
 }
 
@@ -3893,12 +3919,12 @@ html[data-theme='konami'] .experience-header__subtitle {
   gap: 0.5rem;
   padding: 0.65rem 1.1rem;
   border-radius: 999px;
-  border: 2px solid #050505;
+  border: 2px solid var(--home-border);
   font-size: 0.9rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   background: var(--home-gradient);
-  color: #050505;
+  color: var(--home-text);
   text-decoration: none;
   box-shadow: var(--home-shadow);
   transition:
@@ -3912,7 +3938,7 @@ html[data-theme='konami'] .experience-header__subtitle {
 .project-card__link:focus-visible {
   transform: translate(-3px, -4px);
   background: #ffffff;
-  color: #050505;
+  color: var(--home-text);
   box-shadow:
     16px 16px 0 rgba(99, 102, 241, 0.45),
     0 0 30px rgba(99, 102, 241, 0.35);
@@ -4364,7 +4390,7 @@ html[data-theme='dark'] .hero-name {
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  background: linear-gradient(180deg, #f3f3f3 0%, #e2e2e2 100%);
+  background: var(--home-bg-gradient);
 }
 
 .hero-shell {
@@ -4531,10 +4557,10 @@ html[data-theme='dark'] .hero-name {
 
 .hero-cta-row .ds-button {
   border-radius: 999px;
-  border: 2px solid #050505;
+  border: 2px solid var(--home-border);
   padding: 0.58rem 1.9rem;
   background: var(--home-gradient);
-  color: #050505;
+  color: var(--home-text);
   font-weight: 900;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -4547,9 +4573,9 @@ html[data-theme='dark'] .hero-name {
 }
 
 .hero-cta-row .ds-button.ds-button--ghost {
-  border: 2px solid #ffffff;
-  background: #050505;
-  color: #f5f6fa;
+  border: 2px solid var(--home-border);
+  background: var(--home-card-bg);
+  color: var(--home-text);
   box-shadow: var(--home-shadow);
 }
 
@@ -4583,13 +4609,13 @@ html[data-theme='dark'] .hero-name {
   gap: 0.4rem;
   padding: 0.45rem 1rem;
   border-radius: 999px;
-  border: 1.5px solid #050505;
+  border: 1.5px solid var(--home-border);
   font-size: 0.78rem;
   text-transform: uppercase;
   letter-spacing: 0.16em;
   font-weight: 800;
-  color: #050505;
-  background: linear-gradient(180deg, #fefefe 0%, #f1f1f1 100%);
+  color: var(--home-text);
+  background: linear-gradient(180deg, var(--home-card-bg), var(--home-card-bg-muted));
   box-shadow: 0 18px 30px rgba(15, 23, 42, 0.15);
 }
 
@@ -4640,24 +4666,24 @@ html[data-theme='dark'] .hero-name {
 }
 
 .hero-panel__card--status {
-  background: linear-gradient(180deg, #ffffff 0%, #f5f5f5 100%);
-  color: #050505;
+  background: linear-gradient(180deg, var(--home-card-bg), var(--home-card-bg-muted));
+  color: var(--home-text);
   box-shadow: var(--home-shadow);
 }
 
 .hero-panel__card--status .hero-panel__eyebrow {
-  color: #050505;
+  color: var(--home-text);
   font-weight: 900;
 }
 
 .hero-panel__card--status .hero-panel__description {
-  color: #050505;
+  color: var(--home-text);
   font-weight: 700;
   text-shadow: none;
 }
 
 .hero-panel__card--note {
-  background: linear-gradient(180deg, #ffffff 0%, #f0f0f0 100%);
+  background: linear-gradient(180deg, var(--home-card-bg), var(--home-card-bg-muted));
   box-shadow: var(--home-shadow);
 }
 
@@ -4673,13 +4699,13 @@ html[data-theme='dark'] .hero-name {
   align-items: center;
   padding: 0.35rem 0.9rem;
   border-radius: 999px;
-  border: 2px solid #050505;
-  background: linear-gradient(180deg, #fefefe 0%, #f5f5f5 100%);
+  border: 2px solid var(--home-border);
+  background: linear-gradient(180deg, var(--home-card-bg), var(--home-card-bg-muted));
   font-size: 0.75rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   font-weight: 800;
-  color: #050505;
+  color: var(--home-text);
   box-shadow: 0 18px 35px rgba(15, 23, 42, 0.18);
 }
 
@@ -4694,7 +4720,7 @@ html[data-theme='dark'] .hero-name {
 .hero-panel__description {
   font-size: 1rem;
   line-height: 1.6;
-  color: rgba(5, 5, 5, 0.78);
+  color: var(--home-text-muted);
 }
 
 .hero-panel__card--note .hero-panel__description {
@@ -4737,7 +4763,7 @@ html[data-theme='dark'] .hero-name {
 }
 
 .hero-panel__card--stats {
-  background: linear-gradient(180deg, #fefefe 0%, #eeeeee 100%);
+  background: linear-gradient(180deg, var(--home-card-bg), var(--home-card-bg-muted));
   box-shadow: var(--home-shadow);
 }
 
@@ -4750,9 +4776,9 @@ html[data-theme='dark'] .hero-name {
 .project-card .ds-card,
 .contact-form-card,
 .contact-info {
-  border: 2px solid #050505;
+  border: 2px solid var(--home-border);
   border-radius: 32px;
-  background: #ffffff;
+  background: var(--home-card-bg);
   box-shadow: var(--home-shadow);
   padding: clamp(1.25rem, 2vw, 1.75rem);
 }

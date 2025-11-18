@@ -24,6 +24,11 @@ export default function Contact() {
   const linkedinLabel = linkedinUrl.replace(/^https?:\/\//, '').replace(/\/$/, '');
   const safeLinkedinUrl = linkedinUrl ? getSafeUrl(linkedinUrl) : null;
   const invalidUrlMessage = data.toasts?.invalid_url ?? 'Enlace no disponible';
+  const contactTitle = data.lang === 'en' ? 'Contact' : 'Contacto';
+  const contactSubtitle =
+    data.lang === 'en'
+      ? 'Project, collaboration or just want to chat architecture? Write me.'
+      : '¿Proyecto, colaboración o simplemente quieres platicar de arquitectura? Escríbeme.';
 
   const copyEmail = async () => {
     if (!navigator.clipboard) {
@@ -61,14 +66,14 @@ export default function Contact() {
     setStatus('success');
   };
 
-  const contactTitleHtml = data.sections.contact.title.replace(
-    /IA/i,
-    '<span class="contact-hero__accent">IA</span>'
+  const contactTitleHtml = contactTitle.replace(
+    /(IA|AI)/gi,
+    '<span class="contact-hero__accent">$1</span>'
   );
 
-  const contactSubtitleHtml = data.sections.contact.subtitle
-    .replace('IA', '<span class="contact-hero__accent">IA</span>')
-    .replace('iOS', '<span class="contact-hero__accent">iOS</span>');
+  const contactSubtitleHtml = contactSubtitle
+    .replace(/IA/gi, '<span class="contact-hero__accent">IA</span>')
+    .replace(/iOS/gi, '<span class="contact-hero__accent">iOS</span>');
 
   return (
     <>
