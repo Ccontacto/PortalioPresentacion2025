@@ -1,3 +1,4 @@
+import { PenSquare } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 
 import { useLanguage } from '../contexts/LanguageContext';
@@ -57,6 +58,7 @@ export default function DevPortfolioEditor() {
     JSON.stringify(overrides[currentLang] ?? template, null, 2)
   );
   const [status, setStatus] = useState<string | null>(null);
+  const [statusVariant, setStatusVariant] = useState<'success' | 'error' | null>(null);
 
   useEffect(() => {
     setPayload(JSON.stringify(overrides[currentLang] ?? template, null, 2));
@@ -68,8 +70,10 @@ export default function DevPortfolioEditor() {
       const sanitized = sanitizePatch(template, parsed);
       updateOverrides(currentLang, sanitized as Partial<PortfolioData>);
       setStatus('Overrides aplicados.');
+      setStatusVariant('success');
     } catch {
       setStatus('JSON inválido. Corrige y vuelve a aplicar.');
+      setStatusVariant('error');
     }
   };
 
@@ -77,6 +81,7 @@ export default function DevPortfolioEditor() {
     updateOverrides(currentLang, {});
     setPayload(JSON.stringify(template, null, 2));
     setStatus('Overrides reseteados.');
+    setStatusVariant('success');
   };
 
   const downloadZip = () => {
@@ -106,7 +111,8 @@ export default function DevPortfolioEditor() {
         onClick={() => setOpen(true)}
         data-dev-id="dev-portafolio"
       >
-        EDITOR
+        <PenSquare size={16} aria-hidden="true" />
+        <span>Editor</span>
       </button>
       {open ? (
         <div className="dev-editor-overlay" role="dialog" aria-label="Editor del portafolio" aria-modal="true">
@@ -151,7 +157,11 @@ export default function DevPortfolioEditor() {
                 Generar ZIP (dev)
               </button>
             </div>
-            {status ? <p className="dev-editor-panel__status">{status}</p> : null}
+            {status ? (
+              <p className={`dev-editor-panel__status${statusVariant ? ` dev-editor-panel__status--${statusVariant}` : ''}`}>
+                {status}
+              </p>
+            ) : null}
           </div>
         </div>
       ) : null}
