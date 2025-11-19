@@ -21,7 +21,8 @@ import {
   useMemo,
   useRef,
   useState,
-  type KeyboardEvent as ReactKeyboardEvent
+  type KeyboardEvent as ReactKeyboardEvent,
+  type ReactNode
 } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useNavigation } from '../contexts/NavigationContext';
@@ -30,14 +31,22 @@ import { useToast } from '../contexts/ToastContext';
 import { generateATSPdf } from '../utils/pdfGenerator.ats';
 import { generateNonATSPdf } from '../utils/pdfGenerator.nonAts';
 
-type CommandGroup = 'Secciones' | 'Redes' | 'Contacto' | 'Acciones' | 'Preferencias';
+const COMMAND_GROUPS = {
+  sections: 'Secciones',
+  social: 'Redes',
+  contact: 'Contacto',
+  actions: 'Acciones',
+  preferences: 'Preferencias'
+} as const;
+
+type CommandGroup = (typeof COMMAND_GROUPS)[keyof typeof COMMAND_GROUPS];
 
 type CommandItem = {
   id: string;
   label: string;
   group: CommandGroup;
   action: () => void;
-  icon?: JSX.Element;
+  icon?: ReactNode;
   keywords?: string[];
   description?: string;
   predicate?: () => boolean;
@@ -83,7 +92,7 @@ export default function CommandPalette() {
     const navItems: CommandItem[] = data.nav.map(navItem => ({
       id: `nav-${navItem.id}`,
       label: navItem.label,
-      group: 'Secciones',
+      group: COMMAND_GROUPS.sections,
       icon: <Globe size={22} aria-hidden="true" />,
       keywords: [navItem.id, navItem.label],
       action: () => {
@@ -96,7 +105,7 @@ export default function CommandPalette() {
       {
         id: 'contact-email',
         label: `Email: ${data.email}`,
-        group: 'Contacto',
+        group: COMMAND_GROUPS.contact,
         icon: <Mail size={22} aria-hidden="true" />,
         keywords: ['correo', 'contacto', 'mail'],
         action: () => {
@@ -107,7 +116,7 @@ export default function CommandPalette() {
       {
         id: 'contact-copy-email',
         label: 'Copiar email',
-        group: 'Contacto',
+        group: COMMAND_GROUPS.contact,
         icon: <CopyIcon size={22} aria-hidden="true" />,
         keywords: ['clipboard', 'copiar', 'correo'],
         action: async () => {
@@ -129,7 +138,7 @@ export default function CommandPalette() {
             {
               id: 'contact-whatsapp',
               label: 'WhatsApp',
-              group: 'Contacto',
+              group: COMMAND_GROUPS.contact,
               icon: <MessageSquare className="h-[22px] w-[22px]" aria-hidden="true" />,
               keywords: ['whatsapp', 'mensaje', 'contacto'],
               action: () => {
@@ -154,7 +163,7 @@ export default function CommandPalette() {
             {
               id: 'social-linkedin',
               label: 'LinkedIn',
-              group: 'Redes',
+              group: COMMAND_GROUPS.social,
               icon: <Globe size={22} aria-hidden="true" />,
               keywords: ['linkedin', 'networking'],
               action: () => {
@@ -169,7 +178,7 @@ export default function CommandPalette() {
             {
               id: 'social-github',
               label: 'GitHub',
-              group: 'Redes',
+              group: COMMAND_GROUPS.social,
               icon: <Github size={22} aria-hidden="true" />,
               keywords: ['repositorio', 'code'],
               action: () => {
@@ -184,7 +193,7 @@ export default function CommandPalette() {
             {
               id: 'social-portfolio',
               label: 'Portafolio externo',
-              group: 'Redes',
+              group: COMMAND_GROUPS.social,
               icon: <Globe size={22} aria-hidden="true" />,
               keywords: ['portfolio', 'sitio', 'web'],
               action: () => {
@@ -200,7 +209,7 @@ export default function CommandPalette() {
       {
         id: 'action-download-cv',
         label: 'Descargar CV (ATS)',
-        group: 'Acciones',
+        group: COMMAND_GROUPS.actions,
         icon: <Download size={22} aria-hidden="true" />,
         keywords: ['cv', 'curriculum', 'pdf', 'ats'],
         action: () => {
@@ -221,7 +230,7 @@ export default function CommandPalette() {
       {
         id: 'action-download-cv-non-ats',
         label: 'Descargar CV (Diseño)',
-        group: 'Acciones',
+        group: COMMAND_GROUPS.actions,
         icon: <Download size={22} aria-hidden="true" />,
         keywords: ['cv', 'curriculum', 'pdf', 'diseño'],
         action: () => {
@@ -245,7 +254,7 @@ export default function CommandPalette() {
       {
         id: 'pref-theme',
         label: theme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro',
-        group: 'Preferencias',
+        group: COMMAND_GROUPS.preferences,
         icon: theme === 'dark' ? <Sun size={22} aria-hidden="true" /> : <Moon size={22} aria-hidden="true" />,
         keywords: ['tema', 'theme', 'modo'],
         action: () => {
@@ -256,7 +265,7 @@ export default function CommandPalette() {
       {
         id: 'pref-language',
         label: currentLang === 'es' ? 'Cambiar a inglés' : 'Cambiar a español',
-        group: 'Preferencias',
+        group: COMMAND_GROUPS.preferences,
         icon: <Languages size={22} aria-hidden="true" />,
         keywords: ['idioma', 'language'],
         action: () => {

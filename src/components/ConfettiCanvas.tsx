@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { getAccentColorPalette } from '../utils/designTokens';
 
 type ConfettiParticle = {
   x: number;
@@ -10,7 +11,6 @@ type ConfettiParticle = {
   life: number;
 };
 
-const COLORS = ['#FFB7DD', '#A0E7E5', '#B5EAD7', '#39FF14', '#FFF3B0'];
 const BASE_PARTICLE_COUNT = 420;
 
 export default function ConfettiCanvas() {
@@ -40,6 +40,7 @@ export default function ConfettiCanvas() {
     };
 
     const spawnParticles = (count: number) => {
+      const palette = getAccentColorPalette();
       if (particlesRef.current.length > 1500) particlesRef.current.splice(0, 500);
       const canvas = canvasRef.current;
       if (!canvas) return;
@@ -59,7 +60,7 @@ export default function ConfettiCanvas() {
           vx: Math.cos(angle) * speed + wobble,
           vy: Math.sin(angle) * speed - (Math.random() * 2 + 0.5),
           size: Math.random() * 4 + 3,
-          color: COLORS[Math.floor(Math.random() * COLORS.length)],
+          color: palette[Math.floor(Math.random() * palette.length)],
           life: Math.random() * 30 + 40
         });
       }
