@@ -2,6 +2,7 @@ export const es = {
   lang: 'es',
   name: 'José Carlos Torres Rivera',
   title: 'Generative AI & iOS',
+  subtitle: 'Arquitecto de experiencias inteligentes y nativas',
   tagline: 'Reimagino experiencias con IA desde el prototipo hasta el lanzamiento',
   description:
     'Mobile tech lead con 12+ años en iOS y arquitectura. Especialización independiente en IA generativa: integración de LLMs, generación de imágenes y arquitecturas RAG.',

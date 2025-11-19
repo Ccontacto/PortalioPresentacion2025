@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { ACCENT_COLOR_TOKENS, cssVar } from '../utils/designTokens';
 
 export default function PageProgress() {
   const [width, setWidth] = useState(0);
@@ -28,7 +29,7 @@ export default function PageProgress() {
         left: 0,
         height: 4,
         width: `${width}%`,
-        background: '#A0E7E5',
+        background: cssVar(ACCENT_COLOR_TOKENS.electricTeal),
         zIndex: 60,
         transition: 'width 120ms linear'
       }}
