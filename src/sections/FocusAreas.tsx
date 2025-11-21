@@ -1,6 +1,5 @@
 
 import { useLanguage } from '@contexts/LanguageContext';
-import { Badge } from '@design-system/primitives/Badge';
 import { Card } from '@design-system/primitives/Card';
 import { Chip } from '@design-system/primitives/Chip';
 import { SectionHeader as DsSectionHeader } from '@design-system/primitives/SectionHeader';
@@ -24,8 +23,7 @@ export default function FocusAreas() {
   return (
     <SectionWrapper id="focus" className="page-section--focus" aria-labelledby="focus-heading" data-dev-id="3000">
       <header className="focus-header" data-dev-id="3001">
-        <Badge>{focus.eyebrow}</Badge>
-        <DsSectionHeader title={focus.title} subtitle={focus.subtitle} />
+        <DsSectionHeader eyebrow={focus.eyebrow} title={focus.title} subtitle={focus.subtitle} />
       </header>
 
       <div className="focus-grid" role="list" data-dev-id="3002">

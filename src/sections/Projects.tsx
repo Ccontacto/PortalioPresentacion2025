@@ -3,7 +3,6 @@ import HorizontalScroller from '@components/HorizontalScroller';
 import SearchBar from '@components/SearchBar';
 import { useLanguage } from '@contexts/LanguageContext';
 import { usePortfolioContent } from '@contexts/PortfolioSpecContext';
-import { Badge } from '@design-system/primitives/Badge';
 import { Card } from '@design-system/primitives/Card';
 import { Chip } from '@design-system/primitives/Chip';
 import { SectionHeader as DsSectionHeader } from '@design-system/primitives/SectionHeader';
@@ -36,8 +35,8 @@ export default function Projects() {
   return (
     <SectionWrapper ref={sectionRef} id="projects" aria-labelledby="projects-heading" data-dev-id="5000">
       <div className="ds-stack">
-        <Badge>{projectsSpec?.title ? stripBraces(projectsSpec.title) : 'Casos reales'}</Badge>
         <DsSectionHeader
+          eyebrow={projectsSpec?.title ? stripBraces(projectsSpec.title) : data.lang === 'en' ? 'Case studies' : 'Casos reales'}
           title={data.sections.projects.title}
           subtitle="Lanzamientos y prototipos donde combiné iOS, liderazgo técnico e IA aplicada."
         />

@@ -1,6 +1,5 @@
 
 import { useLanguage } from '@contexts/LanguageContext';
-import { Badge } from '@design-system/primitives/Badge';
 import { Card } from '@design-system/primitives/Card';
 import { Chip } from '@design-system/primitives/Chip';
 import { SectionHeader as DsSectionHeader } from '@design-system/primitives/SectionHeader';
@@ -54,8 +53,8 @@ export default function Experience() {
   return (
     <SectionWrapper ref={sectionRef} id="experience" aria-labelledby="experience-heading" data-dev-id="4000">
       <div className="ds-stack">
-        <Badge>Trayectoria destacada</Badge>
         <DsSectionHeader
+          eyebrow={data.lang === 'en' ? 'Trajectory' : 'Trayectoria destacada'}
           title={data.sections.experience.title}
           subtitle="Dirección técnica, liderazgo de squads y exploración de IA generativa aplicadas a productos reales."
         />

@@ -84,11 +84,17 @@ export function SectionHeader({ title, subtitle, eyebrow, className }: SectionHe
     <div className={cx('ds-section-header', className)} style={containerStyle}>
       {eyebrow ? <span className="ds-section-header__eyebrow">{eyebrow}</span> : null}
       <h2 className="ds-section-header__title" style={titleStyle}>
-        {decoratedTitle ?? title}
+        <span className="ds-section-header__title-display" aria-hidden="true">
+          {decoratedTitle ?? title}
+        </span>
+        <span className="ds-section-header__title-plaintext">{title}</span>
       </h2>
       {subtitle ? (
         <p className="ds-section-header__subtitle" style={subtitleStyle}>
-          {decoratedSubtitle ?? subtitle}
+          <span className="ds-section-header__subtitle-display" aria-hidden="true">
+            {decoratedSubtitle ?? subtitle}
+          </span>
+          <span className="ds-section-header__subtitle-plaintext">{subtitle}</span>
         </p>
       ) : null}
     </div>

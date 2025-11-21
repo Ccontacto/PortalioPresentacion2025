@@ -2,7 +2,6 @@
 import HorizontalScroller from '@components/HorizontalScroller';
 import { useLanguage } from '@contexts/LanguageContext';
 import { usePortfolioContent } from '@contexts/PortfolioSpecContext';
-import { Badge } from '@design-system/primitives/Badge';
 import { Card } from '@design-system/primitives/Card';
 import { Chip } from '@design-system/primitives/Chip';
 import { SectionHeader as DsSectionHeader } from '@design-system/primitives/SectionHeader';
@@ -33,8 +32,11 @@ export default function Skills() {
   return (
     <SectionWrapper id="skills" aria-labelledby="skills-heading" data-dev-id="3100">
       <div className="ds-stack">
-        <Badge>{stripBraces(skillsSpec?.title) || 'Stack principal'}</Badge>
-        <DsSectionHeader title={sectionTitle} subtitle={sectionSubtitle} />
+        <DsSectionHeader
+          eyebrow={stripBraces(skillsSpec?.title) || (data.lang === 'en' ? 'Core stack' : 'Stack principal')}
+          title={sectionTitle}
+          subtitle={sectionSubtitle}
+        />
       </div>
 
       <div className="page-section__body" data-dev-id="3103">
