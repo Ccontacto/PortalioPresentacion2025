@@ -1,20 +1,104 @@
-.navbar {
+.site-header {
   position: sticky;
   top: 0;
-  z-index: 100;
-  backdrop-filter: blur(12px);
-  background: rgba(var(--bg-primary-rgb), 0.8);
-  border-bottom: 1px solid var(--border-subtle);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 50;
+  width: 100%;
+  transition: backdrop-filter 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
 }
 
-.navbar.scrolled {
-  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
-  background: rgba(var(--bg-primary-rgb), 0.95);
+.site-header::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: color-mix(in srgb, var(--border-subtle) 70%, transparent);
+  opacity: 0;
+  transition: opacity 0.2s ease;
 }
 
-@supports not (backdrop-filter: blur(12px)) {
-  .navbar {
-    background: var(--bg-primary);
+.site-header--scrolled {
+  backdrop-filter: blur(16px);
+  background: color-mix(in srgb, var(--bg-primary) 85%, transparent);
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+}
+
+.site-header--scrolled::after {
+  opacity: 1;
+}
+
+.site-header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 0;
+}
+
+.site-header__brand {
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  border: none;
+  background: none;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.site-header__nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.site-header__link {
+  border: none;
+  background: none;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.site-header__link.is-active {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.site-header__link:hover,
+.site-header__link:focus-visible {
+  color: var(--accent);
+  outline: none;
+}
+
+.site-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.site-header__icon-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.site-header__icon-btn:hover {
+  transform: translateY(-2px);
+}
+
+@media (max-width: 960px) {
+  .site-header__nav {
+    display: none;
   }
 }

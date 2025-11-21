@@ -1,85 +1,82 @@
+
+import HorizontalScroller from '@components/HorizontalScroller';
+import { useLanguage } from '@contexts/LanguageContext';
+import { usePortfolioContent } from '@contexts/PortfolioSpecContext';
+import { Badge } from '@design-system/primitives/Badge';
+import { Card } from '@design-system/primitives/Card';
+import { Chip } from '@design-system/primitives/Chip';
+import { SectionHeader as DsSectionHeader } from '@design-system/primitives/SectionHeader';
+import { SectionWrapper } from '@design-system/primitives/SectionWrapper';
+import { useSectionTelemetry } from '@telemetry/useSectionTelemetry';
 import { m } from 'framer-motion';
-import { Smartphone, Bot, Cloud, Cpu } from 'lucide-react';
+import { Bot, Cloud, Cpu, Smartphone } from 'lucide-react';
+import { type ReactElement } from 'react';
 
-import { useLanguage } from '../contexts/LanguageContext';
-import { useReducedMotion } from '../hooks/useReducedMotion';
+import type { SkillCategory } from '@portfolio-types';
 
-import type { SkillCategory } from '../types/portfolio';
-import type { ReactElement } from 'react';
+type SkillItem = SkillCategory['items'][number];
 
 const iconMap: Record<string, ReactElement> = {
-  device: <Smartphone size={24} />,
-  robot: <Bot size={24} />,
-  cloud: <Cloud size={24} />,
-  cpu: <Cpu size={24} />,
-};
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-    },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0 },
+  device: <Smartphone size={32} />,
+  robot: <Bot size={32} />,
+  cloud: <Cloud size={32} />
 };
 
 export default function Skills() {
-  const { data, t } = useLanguage();
-  const shouldReduceMotion = useReducedMotion();
+  const { data } = useLanguage();
+  const skillsSpec = usePortfolioContent('skills');
+  useSectionTelemetry('skills');
+  const sectionTitle = data.sections.skills.title || stripBraces(skillsSpec?.title);
+  const sectionSubtitle =
+    'Herramientas y frameworks con los que construyo soluciones móviles e IA de forma integral.';
 
   return (
-    <section id="skills" className="page-section" aria-labelledby="skills-heading">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <header className="text-center mb-16">
-          <h2 id="skills-heading" className="text-3xl md:text-4xl font-bold">
-            {t('skills.title', 'Habilidades y Stack Tecnológico')}
-          </h2>
-          <p className="mt-4 max-w-2xl mx-auto text-lg text-text-muted">
-            {t('skills.subtitle', 'Herramientas con las que construyo soluciones robustas, desde el prototipo hasta el despliegue.')}
-          </p>
-        </header>
+    <SectionWrapper id="skills" aria-labelledby="skills-heading" data-dev-id="3100">
+      <div className="ds-stack">
+        <Badge>{stripBraces(skillsSpec?.title) || 'Stack principal'}</Badge>
+        <DsSectionHeader title={sectionTitle} subtitle={sectionSubtitle} />
+      </div>
 
-        <m.div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto"
-          initial={shouldReduceMotion ? 'visible' : 'hidden'}
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.1 }}
-          variants={containerVariants}
+      <div className="page-section__body" data-dev-id="3103">
+        <HorizontalScroller
+          itemCount={data.sections.skills.categories.length}
+          itemSelector=".skills-card"
+          prevLabelKey="prevSkills"
+          nextLabelKey="nextSkills"
         >
           {data.sections.skills.categories.map((cat: SkillCategory) => (
-            <m.div
+            <m.article
               key={cat.id}
-              className="bg-surface-raised p-6 rounded-lg border border-border-subtle shadow-md"
-              variants={itemVariants}
-              whileHover={shouldReduceMotion ? {} : { y: -5 }}
+              className="skills-card card"
+              data-dev-id={`310${String(cat.id ?? '').slice(-1) || '5'}`}
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              whileHover={{ y: -8 }}
+              role="listitem"
             >
-              <div className="flex items-center gap-4 mb-4">
-                <div className="bg-brand-primary/10 p-2 rounded-md text-brand-primary" aria-hidden="true">
-                  {iconMap[cat.icon] ?? iconMap['cpu']}
+              <Card as="div">
+                <div className="skill-card__icon" aria-hidden="true">
+                  {iconMap[cat.icon] ?? <Cpu size={32} />}
                 </div>
-                <h3 className="text-lg font-semibold">{cat.title}</h3>
-              </div>
-              <div className="flex flex-wrap gap-2" role="list" aria-label={`Habilidades en ${cat.title}`}>
-                {cat.items.map((item: string) => (
-                  <span
-                    key={item}
-                    className="px-3 py-1 text-sm font-medium rounded-pill bg-surface-alt text-text-muted"
-                    role="listitem"
-                  >
-                    {item}
-                  </span>
-                ))}
-              </div>
-            </m.div>
+                <h3 className="text-lg font-bold mb-4">{cat.title}</h3>
+                <ul className="skill-card__chips" aria-label={`Habilidades de ${cat.title}`}>
+                  {cat.items.map((item: SkillItem) => (
+                    <li key={item}>
+                      <Chip>{item}</Chip>
+                    </li>
+                  ))}
+                </ul>
+              </Card>
+            </m.article>
           ))}
-        </m.div>
+        </HorizontalScroller>
       </div>
-    </section>
+    </SectionWrapper>
   );
+}
+
+function stripBraces(value?: string) {
+  if (!value) return '';
+  return value.replace(/^\{|\}$/g, '').replace(/^[^:]+:\s*/, '');
 }

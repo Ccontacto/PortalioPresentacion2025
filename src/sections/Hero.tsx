@@ -1,83 +1,207 @@
+
+import { AvailabilityBadge } from '@components/header/AvailabilityBadge';
+import { useLanguage } from '@contexts/LanguageContext';
+import { useToast } from '@contexts/ToastContext';
+import { Button } from '@design-system/primitives/Button';
+import { Card } from '@design-system/primitives/Card';
+import { SectionWrapper } from '@design-system/primitives/SectionWrapper';
+import { useIntersectionObserver } from '@hooks/useIntersectionObserver';
+import { useSectionTelemetry } from '@telemetry/useSectionTelemetry';
+import { storage } from '@utils/storage';
 import { m } from 'framer-motion';
-import { ArrowDownToLine, MessageCircle } from 'lucide-react';
+import { MapPin } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
-import { Button } from '../components/atoms/Button';
-import { useLanguage } from '../contexts/LanguageContext';
-import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
-import { useReducedMotion } from '../hooks/useReducedMotion';
+import type { AvailabilityKey, HeroMetaItem, PortfolioToasts, Stat } from '@portfolio-types';
 
-import type { Stat } from '../types/portfolio';
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { staggerChildren: 0.15 } },
+const DOMAIN_HINTS: Record<string, string> = {
+  'portalio-presentacion-2025.pages.dev': 'Hola desde Cloudflare Pages!',
+  localhost: 'Modo local activo para pruebas',
+  '127.0.0.1': 'Pruebas locales habilitadas'
 };
 
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0 },
-};
+type AvailabilityState = 'available' | 'listening' | 'unavailable';
+const AVAILABILITY_STORAGE_KEY = 'portfolio_availability';
+const isAvailability = (value: unknown): value is AvailabilityState =>
+  value === 'available' || value === 'listening' || value === 'unavailable';
+const getStoredAvailability = () => storage.get(AVAILABILITY_STORAGE_KEY, 'listening', isAvailability);
 
 export default function Hero() {
-  const { data, t } = useLanguage();
-  const [ref, visible] = useIntersectionObserver<HTMLDivElement>({ threshold: 0.2 });
-  const shouldReduceMotion = useReducedMotion();
+  const { data } = useLanguage();
+  const [ref] = useIntersectionObserver<HTMLDivElement>({ threshold: 0.3 });
+  const { showToast } = useToast();
+  const [availability, setAvailability] = useState<AvailabilityState>(getStoredAvailability);
+  useSectionTelemetry('home');
 
-  const heroTitleHtml = t('title', 'Generative AI & iOS')
-    .replace('Generative AI', '<span class="text-gradient">Generative AI</span>')
-    .replace('iOS', '<span class="text-gradient">iOS</span>');
+  const heroCopy = data.hero;
+
+  const resolvedMeta = (heroCopy.meta ?? []).reduce<{ label: string; value: string }[]>(
+    (acc, metaItem: HeroMetaItem) => {
+      const value =
+        'field' in metaItem && metaItem.field
+          ? data[metaItem.field]
+          : 'value' in metaItem
+          ? metaItem.value
+          : undefined;
+      if (value) {
+        acc.push({ label: metaItem.label, value });
+      }
+      return acc;
+    },
+    []
+  );
+
+  const status = heroCopy.status;
+  const note = heroCopy.note;
+  const focusItems = Array.isArray(note?.items) ? note.items : [];
+  const noteFocusList = focusItems;
+  const statusTitle = status?.title ?? (data.lang === 'en' ? 'Now' : 'Ahora');
+  const statusDescription = status?.description ?? heroCopy.tagline ?? data.tagline ?? '';
+
+  const availabilityLabel = data.availability?.status?.[availability] ?? availability;
+  const availabilityToggleLabel = data.availability?.toggle?.[availability] ?? 'Cambiar disponibilidad';
+  const availabilityCycle: AvailabilityKey[] = ['available', 'listening', 'unavailable'];
+  const toastKeyMap: Record<AvailabilityKey, keyof PortfolioToasts | null> = {
+    available: 'availability_available',
+    listening: 'availability_listening',
+    unavailable: 'availability_unavailable'
+  };
+  const toastTypeMap: Record<AvailabilityKey, 'success' | 'info' | 'warning'> = {
+    available: 'success',
+    listening: 'info',
+    unavailable: 'warning'
+  };
+
+  const [domainHint, setDomainHint] = useState<string | null>(null);
+  const heroTitleLine = data.title ?? heroCopy.eyebrow ?? '';
+  const roleSegments = heroTitleLine.split('&').map(segment => segment.trim()).filter(Boolean);
+  const primaryRole = roleSegments[0] ?? heroTitleLine;
+  const secondaryRole = roleSegments[1] ?? '';
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const host = window.location.hostname;
+    const message = DOMAIN_HINTS[host] ?? `Bienvenido desde ${host}`;
+    setDomainHint(message);
+  }, []);
+
+  const handleToggleAvailability = () => {
+    const currentIndex = availabilityCycle.indexOf(availability);
+    const next = availabilityCycle[(currentIndex + 1) % availabilityCycle.length];
+    setAvailability(next);
+    const toastKey = toastKeyMap[next];
+    const toastMessage = toastKey ? data.toasts?.[toastKey] : null;
+    if (toastMessage) {
+      showToast(toastMessage, toastTypeMap[next]);
+    }
+  };
+
+  useEffect(() => {
+    storage.set(AVAILABILITY_STORAGE_KEY, availability);
+  }, [availability]);
 
   return (
-    <section id="home" className="page-section min-h-screen flex items-center">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <m.div
-          ref={ref}
-          className="grid grid-cols-1 md:grid-cols-5 gap-12 items-center"
-          initial={shouldReduceMotion ? 'visible' : 'hidden'}
-          animate={visible ? 'visible' : 'hidden'}
-          variants={containerVariants}
-        >
-          {/* Columna Izquierda: Texto y Botones */}
-          <div className="md:col-span-3 text-center md:text-left">
-            <m.h1
-              className="text-5xl md:text-6xl font-extrabold uppercase tracking-tight"
-              dangerouslySetInnerHTML={{ __html: heroTitleHtml }}
-              variants={itemVariants}
-            />
-            <m.p className="mt-6 max-w-xl mx-auto md:mx-0 text-lg text-text-muted" variants={itemVariants}>
-              {t('description', 'Consultor independiente con +12 años de experiencia, transformando ideas en productos excepcionales. Mi especialidad es la integración de IA generativa en aplicaciones móviles nativas.')}
-            </m.p>
-            <m.div className="mt-8 flex justify-center md:justify-start gap-4" variants={itemVariants}>
-              <Button size="lg">
-                <MessageCircle className="mr-2 h-5 w-5" />
-                {t('contactMe', 'Contáctame')}
+    <SectionWrapper
+      id="home"
+      className="page-section page-section--hero fx-chaos-bg"
+      aria-labelledby="hero-heading"
+      data-dev-id="2001"
+    >
+      <m.div ref={ref} className="hero-shell" initial={undefined} animate={undefined}>
+        <div className="hero-backdrop" aria-hidden="true" />
+        <div className="hero-grid">
+          <div className="hero-content">
+            <div className="hero-availability-row">
+              <AvailabilityBadge
+                availability={availability}
+                badgeClass={`availability-${availability}`}
+                label={availabilityLabel}
+                toggleLabel={availabilityToggleLabel}
+                onToggle={handleToggleAvailability}
+              />
+            </div>
+            <div className="hero-role-stack" aria-labelledby="hero-heading">
+              <span className="hero-role-stack__eyebrow">
+                {heroCopy.eyebrow ?? 'Liderazgo iOS · IA generativa'}
+              </span>
+              <h1 id="hero-heading" className="hero-role-stack__title">
+                <span className="hero-role-stack__title-part">{primaryRole}</span>
+                {secondaryRole ? (
+                  <>
+                    <span className="hero-role-stack__divider" aria-hidden="true">
+                      •
+                    </span>
+                    <span className="hero-role-stack__title-part hero-role-stack__title-part--accent">
+                      {secondaryRole}
+                    </span>
+                  </>
+                ) : null}
+              </h1>
+            </div>
+            {Array.isArray(heroCopy.descriptionSegments) && heroCopy.descriptionSegments.length ? (
+              <p className="hero-description">
+                {heroCopy.descriptionSegments.map((segment, index) => (
+                  <span
+                    key={`${segment.text}-${index}`}
+                    className={segment.accent === 'gradient' ? 'highlight' : undefined}
+                  >
+                    {segment.text}
+                  </span>
+                ))}
+              </p>
+            ) : null}
+            <div className="hero-cta-row">
+              <Button asChild>
+                <a href="#projects">{data.ui.viewProjects}</a>
               </Button>
-              <Button variant="secondary" size="lg">
-                <ArrowDownToLine className="mr-2 h-5 w-5" />
-                {t('downloadCv', 'Descargar CV')}
+              <Button variant="ghost" asChild>
+                <a href="#contact">{data.ui.bookCall}</a>
               </Button>
-            </m.div>
+            </div>
+            <ul className="hero-meta-bar">
+              {resolvedMeta.length ? (
+                <li className="hero-meta-chip">
+                  <MapPin size={16} aria-hidden="true" />
+                  {resolvedMeta[0].value}
+                </li>
+              ) : null}
+              {domainHint ? <li className="hero-meta-chip">{domainHint}</li> : null}
+            </ul>
           </div>
 
-          {/* Columna Derecha: Avatar y Estadísticas */}
-          <m.div className="md:col-span-2 flex flex-col items-center gap-8" variants={itemVariants}>
-            <div className="relative">
-              <div className="absolute -inset-1 bg-gradient-to-br from-brand-primary to-state-info rounded-full blur-md" />
-              <div className="relative w-40 h-40 flex items-center justify-center bg-surface-raised rounded-full border-2 border-border-subtle text-5xl font-bold text-text-primary">
-                JC
-              </div>
-            </div>
-            <div className="flex flex-col gap-4">
-              {data.stats.map((stat: Stat) => (
-                <div key={stat.id} className="flex items-center gap-4">
-                  <p className="text-3xl font-bold text-gradient">{stat.value}</p>
-                  <p className="text-sm text-text-muted">{stat.label}</p>
-                </div>
-              ))}
-            </div>
-          </m.div>
-        </m.div>
-      </div>
-    </section>
+          <aside className="hero-panel" aria-label={data.lang === 'en' ? 'Current focus' : 'Foco actual'}>
+            <Card as="div" className="hero-panel__card hero-panel__card--status" data-dev-id="2002">
+              <span className="hero-panel__eyebrow">{statusTitle}</span>
+              <p className="hero-panel__description">{statusDescription}</p>
+            </Card>
+
+            {noteFocusList.length ? (
+              <Card as="div" className="hero-panel__card hero-panel__card--note" data-dev-id="2004">
+                <span className="hero-panel__eyebrow">{note?.title ?? 'Frentes activos'}</span>
+                <ul className="hero-panel__note-chips">
+                  {noteFocusList.map(item => (
+                    <li key={item} className="hero-note-chip">
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </Card>
+            ) : null}
+
+            <Card as="div" className="hero-panel__card hero-panel__card--stats" data-dev-id="2003">
+              <span className="hero-panel__eyebrow">{data.lang === 'en' ? 'Measured impact' : 'Impacto medible'}</span>
+              <ul className="hero-panel__stats" aria-label={data.lang === 'en' ? 'Impact metrics' : 'Métricas de impacto'}>
+                {data.stats.map((stat: Stat) => (
+                  <li key={stat.id}>
+                    <span className="hero-panel__stat-value">{stat.value}</span>
+                    <span className="hero-panel__stat-label">{stat.label}</span>
+                  </li>
+                ))}
+              </ul>
+            </Card>
+          </aside>
+        </div>
+      </m.div>
+    </SectionWrapper>
   );
 }

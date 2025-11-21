@@ -4,6 +4,7 @@ import { describe, it, expect, vi } from 'vitest';
 
 import { NavigationProvider } from '../../contexts/NavigationContext';
 import { ThemeProvider } from '../../contexts/ThemeContext';
+import { TelemetryProvider } from '../../contexts/TelemetryContext';
 import { getSafeUrl } from '../../utils/urlValidation';
 import Projects from '../Projects';
 
@@ -57,15 +58,14 @@ vi.mock('../../contexts/LanguageContext', async () => {
   };
 });
 
-const renderWithProviders = (ui: React.ReactElement) => {
-  return render(
-    <ThemeProvider>
-        <NavigationProvider>
-            {ui}
-        </NavigationProvider>
-    </ThemeProvider>
+const renderWithProviders = (ui: React.ReactElement) =>
+  render(
+    <TelemetryProvider>
+      <ThemeProvider>
+        <NavigationProvider>{ui}</NavigationProvider>
+      </ThemeProvider>
+    </TelemetryProvider>
   );
-};
 
 describe('Projects Section', () => {
   it('should render a link for a project with a valid http/https url', () => {
