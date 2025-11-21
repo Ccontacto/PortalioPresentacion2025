@@ -63,9 +63,12 @@
 
   /* Unified token palette */
   --token-bg-dark: color-mix(in srgb, var(--dt-color-neutral-deep, #0b0b0b) 90%, black);
-  --token-card-dark: rgba(255, 255, 255, 0.05);
-  --token-border-dark: rgba(255, 255, 255, 0.12);
-  --token-text-dark: #ffffff;
+  --token-card-dark: rgba(248, 246, 239, 0.05);
+  --token-border-dark: rgba(248, 246, 239, 0.12);
+  --neutral-near-white: #f8f6ef;
+  --neutral-near-white-rgb: 248, 246, 239;
+  --neutral-near-black: #03050a;
+  --token-text-dark: var(--neutral-near-white);
   --token-subtext-dark: #c9c9c9;
   --token-shadow-dark: 0 4px 12px rgba(0, 0, 0, 0.45);
   --token-grad-ia: linear-gradient(90deg, #A5E4DC, #DAB7FF, #BDE3FF);
@@ -73,8 +76,8 @@
   --token-accent2: #DAB7FF;
   --token-accent3: #BDE3FF;
 
-  --color-white: var(--dt-color-neutral-elevated, #fdf8ef);
-  --color-true-black: var(--dt-color-neutral-black-true, #000000);
+  --color-white: var(--dt-color-neutral-elevated, var(--neutral-near-white));
+  --color-true-black: var(--dt-color-neutral-black-true, var(--neutral-near-black));
   --color-ink: var(--dt-color-neutral-ink, #020305);
   --color-black: var(--color-ink);
 
@@ -84,7 +87,7 @@
 
   --color-bg-dark: var(--dt-color-neutral-surface-dark, #090b11);
   --color-text-dark: var(--dt-color-semantic-text-inverse, #f5f5f5);
-  --color-border-dark: var(--dt-color-neutral-border-subtle-dark, #ffffff);
+  --color-border-dark: var(--dt-color-neutral-border-subtle-dark, var(--neutral-near-white));
 
   --surface-primary: var(--dt-color-semantic-bg-default, var(--color-bg-light));
   --surface-card: var(--dt-component-card-bg, #fef9f0);
@@ -131,15 +134,15 @@
   --button-outline: var(--color-true-black);
   --border-muted: var(--dt-color-semantic-border-default, rgba(15, 23, 42, 0.12));
 
-  --shadow-strong: var(--dt-shadow-surface-high, var(--color-true-black));
+  --shadow-strong: rgba(6, 10, 24, 0.45);
   --shadow-soft: rgba(148, 163, 184, 0.45);
-  --shadow-strong-hover: var(--dt-shadow-surface-medium, var(--color-true-black));
+  --shadow-strong-hover: rgba(6, 10, 24, 0.6);
 
   /* 2025 ALT BRAND: Blue ↔ Emerald */
   --gradient-brand-start: var(--dt-color-brand-primary-400, #60A5FA);
   --gradient-brand-end: var(--dt-color-brand-accent-500, #6EE7B7);
-  --gradient-hero-start: color-mix(in srgb, var(--gradient-brand-start) 65%, white);
-  --gradient-hero-end: color-mix(in srgb, var(--gradient-brand-end) 72%, white);
+  --gradient-hero-start: color-mix(in srgb, var(--gradient-brand-start) 65%, var(--neutral-near-white));
+  --gradient-hero-end: color-mix(in srgb, var(--gradient-brand-end) 72%, var(--neutral-near-white));
   --home-gradient: linear-gradient(120deg, #F9A8D4 0%, #C4B5FD 50%, #BAE6FD 100%);
   --hero-cta-gradient: linear-gradient(
     130deg,
@@ -149,21 +152,21 @@
   );
   --hero-chip-gradient: linear-gradient(
     180deg,
-    color-mix(in srgb, var(--home-card-bg) 92%, #ffffff) 0%,
+    color-mix(in srgb, var(--home-card-bg) 92%, var(--neutral-near-white)) 0%,
     var(--home-card-bg-muted) 100%
   );
   --home-shadow: 0 24px 50px rgba(15, 23, 42, 0.18);
   --home-shadow-hover: 0 32px 60px rgba(15, 23, 42, 0.28);
   --home-bg-gradient: linear-gradient(180deg, #fdfdff 0%, #f6f7ff 52%, #fbf3ff 100%);
   --home-surface: #f7f7f7;
-  --home-card-bg: #ffffff;
+  --home-card-bg: var(--neutral-near-white);
   --home-card-bg-muted: #f5f5f5;
   --home-text: #050505;
   --home-text-muted: rgba(5, 5, 5, 0.65);
   --home-border: #050505;
-  --home-inverse-text: #ffffff;
+  --home-inverse-text: var(--neutral-near-white);
   --hero-dark-accent-start: var(--dt-color-brand-primary-400, #38bdf8);
-  --hero-dark-accent-end: color-mix(in srgb, var(--dt-color-brand-amber-500, #fb7185) 90%, white);
+  --hero-dark-accent-end: color-mix(in srgb, var(--dt-color-brand-amber-500, #fb7185) 90%, var(--neutral-near-white));
   --hero-retro-accent-start: #00ffd9;
   --hero-retro-accent-end: #ff2d95;
   /* CTA identity tints (semi-homologated over brand gradient) */
@@ -417,50 +420,50 @@ html[data-theme='oled'] {
 
 html[data-theme='high-contrast'] {
   color-scheme: dark;
-  --home-gradient: linear-gradient(120deg, #ffffff, #ffffff);
-  --hero-cta-gradient: linear-gradient(120deg, #ffffff 0%, #ffffff 100%);
-  --hero-chip-gradient: linear-gradient(120deg, #000000 0%, #000000 100%);
+  --home-gradient: linear-gradient(120deg, #f5f7ff, #edf1ff);
+  --hero-cta-gradient: linear-gradient(120deg, #f7faf5 0%, #eef2ff 100%);
+  --hero-chip-gradient: linear-gradient(120deg, #070b14 0%, #0d1323 100%);
   --home-shadow: 0 0 0 rgba(0, 0, 0, 0);
   --home-shadow-hover: 0 0 0 rgba(0, 0, 0, 0);
-  --home-bg-gradient: #000000;
-  --home-surface: #000000;
-  --home-card-bg: #000000;
-  --home-card-bg-muted: #000000;
-  --home-text: #ffffff;
-  --home-text-muted: rgba(255, 255, 255, 0.85);
-  --home-border: #ffffff;
-  --home-inverse-text: #050505;
+  --home-bg-gradient: #070b14;
+  --home-surface: #060913;
+  --home-card-bg: #0b1020;
+  --home-card-bg-muted: #10162a;
+  --home-text: #f7f8fd;
+  --home-text-muted: rgba(247, 248, 253, 0.85);
+  --home-border: #f2f4ff;
+  --home-inverse-text: #090c14;
   --stars-primary: transparent;
   --stars-secondary: transparent;
   --stars-sparkle: transparent;
   --fx-linear-gradient: none;
-  --gradient-brand-start: #ffffff;
-  --gradient-brand-end: #ffffff;
-  --gradient-hero-start: rgba(255, 255, 255, 0.08);
-  --gradient-hero-end: rgba(255, 255, 255, 0.08);
-  --cta-whatsapp-tint: rgba(255, 255, 255, 0.18);
-  --cta-email-tint: rgba(255, 255, 255, 0.18);
-  --cta-copy-tint: rgba(255, 255, 255, 0.18);
-  --stat-card-1-bg: rgba(255, 255, 255, 0.12);
-  --stat-card-2-bg: rgba(255, 255, 255, 0.12);
-  --stat-card-3-bg: rgba(255, 255, 255, 0.12);
-  --stat-card-1-text: #ffffff;
-  --stat-card-2-text: #ffffff;
-  --stat-card-3-text: #ffffff;
-  --toast-success-bg: rgba(255, 255, 255, 0.18);
-  --toast-error-bg: rgba(255, 255, 255, 0.18);
-  --toast-info-bg: rgba(255, 255, 255, 0.18);
-  --toast-warning-bg: rgba(255, 255, 255, 0.18);
-  --toast-text: #000000;
-  --availability-available-bg-start: rgba(255, 255, 255, 0.25);
-  --availability-available-bg-end: rgba(255, 255, 255, 0.25);
-  --availability-available-text: #000000;
-  --availability-listening-bg-start: rgba(255, 255, 255, 0.25);
-  --availability-listening-bg-end: rgba(255, 255, 255, 0.25);
-  --availability-listening-text: #000000;
-  --availability-unavailable-bg-start: rgba(255, 255, 255, 0.25);
-  --availability-unavailable-bg-end: rgba(255, 255, 255, 0.25);
-  --availability-unavailable-text: #000000;
+  --gradient-brand-start: #f5f7ff;
+  --gradient-brand-end: #edf1ff;
+  --gradient-hero-start: rgba(247, 248, 253, 0.12);
+  --gradient-hero-end: rgba(239, 243, 255, 0.1);
+  --cta-whatsapp-tint: rgba(247, 248, 253, 0.22);
+  --cta-email-tint: rgba(247, 248, 253, 0.22);
+  --cta-copy-tint: rgba(247, 248, 253, 0.22);
+  --stat-card-1-bg: rgba(247, 248, 253, 0.2);
+  --stat-card-2-bg: rgba(247, 248, 253, 0.2);
+  --stat-card-3-bg: rgba(247, 248, 253, 0.2);
+  --stat-card-1-text: #0a0e18;
+  --stat-card-2-text: #0a0e18;
+  --stat-card-3-text: #0a0e18;
+  --toast-success-bg: rgba(247, 248, 253, 0.2);
+  --toast-error-bg: rgba(247, 248, 253, 0.2);
+  --toast-info-bg: rgba(247, 248, 253, 0.2);
+  --toast-warning-bg: rgba(247, 248, 253, 0.2);
+  --toast-text: #0a0e18;
+  --availability-available-bg-start: rgba(247, 248, 253, 0.25);
+  --availability-available-bg-end: rgba(247, 248, 253, 0.25);
+  --availability-available-text: #0a0e18;
+  --availability-listening-bg-start: rgba(247, 248, 253, 0.25);
+  --availability-listening-bg-end: rgba(247, 248, 253, 0.25);
+  --availability-listening-text: #0a0e18;
+  --availability-unavailable-bg-start: rgba(247, 248, 253, 0.25);
+  --availability-unavailable-bg-end: rgba(247, 248, 253, 0.25);
+  --availability-unavailable-text: #0a0e18;
 }
 
 html[data-theme='konami'] {
@@ -3056,7 +3059,7 @@ html[data-theme='dark'] .hero-subtitle span.gradient {
 }
 
 html[data-theme='dark'] .hero-tagline {
-  color: #fff;
+  color: var(--neutral-near-white);
   background: linear-gradient(
     135deg,
     color-mix(in srgb, var(--hero-dark-accent-start) 75%, rgba(255, 255, 255, 0.15)),
@@ -3371,12 +3374,12 @@ html[data-theme='dark'] .contact-highlight:hover {
   :root {
     --color-border-light: var(--color-ink);
     --color-text-light: var(--color-ink);
-    --color-bg-light: #ffffff;
+    --color-bg-light: var(--neutral-near-white);
   }
 
   html[data-theme='dark'] {
-    --color-border-dark: #ffffff;
-    --color-text-dark: #ffffff;
+    --color-border-dark: var(--neutral-near-white);
+    --color-text-dark: var(--neutral-near-white);
     --color-bg-dark: var(--color-ink);
   }
 
@@ -3762,7 +3765,7 @@ html[data-theme='dark'] .contact-hero__accent {
   transform: translate(-3px, -5px);
   box-shadow: var(--home-shadow-hover);
   border-color: var(--home-border);
-  background: #ffffff;
+  background: var(--neutral-near-white);
   color: var(--home-text);
 }
 
@@ -3956,6 +3959,8 @@ html[data-theme='konami'] .contact-info__location {
   flex-direction: column;
   gap: 16px;
   margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 .contact-info__row {
@@ -3964,7 +3969,7 @@ html[data-theme='konami'] .contact-info__location {
   gap: 6px;
 }
 
-.contact-info__row dt {
+.contact-info__stat-label {
   font-size: 0.82rem;
   font-weight: 800;
   text-transform: uppercase;
@@ -3972,11 +3977,23 @@ html[data-theme='konami'] .contact-info__location {
   color: var(--home-text-muted);
 }
 
-.contact-info__row dd {
+.contact-info__stat-value {
+  display: block;
   margin: 0;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   font-weight: 800;
   color: var(--home-text);
+}
+
+.contact-info__stat-link {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.contact-info__stat-link:hover {
+  text-decoration: underline;
 }
 
 .contact-info__row a {
@@ -4218,7 +4235,7 @@ html[data-theme='konami'] .experience-header__subtitle {
 
 html[data-theme='dark'] .project-card__link {
   background: linear-gradient(135deg, rgba(31, 41, 55, 0.95), rgba(15, 23, 42, 0.9));
-  color: #fff;
+  color: var(--neutral-near-white);
   border-color: rgba(255, 255, 255, 0.8);
   box-shadow: 0 18px 44px rgba(255, 255, 255, 0.22);
 }
@@ -4797,8 +4814,8 @@ html[data-theme='dark'] .hero-name {
   border: 2px solid transparent;
   background: var(--home-gradient) border-box;
   -webkit-mask:
-    linear-gradient(#fff 0 0) padding-box,
-    linear-gradient(#fff 0 0);
+    linear-gradient(var(--neutral-near-white) 0 0) padding-box,
+    linear-gradient(var(--neutral-near-white) 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   z-index: -1;
@@ -5286,7 +5303,7 @@ html[data-theme='dark'] .hero-action--ghost {
 
 html[data-theme='dark'] .hero-action--primary {
   background: linear-gradient(135deg, rgba(56, 189, 248, 0.9), rgba(236, 72, 153, 0.9));
-  color: #fff;
+  color: var(--neutral-near-white);
   box-shadow: 0 18px 38px rgba(255, 255, 255, 0.4);
 }
 
@@ -5296,8 +5313,8 @@ html[data-theme='konami'] .hero-action--primary {
 }
 
 html[data-theme='konami'] .hero-action--ghost {
-  background: rgba(0, 0, 0, 0.65);
-  color: #fff;
+  background: rgba(4, 6, 10, 0.65);
+  color: var(--neutral-near-white);
   box-shadow: var(--solid-shadow-retro);
 }
 

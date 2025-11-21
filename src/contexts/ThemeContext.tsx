@@ -55,25 +55,20 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (typeof document === 'undefined') return;
     const root = document.documentElement;
-    root.classList.remove('dark');
-    root.removeAttribute('data-theme');
+    const resolvedTheme: Theme = isKonami ? 'konami' : baseTheme;
 
-    if (baseTheme === 'dark') {
-      root.classList.add('dark');
-    } else if (baseTheme === 'oled') {
-      root.classList.add('dark');
-      root.setAttribute('data-theme', 'oled');
-    } else if (baseTheme === 'high-contrast') {
-      root.setAttribute('data-theme', 'high-contrast');
-    }
+    root.setAttribute('data-theme', resolvedTheme);
 
+    const shouldUseDarkChrome = resolvedTheme === 'dark' || resolvedTheme === 'oled' || resolvedTheme === 'konami';
+    root.classList.toggle('dark', shouldUseDarkChrome);
+    root.classList.toggle('konami', resolvedTheme === 'konami');
+  }, [baseTheme, isKonami]);
+
+  useEffect(() => {
     storage.set(THEME_STORAGE_KEY, baseTheme);
   }, [baseTheme]);
 
   useEffect(() => {
-    if (typeof document !== 'undefined') {
-      document.documentElement.classList.toggle('konami', isKonami);
-    }
     storage.set(KONAMI_STORAGE_KEY, isKonami);
   }, [isKonami]);
 

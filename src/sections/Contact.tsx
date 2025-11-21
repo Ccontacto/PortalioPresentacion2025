@@ -76,6 +76,32 @@ export default function Contact() {
     .replace(/IA/gi, '<span class="contact-hero__accent">IA</span>')
     .replace(/iOS/gi, '<span class="contact-hero__accent">iOS</span>');
 
+  const infoPanelCopy =
+    data.lang === 'en'
+      ? {
+          eyebrow: 'How we collaborate',
+          title: '30-minute tactical kickoff',
+          description: 'We align context, metrics and clear next steps so the roadmap is ready to execute from call one.'
+        }
+      : {
+          eyebrow: 'Cómo colaboramos',
+          title: 'Kickoff táctico en 30 minutos',
+          description: 'Alineamos contexto, métricas y siguientes pasos listos para ejecutar desde la primera sesión.'
+        };
+
+  const infoHighlights =
+    data.lang === 'en'
+      ? [
+          { label: 'Response time', value: '<24h · GMT-6 (CDMX)' },
+          { label: 'Ideal collaboration', value: 'Discovery sprint · AI copilots · iOS leadership' },
+          { label: 'Deliverables', value: 'Ready-to-run playbooks, telemetry dashboards, 1:1 mentoring' }
+        ]
+      : [
+          { label: 'Tiempo de respuesta', value: '<24h · Zona horaria CDMX (GMT-6)' },
+          { label: 'Colaboración ideal', value: 'Discovery sprint · Copilotos IA · Liderazgo iOS' },
+          { label: 'Entregables', value: 'Playbooks accionables, dashboards de telemetría y mentoría 1:1' }
+        ];
+
   return (
     <>
       <SectionWrapper id="contact" aria-labelledby="contact-heading" data-dev-id="9000">
@@ -140,32 +166,27 @@ export default function Contact() {
 
             <section className="contact-info" data-dev-id="9004">
               <header className="contact-info__header" data-dev-id="9005">
-                <h3 className="contact-info__title">{data.name}</h3>
-                <p className="contact-info__tagline">{data.title}</p>
-                <span className="contact-info__location">
-                  {data.lang === 'en' ? 'Based in' : 'Basado en'} {data.location}
-                </span>
+                <p className="contact-info__tagline">{infoPanelCopy.eyebrow}</p>
+                <h3 className="contact-info__title">{infoPanelCopy.title}</h3>
+                <p className="contact-info__location">{infoPanelCopy.description}</p>
               </header>
 
-              <dl className="contact-info__list">
-                <div className="contact-info__row contact-info__row--primary">
-                  <dt>Email</dt>
-                  <dd>
-                    <a href={`mailto:${data.email}`}>{data.email}</a>
-                  </dd>
-                </div>
-
+              <ul className="contact-info__list">
+                {infoHighlights.map(item => (
+                  <li key={item.label} className="contact-info__row contact-info__row--primary">
+                    <span className="contact-info__stat-label">{item.label}</span>
+                    <span className="contact-info__stat-value">{item.value}</span>
+                  </li>
+                ))}
                 {safeLinkedinUrl ? (
-                  <div className="contact-info__row">
-                    <dt>LinkedIn</dt>
-                    <dd>
-                      <a href={safeLinkedinUrl} target="_blank" rel="noopener noreferrer">
-                        {linkedinLabel}
-                      </a>
-                    </dd>
-                  </div>
+                  <li className="contact-info__row contact-info__row--link">
+                    <span className="contact-info__stat-label">{data.lang === 'en' ? 'Case studies' : 'Casos recientes'}</span>
+                    <a href={safeLinkedinUrl} target="_blank" rel="noopener noreferrer" className="contact-info__stat-link">
+                      {linkedinLabel}
+                    </a>
+                  </li>
                 ) : null}
-              </dl>
+              </ul>
 
               <footer className="contact-info__footer">
                 <p>{data.sections.contact.closing}</p>

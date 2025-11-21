@@ -3,8 +3,8 @@ import '@testing-library/jest-dom/vitest';
 import { describe, it, expect, vi } from 'vitest';
 
 import { NavigationProvider } from '../../contexts/NavigationContext';
-import { ThemeProvider } from '../../contexts/ThemeContext';
 import { TelemetryProvider } from '../../contexts/TelemetryContext';
+import { ThemeProvider } from '../../contexts/ThemeContext';
 import { getSafeUrl } from '../../utils/urlValidation';
 import Projects from '../Projects';
 
