@@ -2,7 +2,7 @@ import { useCallback, useRef } from 'react';
 
 import { useLanguage } from '../contexts/LanguageContext';
 import { useToast } from '../contexts/ToastContext';
-import { generatePdf } from '../utils/pdfGenerator';
+import { generateATSPdf } from '../utils/pdfGenerator.ats';
 
 import type { PortfolioData } from '../types/portfolio';
 
@@ -48,7 +48,7 @@ export function useCvDownload() {
       isGeneratingRef.current = true;
 
       try {
-        await generatePdf(targetData, targetLang);
+        await generateATSPdf(targetData, targetLang);
         showToast('CV listo para descargar', 'success');
       } catch (error) {
         handleError(error);

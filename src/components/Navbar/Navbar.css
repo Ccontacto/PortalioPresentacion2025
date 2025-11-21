@@ -1,0 +1,20 @@
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(12px);
+  background: rgba(var(--bg-primary-rgb), 0.8);
+  border-bottom: 1px solid var(--border-subtle);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.navbar.scrolled {
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+  background: rgba(var(--bg-primary-rgb), 0.95);
+}
+
+@supports not (backdrop-filter: blur(12px)) {
+  .navbar {
+    background: var(--bg-primary);
+  }
+}

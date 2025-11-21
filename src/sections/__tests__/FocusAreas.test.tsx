@@ -8,6 +8,15 @@ vi.mock('../../contexts/LanguageContext', () => ({
   useLanguage: () => mockUseLanguage()
 }));
 
+vi.mock('../../contexts/TelemetryContext', () => ({
+  useTelemetry: () => ({
+    preference: 'denied',
+    setPreference: vi.fn(),
+    trackEvent: vi.fn(),
+    resetMetrics: vi.fn()
+  })
+}));
+
 vi.mock('../../hooks/useReducedMotion', () => ({
   useReducedMotion: vi.fn(() => false)
 }));
@@ -58,3 +67,6 @@ describe('FocusAreas', () => {
     expect(screen.getAllByRole('heading', { level: 3 })).toHaveLength(2);
   });
 });
+vi.mock('../../telemetry/useSectionTelemetry', () => ({
+  useSectionTelemetry: vi.fn()
+}));

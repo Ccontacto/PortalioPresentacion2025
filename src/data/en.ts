@@ -142,6 +142,8 @@ export const en: PortfolioData = {
     prevProjects: 'View previous projects',
     nextProjects: 'View next projects',
     prevSkills: 'View previous skills',
-    nextSkills: 'View next skills'
+    nextSkills: 'View next skills',
+    themeSwitcherLabel: 'Theme',
+    themeSwitcherSubtitle: 'Visual modes'
   }
 } as const;

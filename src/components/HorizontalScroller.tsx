@@ -40,7 +40,7 @@ export default function HorizontalScroller({
     .filter(Boolean)
     .join(' ');
 
-  const safeUi = data.ui ?? ({} as UIStrings);
+  const safeUi = (data as { ui?: UIStrings }).ui ?? ({} as UIStrings);
   const prevLabel: string = safeUi[prevLabelKey] ?? 'View previous items';
   const nextLabel: string = safeUi[nextLabelKey] ?? 'View next items';
 

@@ -1,5 +1,7 @@
 import { useEffect, useRef } from 'react';
 
+import { getAccentColorPalette } from '../utils/designTokens';
+
 type ConfettiParticle = {
   x: number;
   y: number;
@@ -10,8 +12,7 @@ type ConfettiParticle = {
   life: number;
 };
 
-const COLORS = ['#FFB7DD', '#A0E7E5', '#B5EAD7', '#39FF14', '#FFF3B0'];
-const BASE_PARTICLE_COUNT = 360;
+const BASE_PARTICLE_COUNT = 420;
 
 export default function ConfettiCanvas() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -40,10 +41,8 @@ export default function ConfettiCanvas() {
     };
 
     const spawnParticles = (count: number) => {
-      // More efficient: slice instead of splice to avoid shifting all elements
-      if (particlesRef.current.length > 1500) {
-        particlesRef.current = particlesRef.current.slice(-1000);
-      }
+      const palette = getAccentColorPalette();
+      if (particlesRef.current.length > 1500) particlesRef.current.splice(0, 500);
       const canvas = canvasRef.current;
       if (!canvas) return;
       const centerX = canvas.width / (window.devicePixelRatio || 1) / 2;
@@ -62,7 +61,7 @@ export default function ConfettiCanvas() {
           vx: Math.cos(angle) * speed + wobble,
           vy: Math.sin(angle) * speed - (Math.random() * 2 + 0.5),
           size: Math.random() * 4 + 3,
-          color: COLORS[Math.floor(Math.random() * COLORS.length)],
+          color: palette[Math.floor(Math.random() * palette.length)],
           life: Math.random() * 30 + 40
         });
       }
@@ -75,23 +74,24 @@ export default function ConfettiCanvas() {
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      const particles = particlesRef.current;
-      for (let index = particles.length - 1; index >= 0; index -= 1) {
-        const particle = particles[index];
-        particle.vy += 0.12;
-        particle.x += particle.vx;
-        particle.y += particle.vy;
-        particle.life -= 1;
+      particlesRef.current = particlesRef.current.filter(particle => {
+        const next = { ...particle };
+        next.vy += 0.12;
+        next.x += next.vx;
+        next.y += next.vy;
+        next.life -= 1;
 
-        ctx.fillStyle = particle.color;
-        ctx.fillRect(particle.x, particle.y, particle.size, particle.size);
+        ctx.fillStyle = next.color;
+        ctx.fillRect(next.x, next.y, next.size, next.size);
 
-        if (particle.life <= 0 || particle.y >= canvas.height) {
-          particles.splice(index, 1);
+        if (next.life > 0 && next.y < canvas.height) {
+          Object.assign(particle, next);
+          return true;
         }
-      }
+        return false;
+      });
 
-      if (particles.length > 0) {
+      if (particlesRef.current.length > 0) {
         animationFrameRef.current = window.requestAnimationFrame(step);
       } else {
         ctx.clearRect(0, 0, canvas.width, canvas.height);

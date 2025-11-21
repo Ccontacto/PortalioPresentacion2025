@@ -7,6 +7,8 @@ import { ensureStorageVersion } from '@utils/storage';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
+import './styles/themes.css';
+import './styles/global.css';
 
 const rootElement = document.getElementById('root');
 

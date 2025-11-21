@@ -45,15 +45,16 @@ const mockData = {
 
 // Mock useLanguage hook
 vi.mock('../../contexts/LanguageContext', async () => {
-    const actual = await vi.importActual('../../contexts/LanguageContext');
-    return {
-        ...actual as object,
-        useLanguage: () => ({
-            data: mockData,
-            currentLang: 'es',
-            toggleLanguage: () => {},
-        }),
-    };
+  const actual = await vi.importActual('../../contexts/LanguageContext');
+  return {
+    ...(actual as object),
+    useLanguage: () => ({
+      data: mockData,
+      currentLang: 'es',
+      toggleLanguage: () => {},
+      t: (_key: string, defaultValue?: string) => defaultValue ?? _key
+    })
+  };
 });
 
 const renderWithProviders = (ui: React.ReactElement) => {
