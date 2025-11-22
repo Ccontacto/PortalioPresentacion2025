@@ -25,6 +25,14 @@ sin romper la arquitectura existente.
 
 ---
 
+## Notas específicas del repo (PortalioPresentacion2025)
+
+- **Iconos:** Usa siempre `VectorIcon` (`src/components/icons/VectorIcon.tsx`) y/o `navIconFor()` para píldoras de navegación. No reinstales `lucide-react`. Si falta un ícono, agrégalo al mapa SVG y reutiliza tokens (`currentColor`, `strokeWidth`).
+- **Menus flotantes:** `Dock`, `HamburgerMenu` y `QuickActions` comparten la misma iconografía + tokens. Cualquier nuevo ítem debe seguir ese patrón para no romper los temas (light/dark/oled/konami).
+- **Landing vs Portfolio:** El home (`/`) carga `LandingPlaceholder`. El portfolio completo vive bajo `VITE_PORTFOLIO_MOUNT` (por defecto `/portafolio/JoseCarlos`). Respeta esa puerta cuando propongas rutas/enlaces.
+- **Deploy Cloudflare:** `PORTFOLIO_BASE_PATH` controla `vite.config.ts`. Para builds remotos usa `npm run build:cloudflare`, que setea los env vars adecuados.
+- **Specs/tokens:** El contenido viene de `PortfolioSpecProvider`; evita duplicar copy estático y conecta los componentes nuevos a `usePortfolioContent`.
+
 ## Detección de stack y lenguaje
 
 Antes de sugerir código, SIEMPRE:
