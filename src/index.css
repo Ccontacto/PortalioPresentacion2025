@@ -255,7 +255,7 @@ html[data-theme='dark'] {
   --home-text: #f8fafc;
   --home-text-muted: rgba(248, 250, 252, 0.88);
   --home-border: rgba(248, 250, 252, 0.4);
-  --home-inverse-text: #050505;
+  --home-inverse-text: #f8fafc;
   --surface-card: #111b2c;
   --surface-panel: #141f33;
   --surface-card-gradient-right: linear-gradient(to right, rgba(12, 17, 27, 0.9), rgba(12, 17, 27, 0.3));
@@ -348,7 +348,7 @@ html[data-theme='oled'] {
   --home-text: #f8fafc;
   --home-text-muted: rgba(248, 250, 252, 0.7);
   --home-border: rgba(248, 250, 252, 0.55);
-  --home-inverse-text: #050505;
+  --home-inverse-text: #f8fafc;
   --surface-card: color-mix(in srgb, #05070d 94%, #010104);
   --surface-panel: color-mix(in srgb, var(--surface-card) 82%, rgba(255, 255, 255, 0.03));
   --surface-card-gradient-right: linear-gradient(
@@ -615,6 +615,17 @@ html[data-theme='konami'] .dock {
 }
 
 .dock-item svg {
+  width: 22px;
+  height: 22px;
+}
+
+.dock-item__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dock-item__icon svg {
   width: 22px;
   height: 22px;
 }
