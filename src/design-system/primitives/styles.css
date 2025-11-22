@@ -51,6 +51,19 @@
   color: var(--dt-color-fg-primary);
 }
 
+html[data-theme='dark'] .ds-button--primary,
+[data-theme='dark'] .ds-button--primary {
+  background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent-hover) 80%, transparent));
+  color: var(--text-primary);
+  box-shadow: 0 18px 32px rgba(0, 0, 0, 0.55);
+}
+
+html[data-theme='dark'] .ds-button--primary:hover,
+[data-theme='dark'] .ds-button--primary:focus-visible {
+  background: color-mix(in srgb, var(--accent-hover) 80%, rgba(255, 255, 255, 0.15));
+  box-shadow: 0 22px 36px rgba(0, 0, 0, 0.6);
+}
+
 .ds-section-header {
   display: flex;
   flex-direction: column;

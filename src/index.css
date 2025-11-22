@@ -244,20 +244,20 @@
 html[data-theme='dark'] {
   color-scheme: dark;
   --home-gradient: linear-gradient(180deg, #05070d, #05070d);
-  --hero-cta-gradient: linear-gradient(135deg, #1d2434 0%, #283144 100%);
-  --hero-chip-gradient: linear-gradient(180deg, #080c16 0%, #111827 100%);
+  --hero-cta-gradient: linear-gradient(135deg, #1d2434 0%, #2b3650 100%);
+  --hero-chip-gradient: linear-gradient(180deg, #0a1221 0%, #162038 100%);
   --home-shadow: 0 24px 45px rgba(3, 3, 3, 0.75);
   --home-shadow-hover: 0 34px 60px rgba(0, 0, 0, 0.85);
   --home-bg-gradient: #05070d;
   --home-surface: #05070d;
-  --home-card-bg: #0c111b;
-  --home-card-bg-muted: #151c2b;
+  --home-card-bg: #0f172a;
+  --home-card-bg-muted: #1f2937;
   --home-text: #f8fafc;
-  --home-text-muted: rgba(248, 250, 252, 0.75);
-  --home-border: rgba(248, 250, 252, 0.25);
+  --home-text-muted: rgba(248, 250, 252, 0.88);
+  --home-border: rgba(248, 250, 252, 0.4);
   --home-inverse-text: #050505;
-  --surface-card: #0c111b;
-  --surface-panel: #090d16;
+  --surface-card: #111b2c;
+  --surface-panel: #141f33;
   --surface-card-gradient-right: linear-gradient(to right, rgba(12, 17, 27, 0.9), rgba(12, 17, 27, 0.3));
   --surface-card-gradient-left: linear-gradient(to left, rgba(12, 17, 27, 0.9), rgba(12, 17, 27, 0.3));
   --surface-card-radial-top: transparent;
@@ -281,6 +281,13 @@ html[data-theme='dark'] {
   --gradient-hero-end: rgba(17, 24, 39, 0.9);
   --gradient-close-start: rgba(255, 183, 221, 0.25);
   --gradient-close-end: rgba(255, 218, 235, 0.32);
+  --text-primary: #f8fafc;
+  --text-secondary: rgba(248, 250, 252, 0.82);
+  --text-tertiary: rgba(248, 250, 252, 0.6);
+  --accent: #38bdf8;
+  --accent-hover: #0ea5e9;
+  --border-subtle: rgba(248, 250, 252, 0.2);
+  --border-strong: rgba(248, 250, 252, 0.45);
   /* Slightly stronger tints in dark for separation */
   --cta-whatsapp-tint: rgba(6, 95, 70, 0.3);
   --cta-email-tint:    rgba(29, 78, 216, 0.35);
@@ -440,51 +447,43 @@ html[data-theme='high-contrast'] {
 }
 
 html[data-theme='konami'] {
-  --surface-primary: #07040f;
-  --surface-card: rgba(12, 18, 36, 0.96);
-  --surface-panel: rgba(10, 15, 32, 0.9);
-  --surface-card-gradient-right: linear-gradient(to right, rgba(0, 198, 255, 0.22), transparent);
-  --surface-card-gradient-left: linear-gradient(to left, rgba(255, 0, 229, 0.22), transparent);
-  --surface-card-radial-top: rgba(0, 198, 255, 0.35);
-  --surface-card-radial-bottom: rgba(113, 255, 178, 0.28);
-  --surface-card-radial-overlay: radial-gradient(
-      circle 140px at top right,
-      var(--surface-card-radial-top),
-      transparent 60%
-    ),
+  --surface-primary: #040209;
+  --surface-card: rgba(7, 10, 24, 0.92);
+  --surface-panel: rgba(5, 7, 20, 0.9);
+  --surface-card-gradient-right: linear-gradient(to right, rgba(0, 255, 156, 0.24), transparent);
+  --surface-card-gradient-left: linear-gradient(to left, rgba(255, 0, 229, 0.24), transparent);
+  --surface-card-radial-top: rgba(0, 255, 156, 0.45);
+  --surface-card-radial-bottom: rgba(0, 198, 255, 0.32);
+  --surface-card-radial-overlay: radial-gradient(circle 140px at top right, var(--surface-card-radial-top), transparent 60%),
     radial-gradient(circle 140px at bottom left, var(--surface-card-radial-bottom), transparent 60%);
-  --surface-card-radial-overlay-wide: radial-gradient(
-      circle 200px at 110% 0%,
-      rgba(255, 0, 229, 0.32),
-      transparent 60%
-    ),
-    radial-gradient(circle 200px at -10% 100%, rgba(0, 198, 255, 0.3), transparent 60%);
+  --surface-card-radial-overlay-wide: radial-gradient(circle 200px at 110% 0%, rgba(255, 0, 229, 0.28), transparent 60%),
+    radial-gradient(circle 200px at -10% 100%, rgba(0, 198, 255, 0.28), transparent 60%);
   --text-strong: #71ffb2;
-  --text-inverse: #0a0c1a;
-  --text-cta: #0a0c1a;
+  --text-inverse: #03040a;
+  --text-cta: #03040a;
   --logo-text: #71ffb2;
-  --text-on-brand: #0a0c1a;
-  --border-strong: #71ffb2;
-  --border-muted: rgba(113, 255, 178, 0.3);
-  --shadow-strong: #00ff9c;
-  --shadow-soft: rgba(0, 255, 156, 0.35);
-  --shadow-strong-hover: #00c6ff;
+  --text-on-brand: #03040a;
+  --border-strong: rgba(0, 255, 156, 0.65);
+  --border-muted: rgba(0, 198, 255, 0.35);
+  --shadow-strong: rgba(0, 255, 156, 0.65);
+  --shadow-soft: rgba(0, 198, 255, 0.35);
+  --shadow-strong-hover: rgba(255, 0, 229, 0.55);
   --stars-primary: rgba(0, 255, 156, 0.75);
   --stars-secondary: rgba(255, 0, 229, 0.55);
-  --stars-sparkle: rgba(255, 255, 255, 0.15);
-  --stars-pulse-duration: 16s;
-  --gradient-brand-start: #00c6ff;
+  --stars-sparkle: rgba(255, 255, 255, 0.18);
+  --stars-pulse-duration: 12s;
+  --gradient-brand-start: #00f0b8;
   --gradient-brand-end: #ff00e5;
-  --gradient-hero-start: rgba(0, 198, 255, 0.22);
-  --gradient-hero-end: rgba(255, 0, 229, 0.22);
-  --gradient-close-start: rgba(0, 198, 255, 0.18);
-  --gradient-close-end: rgba(255, 0, 229, 0.18);
-  --gradient-whatsapp-start: rgba(113, 255, 178, 0.42);
-  --gradient-whatsapp-end: rgba(0, 198, 255, 0.42);
-  --gradient-email-start: rgba(0, 198, 255, 0.42);
-  --gradient-email-end: rgba(255, 0, 229, 0.42);
-  --gradient-copy-start: rgba(255, 0, 229, 0.38);
-  --gradient-copy-end: rgba(113, 255, 178, 0.38);
+  --gradient-hero-start: rgba(0, 198, 255, 0.32);
+  --gradient-hero-end: rgba(255, 0, 229, 0.32);
+  --gradient-close-start: rgba(0, 198, 255, 0.28);
+  --gradient-close-end: rgba(255, 0, 229, 0.28);
+  --gradient-whatsapp-start: rgba(113, 255, 178, 0.52);
+  --gradient-whatsapp-end: rgba(0, 198, 255, 0.48);
+  --gradient-email-start: rgba(0, 198, 255, 0.52);
+  --gradient-email-end: rgba(255, 0, 229, 0.48);
+  --gradient-copy-start: rgba(255, 0, 229, 0.48);
+  --gradient-copy-end: rgba(113, 255, 178, 0.48);
   --cta-whatsapp-start: #00f0b8;
   --cta-whatsapp-end: #00bdf2;
   --cta-email-start: #00c6ff;
@@ -586,11 +585,19 @@ body::after {
   gap: 0.65rem;
   padding: 0.25rem;
   border-radius: 999px;
-  background: color-mix(in srgb, var(--surface-panel) 88%, rgba(15, 23, 42, 0.4));
-  border: 1px solid color-mix(in srgb, var(--border-subtle) 75%, transparent);
+  background: color-mix(in srgb, var(--surface-card) 92%, rgba(255, 255, 255, 0.45));
+  border: 1px solid color-mix(in srgb, var(--border-subtle) 65%, transparent);
   box-shadow: var(--elev-2);
   backdrop-filter: blur(16px);
   transition: transform var(--motion-normal), box-shadow var(--motion-normal);
+  color: var(--home-text);
+}
+
+html[data-theme='konami'] .dock {
+  background: linear-gradient(120deg, rgba(0, 255, 156, 0.25), rgba(255, 0, 229, 0.25), rgba(0, 198, 255, 0.25));
+  background-size: 180% 180%;
+  border-color: rgba(0, 255, 156, 0.35);
+  animation: retroScan 14s linear infinite;
 }
 
 .dock-item {
@@ -633,6 +640,30 @@ body::after {
 .dock-item:focus-visible {
   outline: 2px solid var(--focus-color);
   outline-offset: 2px;
+}
+
+html[data-theme='dark'] .dock {
+  background: color-mix(in srgb, var(--surface-panel) 92%, rgba(255, 255, 255, 0.04));
+  border-color: rgba(248, 250, 252, 0.12);
+  box-shadow: 0 18px 28px rgba(0, 0, 0, 0.65);
+}
+
+html[data-theme='dark'] .dock-item {
+  border-color: rgba(248, 250, 252, 0.2);
+  background: color-mix(in srgb, var(--surface-card) 88%, transparent);
+  color: var(--home-text);
+}
+
+html[data-theme='dark'] .dock-item:hover,
+html[data-theme='dark'] .dock-item:focus-visible {
+  background: rgba(248, 250, 252, 0.08);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.65);
+}
+
+html[data-theme='dark'] .dock-item.active {
+  background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent-hover) 75%, transparent));
+  color: var(--home-inverse-text);
+  box-shadow: 0 20px 32px rgba(0, 0, 0, 0.7);
 }
 
 .dock-theme-switcher {
@@ -889,6 +920,42 @@ html[data-theme='oled'] body::after {
   }
 }
 
+@keyframes retroGlow {
+  0% {
+    text-shadow: 0 0 8px rgba(0, 255, 156, 0.35), 0 0 18px rgba(0, 198, 255, 0.25);
+  }
+  50% {
+    text-shadow: 0 0 14px rgba(0, 255, 156, 0.65), 0 0 28px rgba(0, 198, 255, 0.5);
+  }
+  100% {
+    text-shadow: 0 0 8px rgba(0, 255, 156, 0.35), 0 0 18px rgba(0, 198, 255, 0.25);
+  }
+}
+
+@keyframes retroScan {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes retroPulse {
+  0%,
+  100% {
+    box-shadow: 0 20px 28px rgba(0, 198, 255, 0.25), inset 0 0 0 rgba(0, 255, 156, 0);
+    transform: translateY(0);
+  }
+  50% {
+    box-shadow: 0 26px 46px rgba(255, 0, 229, 0.4), inset 0 0 12px rgba(0, 255, 156, 0.38);
+    transform: translateY(-2px);
+  }
+}
+
 .micro-solid {
   box-shadow: var(--solid-shadow);
   transition: transform var(--motion-normal) var(--ease-standard), box-shadow var(--motion-normal) var(--ease-standard);
@@ -969,6 +1036,7 @@ html[data-theme='dark'] .micro-solid:focus-visible {
   background-image: radial-gradient(circle at top right, rgba(249, 168, 212, 0.25), transparent 60%),
     radial-gradient(circle at 20% 40%, rgba(186, 230, 253, 0.2), transparent 55%),
     var(--home-card-bg);
+  color: var(--home-text);
 }
 
 .dev-editor-panel__body {
@@ -1950,7 +2018,7 @@ html[data-theme='konami'] .icon-btn:hover {
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  box-shadow: 10px 10px 0 var(--shadow-strong);
+  box-shadow: var(--elev-2);
   cursor: pointer;
   transition:
     transform var(--motion-fast) var(--ease-standard),
@@ -1963,9 +2031,9 @@ html[data-theme='konami'] .icon-btn:hover {
 }
 
 .search-trigger:hover {
-  transform: translate(-3px, -3px);
-  box-shadow: 12px 12px 0 var(--shadow-strong-hover);
-  background: rgba(148, 163, 184, 0.12);
+  transform: translate(-1px, -1px);
+  box-shadow: var(--elev-3);
+  background: color-mix(in srgb, var(--surface-card) 85%, transparent);
 }
 
 .search-trigger:focus-visible {
@@ -1974,13 +2042,13 @@ html[data-theme='konami'] .icon-btn:hover {
 }
 
 html[data-theme='dark'] .search-trigger {
-  background: var(--surface-panel);
-  box-shadow: 10px 10px 0 var(--shadow-soft);
+  background: color-mix(in srgb, var(--surface-panel) 90%, transparent);
+  box-shadow: 0 18px 28px rgba(0, 0, 0, 0.55);
 }
 
 html[data-theme='dark'] .search-trigger:hover {
   background: rgba(255, 255, 255, 0.08);
-  box-shadow: 12px 12px 0 var(--shadow-soft);
+  box-shadow: 0 20px 32px rgba(0, 0, 0, 0.6);
 }
 
 .search-trigger--icon {
@@ -3844,6 +3912,11 @@ html[data-theme='konami'] .contact-cta:hover {
   border-color: rgba(113, 255, 178, 0.7);
 }
 
+html[data-theme='konami'] .contact-cta,
+html[data-theme='konami'] .hero-action--primary {
+  animation: retroPulse 3.8s ease-in-out infinite;
+}
+
 
 .project-thumb {
   width: 100%;
@@ -3990,6 +4063,7 @@ html[data-theme='konami'] .experience-header__subtitle {
   max-width: 420px;
   min-height: clamp(320px, 52vh, 520px);
   align-self: stretch;
+  color: var(--home-text);
 }
 
 .project-card a {
@@ -4644,7 +4718,7 @@ html[data-theme='dark'] .hero-name {
   border: 2px solid var(--home-border);
   padding: 0.58rem 1.9rem;
   background: var(--hero-cta-gradient);
-  color: var(--home-inverse-text);
+  color: var(--home-text);
   font-weight: 900;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -4909,6 +4983,13 @@ html[data-theme='dark'] .hero-name {
   opacity: 0.75;
 }
 
+.experience-node__period {
+  color: color-mix(in srgb, var(--home-text) 90%, var(--home-text-muted));
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
 .page-section--focus {
   background: var(--surface-primary);
   padding: clamp(80px, 12vh, 120px) clamp(16px, 6vw, 56px) clamp(100px, 14vh, 140px);
@@ -4945,19 +5026,23 @@ html[data-theme='dark'] .hero-name {
   color: var(--home-text-muted);
 }
 
-.focus-grid {
-  width: 100%;
-  max-width: 1120px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: clamp(20px, 3vw, 28px);
-}
-
 .focus-card {
   position: relative;
   border-radius: 32px;
   overflow: visible;
   transition: transform var(--motion-normal) var(--ease-standard);
+  color: var(--home-text);
+}
+
+.page-section--focus .projects-track {
+  align-items: stretch;
+  padding-left: 0;
+}
+
+.page-section--focus .projects-track .focus-card {
+  flex: 0 0 clamp(280px, 32vw, 420px);
+  min-width: clamp(280px, 32vw, 420px);
+  min-height: clamp(360px, 55vh, 520px);
 }
 
 .focus-card::after {
@@ -5244,6 +5329,10 @@ html[data-theme='konami'] .focus-card__list-item {
   color: var(--text-strong);
 }
 
+html[data-theme='konami'] .hero-role-stack__title {
+  animation: retroGlow 6s ease-in-out infinite;
+}
+
 html[data-theme='konami'] .focus-card {
   background: rgba(7, 10, 26, 0.9);
   border-color: rgba(113, 255, 178, 0.35);
@@ -5262,16 +5351,17 @@ html[data-dev-ids='on'] [data-dev-id] { position: relative; }
 html[data-dev-ids='on'] [data-dev-id]::after {
   content: attr(data-dev-id);
   position: absolute;
-  top: -8px;
-  left: -8px;
-  font-size: 10px;
+  top: -12px;
+  left: -12px;
+  font-size: 0.55rem;
   font-weight: 800;
+  letter-spacing: 0.08em;
   line-height: 1;
-  padding: 2px 4px;
-  border-radius: 6px;
-  background: var(--detonante-black, #020305);
-  color: var(--neutral-near-white, #fff);
-  box-shadow: 0 0 0 1px color-mix(in srgb, var(--neutral-near-white, #fff) 35%, transparent);
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: rgba(9, 14, 30, 0.75);
+  color: var(--home-text);
+  border: 1px solid color-mix(in srgb, var(--home-border) 65%, transparent);
   z-index: var(--z-dev-ids, 2);
   pointer-events: none;
 }

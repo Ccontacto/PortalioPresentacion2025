@@ -1,4 +1,5 @@
 
+import HorizontalScroller from '@components/HorizontalScroller';
 import { useLanguage } from '@contexts/LanguageContext';
 import { Card } from '@design-system/primitives/Card';
 import { Chip } from '@design-system/primitives/Chip';
@@ -26,32 +27,39 @@ export default function FocusAreas() {
         <DsSectionHeader eyebrow={focus.eyebrow} title={focus.title} subtitle={focus.subtitle} />
       </header>
 
-      <div className="focus-grid" role="list" data-dev-id="3002">
-        {focus.items.map((item: FocusAreaItem, index: number) => (
-          <m.article
-            key={item.id}
-            className="focus-card"
-            data-dev-id={`300${index}`}
-            role="listitem"
-            initial={shouldReduceMotion ? undefined : { opacity: 0, y: 40 }}
-            whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
-            viewport={shouldReduceMotion ? undefined : { once: true, amount: 0.35 }}
-            transition={shouldReduceMotion ? undefined : { delay: index * 0.08 }}
-          >
-            <Card as="div">
-              <span className="focus-card__eyebrow">{item.eyebrow}</span>
-              <h3 className="focus-card__title">{item.title}</h3>
-              <p className="focus-card__description">{item.description}</p>
-              <ul className="focus-card__list">
-                {item.highlights.map(highlight => (
-                  <li key={highlight}>
-                    <Chip className="focus-card__list-item">{highlight}</Chip>
-                  </li>
-                ))}
-              </ul>
-            </Card>
-          </m.article>
-        ))}
+      <div data-dev-id="3002">
+        <HorizontalScroller
+          itemCount={focus.items.length}
+          itemSelector=".focus-card"
+          prevLabelKey="prevFocus"
+          nextLabelKey="nextFocus"
+        >
+          {focus.items.map((item: FocusAreaItem, index: number) => (
+            <m.article
+              key={item.id}
+              className="focus-card"
+              data-dev-id={`300${index}`}
+              role="listitem"
+              initial={shouldReduceMotion ? undefined : { opacity: 0, y: 40 }}
+              whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
+              viewport={shouldReduceMotion ? undefined : { once: true, amount: 0.35 }}
+              transition={shouldReduceMotion ? undefined : { delay: index * 0.08 }}
+            >
+              <Card as="div">
+                <span className="focus-card__eyebrow">{item.eyebrow}</span>
+                <h3 className="focus-card__title">{item.title}</h3>
+                <p className="focus-card__description">{item.description}</p>
+                <ul className="focus-card__list">
+                  {item.highlights.map(highlight => (
+                    <li key={highlight}>
+                      <Chip className="focus-card__list-item">{highlight}</Chip>
+                    </li>
+                  ))}
+                </ul>
+              </Card>
+            </m.article>
+          ))}
+        </HorizontalScroller>
       </div>
     </SectionWrapper>
   );

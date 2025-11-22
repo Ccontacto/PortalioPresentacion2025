@@ -143,6 +143,8 @@ export const en: PortfolioData = {
     nextProjects: 'View next projects',
     prevSkills: 'View previous skills',
     nextSkills: 'View next skills',
+    prevFocus: 'View previous playbook',
+    nextFocus: 'View next playbook',
     themeSwitcherLabel: 'Theme',
     themeSwitcherSubtitle: 'Visual modes'
   }
