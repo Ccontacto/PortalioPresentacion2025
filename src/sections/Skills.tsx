@@ -1,5 +1,6 @@
 
 import HorizontalScroller from '@components/HorizontalScroller';
+import Icon from '@components/icons/VectorIcon';
 import { useLanguage } from '@contexts/LanguageContext';
 import { usePortfolioContent } from '@contexts/PortfolioSpecContext';
 import { Card } from '@design-system/primitives/Card';
@@ -8,7 +9,6 @@ import { SectionHeader as DsSectionHeader } from '@design-system/primitives/Sect
 import { SectionWrapper } from '@design-system/primitives/SectionWrapper';
 import { useSectionTelemetry } from '@telemetry/useSectionTelemetry';
 import { m } from 'framer-motion';
-import { Bot, Cloud, Cpu, Smartphone } from 'lucide-react';
 import { type ReactElement } from 'react';
 
 import type { SkillCategory } from '@portfolio-types';
@@ -16,9 +16,10 @@ import type { SkillCategory } from '@portfolio-types';
 type SkillItem = SkillCategory['items'][number];
 
 const iconMap: Record<string, ReactElement> = {
-  device: <Smartphone size={32} />,
-  robot: <Bot size={32} />,
-  cloud: <Cloud size={32} />
+  device: <Icon name="smartphone" size={32} aria-hidden />,
+  robot: <Icon name="bot" size={32} aria-hidden />,
+  cloud: <Icon name="cloud" size={32} aria-hidden />,
+  ai: <Icon name="cpu" size={32} aria-hidden />
 };
 
 export default function Skills() {
@@ -59,7 +60,7 @@ export default function Skills() {
             >
               <Card as="div">
                 <div className="skill-card__icon" aria-hidden="true">
-                  {iconMap[cat.icon] ?? <Cpu size={32} />}
+                  {iconMap[cat.icon] ?? <Icon name="cpu" size={32} aria-hidden />}
                 </div>
                 <h3 className="text-lg font-bold mb-4">{cat.title}</h3>
                 <ul className="skill-card__chips" aria-label={`Habilidades de ${cat.title}`}>

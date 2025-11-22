@@ -5,7 +5,24 @@ import react from '@vitejs/plugin-react';
 import autoprefixer from 'autoprefixer';
 import { defineConfig } from 'vite';
 
+const normalizeBasePath = (value?: string | null) => {
+  if (!value || value === '/') {
+    return '/';
+  }
+  let next = value.trim();
+  if (!next.startsWith('/')) {
+    next = `/${next}`;
+  }
+  if (!next.endsWith('/')) {
+    next = `${next}/`;
+  }
+  return next;
+};
+
+const basePath = normalizeBasePath(process.env.PORTFOLIO_BASE_PATH ?? process.env.VITE_PORTFOLIO_MOUNT);
+
 export default defineConfig({
+  base: basePath,
   plugins: [react()],
   css: {
     postcss: {

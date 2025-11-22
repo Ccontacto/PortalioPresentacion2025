@@ -1,4 +1,4 @@
-import { Sparkles } from 'lucide-react';
+import Icon from '@components/icons/VectorIcon';
 
 import { useLanguage } from '../contexts/LanguageContext';
 
@@ -12,7 +12,7 @@ export function RetroModeBanner({ onExitRetro }: Props) {
 
   return (
     <div className="retro-banner" role="status" aria-live="polite">
-      <Sparkles aria-hidden="true" className="retro-banner__icon" />
+      <Icon name="sparkles" aria-hidden className="retro-banner__icon" />
       <span className="retro-banner__text">{ui.retroActiveLabel ?? 'Modo retro activo'}</span>
       <button type="button" className="retro-banner__button" onClick={onExitRetro} data-retro-sfx>
         {ui.retroExit ?? 'Salir de modo retro'}

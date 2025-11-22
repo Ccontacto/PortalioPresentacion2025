@@ -1,6 +1,6 @@
+import Icon from '@components/icons/VectorIcon';
 import { useLanguage } from '@contexts/LanguageContext';
 import { createZip } from '@utils/zip';
-import { PenSquare } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 import type { PortfolioData } from '@portfolio-types';
@@ -126,7 +126,7 @@ export default function DevPortfolioEditor() {
   return (
     <>
       <button type="button" className="dev-editor-trigger" onClick={() => setOpen(true)} data-dev-id="dev-portafolio">
-        <PenSquare size={16} aria-hidden="true" />
+        <Icon name="penSquare" size={16} aria-hidden />
         <span>Editor</span>
       </button>
       {open ? (

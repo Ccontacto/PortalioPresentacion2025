@@ -1,5 +1,6 @@
 
 import HorizontalScroller from '@components/HorizontalScroller';
+import Icon from '@components/icons/VectorIcon';
 import SearchBar from '@components/SearchBar';
 import { useLanguage } from '@contexts/LanguageContext';
 import { usePortfolioContent } from '@contexts/PortfolioSpecContext';
@@ -10,7 +11,6 @@ import { SectionWrapper } from '@design-system/primitives/SectionWrapper';
 import { useSectionTelemetry } from '@telemetry/useSectionTelemetry';
 import { getSafeUrl } from '@utils/urlValidation';
 import { m } from 'framer-motion';
-import { ExternalLink, Rocket } from 'lucide-react';
 import { useMemo, useRef, useState } from 'react';
 
 import type { ProjectItem } from '@portfolio-types';
@@ -72,7 +72,7 @@ export default function Projects() {
               >
                 <Card as="div">
                   <div className="project-thumb" aria-hidden="true">
-                    <Rocket size={56} />
+                    <Icon name="rocket" size={56} aria-hidden />
                   </div>
                   <h3 className="text-xl font-bold mb-3">{proj.title}</h3>
                   <p className="text-sm mb-4">{proj.description}</p>
@@ -85,7 +85,7 @@ export default function Projects() {
                   </ul>
                   {safeLink ? (
                     <a href={safeLink} target="_blank" rel="noopener noreferrer" className="project-card__link">
-                      <ExternalLink size={24} aria-hidden="true" />
+                      <Icon name="externalLink" size={24} aria-hidden />
                       {data.lang === 'en' ? 'View project' : 'Ver proyecto'}
                     </a>
                   ) : null}

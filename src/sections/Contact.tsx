@@ -1,5 +1,6 @@
 
 import { ContactForm } from '@components/ContactForm/ContactForm';
+import Icon from '@components/icons/VectorIcon';
 import { WhatsappGlyph } from '@components/icons/WhatsappGlyph';
 import { PrivacyPanel } from '@components/PrivacyPanel';
 import { useLanguage } from '@contexts/LanguageContext';
@@ -10,7 +11,6 @@ import { SectionHeader } from '@design-system/primitives/SectionHeader';
 import { SectionWrapper } from '@design-system/primitives/SectionWrapper';
 import { useSectionTelemetry } from '@telemetry/useSectionTelemetry';
 import { openSafeUrl } from '@utils/urlValidation';
-import { Copy, Mail } from 'lucide-react';
 import { useState } from 'react';
 
 type FormStatus = 'idle' | 'sending' | 'success' | 'error';
@@ -137,7 +137,7 @@ export default function Contact() {
                 className="contact-cta contact-cta--email"
               >
                 <span className="contact-cta__icon" aria-hidden="true">
-                  <Mail className="h-8 w-8" />
+                  <Icon name="mail" size={32} />
                 </span>
                 <span className="contact-cta__label">Email</span>
               </button>
@@ -147,7 +147,7 @@ export default function Contact() {
                 className="contact-cta contact-cta--copy"
               >
                 <span className="contact-cta__icon" aria-hidden="true">
-                  <Copy className="h-8 w-8" />
+                  <Icon name="copy" size={32} />
                 </span>
                 <span className="contact-cta__label">{data.lang === 'en' ? 'Copy email' : 'Copiar correo'}</span>
               </button>

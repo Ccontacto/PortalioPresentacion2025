@@ -1,15 +1,4 @@
-import {
-  Download,
-  Github,
-  Languages,
-  Linkedin,
-  Link2,
-  Mail,
-  MessageSquare,
-  PartyPopper,
-  Sparkles,
-  Wrench
-} from 'lucide-react';
+import Icon from '@components/icons/VectorIcon';
 import { useCallback, useMemo } from 'react';
 
 import { KONAMI_DISABLE_MESSAGE, KONAMI_ENABLE_MESSAGE } from '../../constants/konami';
@@ -119,13 +108,13 @@ export function useQuickActionsData() {
         key: 'github',
         label: tooltips.github,
         action: () => openExternalLink(data?.social?.github),
-        icon: <Github size={18} aria-hidden />
+        icon: <Icon name="github" size={18} aria-hidden />
       },
       {
         key: 'linkedin',
         label: tooltips.linkedin,
         action: () => openExternalLink(data?.social?.linkedin),
-        icon: <Linkedin size={18} aria-hidden />
+        icon: <Icon name="linkedin" size={18} aria-hidden />
       },
       ...(data?.social?.portfolio
         ? [
@@ -133,7 +122,7 @@ export function useQuickActionsData() {
               key: 'portfolio',
               label: data.lang === 'en' ? 'Visit portfolio' : 'Visitar sitio',
               action: () => openExternalLink(data.social?.portfolio),
-              icon: <Link2 size={18} aria-hidden />
+              icon: <Icon name="link" size={18} aria-hidden />
             }
           ]
         : [])
@@ -144,7 +133,7 @@ export function useQuickActionsData() {
         key: 'email',
         label: tooltips.email,
         action: openMail,
-        icon: <Mail size={18} aria-hidden />
+        icon: <Icon name="mail" size={18} aria-hidden />
       },
       ...(whatsappLink
         ? [
@@ -152,7 +141,7 @@ export function useQuickActionsData() {
               key: 'whatsapp',
               label: tooltips.whatsapp,
               action: () => openExternalLink(whatsappLink),
-              icon: <MessageSquare size={18} aria-hidden />
+              icon: <Icon name="message" size={18} aria-hidden />
             }
           ]
         : [])
@@ -171,7 +160,7 @@ export function useQuickActionsData() {
         label: tooltips.pdf,
         action: () => downloadCv({ data }),
         immediate: true,
-        icon: <Download size={18} aria-hidden />
+        icon: <Icon name="download" size={18} aria-hidden />
       },
       {
         key: 'theme',
@@ -185,7 +174,7 @@ export function useQuickActionsData() {
         label: currentLang === 'es' ? 'Switch to English' : 'Cambiar a español',
         action: toggleLanguage,
         immediate: true,
-        icon: <Languages size={18} aria-hidden />
+        icon: <Icon name="languages" size={18} aria-hidden />
       }
     ];
 
@@ -195,21 +184,21 @@ export function useQuickActionsData() {
         label: tooltips.celebrate,
         action: handleConfettiClick,
         disabled: isConfettiOnCooldown,
-        icon: <PartyPopper size={18} aria-hidden />
+        icon: <Icon name="party" size={18} aria-hidden />
       },
       {
         key: 'retro',
         label: isKonami ? 'Salir modo retro' : 'Activar modo retro',
         action: handleKonamiToggle,
         immediate: true,
-        icon: <Sparkles size={18} aria-hidden />
+        icon: <Icon name="sparkles" size={18} aria-hidden />
       },
       {
         key: 'dev-ids',
         label: devIds ? 'Ocultar IDs de inspección' : 'Mostrar IDs de inspección',
         action: toggleDevIds,
         immediate: true,
-        icon: <Wrench size={18} aria-hidden />
+        icon: <Icon name="wrench" size={18} aria-hidden />
       }
     ];
 

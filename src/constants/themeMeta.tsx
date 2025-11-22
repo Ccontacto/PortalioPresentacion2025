@@ -1,4 +1,4 @@
-import { Contrast, Moon, Sparkles, Sun } from 'lucide-react';
+import Icon from '@components/icons/VectorIcon';
 
 import type { BaseTheme } from '../contexts/ThemeContext';
 import type { JSX } from 'react';
@@ -15,7 +15,7 @@ const iconSize = 18;
 
 export const THEME_META: Record<BaseTheme, ThemeMeta> = {
   light: {
-    icon: <Sun size={iconSize} aria-hidden />,
+    icon: <Icon name="sun" size={iconSize} aria-hidden />,
     label: { es: 'Claro', en: 'Light' },
     description: {
       es: 'Base luminosa y cálida',
@@ -23,7 +23,7 @@ export const THEME_META: Record<BaseTheme, ThemeMeta> = {
     }
   },
   dark: {
-    icon: <Moon size={iconSize} aria-hidden />,
+    icon: <Icon name="moon" size={iconSize} aria-hidden />,
     label: { es: 'Oscuro', en: 'Dark' },
     description: {
       es: 'Contraste alto para ambientes con poca luz',
@@ -31,7 +31,7 @@ export const THEME_META: Record<BaseTheme, ThemeMeta> = {
     }
   },
   oled: {
-    icon: <Sparkles size={iconSize} aria-hidden />,
+    icon: <Icon name="sparkles" size={iconSize} aria-hidden />,
     label: { es: 'OLED', en: 'OLED' },
     description: {
       es: 'Profundidad máxima y negros orgánicos',
@@ -39,7 +39,7 @@ export const THEME_META: Record<BaseTheme, ThemeMeta> = {
     }
   },
   'high-contrast': {
-    icon: <Contrast size={iconSize} aria-hidden />,
+    icon: <Icon name="contrast" size={iconSize} aria-hidden />,
     label: { es: 'Alto contraste', en: 'High contrast' },
     description: {
       es: 'Modo accesible AA/AAA, tintes mínimos',

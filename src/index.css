@@ -1019,6 +1019,96 @@ html[data-theme='dark'] .micro-solid:focus-visible {
   flex-shrink: 0;
 }
 
+.landing-shell {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(2rem, 4vw, 4rem);
+  background: var(--home-bg-gradient);
+}
+
+.landing-card {
+  width: min(640px, 100%);
+  background: var(--surface-card);
+  border-radius: 32px;
+  border: 3px solid var(--border-strong);
+  box-shadow: 0 45px 90px rgba(15, 23, 42, 0.18);
+  padding: clamp(2rem, 5vw, 3.5rem);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.landing-card__badge {
+  align-self: flex-start;
+  padding: 0.35rem 1rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 800;
+  background: var(--hero-chip-gradient);
+  color: var(--home-text);
+  border: 2px solid var(--home-border);
+}
+
+.landing-card__title {
+  font-size: clamp(2rem, 3vw, 2.8rem);
+  line-height: 1.1;
+  color: var(--home-text);
+  margin: 0;
+}
+
+.landing-card__description {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--home-text-muted);
+  margin: 0;
+}
+
+.landing-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.landing-card__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.85rem 1.8rem;
+  border-radius: 999px;
+  border: 2px solid var(--home-border);
+  background: var(--home-gradient);
+  color: var(--home-inverse-text);
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  box-shadow: var(--home-shadow);
+  transition:
+    transform var(--motion-fast) var(--ease-standard),
+    box-shadow var(--motion-fast) var(--ease-standard);
+}
+
+.landing-card__cta:hover,
+.landing-card__cta:focus-visible {
+  transform: translate(-3px, -3px);
+  box-shadow: var(--home-shadow-hover);
+}
+
+.landing-card__link {
+  color: var(--marca-secundaria);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.landing-card__link:hover,
+.landing-card__link:focus-visible {
+  text-decoration: underline;
+}
+
 .dev-editor-overlay {
   position: fixed;
   inset: 0;

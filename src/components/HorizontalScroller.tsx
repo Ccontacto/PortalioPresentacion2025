@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import Icon from '@components/icons/VectorIcon';
 
 import { useLanguage } from '../contexts/LanguageContext';
 import { useHorizontalScroll } from '../hooks/useHorizontalScroll';
@@ -57,7 +57,7 @@ export default function HorizontalScroller({
           aria-label={prevLabel}
           onClick={() => scrollByCard(-1)}
         >
-          <ChevronLeft size={18} />
+          <Icon name="chevronLeft" size={18} aria-hidden />
         </button>
       ) : null}
 
@@ -68,7 +68,7 @@ export default function HorizontalScroller({
           aria-label={nextLabel}
           onClick={() => scrollByCard(1)}
         >
-          <ChevronRight size={18} />
+          <Icon name="chevronRight" size={18} aria-hidden />
         </button>
       ) : null}
     </div>

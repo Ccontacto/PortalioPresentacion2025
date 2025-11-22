@@ -1,16 +1,4 @@
-import {
-  Copy as CopyIcon,
-  Download,
-  Globe,
-  Github,
-  Languages,
-  Mail,
-  Moon,
-  Search,
-  Sparkles,
-  Sun,
-  X
-} from 'lucide-react';
+import Icon from '@components/icons/VectorIcon';
 import {
   useCallback,
   useEffect,
@@ -115,7 +103,7 @@ export default function CommandPalette() {
       id: `nav-${navItem.id}`,
       label: navItem.label,
       group: 'Secciones',
-      icon: <Globe size={22} aria-hidden="true" />,
+      icon: <Icon name="globe" size={22} aria-hidden />,
       keywords: [navItem.id, navItem.label],
       action: () => {
         navigateTo(navItem.id);
@@ -132,7 +120,7 @@ export default function CommandPalette() {
         id: 'contact-email',
         label: `Email: ${data.email}`,
         group: 'Contacto',
-        icon: <Mail size={22} aria-hidden="true" />,
+        icon: <Icon name="mail" size={22} aria-hidden />,
         keywords: ['correo', 'contacto', 'mail'],
         action: () => {
           window.location.href = `mailto:${data.email}`;
@@ -143,7 +131,7 @@ export default function CommandPalette() {
         id: 'contact-copy-email',
         label: 'Copiar email',
         group: 'Contacto',
-        icon: <CopyIcon size={22} aria-hidden="true" />,
+        icon: <Icon name="copy" size={22} aria-hidden />,
         keywords: ['clipboard', 'copiar', 'correo'],
         action: async () => {
           try {
@@ -185,7 +173,7 @@ export default function CommandPalette() {
               id: 'social-linkedin',
               label: 'LinkedIn',
               group: 'Redes',
-              icon: <Globe size={22} aria-hidden="true" />,
+              icon: <Icon name="globe" size={22} aria-hidden />,
               keywords: ['linkedin', 'networking'],
               action: () => {
                 tryOpenExternal(linkedinUrl);
@@ -199,7 +187,7 @@ export default function CommandPalette() {
               id: 'social-github',
               label: 'GitHub',
               group: 'Redes',
-              icon: <Github size={22} aria-hidden="true" />,
+            icon: <Icon name="github" size={22} aria-hidden />,
               keywords: ['repositorio', 'code'],
               action: () => {
                 tryOpenExternal(githubUrl);
@@ -213,7 +201,7 @@ export default function CommandPalette() {
               id: 'social-portfolio',
               label: 'Portafolio externo',
               group: 'Redes',
-              icon: <Globe size={22} aria-hidden="true" />,
+              icon: <Icon name="globe" size={22} aria-hidden />,
               keywords: ['portfolio', 'sitio', 'web'],
               action: () => {
                 tryOpenExternal(portfolioUrl);
@@ -228,7 +216,7 @@ export default function CommandPalette() {
         id: 'action-download-cv',
         label: 'Descargar CV (PDF)',
         group: 'Acciones',
-        icon: <Download size={22} aria-hidden="true" />,
+        icon: <Icon name="download" size={22} aria-hidden />,
         keywords: ['cv', 'curriculum', 'pdf'],
         action: () => {
           downloadCv({ data }).catch(() => {
@@ -244,7 +232,7 @@ export default function CommandPalette() {
         id: 'pref-konami',
         label: isKonami ? 'Salir de modo Konami' : 'Activar modo Konami',
         group: 'Preferencias',
-        icon: <Sparkles size={22} aria-hidden="true" />,
+        icon: <Icon name="sparkles" size={22} aria-hidden />,
         keywords: ['konami', 'retro', 'easter egg'],
         action: () => {
           if (isKonami) {
@@ -261,7 +249,11 @@ export default function CommandPalette() {
         id: 'pref-theme',
         label: baseTheme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro',
         group: 'Preferencias',
-        icon: baseTheme === 'dark' ? <Sun size={22} aria-hidden="true" /> : <Moon size={22} aria-hidden="true" />,
+        icon: baseTheme === 'dark' ? (
+          <Icon name="sun" size={22} aria-hidden />
+        ) : (
+          <Icon name="moon" size={22} aria-hidden />
+        ),
         keywords: ['tema', 'theme', 'modo'],
         action: () => {
           toggleTheme();
@@ -272,7 +264,7 @@ export default function CommandPalette() {
         id: 'pref-language',
         label: currentLang === 'es' ? 'Cambiar a inglés' : 'Cambiar a español',
         group: 'Preferencias',
-        icon: <Languages size={22} aria-hidden="true" />,
+        icon: <Icon name="languages" size={22} aria-hidden />,
         keywords: ['idioma', 'language'],
         action: () => {
           toggleLanguage();
@@ -433,12 +425,12 @@ export default function CommandPalette() {
           onClick={closePalette}
           aria-label="Cerrar buscador de acciones"
         >
-          <X size={20} aria-hidden="true" />
+          <Icon name="close" size={20} aria-hidden />
         </button>
       </header>
 
       <div className="search-modal__input-group">
-        <Search size={20} aria-hidden="true" className="search-modal__input-icon" />
+        <Icon name="search" size={20} aria-hidden className="search-modal__input-icon" />
         <input
           ref={inputRef}
           type="search"
@@ -463,7 +455,7 @@ export default function CommandPalette() {
             onClick={() => setQuery('')}
             aria-label="Limpiar búsqueda"
           >
-            <X size={16} aria-hidden="true" />
+            <Icon name="close" size={16} aria-hidden />
           </button>
         ) : null}
       </div>

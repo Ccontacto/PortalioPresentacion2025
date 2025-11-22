@@ -1,5 +1,5 @@
+import Icon from '@components/icons/VectorIcon';
 import { m } from 'framer-motion';
-import { ArrowRight, Eraser, Search, Sparkles, X } from 'lucide-react';
 import {
   useCallback,
   useEffect,
@@ -212,12 +212,12 @@ export default function SearchBar({
             onClick={() => handleCloseModal()}
             aria-label="Cerrar buscador"
           >
-            <X size={20} aria-hidden="true" />
+            <Icon name="close" size={20} aria-hidden />
           </button>
         </header>
 
         <div className="search-modal__input-group">
-          <Search size={20} aria-hidden="true" className="search-modal__input-icon" />
+          <Icon name="search" size={20} aria-hidden className="search-modal__input-icon" />
           <input
             ref={inputRef}
             type="search"
@@ -236,7 +236,7 @@ export default function SearchBar({
               onClick={() => handleSearchInput('')}
               aria-label={data.ui?.searchClearLabel ?? (data.lang === 'es' ? 'Limpiar búsqueda' : 'Clear search')}
             >
-              <Eraser size={16} aria-hidden="true" />
+              <Icon name="eraser" size={16} aria-hidden />
             </button>
           )}
         </div>
@@ -281,7 +281,7 @@ export default function SearchBar({
             onClick={handleNavigateProjects}
             data-retro-sfx
           >
-            <ArrowRight size={18} aria-hidden="true" />
+            <Icon name="arrowRight" size={18} aria-hidden />
             {data.ui?.viewProjects ?? (data.lang === 'es' ? 'Ver proyectos' : 'View projects')}
           </button>
         </div>
@@ -292,7 +292,7 @@ export default function SearchBar({
             className="search-modal__confetti"
             onClick={handleConfetti}
           >
-            <Sparkles size={18} aria-hidden="true" />
+            <Icon name="sparkles" size={18} aria-hidden />
             confetti
           </button>
         )}
@@ -315,7 +315,7 @@ export default function SearchBar({
         data-retro-sfx
         data-dev-id="6000"
       >
-        <Search size={22} aria-hidden="true" />
+        <Icon name="search" size={22} aria-hidden />
         {isIconVariant ? (
           <span className="sr-only">{triggerText}</span>
         ) : (

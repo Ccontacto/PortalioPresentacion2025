@@ -1,4 +1,5 @@
 
+import Icon from '@components/icons/VectorIcon';
 import { useLanguage } from '@contexts/LanguageContext';
 import { Card } from '@design-system/primitives/Card';
 import { Chip } from '@design-system/primitives/Chip';
@@ -7,7 +8,6 @@ import { SectionWrapper } from '@design-system/primitives/SectionWrapper';
 import { useHorizontalScroll } from '@hooks/useHorizontalScroll';
 import { useSectionTelemetry } from '@telemetry/useSectionTelemetry';
 import { m } from 'framer-motion';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 
 import type { ExperienceJob } from '@portfolio-types';
@@ -107,7 +107,7 @@ export default function Experience() {
             aria-label="Ver experiencia anterior"
             onClick={() => scrollByCard(-1)}
           >
-            <ChevronLeft size={18} />
+            <Icon name="chevronLeft" size={18} aria-hidden />
           </button>
         ) : null}
         {canScrollRight ? (
@@ -117,7 +117,7 @@ export default function Experience() {
             aria-label="Ver experiencia siguiente"
             onClick={() => scrollByCard(1)}
           >
-            <ChevronRight size={18} />
+            <Icon name="chevronRight" size={18} aria-hidden />
           </button>
         ) : null}
       </div>

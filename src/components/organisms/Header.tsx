@@ -1,4 +1,4 @@
-import { Moon, Sun } from 'lucide-react';
+import Icon from '@components/icons/VectorIcon';
 import { useEffect, useMemo, useState } from 'react';
 
 import { useLanguage } from '../../contexts/LanguageContext';
@@ -75,7 +75,7 @@ export default function Header() {
             onClick={toggleTheme}
             aria-label="Cambiar tema"
           >
-            {baseTheme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+            {baseTheme === 'dark' ? <Icon name="sun" size={18} aria-hidden /> : <Icon name="moon" size={18} aria-hidden />}
           </button>
           <Button size="sm" onClick={() => navigateTo('contact')}>
             Hablemos

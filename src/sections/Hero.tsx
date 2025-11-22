@@ -1,5 +1,6 @@
 
 import { AvailabilityBadge } from '@components/header/AvailabilityBadge';
+import Icon from '@components/icons/VectorIcon';
 import { useLanguage } from '@contexts/LanguageContext';
 import { useToast } from '@contexts/ToastContext';
 import { Button } from '@design-system/primitives/Button';
@@ -9,7 +10,6 @@ import { useIntersectionObserver } from '@hooks/useIntersectionObserver';
 import { useSectionTelemetry } from '@telemetry/useSectionTelemetry';
 import { storage } from '@utils/storage';
 import { m } from 'framer-motion';
-import { MapPin } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 import type { AvailabilityKey, HeroMetaItem, PortfolioToasts, Stat } from '@portfolio-types';
@@ -161,7 +161,7 @@ export default function Hero() {
             <ul className="hero-meta-bar">
               {resolvedMeta.length ? (
                 <li className="hero-meta-chip">
-                  <MapPin size={16} aria-hidden="true" />
+                  <Icon name="mapPin" size={16} aria-hidden />
                   {resolvedMeta[0].value}
                 </li>
               ) : null}
