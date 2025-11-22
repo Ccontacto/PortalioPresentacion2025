@@ -119,7 +119,7 @@ function AppContent() {
 
   return (
     <>
-      <LoadingScreen />
+      <LoadingScreen isSplash={false} />
       <m.div
         initial={shouldReduceMotion ? undefined : { opacity: 0 }}
         animate={shouldReduceMotion ? undefined : { opacity: 1 }}

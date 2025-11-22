@@ -19,7 +19,7 @@ const normalizeBasePath = (value?: string | null) => {
   return next;
 };
 
-const basePath = normalizeBasePath(process.env.PORTFOLIO_BASE_PATH ?? process.env.VITE_PORTFOLIO_MOUNT);
+const basePath = normalizeBasePath(process.env.PORTFOLIO_BASE_PATH ?? process.env.VITE_PORTFOLIO_MOUNT ?? '/');
 
 export default defineConfig({
   base: basePath,

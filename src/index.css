@@ -1020,12 +1020,24 @@ html[data-theme='dark'] .micro-solid:focus-visible {
 }
 
 .landing-shell {
+  position: relative;
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: clamp(2rem, 4vw, 4rem);
-  background: var(--home-bg-gradient);
+  background: radial-gradient(circle at 20% 20%, rgba(53, 28, 99, 0.45), #050b19 75%);
+  overflow: hidden;
+}
+
+.spark-landing .spark-stars {
+  position: absolute;
+  inset: 0;
+}
+
+.spark-landing .landing-card {
+  position: relative;
+  z-index: 5;
 }
 
 .landing-card {
@@ -1038,6 +1050,39 @@ html[data-theme='dark'] .micro-solid:focus-visible {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
+}
+
+.landing-card--glass {
+  position: relative;
+  background: rgba(1, 8, 20, 0.78);
+  border: 1.5px solid rgba(226, 232, 240, 0.35);
+  box-shadow: 0 45px 90px rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(18px);
+  color: #e2e8f0;
+  overflow: hidden;
+}
+
+.landing-card--glass::before {
+  content: '';
+  position: absolute;
+  inset: -40%;
+  background: radial-gradient(circle, rgba(244, 114, 182, 0.25), transparent 60%);
+  opacity: 0.45;
+  animation: landing-orbit 12s linear infinite;
+}
+
+.landing-card--glass::after {
+  content: '';
+  position: absolute;
+  inset: -50%;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.22), transparent 70%);
+  opacity: 0.5;
+  animation: landing-orbit 18s linear infinite reverse;
+}
+
+.landing-card--glass > * {
+  position: relative;
+  z-index: 1;
 }
 
 .landing-card__badge {
@@ -1053,18 +1098,41 @@ html[data-theme='dark'] .micro-solid:focus-visible {
   border: 2px solid var(--home-border);
 }
 
+.landing-card__badge--ghost {
+  background: transparent;
+  color: #ffffff;
+  border: 2px solid transparent;
+  background-image:
+    linear-gradient(#010812, #010812),
+    linear-gradient(120deg, #f472b6, #3b82f6);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+
 .landing-card__title {
-  font-size: clamp(2rem, 3vw, 2.8rem);
-  line-height: 1.1;
+  font-size: clamp(2.4rem, 4.5vw, 3.4rem);
+  line-height: 1.05;
   color: var(--home-text);
   margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.landing-card__title--white {
+  color: #ffffff;
 }
 
 .landing-card__description {
-  font-size: 1rem;
+  font-size: 1.1rem;
   line-height: 1.5;
   color: var(--home-text-muted);
   margin: 0;
+  font-weight: 500;
+}
+
+.landing-card__description--lead {
+  font-size: 1.2rem;
+  color: #f8fafc;
 }
 
 .landing-card__actions {
@@ -1080,13 +1148,18 @@ html[data-theme='dark'] .micro-solid:focus-visible {
   justify-content: center;
   padding: 0.85rem 1.8rem;
   border-radius: 999px;
-  border: 2px solid var(--home-border);
-  background: var(--home-gradient);
-  color: var(--home-inverse-text);
+  border: 2px solid transparent;
+  background: transparent;
+  color: #ffffff;
   font-weight: 800;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  box-shadow: var(--home-shadow);
+  box-shadow: 0 18px 35px rgba(15, 23, 42, 0.35);
+  background-image:
+    linear-gradient(#010812, #010812),
+    linear-gradient(120deg, #f472b6, #3b82f6);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
   transition:
     transform var(--motion-fast) var(--ease-standard),
     box-shadow var(--motion-fast) var(--ease-standard);
@@ -1095,7 +1168,7 @@ html[data-theme='dark'] .micro-solid:focus-visible {
 .landing-card__cta:hover,
 .landing-card__cta:focus-visible {
   transform: translate(-3px, -3px);
-  box-shadow: var(--home-shadow-hover);
+  box-shadow: 0 24px 45px rgba(2, 6, 23, 0.55);
 }
 
 .landing-card__link {
@@ -1107,6 +1180,14 @@ html[data-theme='dark'] .micro-solid:focus-visible {
 .landing-card__link:hover,
 .landing-card__link:focus-visible {
   text-decoration: underline;
+}
+
+.landing-card--glass .landing-card__description {
+  color: rgba(226, 232, 240, 0.85);
+}
+
+.landing-card--glass .landing-card__link {
+  color: #93c5fd;
 }
 
 .dev-editor-overlay {
@@ -3473,6 +3554,165 @@ html[data-theme='dark'] .hero-name {
   background: var(--surface-primary);
   z-index: 70;
   color: inherit;
+  overflow: hidden;
+}
+
+.spark-loading {
+  background: radial-gradient(circle at 20% 20%, rgba(91, 33, 182, 0.25), rgba(15, 23, 42, 0.95));
+}
+
+.spark-stars {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #0f172a 0%, #1e1b4b 100%);
+  overflow: hidden;
+}
+
+.spark-stars--classic .spark-stars__central {
+  animation: spark-pulse 3s ease-in-out infinite;
+}
+
+.spark-stars__central-path {
+  filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.6)) drop-shadow(0 0 40px rgba(236, 72, 153, 0.35));
+  animation: spark-rotate 22s linear infinite;
+}
+
+.spark-stars__message {
+  margin-top: 1.5rem;
+  font-size: clamp(1rem, 3vw, 1.2rem);
+  font-weight: 600;
+  color: #e2e8f0;
+  text-align: center;
+  letter-spacing: 0.08em;
+}
+
+.spark-stars__central--motion svg {
+  filter: drop-shadow(0 0 25px rgba(14, 165, 233, 0.4));
+}
+
+.spark-stars__particle {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: spark-flicker infinite ease-in-out;
+  box-shadow: 0 0 6px currentColor;
+  opacity: 0;
+}
+
+.spark-stars__particle--motion {
+  animation: unset;
+}
+
+.spark-loading__actions {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem 1.5rem;
+  border-radius: 1.5rem;
+  background: rgba(2, 6, 23, 0.65);
+  border: 2px solid rgba(226, 232, 240, 0.2);
+  backdrop-filter: blur(18px);
+}
+
+.spark-loading__toggle {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.spark-loading__button {
+  border-radius: 999px;
+  padding: 0.4rem 1.3rem;
+  border: 2px solid rgba(226, 232, 240, 0.2);
+  background: transparent;
+  color: #e2e8f0;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    transform 180ms var(--ease-standard),
+    border-color 180ms var(--ease-standard),
+    color 180ms var(--ease-standard),
+    background 180ms var(--ease-standard);
+}
+
+.spark-loading__button.is-active,
+.spark-loading__button:hover {
+  background: rgba(226, 232, 240, 0.12);
+  border-color: rgba(226, 232, 240, 0.45);
+  transform: translateY(-1px);
+}
+
+.spark-loading__skip {
+  width: 100%;
+  margin-top: 0.5rem;
+  border: none;
+  border-radius: 999px;
+  padding: 0.55rem 1.5rem;
+  font-weight: 700;
+  cursor: pointer;
+  background: linear-gradient(120deg, #8b5cf6, #ec4899, #3b82f6);
+  color: #fff;
+  box-shadow: 0 8px 25px rgba(14, 165, 233, 0.35);
+  transition:
+    transform 200ms var(--ease-standard),
+    box-shadow 200ms var(--ease-standard);
+}
+
+.spark-loading__skip:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 35px rgba(14, 165, 233, 0.45);
+}
+
+@media (max-width: 640px) {
+  .spark-loading__actions {
+    width: calc(100% - 2rem);
+  }
+}
+
+@keyframes spark-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spark-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  50% {
+    transform: scale(1.05);
+    filter: brightness(1.2);
+  }
+}
+
+@keyframes spark-flicker {
+  0%,
+  100% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 *:focus-visible {
@@ -5805,4 +6045,15 @@ html[data-theme='konami'] .hamburger-menu__caret { background: rgba(6,10,24,.95)
 
 .back-to-top:active {
   transform: translateY(-2px);
+}
+@keyframes landing-orbit {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  50% {
+    transform: rotate(180deg) scale(1.05);
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+  }
 }

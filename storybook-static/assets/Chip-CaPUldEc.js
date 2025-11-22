@@ -1,1 +1,0 @@
-import{j as i}from"./iframe-Dk93WtSj.js";import{c as p}from"./styles-CLsdkOxy.js";function r({className:s,...o}){return i.jsx("span",{className:p("ds-chip",s),...o})}r.__docgenInfo={description:"",methods:[],displayName:"Chip"};export{r as C};

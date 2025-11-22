@@ -8,7 +8,7 @@ Esta guía resume cómo está organizado el repositorio y cuál es el rol de cad
 
 | Ruta | Descripción |
 |------|-------------|
-| `package.json`, `package-lock.json`, `pnpm-lock.yaml` | Scripts y dependencias. Recordar que `lucide-react` fue removido; los íconos viven en `VectorIcon`. |
+| `package.json`, `package-lock.json`, `pnpm-lock.yaml` | Scripts y dependencias. Recordar que el paquete externo de íconos fue removido; los íconos viven en `VectorIcon`. |
 | `README.md` | Introducción rápida + enlaces a docs clave. |
 | `docs/` | Documentación operativa (`design-system`, `TECH_DEBT`, `AGENT_CHECKPOINTS`, etc.). |
 | `scripts/` | Utilidades de build (`tokens-build`, `build-cloudflare.mjs`, `audit.sh`). |

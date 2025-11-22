@@ -65,10 +65,6 @@ a:focus-visible {
   pointer-events: none;
 }
 
-[aria-hidden='true'] {
-  display: none !important;
-}
-
 ::selection {
   background: var(--accent);
   color: white;

@@ -21,7 +21,17 @@
 - Todo el set de íconos vive ahora en `src/components/icons/VectorIcon.tsx`.  
   - Es un wrapper ligero sobre SVG inline, respeta los tokens `color` y `strokeWidth` del tema activo.  
   - Usa `navIconFor()` para mapear secciones → ícono (Navbar, Dock, HamburgerMenu).  
-  - No se debe volver a instalar `lucide-react`; cualquier ícono nuevo se agrega al mapa.
+  - No se deben reinstalar librerías externas de íconos; cualquier recurso nuevo se agrega al mapa.
+- Si encuentras código legado, conviértelo siguiendo este patrón:
+  ```tsx
+  // Antes (mal)
+  import { MapPin } from 'lucide-react';
+  <MapPin size={16} aria-hidden />;
+
+  // Después (bien)
+  import Icon from '@components/icons/VectorIcon';
+  <Icon name="mapPin" size={16} aria-hidden />;
+  ```
 - Microinteracciones (hover/active/pressed) se componen con las mismas variables `--motion-*` declaradas en `src/index.css`.
 
 ## Entrypoint y despliegue Cloudflare

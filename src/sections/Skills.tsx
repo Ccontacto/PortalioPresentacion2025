@@ -1,12 +1,11 @@
 
 import HorizontalScroller from '@components/HorizontalScroller';
 import Icon from '@components/icons/VectorIcon';
+import { SectionLayout } from '@components/SectionLayout';
 import { useLanguage } from '@contexts/LanguageContext';
 import { usePortfolioContent } from '@contexts/PortfolioSpecContext';
 import { Card } from '@design-system/primitives/Card';
 import { Chip } from '@design-system/primitives/Chip';
-import { SectionHeader as DsSectionHeader } from '@design-system/primitives/SectionHeader';
-import { SectionWrapper } from '@design-system/primitives/SectionWrapper';
 import { useSectionTelemetry } from '@telemetry/useSectionTelemetry';
 import { m } from 'framer-motion';
 import { type ReactElement } from 'react';
@@ -31,15 +30,13 @@ export default function Skills() {
     'Herramientas y frameworks con los que construyo soluciones móviles e IA de forma integral.';
 
   return (
-    <SectionWrapper id="skills" aria-labelledby="skills-heading" data-dev-id="3100">
-      <div className="ds-stack">
-        <DsSectionHeader
-          eyebrow={stripBraces(skillsSpec?.title) || (data.lang === 'en' ? 'Core stack' : 'Stack principal')}
-          title={sectionTitle}
-          subtitle={sectionSubtitle}
-        />
-      </div>
-
+    <SectionLayout
+      id="skills"
+      data-dev-id="3100"
+      eyebrow={stripBraces(skillsSpec?.title) || (data.lang === 'en' ? 'Core stack' : 'Stack principal')}
+      title={sectionTitle}
+      subtitle={sectionSubtitle}
+    >
       <div className="page-section__body" data-dev-id="3103">
         <HorizontalScroller
           itemCount={data.sections.skills.categories.length}
@@ -75,7 +72,7 @@ export default function Skills() {
           ))}
         </HorizontalScroller>
       </div>
-    </SectionWrapper>
+    </SectionLayout>
   );
 }
 

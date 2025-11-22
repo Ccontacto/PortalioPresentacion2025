@@ -1,21 +1,19 @@
 
 import Icon from '@components/icons/VectorIcon';
+import { SectionLayout } from '@components/SectionLayout';
 import { useLanguage } from '@contexts/LanguageContext';
 import { Card } from '@design-system/primitives/Card';
 import { Chip } from '@design-system/primitives/Chip';
-import { SectionHeader as DsSectionHeader } from '@design-system/primitives/SectionHeader';
-import { SectionWrapper } from '@design-system/primitives/SectionWrapper';
 import { useHorizontalScroll } from '@hooks/useHorizontalScroll';
 import { useSectionTelemetry } from '@telemetry/useSectionTelemetry';
 import { m } from 'framer-motion';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 
 import type { ExperienceJob } from '@portfolio-types';
 
 export default function Experience() {
   const { data } = useLanguage();
   const jobs = data.sections.experience.jobs as ExperienceJob[];
-  const sectionRef = useRef<HTMLElement | null>(null);
   useSectionTelemetry('experience');
   
   const { trackRef, canScrollLeft, canScrollRight, scrollByCard, updateScrollButtons } = useHorizontalScroll({
@@ -51,15 +49,13 @@ export default function Experience() {
     .join(' ');
 
   return (
-    <SectionWrapper ref={sectionRef} id="experience" aria-labelledby="experience-heading" data-dev-id="4000">
-      <div className="ds-stack">
-        <DsSectionHeader
-          eyebrow={data.lang === 'en' ? 'Trajectory' : 'Trayectoria destacada'}
-          title={data.sections.experience.title}
-          subtitle="Dirección técnica, liderazgo de squads y exploración de IA generativa aplicadas a productos reales."
-        />
-      </div>
-
+    <SectionLayout
+      id="experience"
+      data-dev-id="4000"
+      eyebrow={data.lang === 'en' ? 'Trajectory' : 'Trayectoria destacada'}
+      title={data.sections.experience.title}
+      subtitle="Dirección técnica, liderazgo de squads y exploración de IA generativa aplicadas a productos reales."
+    >
       <div className={wrapperClass}>
         <div
           className="experience-track experience-track--horizontal"
@@ -121,6 +117,6 @@ export default function Experience() {
           </button>
         ) : null}
       </div>
-    </SectionWrapper>
+    </SectionLayout>
   );
 }

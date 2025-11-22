@@ -2,22 +2,34 @@ import type { ReactElement } from 'react';
 
 type NavIconKey = 'home' | 'experience' | 'skills' | 'focus' | 'projects' | 'contact';
 
-const baseIcon = (size: number, paths: ReactElement[]) => (
-  <svg
-    width={size}
-    height={size}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth={1.7}
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden="true"
-    focusable="false"
-  >
-    {paths}
-  </svg>
-);
+let gradientIdCounter = 0;
+const nextGradientId = () => `navIconGradient-${++gradientIdCounter}`;
+
+function baseIcon(size: number, paths: ReactElement[]) {
+  const gradientId = nextGradientId();
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill={`url(#${gradientId})`}
+      stroke="currentColor"
+      strokeWidth={1.7}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <defs>
+        <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#f472b6" />
+          <stop offset="100%" stopColor="#3b82f6" />
+        </linearGradient>
+      </defs>
+      {paths}
+    </svg>
+  );
+}
 
 const ICON_MAP: Record<NavIconKey, (size: number) => ReactElement> = {
   home: size =>

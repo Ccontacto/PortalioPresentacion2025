@@ -20,7 +20,7 @@ const normalizeMountPath = (value?: string | null) => {
   return next.replace(/\/+$/, '') || '/';
 };
 
-const portfolioMountPath = normalizeMountPath(import.meta.env.VITE_PORTFOLIO_MOUNT);
+const portfolioMountPath = normalizeMountPath(import.meta.env.VITE_PORTFOLIO_MOUNT ?? '/portafolio/JoseCarlos');
 
 const isPortfolioRoute = (mountPath: string) => {
   if (mountPath === '/') return true;
@@ -45,12 +45,12 @@ ensureStorageVersion(1, [
 const shouldRenderPortfolio = isPortfolioRoute(portfolioMountPath);
 
 const tree = shouldRenderPortfolio ? (
-    <PortfolioSpecProvider>
-      <App />
-    </PortfolioSpecProvider>
-  ) : (
-    <LandingPlaceholder portfolioPath={portfolioMountPath} />
-  );
+  <PortfolioSpecProvider>
+    <App />
+  </PortfolioSpecProvider>
+) : (
+  <LandingPlaceholder portfolioPath={portfolioMountPath} />
+);
 
 ReactDOM.createRoot(rootElement).render(
   <React.StrictMode>

@@ -1,10 +1,9 @@
 
 import HorizontalScroller from '@components/HorizontalScroller';
+import { SectionLayout } from '@components/SectionLayout';
 import { useLanguage } from '@contexts/LanguageContext';
 import { Card } from '@design-system/primitives/Card';
 import { Chip } from '@design-system/primitives/Chip';
-import { SectionHeader as DsSectionHeader } from '@design-system/primitives/SectionHeader';
-import { SectionWrapper } from '@design-system/primitives/SectionWrapper';
 import { useReducedMotion } from '@hooks/useReducedMotion';
 import { useSectionTelemetry } from '@telemetry/useSectionTelemetry';
 import { m } from 'framer-motion';
@@ -22,18 +21,17 @@ export default function FocusAreas() {
   }
 
   return (
-    <SectionWrapper id="focus" className="page-section--focus" aria-labelledby="focus-heading" data-dev-id="3000">
-      <header className="focus-header" data-dev-id="3001">
-        <DsSectionHeader eyebrow={focus.eyebrow} title={focus.title} subtitle={focus.subtitle} />
-      </header>
-
+    <SectionLayout
+      id="focus"
+      className="page-section--focus"
+      data-dev-id="3000"
+      headerClassName="focus-header"
+      eyebrow={focus.eyebrow}
+      title={focus.title}
+      subtitle={focus.subtitle}
+    >
       <div data-dev-id="3002">
-        <HorizontalScroller
-          itemCount={focus.items.length}
-          itemSelector=".focus-card"
-          prevLabelKey="prevFocus"
-          nextLabelKey="nextFocus"
-        >
+        <HorizontalScroller itemCount={focus.items.length} itemSelector=".focus-card" prevLabelKey="prevFocus" nextLabelKey="nextFocus">
           {focus.items.map((item: FocusAreaItem, index: number) => (
             <m.article
               key={item.id}
@@ -61,6 +59,6 @@ export default function FocusAreas() {
           ))}
         </HorizontalScroller>
       </div>
-    </SectionWrapper>
+    </SectionLayout>
   );
 }

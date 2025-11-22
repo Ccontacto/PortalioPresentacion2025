@@ -9,7 +9,7 @@ Este documento es la guía rápida para cualquier agente (humano o automatizado)
 | Tema                          | Detalle                                                                                                            |
 |------------------------------|---------------------------------------------------------------------------------------------------------------------|
 | Entrada / rutas               | `/` → `LandingPlaceholder` (“en progreso”). `/portafolio/JoseCarlos` → App completa (controlado por `VITE_PORTFOLIO_MOUNT`). |
-| Iconografía                   | Se usa **solo** `VectorIcon` (`src/components/icons/VectorIcon.tsx`) + `navIconFor`. `lucide-react` está desinstalado. |
+| Iconografía                   | Se usa **solo** `VectorIcon` (`src/components/icons/VectorIcon.tsx`) + `navIconFor`; no hay librerías externas de íconos instaladas. |
 | Temas                         | `ThemeContext` suporta light/dark/oled/high-contrast + konami (retro). Tokens en `src/index.css` / `src/styles/themes.css`. |
 | Datos                         | `PortfolioSpecProvider` + `usePortfolioContent`. Texto duro solo vive en `src/data/es|en.ts`.                         |
 | QA básica                     | `npm run lint`, `npm run test -- --run`, `npm run build` (build aún advierte del gradiente legacy en `.hero-cta-row`). |
@@ -84,6 +84,6 @@ La tabla siguiente enlaza los 16 pilares solicitados por el equipo. Cada punto t
 
 ## 4. Apuntes finales
 
-- **No reinstalar librerías removidas** (ej. `lucide-react`). Cualquier ícono o animación va por el sistema actual.  
+- **No reinstalar librerías removidas** (p. ej. el paquete de íconos externo anterior). Cualquier ícono o animación va por el sistema actual.  
 - **Cualquier cambio en rutas o basepath** debe probarse tanto en `npm run dev` como en `npm run preview` y dejar constancia en `docs/design-system.md`.  
 - **Mantén esta guía al día**: tras cada refactor mayor, revisa si los puntos de control siguen siendo correctos y actualiza enlaces o comandos.

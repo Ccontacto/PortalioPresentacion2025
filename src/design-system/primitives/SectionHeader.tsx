@@ -7,6 +7,7 @@ import type { CSSProperties, ReactNode } from 'react';
 import './styles.css';
 
 type SectionHeaderProps = {
+  id?: string;
   title: string;
   subtitle?: string;
   eyebrow?: string;
@@ -54,7 +55,7 @@ const createSubtitleMarkup = (value?: string): ReactNode => {
   );
 };
 
-export function SectionHeader({ title, subtitle, eyebrow, className }: SectionHeaderProps) {
+export function SectionHeader({ id, title, subtitle, eyebrow, className }: SectionHeaderProps) {
   const resolvedTitleSize = resolveSpecValue(sectionSpec.titleSize);
   const resolvedTitleWeight = resolveSpecValue(sectionSpec.titleWeight);
   const resolvedSubtitleSize = resolveSpecValue(sectionSpec.subtitleSize);
@@ -83,7 +84,7 @@ export function SectionHeader({ title, subtitle, eyebrow, className }: SectionHe
   return (
     <div className={cx('ds-section-header', className)} style={containerStyle}>
       {eyebrow ? <span className="ds-section-header__eyebrow">{eyebrow}</span> : null}
-      <h2 className="ds-section-header__title" style={titleStyle}>
+      <h2 className="ds-section-header__title" style={titleStyle} id={id}>
         <span className="ds-section-header__title-display" aria-hidden="true">
           {decoratedTitle ?? title}
         </span>
