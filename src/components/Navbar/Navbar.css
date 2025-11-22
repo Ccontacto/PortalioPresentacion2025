@@ -3,36 +3,23 @@
   top: 0;
   z-index: 50;
   width: 100%;
-  transition: backdrop-filter 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
-}
-
-.site-header::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 1px;
-  background: color-mix(in srgb, var(--border-subtle) 70%, transparent);
-  opacity: 0;
-  transition: opacity 0.2s ease;
+  backdrop-filter: blur(12px);
+  background: color-mix(in srgb, var(--surface-primary) 92%, rgba(15, 23, 42, 0.08));
+  border-bottom: 1px solid color-mix(in srgb, var(--border-subtle) 85%, transparent);
+  transition: background 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 .site-header--scrolled {
-  backdrop-filter: blur(16px);
-  background: color-mix(in srgb, var(--bg-primary) 85%, transparent);
-  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
-}
-
-.site-header--scrolled::after {
-  opacity: 1;
+  background: color-mix(in srgb, var(--surface-panel) 94%, rgba(15, 23, 42, 0.12));
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+  border-color: color-mix(in srgb, var(--border-strong) 45%, transparent);
 }
 
 .site-header__inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.25rem 0;
+  padding: 1rem 0;
 }
 
 .site-header__brand {
@@ -58,6 +45,7 @@
   padding: 0.4rem 0.8rem;
   font-size: 0.95rem;
   color: var(--text-secondary);
+  font-weight: 500;
   cursor: pointer;
   transition: color 0.2s ease;
 }
@@ -83,18 +71,20 @@
   width: 38px;
   height: 38px;
   border-radius: 999px;
-  border: 1px solid var(--border-subtle);
-  background: var(--bg-secondary);
+  border: 1px solid color-mix(in srgb, var(--border-subtle) 65%, transparent);
+  background: color-mix(in srgb, var(--surface-card) 85%, transparent);
   color: var(--text-primary);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: var(--elev-1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
 
 .site-header__icon-btn:hover {
   transform: translateY(-2px);
+  box-shadow: var(--elev-2);
 }
 
 @media (max-width: 960px) {

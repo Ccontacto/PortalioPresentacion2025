@@ -9,7 +9,7 @@ import { Card } from '@design-system/primitives/Card';
 import { SectionHeader } from '@design-system/primitives/SectionHeader';
 import { SectionWrapper } from '@design-system/primitives/SectionWrapper';
 import { useSectionTelemetry } from '@telemetry/useSectionTelemetry';
-import { getSafeUrl, openSafeUrl } from '@utils/urlValidation';
+import { openSafeUrl } from '@utils/urlValidation';
 import { Copy, Mail } from 'lucide-react';
 import { useState } from 'react';
 
@@ -21,9 +21,6 @@ export default function Contact() {
   const [status, setStatus] = useState<FormStatus>('idle');
   useSectionTelemetry('contact');
   const contactSpec = usePortfolioContent('contact');
-  const linkedinUrl = data.social?.linkedin ?? '';
-  const linkedinLabel = linkedinUrl.replace(/^https?:\/\//, '').replace(/\/$/, '');
-  const safeLinkedinUrl = linkedinUrl ? getSafeUrl(linkedinUrl) : null;
   const invalidUrlMessage = data.toasts?.invalid_url ?? 'Enlace no disponible';
   const contactTitle = data.lang === 'en' ? 'Contact' : 'Contacto';
   const contactSubtitle =
@@ -89,24 +86,11 @@ export default function Contact() {
           description: 'Alineamos contexto, métricas y siguientes pasos listos para ejecutar desde la primera sesión.'
         };
 
-  const infoHighlights =
-    data.lang === 'en'
-      ? [
-          { label: 'Response time', value: '<24h · GMT-6 (CDMX)' },
-          { label: 'Ideal collaboration', value: 'Discovery sprint · AI copilots · iOS leadership' },
-          { label: 'Deliverables', value: 'Ready-to-run playbooks, telemetry dashboards, 1:1 mentoring' }
-        ]
-      : [
-          { label: 'Tiempo de respuesta', value: '<24h · Zona horaria CDMX (GMT-6)' },
-          { label: 'Colaboración ideal', value: 'Discovery sprint · Copilotos IA · Liderazgo iOS' },
-          { label: 'Entregables', value: 'Playbooks accionables, dashboards de telemetría y mentoría 1:1' }
-        ];
-
   return (
     <>
       <SectionWrapper id="contact" aria-labelledby="contact-heading" data-dev-id="9000">
         <div className="contact-wrapper" data-dev-id="9001">
-          <div className="contact-column">
+          <div className="contact-panel">
             <header className="contact-hero" data-dev-id="9002">
               <span className="contact-hero__eyebrow">{data.lang === 'en' ? 'Let’s connect' : 'Conectemos'}</span>
               <h2
@@ -118,6 +102,11 @@ export default function Contact() {
                 className="contact-hero__subtitle"
                 dangerouslySetInnerHTML={{ __html: contactSubtitleHtml }}
               />
+              <p className="contact-hero__support">
+                <strong>{infoPanelCopy.title}</strong>
+                {' — '}
+                {infoPanelCopy.description}
+              </p>
             </header>
 
             <div
@@ -164,44 +153,18 @@ export default function Contact() {
               </button>
             </div>
 
-            <section className="contact-info" data-dev-id="9004">
-              <header className="contact-info__header" data-dev-id="9005">
-                <p className="contact-info__tagline">{infoPanelCopy.eyebrow}</p>
-                <h3 className="contact-info__title">{infoPanelCopy.title}</h3>
-                <p className="contact-info__location">{infoPanelCopy.description}</p>
-              </header>
-
-              <ul className="contact-info__list">
-                {infoHighlights.map(item => (
-                  <li key={item.label} className="contact-info__row contact-info__row--primary">
-                    <span className="contact-info__stat-label">{item.label}</span>
-                    <span className="contact-info__stat-value">{item.value}</span>
-                  </li>
-                ))}
-                {safeLinkedinUrl ? (
-                  <li className="contact-info__row contact-info__row--link">
-                    <span className="contact-info__stat-label">{data.lang === 'en' ? 'Case studies' : 'Casos recientes'}</span>
-                    <a href={safeLinkedinUrl} target="_blank" rel="noopener noreferrer" className="contact-info__stat-link">
-                      {linkedinLabel}
-                    </a>
-                  </li>
-                ) : null}
-              </ul>
-
-              <footer className="contact-info__footer">
-                <p>{data.sections.contact.closing}</p>
-                <span>{data.sections.contact.signature}</span>
-              </footer>
-            </section>
           </div>
-          <Card className="contact-form-card" as="div">
-            <SectionHeader
-              title={stripBraces(contactSpec?.title) || contactTitle}
-              subtitle={stripBraces(contactSpec?.subtitle) || contactSubtitle}
-            />
-            <ContactForm />
-          </Card>
-          <PrivacyPanel />
+
+          <div className="contact-form-panel">
+            <Card className="contact-form-card" as="div">
+              <SectionHeader
+                title={stripBraces(contactSpec?.title) || contactTitle}
+                subtitle={stripBraces(contactSpec?.subtitle) || contactSubtitle}
+              />
+              <ContactForm />
+            </Card>
+            <PrivacyPanel />
+          </div>
         </div>
       </SectionWrapper>
 

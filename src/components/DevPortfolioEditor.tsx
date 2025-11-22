@@ -1,36 +1,11 @@
 import { useLanguage } from '@contexts/LanguageContext';
 import { createZip } from '@utils/zip';
 import { PenSquare } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import type { PortfolioData } from '@portfolio-types';
 
 const WATERMARK_TEXT = 'PortalioPresentacion2025 dev build';
-const PLACEHOLDER = '<<edita solo el valor>>';
-const EMPTY_OVERRIDES: Record<PortfolioData['lang'], Partial<PortfolioData>> = {
-  es: {},
-  en: {}
-};
-
-function createTemplate(value: unknown): unknown {
-  if (typeof value === 'string') {
-    return PLACEHOLDER;
-  }
-  if (typeof value === 'number' || typeof value === 'boolean' || value === null) {
-    return value;
-  }
-  if (Array.isArray(value)) {
-    return value.map(item => createTemplate(item));
-  }
-  if (typeof value === 'object' && value !== null) {
-    const result: Record<string, unknown> = {};
-    Object.entries(value).forEach(([key, val]) => {
-      result[key] = createTemplate(val);
-    });
-    return result;
-  }
-  return PLACEHOLDER;
-}
 
 function sanitizePatch(base: unknown, patch: unknown): unknown {
   if (!patch || typeof patch !== 'object') {
@@ -61,23 +36,16 @@ type LanguageOverridesApi = {
 export default function DevPortfolioEditor() {
   const language = useLanguage() as ReturnType<typeof useLanguage> & Partial<LanguageOverridesApi>;
   const { data, currentLang } = language;
-  const overridesMap = useMemo(
-    () => language.overrides ?? EMPTY_OVERRIDES,
-    [language.overrides]
-  );
   const updateOverrides = language.updateOverrides;
   const supportsOverrides = typeof updateOverrides === 'function';
-  const template = useMemo(() => createTemplate(data) ?? {}, [data]);
   const [open, setOpen] = useState(false);
-  const [payload, setPayload] = useState(() =>
-    JSON.stringify((supportsOverrides && overridesMap[currentLang]) ?? template, null, 2)
-  );
+  const [payload, setPayload] = useState(() => JSON.stringify(data, null, 2));
   const [status, setStatus] = useState<string | null>(null);
   const [statusVariant, setStatusVariant] = useState<'success' | 'error' | null>(null);
 
   useEffect(() => {
-    setPayload(JSON.stringify((supportsOverrides && overridesMap[currentLang]) ?? template, null, 2));
-  }, [currentLang, overridesMap, supportsOverrides, template]);
+    setPayload(JSON.stringify(data, null, 2));
+  }, [data]);
 
   const applyOverrides = () => {
     if (!supportsOverrides || !updateOverrides) {
@@ -87,11 +55,14 @@ export default function DevPortfolioEditor() {
     }
     try {
       const parsed = payload ? JSON.parse(payload) : {};
-      const sanitized = sanitizePatch(template, parsed);
+      const sanitized = sanitizePatch(data, parsed);
       updateOverrides(currentLang, sanitized as Partial<PortfolioData>);
-      setStatus('Overrides aplicados.');
+      setStatus('Contenido actualizado.');
       setStatusVariant('success');
-    } catch {
+    } catch (error) {
+      if (import.meta.env.DEV) {
+        console.error('Invalid JSON payload', error);
+      }
       setStatus('JSON inválido. Corrige y vuelve a aplicar.');
       setStatusVariant('error');
     }
@@ -104,9 +75,33 @@ export default function DevPortfolioEditor() {
       return;
     }
     updateOverrides(currentLang, {});
-    setPayload(JSON.stringify(template, null, 2));
+    setPayload(JSON.stringify(data, null, 2));
     setStatus('Overrides reseteados.');
     setStatusVariant('success');
+  };
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(payload);
+      setStatus('JSON copiado al portapapeles.');
+      setStatusVariant('success');
+    } catch (error) {
+      if (import.meta.env.DEV) {
+        console.error('Clipboard copy failed', error);
+      }
+      setStatus('No se pudo copiar. Intenta manualmente.');
+      setStatusVariant('error');
+    }
+  };
+
+  const downloadJson = () => {
+    const blob = new Blob([payload], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = `portfolio-${currentLang}.json`;
+    anchor.click();
+    URL.revokeObjectURL(url);
   };
 
   const downloadZip = () => {
@@ -130,12 +125,7 @@ export default function DevPortfolioEditor() {
 
   return (
     <>
-      <button
-        type="button"
-        className="dev-editor-trigger"
-        onClick={() => setOpen(true)}
-        data-dev-id="dev-portafolio"
-      >
+      <button type="button" className="dev-editor-trigger" onClick={() => setOpen(true)} data-dev-id="dev-portafolio">
         <PenSquare size={16} aria-hidden="true" />
         <span>Editor</span>
       </button>
@@ -155,18 +145,17 @@ export default function DevPortfolioEditor() {
             </header>
             <div className="dev-editor-panel__body">
               <p className="dev-editor-panel__description">
-                Edita solo los valores y respeta la estructura JSON. Este módulo solo está habilitado en modo desarrollo.
+                Edita todo el contenido del portfolio en JSON. Solo se habilita en modo desarrollo y no afecta producción.
               </p>
               <textarea
                 className="dev-editor-panel__textarea"
-                placeholder='{"llave": "<<edita solo el valor>>"}'
-                aria-label="Overrides JSON"
+                aria-label="JSON del portafolio"
                 value={payload}
                 onChange={event => setPayload(event.target.value)}
               />
               <div className="dev-editor-panel__footer">
                 <button type="button" className="dev-editor-panel__button" onClick={applyOverrides}>
-                  Aplicar Overrides
+                  Aplicar JSON
                 </button>
                 <button
                   type="button"
@@ -181,6 +170,12 @@ export default function DevPortfolioEditor() {
                   onClick={downloadZip}
                 >
                   Generar ZIP (dev)
+                </button>
+                <button type="button" className="dev-editor-panel__button dev-editor-panel__button--ghost" onClick={handleCopy}>
+                  Copiar JSON
+                </button>
+                <button type="button" className="dev-editor-panel__button dev-editor-panel__button--ghost" onClick={downloadJson}>
+                  Descargar JSON
                 </button>
               </div>
               {status ? (
