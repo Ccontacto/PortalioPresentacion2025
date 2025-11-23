@@ -104,7 +104,7 @@ export function ContactForm() {
       </div>
 
       <div className="form-actions">
-        <Button type="submit" disabled={!isValid || isSubmitting}>
+        <Button type="submit" disabled={!isValid || isSubmitting} variant="ghost">
           {isSubmitting ? 'Enviando…' : 'Enviar mensaje'}
         </Button>
         {serverStatus === 'success' ? (
