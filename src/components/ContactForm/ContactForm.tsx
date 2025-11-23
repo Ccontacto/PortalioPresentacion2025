@@ -1,21 +1,54 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { Button } from '../atoms/Button';
+import { useLanguage } from '@contexts/LanguageContext';
+import { useTelemetry } from '@contexts/TelemetryContext';
+import { useToast } from '@contexts/ToastContext';
+import { Button } from '@design-system/primitives/Button';
+
+import type { ContactFormCopy } from '../../types/portfolio';
+
 import './ContactForm.css';
 
-const contactSchema = z.object({
-  name: z.string().min(2, 'Mínimo 2 caracteres').max(80, 'Máximo 80 caracteres'),
-  email: z.string().email('Email inválido'),
-  message: z.string().min(10, 'Mínimo 10 caracteres').max(500, 'Máximo 500 caracteres')
-});
+type ContactFormValues = {
+  name: string;
+  email: string;
+  message: string;
+};
 
-type ContactFormValues = z.infer<typeof contactSchema>;
+type ContactFormProps = {
+  copy?: ContactFormCopy;
+  endpoint?: string;
+};
 
-export function ContactForm() {
+export function ContactForm({ copy, endpoint }: ContactFormProps) {
   const [serverStatus, setServerStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [statusMessage, setStatusMessage] = useState<string | null>(null);
+  const { data } = useLanguage();
+  const { trackEvent } = useTelemetry();
+  const { showToast } = useToast();
+
+  const resolvedCopy = copy ?? data.contactForm;
+  const submitEndpoint = endpoint ?? import.meta.env.VITE_CONTACT_ENDPOINT ?? '/api/contact';
+
+  const contactSchema = useMemo(
+    () =>
+      z.object({
+        name: z
+          .string()
+          .min(2, resolvedCopy.errors.nameTooShort)
+          .max(80, resolvedCopy.errors.nameTooLong),
+        email: z.string().email(resolvedCopy.errors.emailInvalid),
+        message: z
+          .string()
+          .min(10, resolvedCopy.errors.messageTooShort)
+          .max(500, resolvedCopy.errors.messageTooLong)
+      }),
+    [resolvedCopy.errors.emailInvalid, resolvedCopy.errors.messageTooLong, resolvedCopy.errors.messageTooShort, resolvedCopy.errors.nameTooLong, resolvedCopy.errors.nameTooShort]
+  );
+
   const {
     register,
     handleSubmit,
@@ -28,22 +61,36 @@ export function ContactForm() {
 
   const onSubmit = async (values: ContactFormValues) => {
     setServerStatus('idle');
+    setStatusMessage(null);
+    trackEvent('contact_submit_attempt', { lang: data.lang, hasMessage: Boolean(values.message) });
+
     try {
-      await new Promise(resolve => setTimeout(resolve, 900));
-      await fetch('/api/contact', {
+      await new Promise(resolve => setTimeout(resolve, 450));
+      const response = await fetch(submitEndpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(values)
+        body: JSON.stringify({ ...values, lang: data.lang })
       });
+      if (!response.ok) throw new Error(`Request failed with ${response.status}`);
       reset();
       setServerStatus('success');
-    } catch {
+      setStatusMessage(resolvedCopy.success);
+      showToast(resolvedCopy.success, 'success');
+      trackEvent('contact_submit_success', {
+        lang: data.lang,
+        messageLength: values.message?.length ?? 0
+      });
+    } catch (error) {
+      console.error('[ContactForm] submit failed', error);
       setServerStatus('error');
+      setStatusMessage(resolvedCopy.error);
+      showToast(resolvedCopy.error, 'error');
+      trackEvent('contact_submit_error', { lang: data.lang });
     }
   };
 
   return (
-    <form className="contact-form" onSubmit={handleSubmit(onSubmit)} noValidate>
+    <form className="contact-form" onSubmit={handleSubmit(onSubmit)} noValidate aria-live="polite" aria-busy={isSubmitting}>
       <div className="input-wrapper">
         <input
           id="contact-name"
@@ -51,10 +98,11 @@ export function ContactForm() {
           placeholder=" "
           aria-invalid={Boolean(errors.name)}
           aria-describedby={errors.name ? 'contact-name-error' : undefined}
+          autoComplete="name"
           {...register('name')}
         />
         <label htmlFor="contact-name" className="input-label">
-          Nombre
+          {resolvedCopy.nameLabel}
         </label>
         {errors.name ? (
           <p className="input-error" id="contact-name-error">
@@ -69,12 +117,14 @@ export function ContactForm() {
           className="form-input"
           placeholder=" "
           type="email"
+          inputMode="email"
+          autoComplete="email"
           aria-invalid={Boolean(errors.email)}
           aria-describedby={errors.email ? 'contact-email-error' : undefined}
           {...register('email')}
         />
         <label htmlFor="contact-email" className="input-label">
-          Email
+          {resolvedCopy.emailLabel}
         </label>
         {errors.email ? (
           <p className="input-error" id="contact-email-error">
@@ -94,7 +144,7 @@ export function ContactForm() {
           {...register('message')}
         />
         <label htmlFor="contact-message" className="input-label">
-          Mensaje
+          {resolvedCopy.messageLabel}
         </label>
         {errors.message ? (
           <p className="input-error" id="contact-message-error">
@@ -104,14 +154,17 @@ export function ContactForm() {
       </div>
 
       <div className="form-actions">
-        <Button type="submit" disabled={!isValid || isSubmitting} variant="ghost">
-          {isSubmitting ? 'Enviando…' : 'Enviar mensaje'}
+        <Button type="submit" disabled={!isValid || isSubmitting} variant="primary">
+          {isSubmitting ? resolvedCopy.submittingLabel : resolvedCopy.submitLabel}
         </Button>
-        {serverStatus === 'success' ? (
-          <p className="form-status form-status--success">¡Gracias! Responderé pronto.</p>
-        ) : null}
-        {serverStatus === 'error' ? (
-          <p className="form-status form-status--error">Ocurrió un error. Intenta más tarde.</p>
+        {resolvedCopy.legalHint ? <p className="form-hint">{resolvedCopy.legalHint}</p> : null}
+        {statusMessage ? (
+          <p
+            className={`form-status ${serverStatus === 'success' ? 'form-status--success' : 'form-status--error'}`}
+            role="status"
+          >
+            {statusMessage}
+          </p>
         ) : null}
       </div>
     </form>

@@ -76,6 +76,10 @@
   gap: 0.5rem;
 }
 
+.contact-form .ds-button {
+  align-self: flex-start;
+}
+
 .form-status {
   font-size: 0.9rem;
 }
@@ -86,4 +90,9 @@
 
 .form-status--error {
   color: var(--color-state-danger, #f87171);
+}
+
+.form-hint {
+  font-size: 0.85rem;
+  color: var(--home-text-muted, var(--text-secondary));
 }

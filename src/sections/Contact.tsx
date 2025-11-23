@@ -3,6 +3,7 @@ import Icon from '@components/icons/VectorIcon';
 import { WhatsappGlyph } from '@components/icons/WhatsappGlyph';
 import { useLanguage } from '@contexts/LanguageContext';
 import { usePortfolioContent } from '@contexts/PortfolioSpecContext';
+import { useTelemetry } from '@contexts/TelemetryContext';
 import { useToast } from '@contexts/ToastContext';
 import { Card } from '@design-system/primitives/Card';
 import { SectionWrapper } from '@design-system/primitives/SectionWrapper';
@@ -21,9 +22,11 @@ type ContactAction = {
 export default function Contact() {
   const { data } = useLanguage();
   const { showToast } = useToast();
+  const { trackEvent } = useTelemetry();
   useSectionTelemetry('contact');
   const contactSpec = usePortfolioContent('contact');
   const invalidUrlMessage = data.toasts?.invalid_url ?? 'Enlace no disponible';
+  const contactFormCopy = data.contactForm;
 
   const contactTitle = stripBraces(contactSpec?.title) || (data.lang === 'en' ? 'Contact' : 'Contacto');
   const contactSubtitle =
@@ -33,10 +36,12 @@ export default function Contact() {
       : '¿Proyecto, colaboración o simplemente quieres platicar de arquitectura? Escríbeme.');
 
   const openEmail = () => {
+    trackEvent('contact_action', { channel: 'email', lang: data.lang });
     window.location.href = `mailto:${data.email}`;
   };
 
   const copyEmail = async () => {
+    trackEvent('contact_action', { channel: 'copy', lang: data.lang });
     try {
       await navigator.clipboard.writeText(data.email);
       showToast(data.toasts.email_copy_success, 'success');
@@ -50,8 +55,10 @@ export default function Contact() {
     const whatsappUrl = `https://wa.me/${data.whatsapp}?text=${message}`;
     if (!openSafeUrl(whatsappUrl)) {
       showToast(invalidUrlMessage, 'error');
+      trackEvent('contact_action', { channel: 'whatsapp', lang: data.lang, status: 'blocked' });
       return;
     }
+    trackEvent('contact_action', { channel: 'whatsapp', lang: data.lang, status: 'opened' });
     showToast(data.toasts.whatsapp_open, 'info');
   };
 
@@ -115,10 +122,11 @@ export default function Contact() {
 
         <Card className="contact-panel contact-panel--form" as="section">
           <div className="contact-panel__form-header">
-            <h3>{data.lang === 'en' ? 'Let me know about your idea' : 'Cuéntame tu idea'}</h3>
-            <p>{data.lang === 'en' ? 'Name, email and the context you want to explore.' : 'Nombre, email y el contexto que te gustaría explorar.'}</p>
+            <h3>{contactFormCopy.title}</h3>
+            <p>{contactFormCopy.helper}</p>
+            {contactFormCopy.kpiBadge ? <span className="contact-status-pill">{contactFormCopy.kpiBadge}</span> : null}
           </div>
-          <ContactForm />
+          <ContactForm copy={contactFormCopy} />
         </Card>
       </div>
     </SectionWrapper>

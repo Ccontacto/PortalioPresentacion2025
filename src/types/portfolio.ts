@@ -88,6 +88,13 @@ export interface Tooltips {
 export interface UIStrings {
   viewProjects: string;
   bookCall: string;
+  searchEyebrow?: string;
+  searchHelper?: string;
+  searchShortcut?: string;
+  searchSuggestionsTitle?: string;
+  searchSuggestionsCaption?: string;
+  searchTagsTitle?: string;
+  searchTagsCaption?: string;
   retroExit: string;
   retroActiveLabel: string;
   quickActionsTitle: string;
@@ -125,6 +132,27 @@ export interface ContactSection {
   subtitle: string;
   closing: string;
   signature: string;
+}
+
+export interface ContactFormCopy {
+  title: string;
+  helper: string;
+  nameLabel: string;
+  emailLabel: string;
+  messageLabel: string;
+  submitLabel: string;
+  submittingLabel: string;
+  success: string;
+  error: string;
+  legalHint?: string;
+  kpiBadge?: string;
+  errors: {
+    nameTooShort: string;
+    nameTooLong: string;
+    emailInvalid: string;
+    messageTooShort: string;
+    messageTooLong: string;
+  };
 }
 
 export interface ExperienceSection {
@@ -218,4 +246,5 @@ export interface PortfolioData {
     invalid_url?: string;
   };
   ui: UIStrings;
+  contactForm: ContactFormCopy;
 }

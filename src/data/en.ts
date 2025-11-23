@@ -123,6 +123,13 @@ export const en: PortfolioData = {
   ui: {
     viewProjects: 'View projects',
     bookCall: 'Book intro call',
+    searchEyebrow: 'AI search',
+    searchHelper: 'Filter by skills, tags & launches',
+    searchShortcut: '⌘K / Ctrl+K',
+    searchSuggestionsTitle: 'Curated picks',
+    searchSuggestionsCaption: 'Tap a highlighted technology',
+    searchTagsTitle: 'Browse by tags',
+    searchTagsCaption: 'Sorted by project frequency',
     retroExit: 'Exit retro mode',
     retroActiveLabel: 'Retro mode active',
     quickActionsTitle: 'Quick actions',
@@ -146,5 +153,25 @@ export const en: PortfolioData = {
     nextFocus: 'View next playbook',
     themeSwitcherLabel: 'Theme',
     themeSwitcherSubtitle: 'Visual modes'
+  },
+  contactForm: {
+    title: 'Tell me about your idea',
+    helper: 'Name, email and the context you want to explore.',
+    nameLabel: 'Name',
+    emailLabel: 'Email',
+    messageLabel: 'Message',
+    submitLabel: 'Send message',
+    submittingLabel: 'Sending…',
+    success: 'Thank you! I will reply soon.',
+    error: 'Something went wrong. Please try later.',
+    legalHint: 'I do not share your data or spam you.',
+    kpiBadge: 'Response time <24h',
+    errors: {
+      nameTooShort: 'Minimum 2 characters',
+      nameTooLong: 'Maximum 80 characters',
+      emailInvalid: 'Invalid email',
+      messageTooShort: 'Minimum 10 characters',
+      messageTooLong: 'Maximum 500 characters'
+    }
   }
 } as const;

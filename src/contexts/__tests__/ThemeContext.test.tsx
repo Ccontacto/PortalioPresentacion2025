@@ -1,4 +1,4 @@
-import { renderHook, act } from '@testing-library/react';
+import { renderHook, act, waitFor } from '@testing-library/react';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 
 import { storage } from '../../utils/storage';
@@ -80,5 +80,36 @@ describe('ThemeProvider', () => {
 
     expect(result.current.theme).toBe(BASE_THEME_ORDER[afterKonamiIndex]);
     expect(result.current.isKonami).toBe(false);
+  });
+
+  it('persists theme changes and updates document attributes', async () => {
+    const matchMediaMock = vi.fn().mockImplementation(() => ({
+      matches: false,
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      media: '(prefers-color-scheme: dark)',
+      onchange: null,
+      dispatchEvent: vi.fn()
+    }));
+    vi.stubGlobal('matchMedia', matchMediaMock);
+
+    const { result } = renderHook(() => useTheme(), {
+      wrapper: ThemeProvider
+    });
+
+    await waitFor(() => {
+      expect(document.documentElement.getAttribute('data-theme')).toBe(result.current.theme);
+    });
+
+    act(() => {
+      result.current.toggleTheme();
+    });
+
+    await waitFor(() => {
+      expect(document.documentElement.getAttribute('data-theme')).toBe(result.current.theme);
+    });
+    expect(setSpy).toHaveBeenCalledWith('portfolio_theme', result.current.baseTheme);
   });
 });

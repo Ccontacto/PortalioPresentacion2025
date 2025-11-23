@@ -143,12 +143,15 @@
   --gradient-brand-end: var(--dt-color-brand-accent-500, #6EE7B7);
   --gradient-hero-start: color-mix(in srgb, var(--gradient-brand-start) 65%, var(--neutral-near-white));
   --gradient-hero-end: color-mix(in srgb, var(--gradient-brand-end) 72%, var(--neutral-near-white));
-  --home-gradient: linear-gradient(120deg, #F9A8D4 0%, #C4B5FD 50%, #BAE6FD 100%);
+  --home-gradient: linear-gradient(
+    120deg,
+    color-mix(in srgb, var(--gradient-brand-start) 70%, #fefefe) 0%,
+    color-mix(in srgb, var(--gradient-brand-end) 70%, #f7f8ff) 100%
+  );
   --hero-cta-gradient: linear-gradient(
-    130deg,
-    oklch(0.92 0.08 20) 0%,
-    oklch(0.89 0.09 330) 46%,
-    oklch(0.86 0.05 260) 100%
+    122deg,
+    color-mix(in srgb, var(--gradient-brand-start) 88%, var(--home-card-bg)),
+    color-mix(in srgb, var(--gradient-brand-end) 85%, var(--home-card-bg))
   );
   --hero-chip-gradient: linear-gradient(
     180deg,
@@ -244,7 +247,11 @@
 html[data-theme='dark'] {
   color-scheme: dark;
   --home-gradient: linear-gradient(180deg, #05070d, #05070d);
-  --hero-cta-gradient: linear-gradient(135deg, #1d2434 0%, #2b3650 100%);
+  --hero-cta-gradient: linear-gradient(
+    125deg,
+    color-mix(in srgb, var(--gradient-brand-start) 60%, var(--surface-card)),
+    color-mix(in srgb, var(--gradient-brand-end) 62%, var(--surface-panel))
+  );
   --hero-chip-gradient: linear-gradient(180deg, #0a1221 0%, #162038 100%);
   --home-shadow: 0 24px 45px rgba(3, 3, 3, 0.75);
   --home-shadow-hover: 0 34px 60px rgba(0, 0, 0, 0.85);
@@ -329,10 +336,9 @@ html[data-theme='oled'] {
   color-scheme: dark;
   --home-gradient: linear-gradient(120deg, #0ea5e9 0%, #a855f7 55%, #f472b6 100%);
   --hero-cta-gradient: linear-gradient(
-    138deg,
-    oklch(0.56 0.12 265) 0%,
-    oklch(0.49 0.10 308) 48%,
-    oklch(0.45 0.09 338) 100%
+    130deg,
+    color-mix(in srgb, var(--gradient-brand-start) 70%, rgba(0, 0, 0, 0.25)),
+    color-mix(in srgb, var(--gradient-brand-end) 68%, rgba(0, 0, 0, 0.15))
   );
   --hero-chip-gradient: linear-gradient(
     180deg,
@@ -401,7 +407,11 @@ html[data-theme='oled'] {
 html[data-theme='high-contrast'] {
   color-scheme: dark;
   --home-gradient: linear-gradient(120deg, #f5f7ff, #edf1ff);
-  --hero-cta-gradient: linear-gradient(120deg, #f7faf5 0%, #eef2ff 100%);
+  --hero-cta-gradient: linear-gradient(
+    118deg,
+    color-mix(in srgb, var(--gradient-brand-start) 85%, #0b0f1c),
+    color-mix(in srgb, var(--gradient-brand-end) 80%, #0b0f1c)
+  );
   --hero-chip-gradient: linear-gradient(120deg, #070b14 0%, #0d1323 100%);
   --home-shadow: 0 0 0 rgba(0, 0, 0, 0);
   --home-shadow-hover: 0 0 0 rgba(0, 0, 0, 0);
@@ -6695,7 +6705,7 @@ html[data-theme='dark'] .hero-name {
   position: absolute;
   inset: auto -60% -65% -60%;
   height: 160px;
-  background: radial-gradient(60% 60% at 50% 50%, rgba(160, 231, 229, 0.35), transparent 70%);
+  background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(160, 231, 229, 0.35), transparent 70%);
   opacity: 0;
   transition: opacity var(--motion-normal) var(--ease-standard);
 }
@@ -6808,9 +6818,9 @@ html[data-theme='dark'] .hero-role-stack__title-part--accent::after {
 
 html[data-theme='dark'] .hero-backdrop {
   background:
-    radial-gradient(170% 160% at 18% 20%, rgba(56, 189, 248, 0.28), transparent 58%),
-    radial-gradient(160% 140% at 78% 28%, rgba(248, 113, 113, 0.24), transparent 62%),
-    radial-gradient(180% 140% at 50% 78%, rgba(16, 185, 129, 0.18), transparent 60%),
+    radial-gradient(ellipse 170% 160% at 18% 20%, rgba(56, 189, 248, 0.28), transparent 58%),
+    radial-gradient(ellipse 160% 140% at 78% 28%, rgba(248, 113, 113, 0.24), transparent 62%),
+    radial-gradient(ellipse 180% 140% at 50% 78%, rgba(16, 185, 129, 0.18), transparent 60%),
     radial-gradient(circle, rgba(255, 255, 255, 0.4) 0 1px, transparent 1px 5px),
     linear-gradient(125deg, rgba(255, 255, 255, 0.08), transparent 70%);
   background-size: 100% 100%, 100% 100%, 100% 100%, 6px 6px, 200% 200%;
@@ -6890,9 +6900,9 @@ html[data-theme='oled'] .hero-role-stack__title-part--accent::after {
 
 html[data-theme='oled'] .hero-backdrop {
   background:
-    radial-gradient(180% 160% at 18% 20%, rgba(14, 165, 233, 0.35), transparent 60%),
-    radial-gradient(160% 150% at 72% 25%, rgba(244, 114, 182, 0.28), transparent 65%),
-    radial-gradient(160% 140% at 48% 80%, rgba(45, 212, 191, 0.25), transparent 55%),
+    radial-gradient(ellipse 180% 160% at 18% 20%, rgba(14, 165, 233, 0.35), transparent 60%),
+    radial-gradient(ellipse 160% 150% at 72% 25%, rgba(244, 114, 182, 0.28), transparent 65%),
+    radial-gradient(ellipse 160% 140% at 48% 80%, rgba(45, 212, 191, 0.25), transparent 55%),
     radial-gradient(circle, rgba(255, 255, 255, 0.45) 0 1px, transparent 1px 5px);
   background-size: 100% 100%, 100% 100%, 100% 100%, 6px 6px;
   background-blend-mode: screen;
@@ -6931,8 +6941,8 @@ html[data-theme='oled'] .focus-card__list-item::before {
 }
 
 html[data-theme='konami'] .page-section--hero {
-  background: radial-gradient(120% 120% at 50% 0%, rgba(0, 198, 255, 0.18), transparent 70%),
-    radial-gradient(90% 90% at 20% 20%, rgba(255, 0, 229, 0.18), transparent 70%),
+  background: radial-gradient(ellipse 120% 120% at 50% 0%, rgba(0, 198, 255, 0.18), transparent 70%),
+    radial-gradient(ellipse 90% 90% at 20% 20%, rgba(255, 0, 229, 0.18), transparent 70%),
     var(--surface-primary);
 }
 
@@ -6961,9 +6971,9 @@ html[data-theme='konami'] .hero-role-stack__title-part--accent::after {
 }
 
 html[data-theme='konami'] .hero-backdrop {
-  background: radial-gradient(50% 50% at 25% 30%, rgba(255, 0, 229, 0.45), transparent 70%),
-    radial-gradient(55% 55% at 75% 20%, rgba(0, 198, 255, 0.42), transparent 80%),
-    radial-gradient(65% 65% at 50% 70%, rgba(113, 255, 178, 0.45), transparent 85%);
+  background: radial-gradient(ellipse 50% 50% at 25% 30%, rgba(255, 0, 229, 0.45), transparent 70%),
+    radial-gradient(ellipse 55% 55% at 75% 20%, rgba(0, 198, 255, 0.42), transparent 80%),
+    radial-gradient(ellipse 65% 65% at 50% 70%, rgba(113, 255, 178, 0.45), transparent 85%);
 }
 
 html[data-theme='konami'] .hero-meta__item dt,
@@ -7144,8 +7154,8 @@ html[data-theme='konami'] :where(button,[role="button"],.icon-btn,.header-panel-
 
 .fx-chaos-bg {
   background:
-    radial-gradient(140% 110% at 12% 18%, rgba(59, 130, 246, 0.18), transparent 62%),
-    radial-gradient(120% 120% at 82% 12%, rgba(236, 72, 153, 0.14), transparent 68%),
+    radial-gradient(ellipse 140% 110% at 12% 18%, rgba(59, 130, 246, 0.18), transparent 62%),
+    radial-gradient(ellipse 120% 120% at 82% 12%, rgba(236, 72, 153, 0.14), transparent 68%),
     var(--surface-primary);
 }
 
