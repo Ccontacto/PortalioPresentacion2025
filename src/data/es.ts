@@ -75,7 +75,7 @@ export const es: PortfolioData = {
   ],
   sections: {
     experience: {
-      title: 'Experiencia',
+      title: '',
       jobs: [
         {
           id: 'e1',
@@ -105,7 +105,7 @@ export const es: PortfolioData = {
       ]
     },
     skills: {
-      title: 'Habilidades',
+      title: '',
       categories: [
         {
           id: 'ios',
@@ -130,8 +130,7 @@ export const es: PortfolioData = {
     focus: {
       eyebrow: 'Playbooks accionables',
       title: 'Estrategia lista para integrar en tu roadmap',
-      subtitle:
-        'Tres líneas de ejecución para acelerar lanzamientos iOS potenciados con IA, métricas claras y squads alineados.',
+      subtitle: 'Tres frentes para lanzar iOS + IA con métricas claras y squads alineados.',
       items: [
         {
           id: 'focus-ai',
@@ -158,7 +157,7 @@ export const es: PortfolioData = {
       ]
     },
     projects: {
-      title: 'Proyectos',
+      title: '',
       items: [
         {
           id: 'p1',

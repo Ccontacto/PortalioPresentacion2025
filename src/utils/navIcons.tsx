@@ -11,10 +11,10 @@ function baseIcon(size: number, paths: ReactElement[]) {
     <svg
       width={size}
       height={size}
-      viewBox="0 0 24 24"
-      fill={`url(#${gradientId})`}
-      stroke="currentColor"
-      strokeWidth={1.7}
+      viewBox="0 0 32 32"
+      fill="none"
+      stroke={`url(#${gradientId})`}
+      strokeWidth={2.2}
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden="true"
@@ -34,44 +34,41 @@ function baseIcon(size: number, paths: ReactElement[]) {
 const ICON_MAP: Record<NavIconKey, (size: number) => ReactElement> = {
   home: size =>
     baseIcon(size, [
-      <path key="roof" d="M4 11.5 12 5l8 6.5" />,
-      <path key="body" d="M6.5 10.8V19h4.5v-4.5h2V19H18v-8.2" />
+      <path key="roof" d="M6 14 16 5l10 9" />,
+      <path key="door" d="M10 14v10h6v-6h4v6h6v-10" />
     ]),
   experience: size =>
     baseIcon(size, [
-      <rect key="body" x="4" y="9" width="16" height="10" rx="2.4" />,
-      <path key="handle" d="M9 9V7.5A3 3 0 0 1 15 7.5V9" />,
-      <path key="divider" d="M4 13h16" />
+      <rect key="body" x="6" y="11" width="20" height="14" rx="3" />,
+      <path key="handle" d="M12 11V8.5a2.5 2.5 0 0 1 5 0V11" />,
+      <path key="divider" d="M6 18h20" />
     ]),
   skills: size =>
     baseIcon(size, [
-      <path key="layer1" d="M12 4 4.5 8l7.5 4 7.5-4Z" />,
-      <path key="layer2" d="m4.5 12 7.5 4 7.5-4" />,
-      <path key="layer3" d="m4.5 16 7.5 4 7.5-4" />
+      <rect key="top" x="7" y="7" width="18" height="6" rx="2" />,
+      <rect key="mid" x="5" y="14" width="22" height="6" rx="2" />,
+      <rect key="bot" x="7" y="21" width="18" height="6" rx="2" />
     ]),
   focus: size =>
     baseIcon(size, [
-      <circle key="outer" cx="12" cy="12" r="6" />,
-      <circle key="inner" cx="12" cy="12" r="2.5" />,
-      <path key="north" d="M12 3v3" />,
-      <path key="south" d="M12 18v3" />,
-      <path key="west" d="M3 12h3" />,
-      <path key="east" d="M18 12h3" />
+      <circle key="outer" cx="16" cy="16" r="9" />,
+      <circle key="inner" cx="16" cy="16" r="4" />,
+      <path key="north" d="M16 4v4" />,
+      <path key="south" d="M16 24v4" />,
+      <path key="west" d="M4 16h4" />,
+      <path key="east" d="M24 16h4" />
     ]),
   projects: size =>
     baseIcon(size, [
-      <path
-        key="body"
-        d="M12 3c3 2.4 4.8 6.3 4.1 10-.5 2.5-2 4.8-4.1 6.6-2.1-1.8-3.6-4.1-4.1-6.6C7.2 9.3 9 5.4 12 3Z"
-      />,
-      <circle key="window" cx="12" cy="10" r="1.8" />,
-      <path key="fin-left" d="M9.7 14.7 7 20l4.3-1.6" />,
-      <path key="fin-right" d="M14.3 14.7 17 20l-4.3-1.6" />
+      <path key="body" d="M16 4c3 2.5 4.6 6.4 4 10-.4 2.4-1.7 4.8-4 6.8-2.3-2-3.6-4.4-4-6.8-.6-3.6 1-7.5 4-10Z" />,
+      <circle key="window" cx="16" cy="12" r="2.2" />,
+      <path key="finL" d="M13 18l-3 5" />,
+      <path key="finR" d="M19 18l3 5" />
     ]),
   contact: size =>
     baseIcon(size, [
-      <rect key="envelope" x="4" y="6.5" width="16" height="11" rx="2" />,
-      <path key="flap" d="M5 8.5 12 13l7-4.5" />
+      <rect key="env" x="6" y="10" width="20" height="14" rx="3" />,
+      <path key="flap" d="M6 12l10 7 10-7" />
     ])
 };
 
