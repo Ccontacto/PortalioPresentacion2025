@@ -36,7 +36,6 @@ export default function Projects() {
       data-dev-id="5000"
       eyebrow={projectsSpec?.title ? stripBraces(projectsSpec.title) : data.lang === 'en' ? 'Case studies' : 'Casos reales'}
       title={data.sections.projects.title}
-      subtitle="Lanzamientos y prototipos donde combiné iOS, liderazgo técnico e IA aplicada."
     >
       <div className="page-section__body" data-dev-id="5003">
         <SearchBar projectItems={data.sections.projects.items} onSearch={setCurrentSearchTerm} resultCount={filteredProjects.length} />

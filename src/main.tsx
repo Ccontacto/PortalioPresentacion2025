@@ -2,6 +2,7 @@
 import App from '@app/App';
 import ErrorBoundary from '@components/ErrorBoundary';
 import LandingPlaceholder from '@components/LandingPlaceholder';
+import { LanguageProvider } from '@contexts/LanguageContext';
 import { PortfolioSpecProvider } from '@contexts/PortfolioSpecContext';
 import { logger } from '@utils/logger';
 import { ensureStorageVersion } from '@utils/storage';
@@ -46,7 +47,9 @@ const shouldRenderPortfolio = isPortfolioRoute(portfolioMountPath);
 
 const tree = shouldRenderPortfolio ? (
   <PortfolioSpecProvider>
-    <App />
+    <LanguageProvider>
+      <App />
+    </LanguageProvider>
   </PortfolioSpecProvider>
 ) : (
   <LandingPlaceholder portfolioPath={portfolioMountPath} />

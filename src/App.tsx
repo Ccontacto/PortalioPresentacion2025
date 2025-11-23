@@ -10,7 +10,7 @@ import { TelemetryConsent } from '@components/TelemetryConsent';
 import ToastContainer from '@components/ToastContainer';
 import { KONAMI_DISABLE_MESSAGE, KONAMI_ENABLE_MESSAGE } from '@constants/konami';
 import { DevProvider } from '@contexts/DevContext';
-import { LanguageProvider, useLanguage } from '@contexts/LanguageContext';
+import { useLanguage } from '@contexts/LanguageContext';
 import { NavigationProvider } from '@contexts/NavigationContext';
 import { TelemetryProvider } from '@contexts/TelemetryContext';
 import { ThemeProvider, useTheme } from '@contexts/ThemeContext';
@@ -156,20 +156,18 @@ function AppContent() {
 
 export default function App() {
   return (
-    <LanguageProvider>
-      <ToastProvider>
-        <ThemeProvider>
-          <TelemetryProvider>
-            <NavigationProvider>
-              <DevProvider>
-                <LazyMotion features={domAnimation} strict>
-                  <AppContent />
-                </LazyMotion>
-              </DevProvider>
-            </NavigationProvider>
-          </TelemetryProvider>
-        </ThemeProvider>
-      </ToastProvider>
-    </LanguageProvider>
+    <ToastProvider>
+      <ThemeProvider>
+        <TelemetryProvider>
+          <NavigationProvider>
+            <DevProvider>
+              <LazyMotion features={domAnimation} strict>
+                <AppContent />
+              </LazyMotion>
+            </DevProvider>
+          </NavigationProvider>
+        </TelemetryProvider>
+      </ThemeProvider>
+    </ToastProvider>
   );
 }

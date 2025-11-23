@@ -25,9 +25,10 @@ export default function Skills() {
   const { data } = useLanguage();
   const skillsSpec = usePortfolioContent('skills');
   useSectionTelemetry('skills');
-  const sectionTitle = data.sections.skills.title || stripBraces(skillsSpec?.title);
-  const sectionSubtitle =
-    'Herramientas y frameworks con los que construyo soluciones móviles e IA de forma integral.';
+  const sectionTitle =
+    data.sections.skills.title ||
+    stripBraces(skillsSpec?.title) ||
+    (data.lang === 'en' ? 'Skills & tools' : 'Habilidades y herramientas');
 
   return (
     <SectionLayout
@@ -35,7 +36,6 @@ export default function Skills() {
       data-dev-id="3100"
       eyebrow={stripBraces(skillsSpec?.title) || (data.lang === 'en' ? 'Core stack' : 'Stack principal')}
       title={sectionTitle}
-      subtitle={sectionSubtitle}
     >
       <div className="page-section__body" data-dev-id="3103">
         <HorizontalScroller

@@ -1,7 +1,6 @@
 
 import { ContactForm } from '@components/ContactForm/ContactForm';
 import Icon from '@components/icons/VectorIcon';
-import { WhatsappGlyph } from '@components/icons/WhatsappGlyph';
 import { PrivacyPanel } from '@components/PrivacyPanel';
 import { useLanguage } from '@contexts/LanguageContext';
 import { usePortfolioContent } from '@contexts/PortfolioSpecContext';
@@ -11,58 +10,19 @@ import { SectionHeader } from '@design-system/primitives/SectionHeader';
 import { SectionWrapper } from '@design-system/primitives/SectionWrapper';
 import { useSectionTelemetry } from '@telemetry/useSectionTelemetry';
 import { openSafeUrl } from '@utils/urlValidation';
-import { useState } from 'react';
-
-type FormStatus = 'idle' | 'sending' | 'success' | 'error';
+import { useCallback } from 'react';
 
 export default function Contact() {
-  const { data, t } = useLanguage();
+  const { data } = useLanguage();
   const { showToast } = useToast();
-  const [status, setStatus] = useState<FormStatus>('idle');
   useSectionTelemetry('contact');
   const contactSpec = usePortfolioContent('contact');
-  const invalidUrlMessage = data.toasts?.invalid_url ?? 'Enlace no disponible';
   const contactTitle = data.lang === 'en' ? 'Contact' : 'Contacto';
   const contactSubtitle =
     data.lang === 'en'
       ? 'Project, collaboration or just want to chat architecture? Write me.'
       : '¿Proyecto, colaboración o simplemente quieres platicar de arquitectura? Escríbeme.';
-
-  const copyEmail = async () => {
-    if (!navigator.clipboard) {
-      showToast(data.toasts.email_copy_error, 'error');
-      return;
-    }
-    try {
-      await navigator.clipboard.writeText(data.email);
-      showToast(data.toasts.email_copy_success, 'success');
-      setStatus('success');
-    } catch (error) {
-      if (import.meta.env.DEV) {
-        console.error('Clipboard copy failed', error);
-      }
-      showToast(data.toasts.email_copy_error, 'error');
-      setStatus('error');
-    }
-  };
-
-  const openEmail = () => {
-    setStatus('sending');
-    window.location.href = `mailto:${data.email}`;
-  };
-
-  const openWhatsApp = () => {
-    setStatus('sending');
-    const message = encodeURIComponent('Hola José Carlos! Vi tu portfolio y me gustaría conversar.');
-    const whatsappUrl = `https://wa.me/${data.whatsapp}?text=${message}`;
-    if (!openSafeUrl(whatsappUrl)) {
-      showToast(invalidUrlMessage, 'error');
-      setStatus('error');
-      return;
-    }
-    showToast(data.toasts.whatsapp_open, 'info');
-    setStatus('success');
-  };
+  const invalidUrlMessage = data.toasts?.invalid_url ?? 'Enlace no disponible';
 
   const contactTitleHtml = contactTitle.replace(
     /(IA|AI)/gi,
@@ -86,77 +46,147 @@ export default function Contact() {
           description: 'Alineamos contexto, métricas y siguientes pasos listos para ejecutar desde la primera sesión.'
         };
 
+  const scrollToForm = useCallback(() => {
+    const target = document.getElementById('contact-form-panel');
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, []);
+
+  const openEmail = () => {
+    window.location.href = `mailto:${data.email}`;
+  };
+
+  const openWhatsApp = () => {
+    const message = encodeURIComponent('Hola José Carlos! Vi tu portfolio y me gustaría conversar.');
+    const whatsappUrl = `https://wa.me/${data.whatsapp}?text=${message}`;
+    if (!openSafeUrl(whatsappUrl)) {
+      showToast(invalidUrlMessage, 'error');
+      return;
+    }
+    showToast(data.toasts.whatsapp_open, 'info');
+  };
+
+  const copyEmail = async () => {
+    if (!navigator.clipboard) {
+      showToast(data.toasts.email_copy_error, 'error');
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(data.email);
+      showToast(data.toasts.email_copy_success, 'success');
+    } catch (error) {
+      if (import.meta.env.DEV) {
+        console.error('Clipboard copy failed', error);
+      }
+      showToast(data.toasts.email_copy_error, 'error');
+    }
+  };
+
+  const contactMethods = [
+    {
+      id: 'whatsapp',
+      label: 'WhatsApp',
+      value: data.whatsapp,
+      icon: <WhatsappGlyph className="h-6 w-6" />,
+      action: openWhatsApp
+    },
+    {
+      id: 'email',
+      label: data.lang === 'en' ? 'Email' : 'Correo',
+      value: data.email,
+      icon: <Icon name="mail" size={22} aria-hidden />,
+      action: openEmail
+    },
+    {
+      id: 'copy',
+      label: data.lang === 'en' ? 'Copy' : 'Copiar',
+      value: data.email,
+      icon: <Icon name="copy" size={20} aria-hidden />,
+      action: copyEmail
+    }
+  ];
+
   return (
     <>
       <SectionWrapper id="contact" aria-labelledby="contact-heading" data-dev-id="9000">
         <div className="contact-wrapper" data-dev-id="9001">
           <div className="contact-panel">
-            <header className="contact-hero" data-dev-id="9002">
-              <span className="contact-hero__eyebrow">{data.lang === 'en' ? 'Let’s connect' : 'Conectemos'}</span>
-              <h2
-                id="contact-heading"
-                className="contact-hero__title"
-                dangerouslySetInnerHTML={{ __html: contactTitleHtml }}
-              />
-              <p
-                className="contact-hero__subtitle"
-                dangerouslySetInnerHTML={{ __html: contactSubtitleHtml }}
-              />
-              <p className="contact-hero__support">
-                <strong>{infoPanelCopy.title}</strong>
-                {' — '}
-                {infoPanelCopy.description}
+            <section className="contact-hero-card" data-dev-id="9002">
+              <header className="contact-hero">
+                <div className="contact-hero__badge-group">
+                  <span className="contact-hero__eyebrow">{data.lang === 'en' ? 'Let’s connect' : 'Conectemos'}</span>
+                  <span className="contact-status-pill">
+                    <Icon name="sparkles" size={16} aria-hidden />
+                    {data.badge}
+                  </span>
+                </div>
+                <div className="contact-hero__headline">
+                  <h2
+                    id="contact-heading"
+                    className="contact-hero__title"
+                    dangerouslySetInnerHTML={{ __html: contactTitleHtml }}
+                  />
+                  <p
+                    className="contact-hero__subtitle"
+                    dangerouslySetInnerHTML={{ __html: contactSubtitleHtml }}
+                  />
+                </div>
+                <p className="contact-hero__support">
+                  <span className="contact-hero__support-eyebrow">{infoPanelCopy.title}</span>
+                  {infoPanelCopy.description}
+                </p>
+              </header>
+
+              <div className="contact-hero__chant" aria-hidden="true">
+                <span>Contacto</span>
+                <span>Contacto</span>
+                <span>Contacto</span>
+              </div>
+              <p className="contact-hero__chant-caption">
+                {stripBraces(contactSpec?.subtitle) || contactSubtitle}
               </p>
-            </header>
 
-            <div
-              role="status"
-              aria-live="polite"
-              aria-atomic="true"
-              className="sr-only"
-            >
-              {status === 'sending' && (data.lang === 'en' ? 'Sending message...' : 'Enviando mensaje...')}
-              {status === 'success' && (data.lang === 'en' ? 'Message sent' : 'Mensaje enviado correctamente')}
-              {status === 'error' && (data.lang === 'en' ? 'Error. Try again.' : 'Error al enviar. Intenta de nuevo.')}
-            </div>
-
-            <div className="contact-actions" data-dev-id="9003">
-              <button
-                type="button"
-                onClick={openWhatsApp}
-                className="contact-cta contact-cta--whatsapp"
-              >
-                <span className="contact-cta__icon" aria-hidden="true">
-                  <WhatsappGlyph className="h-8 w-8" />
-                </span>
-                <span className="contact-cta__label">WhatsApp</span>
-              </button>
-              <button
-                type="button"
-                onClick={openEmail}
-                className="contact-cta contact-cta--email"
-              >
-                <span className="contact-cta__icon" aria-hidden="true">
-                  <Icon name="mail" size={32} />
-                </span>
-                <span className="contact-cta__label">Email</span>
-              </button>
-              <button
-                type="button"
-                onClick={copyEmail}
-                className="contact-cta contact-cta--copy"
-              >
-                <span className="contact-cta__icon" aria-hidden="true">
-                  <Icon name="copy" size={32} />
-                </span>
-                <span className="contact-cta__label">{data.lang === 'en' ? 'Copy email' : 'Copiar correo'}</span>
-              </button>
-            </div>
-
+              <div className="contact-folder">
+                <div className="contact-folder__tab">
+                  <span>{data.lang === 'en' ? 'Contact sheet' : 'Ficha de contacto'}</span>
+                </div>
+                <div className="contact-folder__body">
+                  <p className="contact-folder__lead">
+                    {data.lang === 'en'
+                      ? 'Pick a channel to start the conversation and I will get back within 24h.'
+                      : 'Elige el canal para iniciar la conversación y respondo en menos de 24h.'}
+                  </p>
+                  <ul className="contact-folder__methods">
+                    {contactMethods.map(method => (
+                      <li key={method.id} className="contact-method">
+                        <span className="contact-method__icon" aria-hidden="true">
+                          {method.icon}
+                        </span>
+                        <div className="contact-method__copy">
+                          <span className="contact-method__label">{method.label}</span>
+                          <span className="contact-method__value">{method.value}</span>
+                        </div>
+                        <button type="button" className="contact-method__action" onClick={method.action}>
+                          <Icon name="arrowRight" size={18} aria-hidden />
+                          <span className="sr-only">
+                            {data.lang === 'en' ? 'Open ' : 'Abrir '}
+                            {method.label}
+                          </span>
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                  <button type="button" className="contact-folder__submit" onClick={scrollToForm}>
+                    {data.lang === 'en' ? 'Go to form' : 'Ir al formulario'}
+                  </button>
+                </div>
+              </div>
+            </section>
           </div>
 
           <div className="contact-form-panel">
-            <Card className="contact-form-card" as="div">
+            <Card className="contact-form-card" as="div" id="contact-form-panel">
               <SectionHeader
                 title={stripBraces(contactSpec?.title) || contactTitle}
                 subtitle={stripBraces(contactSpec?.subtitle) || contactSubtitle}
@@ -168,11 +198,6 @@ export default function Contact() {
         </div>
       </SectionWrapper>
 
-      {/* MEJORA 1: footer con role="contentinfo" */}
-      <footer role="contentinfo" className="py-8 text-center text-sm border-t-2 border-black dark:border-white">
-        <p className="mb-2">{t('footer', 'rights')}</p>
-        <p className="text-xs opacity-70">{t('footer', 'builtWith')}</p>
-      </footer>
     </>
   );
 }

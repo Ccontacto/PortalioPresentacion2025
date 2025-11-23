@@ -54,7 +54,6 @@ export default function Experience() {
       data-dev-id="4000"
       eyebrow={data.lang === 'en' ? 'Trajectory' : 'Trayectoria destacada'}
       title={data.sections.experience.title}
-      subtitle="Dirección técnica, liderazgo de squads y exploración de IA generativa aplicadas a productos reales."
     >
       <div className={wrapperClass}>
         <div

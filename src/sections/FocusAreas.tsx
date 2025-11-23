@@ -28,7 +28,6 @@ export default function FocusAreas() {
       headerClassName="focus-header"
       eyebrow={focus.eyebrow}
       title={focus.title}
-      subtitle={focus.subtitle}
     >
       <div data-dev-id="3002">
         <HorizontalScroller itemCount={focus.items.length} itemSelector=".focus-card" prevLabelKey="prevFocus" nextLabelKey="nextFocus">

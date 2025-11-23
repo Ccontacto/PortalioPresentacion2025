@@ -15,11 +15,26 @@ type LanguageContextValue = {
   t: (key: string, defaultValue?: string) => string;
 };
 
-const LanguageContext = createContext<LanguageContextValue | null>(null);
+const fallbackContext: LanguageContextValue = {
+  data: es,
+  currentLang: 'es',
+  toggleLanguage: () => {
+    if (import.meta.env?.DEV) {
+      console.warn('[LanguageContext] LanguageProvider ausente. Usando fallback ES.');
+    }
+  },
+  t: (key: string, defaultValue?: string) => defaultValue ?? key
+};
 
+const LanguageContext = createContext<LanguageContextValue>(fallbackContext);
+
+let fallbackWarningEmitted = false;
 export const useLanguage = () => {
   const ctx = useContext(LanguageContext);
-  if (!ctx) throw new Error('useLanguage must be used within LanguageProvider');
+  if (ctx === fallbackContext && import.meta.env?.DEV && !fallbackWarningEmitted) {
+    fallbackWarningEmitted = true;
+    console.warn('[LanguageContext] Se está utilizando el contexto por defecto sin LanguageProvider.');
+  }
   return ctx;
 };
 

@@ -2189,33 +2189,47 @@ html[data-theme='konami'] .icon-btn:hover {
 .search-trigger {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: 12px;
-  width: min(420px, 100%);
-  padding: 18px 28px;
-  border-radius: 24px;
-  border: 3px solid var(--border-strong);
-  background: var(--surface-card);
-  color: var(--text-strong);
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  box-shadow: var(--elev-2);
+  justify-content: flex-start;
+  gap: 18px;
+  width: min(560px, 100%);
+  padding: 20px 26px;
+  border-radius: 32px;
+  border: 1px solid transparent;
+  background:
+    linear-gradient(var(--home-card-bg), var(--home-card-bg)) padding-box,
+    linear-gradient(
+      120deg,
+      color-mix(in srgb, var(--gradient-brand-start) 72%, transparent),
+      color-mix(in srgb, var(--gradient-brand-end) 72%, transparent)
+    ) border-box;
+  color: var(--home-text);
+  font-weight: 500;
+  letter-spacing: normal;
+  text-transform: none;
+  text-align: left;
+  box-shadow:
+    0 24px 50px rgba(15, 23, 42, 0.12),
+    0 0 0 1px color-mix(in srgb, var(--home-border) 65%, transparent);
   cursor: pointer;
   transition:
     transform var(--motion-fast) var(--ease-standard),
     box-shadow var(--motion-fast) var(--ease-standard),
-    background-color var(--motion-fast) var(--ease-standard);
-}
-
-.search-trigger span {
-  font-size: 0.95rem;
+    background-color var(--motion-fast) var(--ease-standard),
+    color var(--motion-fast) var(--ease-standard);
 }
 
 .search-trigger:hover {
-  transform: translate(-1px, -1px);
-  box-shadow: var(--elev-3);
-  background: color-mix(in srgb, var(--surface-card) 85%, transparent);
+  transform: translate(-2px, -2px);
+  box-shadow:
+    0 28px 60px rgba(15, 23, 42, 0.18),
+    0 0 0 1px color-mix(in srgb, var(--home-border) 80%, transparent);
+  background:
+    linear-gradient(color-mix(in srgb, var(--home-card-bg) 94%, transparent), color-mix(in srgb, var(--home-card-bg) 92%, transparent)) padding-box,
+    linear-gradient(
+      120deg,
+      color-mix(in srgb, var(--gradient-brand-start) 88%, transparent),
+      color-mix(in srgb, var(--gradient-brand-end) 88%, transparent)
+    ) border-box;
 }
 
 .search-trigger:focus-visible {
@@ -2224,13 +2238,35 @@ html[data-theme='konami'] .icon-btn:hover {
 }
 
 html[data-theme='dark'] .search-trigger {
-  background: color-mix(in srgb, var(--surface-panel) 90%, transparent);
-  box-shadow: 0 18px 28px rgba(0, 0, 0, 0.55);
+  background:
+    linear-gradient(
+      color-mix(in srgb, var(--surface-panel) 94%, transparent),
+      color-mix(in srgb, var(--surface-panel) 86%, transparent)
+    ) padding-box,
+    linear-gradient(
+      130deg,
+      color-mix(in srgb, var(--gradient-brand-start) 82%, transparent),
+      color-mix(in srgb, var(--gradient-brand-end) 82%, transparent)
+    ) border-box;
+  box-shadow:
+    0 32px 70px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(255, 255, 255, 0.05);
 }
 
 html[data-theme='dark'] .search-trigger:hover {
-  background: rgba(255, 255, 255, 0.08);
-  box-shadow: 0 20px 32px rgba(0, 0, 0, 0.6);
+  background:
+    linear-gradient(
+      color-mix(in srgb, var(--surface-panel) 90%, transparent),
+      color-mix(in srgb, var(--surface-panel) 80%, transparent)
+    ) padding-box,
+    linear-gradient(
+      130deg,
+      color-mix(in srgb, var(--gradient-brand-start) 96%, transparent),
+      color-mix(in srgb, var(--gradient-brand-end) 96%, transparent)
+    ) border-box;
+  box-shadow:
+    0 36px 80px rgba(0, 0, 0, 0.65),
+    0 0 0 1px rgba(255, 255, 255, 0.08);
 }
 
 .search-trigger--icon {
@@ -2248,6 +2284,74 @@ html[data-theme='dark'] .search-trigger:hover {
   padding: 14px 20px;
   font-size: 0.85rem;
   gap: 10px;
+}
+
+.search-trigger__icon {
+  width: 54px;
+  height: 54px;
+  border-radius: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--gradient-brand-start), var(--gradient-brand-end));
+  color: var(--text-on-brand);
+  box-shadow: 0 15px 30px rgba(99, 102, 241, 0.35);
+}
+
+.search-trigger__label {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.search-trigger__eyebrow {
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--home-text-muted);
+}
+
+.search-trigger__text {
+  font-size: clamp(1rem, 1.2vw, 1.25rem);
+  font-weight: 700;
+  color: var(--home-text);
+}
+
+.search-trigger__hint {
+  font-size: 0.85rem;
+  color: var(--home-text-muted);
+}
+
+.search-trigger__kbd {
+  border-radius: 999px;
+  padding: 10px 18px;
+  border: 1px solid color-mix(in srgb, var(--home-border) 80%, transparent);
+  background: color-mix(in srgb, var(--surface-panel) 85%, transparent);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+
+html[data-theme='dark'] .search-trigger__kbd {
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(248, 250, 252, 0.85);
+}
+
+@media (max-width: 640px) {
+  .search-trigger {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+
+  .search-trigger__label {
+    align-items: flex-start;
+  }
+
+  .search-trigger__kbd {
+    align-self: flex-start;
+  }
 }
 
 .search-modal {
@@ -2275,25 +2379,46 @@ html[data-theme='dark'] .search-modal__backdrop {
   position: relative;
   width: min(680px, 100%);
   max-height: min(640px, calc(100vh - 80px));
-  background: var(--home-card-bg);
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--home-card-bg) 96%, transparent),
+      color-mix(in srgb, var(--home-card-bg) 88%, transparent)
+    ) padding-box,
+    linear-gradient(
+      125deg,
+      color-mix(in srgb, var(--gradient-brand-start) 70%, transparent),
+      color-mix(in srgb, var(--gradient-brand-end) 70%, transparent)
+    ) border-box;
   color: var(--home-text);
-  border: 3px solid var(--home-border);
+  border: 1px solid transparent;
   border-radius: 26px;
   box-shadow:
-    0 0 0 1px color-mix(in srgb, var(--sketch-ink) 12%, transparent) inset,
-    var(--home-shadow);
+    0 25px 80px rgba(15, 23, 42, 0.25),
+    0 0 0 1px color-mix(in srgb, var(--home-border) 50%, transparent) inset;
   padding: 32px;
   display: flex;
   flex-direction: column;
   gap: 20px;
   overflow: hidden;
+  backdrop-filter: blur(22px);
 }
 
 html[data-theme='dark'] .search-modal__panel {
-  background: var(--home-card-bg);
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--surface-panel) 90%, transparent),
+      color-mix(in srgb, var(--surface-panel) 80%, transparent)
+    ) padding-box,
+    linear-gradient(
+      125deg,
+      color-mix(in srgb, var(--gradient-brand-start) 80%, transparent),
+      color-mix(in srgb, var(--gradient-brand-end) 80%, transparent)
+    ) border-box;
   box-shadow:
-    0 0 0 1px rgba(148, 163, 184, 0.15) inset,
-    var(--home-shadow);
+    0 30px 90px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(148, 163, 184, 0.15) inset;
 }
 
 .search-modal__header {
@@ -2314,6 +2439,36 @@ html[data-theme='dark'] .search-modal__panel {
   margin-top: 6px;
   font-size: 0.9rem;
   color: var(--home-text-muted);
+}
+
+.search-modal__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.search-modal__pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--home-border) 80%, transparent);
+  background:
+    linear-gradient(
+      color-mix(in srgb, var(--home-card-bg) 92%, transparent),
+      color-mix(in srgb, var(--home-card-bg) 85%, transparent)
+    );
+  color: var(--home-text);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.search-modal__pill--ghost {
+  background: transparent;
+  color: var(--home-text-muted);
+  border-style: dashed;
 }
 
 html[data-theme='dark'] .search-modal__subtitle {
@@ -2365,16 +2520,27 @@ html[data-theme='dark'] .search-modal__subtitle {
 
 .search-modal__input {
   width: 100%;
-  padding: 16px 56px;
-  padding-left: 60px;
-  border-radius: 22px;
-  border: 3px solid var(--home-border);
-  background: var(--home-card-bg);
+  padding: 18px 56px;
+  padding-left: 64px;
+  border-radius: 24px;
+  border: 1px solid transparent;
+  background:
+    linear-gradient(
+      color-mix(in srgb, var(--home-card-bg) 98%, transparent),
+      color-mix(in srgb, var(--home-card-bg) 90%, transparent)
+    ) padding-box,
+    linear-gradient(
+      120deg,
+      color-mix(in srgb, var(--gradient-brand-start) 60%, transparent),
+      color-mix(in srgb, var(--gradient-brand-end) 60%, transparent)
+    ) border-box;
   color: var(--home-text);
   font-size: 1rem;
   font-weight: 600;
   letter-spacing: 0.02em;
-  box-shadow: var(--home-shadow);
+  box-shadow:
+    0 24px 60px rgba(15, 23, 42, 0.16),
+    0 0 0 1px color-mix(in srgb, var(--home-border) 40%, transparent);
   transition:
     transform var(--motion-fast) var(--ease-standard),
     box-shadow var(--motion-fast) var(--ease-standard),
@@ -2386,8 +2552,19 @@ html[data-theme='dark'] .search-modal__subtitle {
 }
 
 html[data-theme='dark'] .search-modal__input {
-  background: rgba(255, 255, 255, 0.08);
-  box-shadow: 10px 10px 0 var(--shadow-soft);
+  background:
+    linear-gradient(
+      color-mix(in srgb, rgba(18, 22, 35, 0.95) 100%, transparent),
+      color-mix(in srgb, rgba(18, 22, 35, 0.9) 100%, transparent)
+    ) padding-box,
+    linear-gradient(
+      120deg,
+      color-mix(in srgb, var(--gradient-brand-start) 70%, transparent),
+      color-mix(in srgb, var(--gradient-brand-end) 70%, transparent)
+    ) border-box;
+  box-shadow:
+    0 28px 70px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(255, 255, 255, 0.08);
 }
 
 html[data-theme='dark'] .search-modal__input::placeholder {
@@ -2433,11 +2610,49 @@ html[data-theme='dark'] .search-modal__clear {
   box-shadow: 6px 6px 0 var(--shadow-soft);
 }
 
+.search-modal__section {
+  padding: 18px;
+  border-radius: 24px;
+  border: 1px solid color-mix(in srgb, var(--home-border) 75%, transparent);
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.08);
+}
+
+html[data-theme='dark'] .search-modal__section {
+  background: rgba(8, 10, 16, 0.4);
+  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.45);
+}
+
+.search-modal__section + .search-modal__section {
+  margin-top: 18px;
+}
+
+.search-modal__section-heading {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 14px;
+}
+
+.search-modal__section-title {
+  font-size: 0.9rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--home-text);
+}
+
+.search-modal__section-caption {
+  font-size: 0.85rem;
+  color: var(--home-text-muted);
+}
+
 .search-modal__suggestions {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin-top: 8px;
 }
 
 .search-modal__chip {
@@ -2445,17 +2660,17 @@ html[data-theme='dark'] .search-modal__clear {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 8px 16px;
+  padding: 8px 18px;
   border-radius: 9999px;
-  border: 3px solid var(--border-strong);
-  background: var(--surface-card);
-  color: var(--text-strong);
+  border: 1px solid color-mix(in srgb, var(--home-border) 75%, transparent);
+  background: color-mix(in srgb, var(--surface-card) 90%, transparent);
+  color: var(--home-text);
   font-size: 0.85rem;
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
   cursor: pointer;
-  box-shadow: 6px 6px 0 var(--shadow-strong);
+  box-shadow: 6px 6px 0 rgba(15, 23, 42, 0.1);
   transition:
     transform var(--motion-fast) var(--ease-standard),
     box-shadow var(--motion-fast) var(--ease-standard),
@@ -2465,14 +2680,14 @@ html[data-theme='dark'] .search-modal__clear {
 
 .search-modal__chip:hover {
   transform: translate(-2px, -2px);
-  box-shadow: 8px 8px 0 var(--shadow-strong-hover);
+  box-shadow: 8px 8px 0 rgba(15, 23, 42, 0.14);
   background: linear-gradient(135deg, var(--gradient-brand-start), var(--gradient-brand-end));
   color: var(--text-on-brand);
 }
 
 html[data-theme='dark'] .search-modal__chip {
   background: rgba(255, 255, 255, 0.08);
-  box-shadow: 6px 6px 0 var(--shadow-soft);
+  box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.25);
 }
 
 .search-modal__tag-list {
@@ -2490,15 +2705,15 @@ html[data-theme='dark'] .search-modal__chip {
   justify-content: center;
   padding: 10px 14px;
   border-radius: 18px;
-  border: 3px solid var(--border-strong);
-  background: var(--surface-card);
-  color: var(--text-strong);
+  border: 1px solid color-mix(in srgb, var(--home-border) 70%, transparent);
+  background: color-mix(in srgb, var(--surface-card) 92%, transparent);
+  color: var(--home-text);
   font-size: 0.85rem;
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
   cursor: pointer;
-  box-shadow: 6px 6px 0 var(--shadow-strong);
+  box-shadow: 6px 6px 0 rgba(15, 23, 42, 0.1);
   transition:
     transform var(--motion-fast) var(--ease-standard),
     box-shadow var(--motion-fast) var(--ease-standard),
@@ -2508,7 +2723,7 @@ html[data-theme='dark'] .search-modal__chip {
 
 .search-modal__tag:hover {
   transform: translate(-2px, -2px);
-  box-shadow: 8px 8px 0 var(--shadow-strong-hover);
+  box-shadow: 8px 8px 0 rgba(15, 23, 42, 0.15);
   background: rgba(148, 163, 184, 0.12);
 }
 
@@ -2516,7 +2731,7 @@ html[data-theme='dark'] .search-modal__chip {
   transform: translate(-3px, -3px);
   background: linear-gradient(135deg, var(--gradient-brand-start), var(--gradient-brand-end));
   color: var(--text-on-brand);
-  box-shadow: 10px 10px 0 var(--shadow-strong-hover);
+  box-shadow: 10px 10px 0 rgba(15, 23, 42, 0.2);
 }
 
 .search-modal__actions {
@@ -4009,18 +4224,66 @@ html[data-theme='konami'] .skill-card__icon {
 
 .contact-wrapper {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1240px;
   margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 32px;
+  gap: clamp(20px, 4vw, 40px);
   align-items: stretch;
+}
+
+@media (min-width: 1024px) {
+  .contact-wrapper {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  }
 }
 
 .contact-panel {
   display: flex;
   flex-direction: column;
   gap: 24px;
+}
+
+.contact-hero-card {
+  width: 100%;
+  border-radius: 32px;
+  border: 1px solid transparent;
+  padding: clamp(24px, 3vw, 36px);
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--home-card-bg) 94%, transparent),
+      color-mix(in srgb, var(--home-card-bg) 86%, transparent)
+    ) padding-box,
+    linear-gradient(
+      120deg,
+      color-mix(in srgb, var(--gradient-brand-start) 70%, transparent),
+      color-mix(in srgb, var(--gradient-brand-end) 70%, transparent)
+    ) border-box;
+  box-shadow:
+    0 30px 70px rgba(15, 23, 42, 0.16),
+    0 0 0 1px color-mix(in srgb, var(--home-border) 45%, transparent) inset;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  height: 100%;
+}
+
+html[data-theme='dark'] .contact-hero-card {
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, rgba(10, 14, 24, 0.95) 100%, transparent),
+      color-mix(in srgb, rgba(12, 18, 34, 0.88) 100%, transparent)
+    ) padding-box,
+    linear-gradient(
+      120deg,
+      color-mix(in srgb, var(--gradient-brand-start) 85%, transparent),
+      color-mix(in srgb, var(--gradient-brand-end) 85%, transparent)
+    ) border-box;
+  box-shadow:
+    0 36px 90px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(255, 255, 255, 0.08) inset;
 }
 
 .contact-form-panel {
@@ -4034,11 +4297,17 @@ html[data-theme='konami'] .skill-card__icon {
 }
 
 .contact-hero {
-  text-align: left;
   display: flex;
   flex-direction: column;
   gap: 18px;
   align-items: flex-start;
+}
+
+.contact-hero__badge-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
 }
 
 .contact-hero__eyebrow {
@@ -4055,6 +4324,19 @@ html[data-theme='konami'] .skill-card__icon {
   letter-spacing: 0.18em;
   text-transform: uppercase;
   font-size: 0.75rem;
+}
+
+.contact-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  border: 1px solid color-mix(in srgb, var(--gradient-brand-end) 60%, transparent);
+  background: color-mix(in srgb, var(--gradient-brand-start) 18%, transparent);
+  color: var(--home-text);
+  font-size: 0.8rem;
+  font-weight: 600;
 }
 
 .contact-hero__title {
@@ -4076,6 +4358,12 @@ html[data-theme='konami'] .skill-card__icon {
   color: var(--home-text-muted);
 }
 
+.contact-hero__headline {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
 .contact-hero__accent {
   background: linear-gradient(120deg, var(--gradient-brand-start), var(--gradient-brand-end));
   -webkit-background-clip: text;
@@ -4091,8 +4379,13 @@ html[data-theme='konami'] .skill-card__icon {
   color: var(--text-secondary);
 }
 
-.contact-hero__support strong {
-  color: var(--text-strong);
+.contact-hero__support-eyebrow {
+  display: block;
+  font-size: 0.78rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--home-text-muted);
+  margin-bottom: 6px;
 }
 
 html[data-theme='dark'] .contact-hero__accent {
@@ -4100,61 +4393,30 @@ html[data-theme='dark'] .contact-hero__accent {
   text-shadow: 0 8px 24px rgba(4, 7, 12, 0.3);
 }
 
-.contact-actions {
+.contact-hero__chant {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 18px;
   flex-wrap: wrap;
-}
-
-.contact-cta {
-  display: inline-flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 14px;
-  min-width: 210px;
-  padding: 18px 26px;
-  border-radius: 28px;
-  border: 2px solid var(--home-border);
-  background: var(--home-gradient);
-  color: var(--home-text);
-  box-shadow: var(--home-shadow);
-  transition:
-    transform var(--motion-normal) var(--ease-standard),
-    box-shadow var(--motion-normal) var(--ease-standard),
-    border-color var(--motion-normal) var(--ease-standard),
-    background var(--motion-normal) var(--ease-standard),
-    color var(--motion-normal) var(--ease-standard);
-}
-
-.contact-cta:hover {
-  transform: translate(-3px, -5px);
-  box-shadow: var(--home-shadow-hover);
-  border-color: var(--home-border);
-  background: var(--neutral-near-white);
-  color: var(--home-text);
-}
-
-.contact-cta__icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 48px;
-  height: 48px;
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 2px solid rgba(255, 255, 255, 0.28);
-  box-shadow: inset 0 4px 12px rgba(0, 0, 0, 0.45);
-  color: currentColor;
-}
-
-.contact-cta__label {
-  font-family: 'Outfit', sans-serif;
-  font-size: 0.95rem;
-  font-weight: 800;
-  letter-spacing: 0.14em;
+  gap: 12px;
+  font-size: clamp(1.4rem, 2vw + 0.8rem, 2rem);
+  font-weight: 900;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
+  color: var(--home-text);
+  opacity: 0.85;
+}
+
+.contact-hero__chant span {
+  padding: 6px 14px;
+  border-radius: 18px;
+  border: 1px solid color-mix(in srgb, var(--gradient-brand-end) 60%, transparent);
+  background: color-mix(in srgb, var(--gradient-brand-start) 15%, transparent);
+}
+
+.contact-hero__chant-caption {
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--home-text);
 }
 
 /* Homologar CTAs a identidad 2025: degradado brand + tinte leve */
@@ -4257,6 +4519,7 @@ html[data-theme='konami'] .contact-cta,
 html[data-theme='konami'] .hero-action--primary {
   animation: retroPulse 3.8s ease-in-out infinite;
 }
+
 
 
 .project-thumb {
