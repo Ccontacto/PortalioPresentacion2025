@@ -67,14 +67,13 @@ export const en: PortfolioData = {
     { id: 'contact', label: 'Contact' }
   ],
   sections: {
-    experience: { title: 'Experience', jobs: es.sections.experience.jobs },
-    skills: { title: 'Skills', categories: es.sections.skills.categories },
-    projects: { title: 'Projects', items: es.sections.projects.items },
+    experience: { title: '', jobs: es.sections.experience.jobs },
+    skills: { title: '', categories: es.sections.skills.categories },
+    projects: { title: '', items: es.sections.projects.items },
     focus: {
       eyebrow: 'Actionable playbooks',
-      title: 'Strategy ready for your roadmap',
-      subtitle:
-        'Three execution lanes to launch iOS + AI initiatives with measurable impact, faster releases and aligned squads.',
+      title: 'Deploy iOS + AI with clarity',
+      subtitle: 'Three execution lanes to launch and scale initiatives with measurable impact.',
       items: [
         {
           id: 'focus-ai',
@@ -142,6 +141,10 @@ export const en: PortfolioData = {
     prevProjects: 'View previous projects',
     nextProjects: 'View next projects',
     prevSkills: 'View previous skills',
-    nextSkills: 'View next skills'
+    nextSkills: 'View next skills',
+    prevFocus: 'View previous playbook',
+    nextFocus: 'View next playbook',
+    themeSwitcherLabel: 'Theme',
+    themeSwitcherSubtitle: 'Visual modes'
   }
 } as const;

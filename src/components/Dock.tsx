@@ -1,21 +1,12 @@
 import { m } from 'framer-motion';
-import { Briefcase, Code, Home, Mail, Rocket, Sparkles } from 'lucide-react';
-import { useCallback, useEffect, useRef, useState, type JSX, type KeyboardEvent as ReactKeyboardEvent } from 'react';
+import { useCallback, useEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from 'react';
 
 import { useLanguage } from '../contexts/LanguageContext';
 import { useNavigation } from '../contexts/NavigationContext';
 import { useReducedMotion } from '../hooks/useReducedMotion';
+import { navIconFor } from '../utils/navIcons';
 
 import ThemeSwitcher from './ThemeSwitcher';
-
-const icons: Record<string, JSX.Element> = {
-  home: <Home size={24} aria-hidden="true" />,
-  experience: <Briefcase size={24} aria-hidden="true" />,
-  skills: <Code size={24} aria-hidden="true" />,
-  focus: <Sparkles size={24} aria-hidden="true" />,
-  projects: <Rocket size={24} aria-hidden="true" />,
-  contact: <Mail size={24} aria-hidden="true" />
-};
 
 export default function Dock() {
   const { data } = useLanguage();
@@ -129,7 +120,9 @@ export default function Dock() {
             title={item.label}
             data-retro-sfx
           >
-            {icons[item.id] || <Home size={24} aria-hidden="true" />}
+            <span className="dock-item__icon" aria-hidden="true">
+              {navIconFor(item.id, 22)}
+            </span>
           </button>
         ))}
         <ThemeSwitcher />

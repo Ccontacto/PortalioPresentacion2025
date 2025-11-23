@@ -1,33 +1,11 @@
+import Icon from '@components/icons/VectorIcon';
 import { useLanguage } from '@contexts/LanguageContext';
 import { createZip } from '@utils/zip';
-import { PenSquare } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
-
+import { useEffect, useState } from 'react';
 
 import type { PortfolioData } from '@portfolio-types';
 
 const WATERMARK_TEXT = 'PortalioPresentacion2025 dev build';
-const PLACEHOLDER = '<<edita solo el valor>>';
-
-function createTemplate(value: unknown): unknown {
-  if (typeof value === 'string') {
-    return PLACEHOLDER;
-  }
-  if (typeof value === 'number' || typeof value === 'boolean' || value === null) {
-    return value;
-  }
-  if (Array.isArray(value)) {
-    return value.map(item => createTemplate(item));
-  }
-  if (typeof value === 'object' && value !== null) {
-    const result: Record<string, unknown> = {};
-    Object.entries(value).forEach(([key, val]) => {
-      result[key] = createTemplate(val);
-    });
-    return result;
-  }
-  return PLACEHOLDER;
-}
 
 function sanitizePatch(base: unknown, patch: unknown): unknown {
   if (!patch || typeof patch !== 'object') {
@@ -50,38 +28,80 @@ function sanitizePatch(base: unknown, patch: unknown): unknown {
   return result;
 }
 
+type LanguageOverridesApi = {
+  overrides: Record<PortfolioData['lang'], Partial<PortfolioData>>;
+  updateOverrides: (lang: PortfolioData['lang'], patch: Partial<PortfolioData>) => void;
+};
+
 export default function DevPortfolioEditor() {
-  const { data, currentLang, overrides, updateOverrides } = useLanguage();
-  const template = useMemo(() => createTemplate(data) ?? {}, [data]);
+  const language = useLanguage() as ReturnType<typeof useLanguage> & Partial<LanguageOverridesApi>;
+  const { data, currentLang } = language;
+  const updateOverrides = language.updateOverrides;
+  const supportsOverrides = typeof updateOverrides === 'function';
   const [open, setOpen] = useState(false);
-  const [payload, setPayload] = useState(() =>
-    JSON.stringify(overrides[currentLang] ?? template, null, 2)
-  );
+  const [payload, setPayload] = useState(() => JSON.stringify(data, null, 2));
   const [status, setStatus] = useState<string | null>(null);
   const [statusVariant, setStatusVariant] = useState<'success' | 'error' | null>(null);
 
   useEffect(() => {
-    setPayload(JSON.stringify(overrides[currentLang] ?? template, null, 2));
-  }, [currentLang, overrides, template]);
+    setPayload(JSON.stringify(data, null, 2));
+  }, [data]);
 
   const applyOverrides = () => {
+    if (!supportsOverrides || !updateOverrides) {
+      setStatus('Overrides no soportados en este build.');
+      setStatusVariant('error');
+      return;
+    }
     try {
       const parsed = payload ? JSON.parse(payload) : {};
-      const sanitized = sanitizePatch(template, parsed);
+      const sanitized = sanitizePatch(data, parsed);
       updateOverrides(currentLang, sanitized as Partial<PortfolioData>);
-      setStatus('Overrides aplicados.');
+      setStatus('Contenido actualizado.');
       setStatusVariant('success');
-    } catch {
+    } catch (error) {
+      if (import.meta.env.DEV) {
+        console.error('Invalid JSON payload', error);
+      }
       setStatus('JSON inválido. Corrige y vuelve a aplicar.');
       setStatusVariant('error');
     }
   };
 
   const resetOverrides = () => {
+    if (!supportsOverrides || !updateOverrides) {
+      setStatus('Overrides no soportados en este build.');
+      setStatusVariant('error');
+      return;
+    }
     updateOverrides(currentLang, {});
-    setPayload(JSON.stringify(template, null, 2));
+    setPayload(JSON.stringify(data, null, 2));
     setStatus('Overrides reseteados.');
     setStatusVariant('success');
+  };
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(payload);
+      setStatus('JSON copiado al portapapeles.');
+      setStatusVariant('success');
+    } catch (error) {
+      if (import.meta.env.DEV) {
+        console.error('Clipboard copy failed', error);
+      }
+      setStatus('No se pudo copiar. Intenta manualmente.');
+      setStatusVariant('error');
+    }
+  };
+
+  const downloadJson = () => {
+    const blob = new Blob([payload], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = `portfolio-${currentLang}.json`;
+    anchor.click();
+    URL.revokeObjectURL(url);
   };
 
   const downloadZip = () => {
@@ -105,13 +125,8 @@ export default function DevPortfolioEditor() {
 
   return (
     <>
-      <button
-        type="button"
-        className="dev-editor-trigger"
-        onClick={() => setOpen(true)}
-        data-dev-id="dev-portafolio"
-      >
-        <PenSquare size={16} aria-hidden="true" />
+      <button type="button" className="dev-editor-trigger" onClick={() => setOpen(true)} data-dev-id="dev-portafolio">
+        <Icon name="penSquare" size={16} aria-hidden />
         <span>Editor</span>
       </button>
       {open ? (
@@ -130,18 +145,17 @@ export default function DevPortfolioEditor() {
             </header>
             <div className="dev-editor-panel__body">
               <p className="dev-editor-panel__description">
-                Edita solo los valores y respeta la estructura JSON. Este módulo solo está habilitado en modo desarrollo.
+                Edita todo el contenido del portfolio en JSON. Solo se habilita en modo desarrollo y no afecta producción.
               </p>
               <textarea
                 className="dev-editor-panel__textarea"
-                placeholder='{"llave": "<<edita solo el valor>>"}'
-                aria-label="Overrides JSON"
+                aria-label="JSON del portafolio"
                 value={payload}
                 onChange={event => setPayload(event.target.value)}
               />
               <div className="dev-editor-panel__footer">
                 <button type="button" className="dev-editor-panel__button" onClick={applyOverrides}>
-                  Aplicar Overrides
+                  Aplicar JSON
                 </button>
                 <button
                   type="button"
@@ -156,6 +170,12 @@ export default function DevPortfolioEditor() {
                   onClick={downloadZip}
                 >
                   Generar ZIP (dev)
+                </button>
+                <button type="button" className="dev-editor-panel__button dev-editor-panel__button--ghost" onClick={handleCopy}>
+                  Copiar JSON
+                </button>
+                <button type="button" className="dev-editor-panel__button dev-editor-panel__button--ghost" onClick={downloadJson}>
+                  Descargar JSON
                 </button>
               </div>
               {status ? (

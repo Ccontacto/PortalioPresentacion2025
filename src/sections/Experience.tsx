@@ -1,22 +1,19 @@
 
+import Icon from '@components/icons/VectorIcon';
+import { SectionLayout } from '@components/SectionLayout';
 import { useLanguage } from '@contexts/LanguageContext';
-import { Badge } from '@design-system/primitives/Badge';
 import { Card } from '@design-system/primitives/Card';
 import { Chip } from '@design-system/primitives/Chip';
-import { SectionHeader as DsSectionHeader } from '@design-system/primitives/SectionHeader';
-import { SectionWrapper } from '@design-system/primitives/SectionWrapper';
 import { useHorizontalScroll } from '@hooks/useHorizontalScroll';
 import { useSectionTelemetry } from '@telemetry/useSectionTelemetry';
 import { m } from 'framer-motion';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 
 import type { ExperienceJob } from '@portfolio-types';
 
 export default function Experience() {
   const { data } = useLanguage();
   const jobs = data.sections.experience.jobs as ExperienceJob[];
-  const sectionRef = useRef<HTMLElement | null>(null);
   useSectionTelemetry('experience');
   
   const { trackRef, canScrollLeft, canScrollRight, scrollByCard, updateScrollButtons } = useHorizontalScroll({
@@ -52,15 +49,12 @@ export default function Experience() {
     .join(' ');
 
   return (
-    <SectionWrapper ref={sectionRef} id="experience" aria-labelledby="experience-heading" data-dev-id="4000">
-      <div className="ds-stack">
-        <Badge>Trayectoria destacada</Badge>
-        <DsSectionHeader
-          title={data.sections.experience.title}
-          subtitle="Dirección técnica, liderazgo de squads y exploración de IA generativa aplicadas a productos reales."
-        />
-      </div>
-
+    <SectionLayout
+      id="experience"
+      data-dev-id="4000"
+      eyebrow={data.lang === 'en' ? 'Trajectory' : 'Trayectoria destacada'}
+      title={data.sections.experience.title}
+    >
       <div className={wrapperClass}>
         <div
           className="experience-track experience-track--horizontal"
@@ -108,7 +102,7 @@ export default function Experience() {
             aria-label="Ver experiencia anterior"
             onClick={() => scrollByCard(-1)}
           >
-            <ChevronLeft size={18} />
+            <Icon name="chevronLeft" size={18} aria-hidden />
           </button>
         ) : null}
         {canScrollRight ? (
@@ -118,10 +112,10 @@ export default function Experience() {
             aria-label="Ver experiencia siguiente"
             onClick={() => scrollByCard(1)}
           >
-            <ChevronRight size={18} />
+            <Icon name="chevronRight" size={18} aria-hidden />
           </button>
         ) : null}
       </div>
-    </SectionWrapper>
+    </SectionLayout>
   );
 }

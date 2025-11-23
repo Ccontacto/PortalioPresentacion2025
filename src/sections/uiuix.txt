@@ -25987,7 +25987,7 @@ Getting Started: Server and Client Components - Next.js, fecha de acceso: noviem
 Nextjs mix server and client components - Stack Overflow, fecha de acceso: noviembre 18, 2025, https://stackoverflow.com/questions/77993934/nextjs-mix-server-and-client-components
 Get realtime updates with Cloud Firestore | Firebase, fecha de acceso: noviembre 18, 2025, https://firebase.google.com/docs/firestore/query-data/listen
 Which react hook to use with firestore onsnapshot? - Stack Overflow, fecha de acceso: noviembre 18, 2025, https://stackoverflow.com/questions/59944658/which-react-hook-to-use-with-firestore-onsnapshot
-Build a CRUD application in React with Firebase Web SDK v9 - LogRocket Blog, fecha de acceso: noviembre 18, 2025, https://blog.logrocket.com/build-crud-application-react-firebase-web-sdk-v9/
+Build a CRUD application in React with Firebase Web SDK v9 - Firebase Codelabs, fecha de acceso: noviembre 18, 2025, https://firebase.google.com/codelabs/build-crud-react-web
 File-system conventions: loading.js | Next.js, fecha de acceso: noviembre 18, 2025, https://nextjs.org/docs/app/api-reference/file-conventions/loading
 Loading Skeleton for Search & Pagination in NextJs 13 Movie App - YouTube, fecha de acceso: noviembre 18, 2025, https://www.youtube.com/watch?v=UNEXbGJCTw8
 Can't anyone with my API key read or write on my Firestore? : r/Firebase - Reddit, fecha de acceso: noviembre 18, 2025, https://www.reddit.com/r/Firebase/comments/1in8z2k/cant_anyone_with_my_api_key_read_or_write_on_my/

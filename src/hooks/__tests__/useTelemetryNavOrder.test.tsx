@@ -62,3 +62,11 @@ describe('useTelemetryNavOrder', () => {
     expect(subscribers).toHaveLength(0);
   });
 });
+vi.mock('../../contexts/TelemetryContext', () => ({
+  useTelemetry: () => ({
+    preference: 'granted',
+    setPreference: vi.fn(),
+    trackEvent: vi.fn(),
+    resetMetrics: vi.fn()
+  })
+}));

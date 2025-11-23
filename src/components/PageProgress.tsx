@@ -1,36 +1,24 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
+
+import { ACCENT_COLOR_TOKENS, cssVar } from '../utils/designTokens';
 
 export default function PageProgress() {
   const [width, setWidth] = useState(0);
-  const frameRef = useRef<number | null>(null);
 
   useEffect(() => {
-    const recalc = () => {
+    const onScroll = () => {
       const scrolled = window.scrollY;
       const height = document.documentElement.scrollHeight - window.innerHeight;
-      const nextWidth = height ? (scrolled / height) * 100 : 0;
-      setWidth(prev => (prev === nextWidth ? prev : nextWidth));
+      setWidth(height ? (scrolled / height) * 100 : 0);
     };
 
-    const schedule = () => {
-      if (frameRef.current !== null) return;
-      frameRef.current = window.requestAnimationFrame(() => {
-        frameRef.current = null;
-        recalc();
-      });
-    };
-
-    schedule();
-    window.addEventListener('scroll', schedule, { passive: true });
-    window.addEventListener('resize', schedule);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
 
     return () => {
-      if (frameRef.current !== null) {
-        window.cancelAnimationFrame(frameRef.current);
-        frameRef.current = null;
-      }
-      window.removeEventListener('scroll', schedule);
-      window.removeEventListener('resize', schedule);
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
     };
   }, []);
 
@@ -42,12 +30,10 @@ export default function PageProgress() {
         left: 0,
         height: 4,
         width: `${width}%`,
-        background: 'var(--progress-color)',
+        background: cssVar(ACCENT_COLOR_TOKENS.electricTeal),
         zIndex: 60,
-        pointerEvents: 'none',
         transition: 'width 120ms linear'
       }}
-      data-dev-id="8601"
       role="progressbar"
       aria-valuenow={Math.round(width)}
       aria-valuemin={0}

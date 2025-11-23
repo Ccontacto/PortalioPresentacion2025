@@ -1,8 +1,28 @@
 import '@testing-library/jest-dom/vitest';
-import { toHaveNoViolations } from 'jest-axe';
 import { expect } from 'vitest';
 
-expect.extend(toHaveNoViolations);
+type AxeResult = {
+  violations?: Array<{ id: string; impact?: string; description?: string }>;
+};
+
+expect.extend({
+  async toHaveNoViolations(received?: AxeResult) {
+    const violations = received?.violations ?? [];
+    if (violations.length > 0) {
+      const details = violations
+        .map(violation => `${violation.id ?? 'rule'} (${violation.impact ?? 'impacto desconocido'})`)
+        .join(', ');
+      return {
+        pass: false,
+        message: () => `Violaciones de accesibilidad detectadas: ${details}`
+      };
+    }
+    return {
+      pass: true,
+      message: () => 'Sin violaciones de accesibilidad detectadas.'
+    };
+  }
+});
 
 if (typeof window !== 'undefined' && !window.matchMedia) {
   window.matchMedia = (query: string): MediaQueryList => {

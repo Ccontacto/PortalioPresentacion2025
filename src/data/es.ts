@@ -3,19 +3,19 @@ import type { PortfolioData } from '../types/portfolio';
 export const es: PortfolioData = {
   lang: 'es',
   name: 'José Carlos Torres Rivera',
-  title: 'Líder Técnico iOS & Arquitecto de IA',
-  subtitle: 'IA generativa segura en ecosistemas iOS',
-  tagline: 'Arquitectura iOS con IA medible de punta a punta',
+  title: 'Estrategia iOS · IA confiable',
+  subtitle: 'Arquitecto de experiencias inteligentes y nativas',
+  tagline: 'Reimagino experiencias con IA desde el prototipo hasta el lanzamiento',
   description:
-    'Arquitecto de software y líder técnico iOS con 12+ años creando apps nativas, arquitecturas escalables y squads de alto desempeño. Especialista en Swift, SwiftUI, Clean Architecture y adopción de IA generativa (RAG, Core ML, LangChain).',
+    'Mobile tech lead con 12+ años en iOS y arquitectura. Especialización independiente en IA generativa: integración de LLMs, generación de imágenes y arquitecturas RAG.',
   email: 'jctorresrivera@gmail.com',
   phone: '+52 56 1172 7994',
   whatsapp: '5611727994',
-  location: 'Centro, CDMX, México',
+  location: 'Ciudad de México, México',
   social: {
-    linkedin: 'https://linkedin.com/in/jctorresrivera',
-    github: 'https://github.com/josecarlos21',
-    portfolio: 'https://www.orquestador.ai'
+    linkedin: 'https://www.linkedin.com/in/josecarivera',
+    github: 'https://github.com/Ccontacto',
+    portfolio: 'https://www.yosoymx.com'
   },
   availability: {
     status: {
@@ -24,12 +24,12 @@ export const es: PortfolioData = {
       unavailable: 'No disponible'
     },
     toggle: {
-      available: 'Cambiar a escuchando propuestas',
+      available: 'Cambiar a escuchando',
       listening: 'Cambiar a no disponible',
       unavailable: 'Cambiar a disponible'
     }
   },
-  badge: 'Escuchando propuestas',
+  badge: 'Disponible',
   nav: [
     { id: 'home', label: 'Inicio' },
     { id: 'experience', label: 'Experiencia' },
@@ -38,167 +38,147 @@ export const es: PortfolioData = {
     { id: 'projects', label: 'Proyectos' },
     { id: 'contact', label: 'Contacto' }
   ],
-  stats: [
-    { id: 's1', value: '12+', label: 'Años liderando iOS' },
-    { id: 's2', value: '10%', label: 'Mejora en precisión de búsqueda' },
-    { id: 's3', value: '85%', label: 'Cobertura de pruebas' }
-  ],
   hero: {
     eyebrow: 'Estrategia iOS · IA confiable',
     titleSegments: [
-      { text: 'Líder Técnico iOS', accent: 'primary' },
-      { text: ' & ' },
-      { text: 'Arquitecto de IA', accent: 'secondary' }
+      { text: 'Estrategia iOS', accent: 'primary' },
+      { text: ' · ' },
+      { text: 'IA confiable', accent: 'secondary' }
     ],
     descriptionSegments: [
       {
-        text:
-          'Conecto visión de producto y ejecución móvil para lanzar features respaldados por '
+        text: 'Mobile tech lead con 12+ años diseñando productos iOS y squads de alto rendimiento. '
       },
-      { text: 'Swift · SwiftUI', accent: 'gradient' },
-      { text: ' y ' },
-      { text: 'IA medible (RAG + Core ML)', accent: 'gradient' },
-      { text: '. Mentor squads senior para llevar IA segura directo al dispositivo.' }
+      { text: 'Integro IA generativa responsable', accent: 'gradient' },
+      {
+        text: ' con pipelines medibles, on-device AI y playbooks accionables para acelerar lanzamientos.'
+      }
     ],
     status: {
       title: 'Ahora',
-      description: 'Mentoreo squads para aterrizar IA en apps nativas y medir impacto sin riesgos.'
+      description: 'Co-diseñando experiencias iOS potenciadas con IA en compañías que escalan su roadmap.'
     },
-    // Evitar duplicidad (la disponibilidad ya vive como badge y el enfoque en su sección)
-    meta: [{ label: 'Ubicación', field: 'location' }],
+    meta: [
+      { label: 'Ubicación', field: 'location' },
+      { label: 'Disponibilidad', field: 'badge' }
+    ],
     note: {
-      title: 'En lo que estoy trabajando',
-      items: ['IA en dispositivo', 'Playbooks RAG', 'CI/CD móvil', 'Lanzamientos medibles']
+      title: 'Últimas obsesiones',
+      items: ['Evaluaciones automáticas', 'RAG seguro', 'CI/CD móvil']
     },
-    tagline: 'Arquitecturas nativas con IA segura y medible.'
+    tagline: 'Líneas de ejecución que conectan IA con producto real.'
   },
+  stats: [
+    { id: 's1', value: '12+', label: 'Años liderando iOS' },
+    { id: 's2', value: '50+', label: 'Productos lanzados' },
+    { id: 's3', value: '85%', label: 'Cobertura de pruebas' }
+  ],
   sections: {
     experience: {
-      title: 'Experiencia Profesional',
+      title: '',
       jobs: [
         {
           id: 'e1',
-          role: 'Project Lead & Senior iOS Developer',
-          company: 'Coppel',
-          period: 'Mayo 2022 – Agosto 2024',
+          role: 'Independent AI/iOS Consultant & Technical Advisor',
+          company: 'Freelance / Proyectos Personales',
+          period: 'Ago 2024 — Presente',
           description:
-            'Lideré un equipo iOS/backend/web/QA para modernizar la app principal, incorporé IA en el buscador (+≈10 % precisión y mejor conversión) y reduje los ciclos de despliegue de semanas a días con CI/CD y experimentación controlada.',
-          tags: ['Swift', 'SwiftUI', 'UIKit', 'Combine', 'Core Data', 'GraphQL', 'Firebase', 'AWS', 'CI/CD', 'IA']
+            'Especialización en IA Generativa vía R&D y proyectos personales: LLMs, generación de imágenes y RAG.',
+          tags: ['GPT-4', 'Gemini', 'LLaMA', 'Stable Diffusion', 'LangChain', 'RAG', 'SwiftUI', 'Python']
         },
         {
           id: 'e2',
-          role: 'Technical Lead iOS',
-          company: 'Procesar',
-          period: 'Marzo 2018 – Mayo 2022',
-          description:
-            'Diseñé un framework biométrico modular voz/rostro adoptado por apps financieras, elevé la cobertura de pruebas de 62 % a 85 % con XCTest y gestioné la dirección temporal del área iOS asegurando entregables y mentoría.',
-          tags: ['Swift', 'Objective-C', 'Core ML', 'XCTest', 'Fastlane', 'CI/CD', 'Seguridad']
+          role: 'Project Lead & Senior iOS Developer',
+          company: 'Coppel',
+          period: 'Mayo 2022 — Ago 2024',
+          description: 'Optimización de arquitectura, mejora de buscador (+~10% precisión) y squad ágil para features.',
+          tags: ['Swift', 'SwiftUI', 'UIKit', 'Combine', 'Core Data', 'GraphQL', 'Firebase', 'AWS']
         },
         {
           id: 'e3',
-          role: 'Senior iOS Developer / Technical Lead',
-          company: 'Claro Música / Ironbit',
-          period: '2014 – 2018',
-          description:
-            'Desarrollé apps iOS multimedia con suscripciones y compras integradas, reescribí código legado aplicando Clean Architecture y MVVM, e implementé pipelines CI/CD con Jenkins y Fastlane para lanzamientos confiables.',
-          tags: ['Swift', 'Objective-C', 'SwiftUI', 'Clean Architecture', 'MVVM', 'Jenkins', 'Fastlane', 'Notificaciones push']
+          role: 'Technical Lead iOS & Framework Architect',
+          company: 'Procesar',
+          period: 'Mar 2018 — May 2022',
+          description: 'Framework biométrico modular y gobernanza de APIs con seguridad y monitoreo.',
+          tags: ['Swift', 'Objective-C', 'Core ML', 'XCTest', 'CI/CD', 'Fastlane', 'Security']
         }
       ]
     },
     skills: {
-      title: 'Habilidades Técnicas',
+      title: '',
       categories: [
         {
           id: 'ios',
           icon: 'device',
-          title: 'iOS nativo',
-          items: ['Swift', 'SwiftUI', 'Objective-C', 'Combine', 'Core Data', 'MapKit', 'AVFoundation']
-        },
-        {
-          id: 'architecture',
-          icon: 'cpu',
-          title: 'Arquitectura & Liderazgo',
-          items: ['Clean Architecture', 'MVVM', 'Modularización', 'Microservicios', 'Mentoría', 'Comunicación técnica']
+          title: 'iOS',
+          items: ['Swift', 'SwiftUI', 'UIKit', 'Core ML']
         },
         {
           id: 'ai',
           icon: 'robot',
-          title: 'IA Generativa & MLOps',
-          items: ['RAG', 'LangChain', 'Core ML', 'GPT-4', 'Gemini', 'LLaMA', 'Mistral', 'Prompt Engineering']
+          title: 'IA Generativa',
+          items: ['GPT-4', 'Gemini', 'Stable Diffusion', 'LangChain', 'RAG']
         },
         {
           id: 'cloud',
           icon: 'cloud',
           title: 'Cloud & DevOps',
-          items: ['AWS (S3/Lambda)', 'Firebase', 'MongoDB', 'Docker', 'GitHub Actions', 'Fastlane', 'Xcode Cloud']
-        }
-      ]
-    },
-    projects: {
-      title: 'Proyectos de IA Generativa',
-      items: [
-        {
-          id: 'p1',
-          title: 'Sistema Legal Auto-Evolutivo',
-          description: 'Agentes autónomos con RAG para análisis jurídico y actualización dinámica del corpus legal.',
-          tags: ['Swift', 'LangChain', 'GPT-4', 'Gemini']
-        },
-        {
-          id: 'p2',
-          title: 'Asistente de Condominios',
-          description: 'Aplicación SwiftUI con asistente RAG para gestión administrativa y atención virtual continua.',
-          tags: ['SwiftUI', 'Core Data', 'Gemini Pro']
-        },
-        {
-          id: 'p3',
-          title: 'Asistente Técnico iOS (RAG)',
-          description: 'Chatbot nativo con LangChain + Gemini para soporte técnico contextual y respuestas inteligentes.',
-          tags: ['SwiftUI', 'LangChain', 'Gemini Pro']
-        },
-        {
-          id: 'p4',
-          title: 'Agente de Prompts Generativos',
-          description: 'Agente inteligente para creación automatizada de prompts multidominio y contenido guiado.',
-          tags: ['Python', 'GPT-4', 'Gemini']
+          items: ['AWS', 'Firebase', 'Docker', 'GitHub Actions']
         }
       ]
     },
     focus: {
       eyebrow: 'Playbooks accionables',
       title: 'Estrategia lista para integrar en tu roadmap',
-      subtitle:
-        'Tres líneas de ejecución para acelerar lanzamientos iOS potenciados con IA, métricas claras y equipos alineados.',
+      subtitle: 'Tres frentes para lanzar iOS + IA con métricas claras y squads alineados.',
       items: [
         {
           id: 'focus-ai',
           eyebrow: 'IA aplicada',
-          title: 'IA confiable dentro del producto',
-          description:
-            'Diseño experiencias que mezclan RAG, modelos en dispositivo y guardrails medibles para liberar features seguros.',
-          highlights: ['Evaluaciones automáticas', 'Guardrails multicanal', 'Controles de calidad continuos']
+          title: 'Automatizaciones confiables',
+          description: 'Integro RAG multi-fuente, evaluaciones automáticas y on-device AI con guardrails medibles.',
+          highlights: ['RAG con guardrails', 'Evaluaciones automáticas', 'Modelos on-device']
         },
         {
           id: 'focus-execution',
-          eyebrow: 'Entrega continua',
-          title: 'Operación que escala con tu equipo',
-          description:
-            'Creo pipelines móviles/IA con CI/CD, observabilidad y feature flags para lanzar sin fricción ni regresiones.',
-          highlights: ['CI/CD móvil con métricas', 'Feature flags + experimentos', 'Tableros de salud del release']
+          eyebrow: 'Ejecución',
+          title: 'Operaciones que escalan',
+          description: 'CI/CD móvil, feature flags y telemetría que permiten releases semanales sin perder estabilidad.',
+          highlights: ['Pipelines iOS + IA', 'Feature flags', 'Dashboards de salud']
         },
         {
           id: 'focus-leadership',
-          eyebrow: 'Liderazgo',
-          title: 'Alineación y coaching técnico',
+          eyebrow: 'Liderazgo técnico',
+          title: 'Mentoría y workshops',
           description:
-            'Facilito decisiones entre producto, ingeniería y data con workshops, documentación y mentoría práctica.',
-          highlights: ['Workshops tácticos', 'Documentación viva', 'Mentoría para squads']
+            'Facilito decisiones entre producto, data y dev con workshops tácticos y documentación viva.',
+          highlights: ['Workshops tácticos', 'Documentación viva', 'Mentoría mano a mano']
+        }
+      ]
+    },
+    projects: {
+      title: '',
+      items: [
+        {
+          id: 'p1',
+          title: 'Self-Evolving Legal System',
+          description: 'Agente legal autónomo con RAG multi-paso.',
+          tags: ['RAG', 'GPT-4', 'LangChain', 'Python'],
+          link: 'https://github.com/Ccontacto'
+        },
+        {
+          id: 'p2',
+          title: 'Condominium App',
+          description: 'App SwiftUI con asistente virtual para condominios.',
+          tags: ['SwiftUI', 'Gemini', 'Firebase', 'RAG'],
+          link: 'https://www.yosoymx.com'
         }
       ]
     },
     contact: {
       title: 'Contacto',
-      subtitle: '¿Listo para acelerar tu roadmap de iOS e IA?',
-      closing: 'Abierto a liderazgo técnico, consultoría y lanzamientos impulsados por IA.',
+      subtitle: '¿Proyecto, colaboración o simplemente platicar de arquitectura? Escríbeme.',
+      closing: 'Abierto a proyectos de IA e iOS.',
       signature: '— José Carlos'
     }
   },
@@ -222,30 +202,34 @@ export const es: PortfolioData = {
     availability_available: 'Estado actualizado: disponible',
     availability_listening: 'Estado actualizado: escuchando propuestas',
     availability_unavailable: 'Estado actualizado: no disponible',
-    retro_enabled: 'Modo retro activado. Bienvenido al futuro en 8 bits.',
-    retro_disabled: 'Modo retro desactivado. Volviendo al presente.'
+    retro_enabled: 'Modo retro activado. Vive la UI 8-bit.',
+    retro_disabled: 'Modo retro desactivado. Regresamos al 2025.'
   },
   ui: {
     viewProjects: 'Ver proyectos',
-    bookCall: 'Agendar conversación',
+    bookCall: 'Agendar llamada',
     retroExit: 'Salir de modo retro',
     retroActiveLabel: 'Modo retro activo',
     quickActionsTitle: 'Acciones rápidas',
-    searchAriaLabel: 'Buscar accesos rápidos',
+    searchAriaLabel: 'Buscar acciones rápidas',
     searchPlaceholder: 'Buscar…',
     noMatchesTitle: 'Sin coincidencias',
-    noMatchesSubtitle: 'Ajusta la búsqueda o explora otras acciones.',
+    noMatchesSubtitle: 'Ajusta tu búsqueda o explora otra acción.',
     quickSectionsLabel: 'Secciones',
     quickPreferencesLabel: 'Preferencias',
     searchFilterTitle: 'Filtrar proyectos',
-    searchFilterSubtitle: 'Escribe una tecnología o selecciona una de las sugerencias.',
-    searchPlaceholderTech: 'Buscar por tecnología...',
+    searchFilterSubtitle: 'Teclea una tecnología o elige una sugerencia.',
+    searchPlaceholderTech: 'Buscar por tecnología…',
     searchClearLabel: 'Limpiar búsqueda',
     searchSuggestionsAria: 'Sugerencias destacadas',
-    searchNoMatches: 'Sin coincidencias. Ajusta la búsqueda o lanza confetti.',
+    searchNoMatches: 'Sin coincidencias. Ajusta el término o lanza confetti.',
     prevProjects: 'Ver proyectos anteriores',
     nextProjects: 'Ver siguientes proyectos',
     prevSkills: 'Ver habilidades anteriores',
-    nextSkills: 'Ver siguientes habilidades'
+    nextSkills: 'Ver siguientes habilidades',
+    prevFocus: 'Ver playbook anterior',
+    nextFocus: 'Ver siguiente playbook',
+    themeSwitcherLabel: 'Tema',
+    themeSwitcherSubtitle: 'Modos visuales disponibles'
   }
 } as const;

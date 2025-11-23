@@ -1,15 +1,15 @@
+import Icon from '@components/icons/VectorIcon';
 import { m, AnimatePresence } from 'framer-motion';
-import { Info, CheckCircle, XCircle, X } from 'lucide-react';
 
 import { useToast } from '../contexts/ToastContext';
 
 import type { JSX } from 'react';
 
 const icons: Record<string, JSX.Element> = {
-  info: <Info size={24} aria-hidden="true" />,
-  success: <CheckCircle size={24} aria-hidden="true" />,
-  error: <XCircle size={24} aria-hidden="true" />,
-  warning: <Info size={24} aria-hidden="true" />
+  info: <Icon name="info" size={24} aria-hidden />,
+  success: <Icon name="checkCircle" size={24} aria-hidden />,
+  error: <Icon name="xCircle" size={24} aria-hidden />,
+  warning: <Icon name="info" size={24} aria-hidden />
 };
 
 export default function ToastContainer() {
@@ -43,7 +43,7 @@ export default function ToastContainer() {
               className="p-1"
               aria-label="Cerrar notificación"
             >
-              <X size={24} aria-hidden="true" />
+              <Icon name="close" size={24} aria-hidden />
             </button>
           </m.div>
         ))}

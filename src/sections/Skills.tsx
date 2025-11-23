@@ -1,15 +1,13 @@
 
 import HorizontalScroller from '@components/HorizontalScroller';
+import Icon from '@components/icons/VectorIcon';
+import { SectionLayout } from '@components/SectionLayout';
 import { useLanguage } from '@contexts/LanguageContext';
 import { usePortfolioContent } from '@contexts/PortfolioSpecContext';
-import { Badge } from '@design-system/primitives/Badge';
 import { Card } from '@design-system/primitives/Card';
 import { Chip } from '@design-system/primitives/Chip';
-import { SectionHeader as DsSectionHeader } from '@design-system/primitives/SectionHeader';
-import { SectionWrapper } from '@design-system/primitives/SectionWrapper';
 import { useSectionTelemetry } from '@telemetry/useSectionTelemetry';
 import { m } from 'framer-motion';
-import { Bot, Cloud, Cpu, Smartphone } from 'lucide-react';
 import { type ReactElement } from 'react';
 
 import type { SkillCategory } from '@portfolio-types';
@@ -17,26 +15,28 @@ import type { SkillCategory } from '@portfolio-types';
 type SkillItem = SkillCategory['items'][number];
 
 const iconMap: Record<string, ReactElement> = {
-  device: <Smartphone size={32} />,
-  robot: <Bot size={32} />,
-  cloud: <Cloud size={32} />
+  device: <Icon name="smartphone" size={32} aria-hidden />,
+  robot: <Icon name="bot" size={32} aria-hidden />,
+  cloud: <Icon name="cloud" size={32} aria-hidden />,
+  ai: <Icon name="cpu" size={32} aria-hidden />
 };
 
 export default function Skills() {
   const { data } = useLanguage();
   const skillsSpec = usePortfolioContent('skills');
   useSectionTelemetry('skills');
-  const sectionTitle = data.sections.skills.title || stripBraces(skillsSpec?.title);
-  const sectionSubtitle =
-    'Herramientas y frameworks con los que construyo soluciones móviles e IA de forma integral.';
+  const sectionTitle =
+    data.sections.skills.title ||
+    stripBraces(skillsSpec?.title) ||
+    (data.lang === 'en' ? 'Skills & tools' : 'Habilidades y herramientas');
 
   return (
-    <SectionWrapper id="skills" aria-labelledby="skills-heading" data-dev-id="3100">
-      <div className="ds-stack">
-        <Badge>{stripBraces(skillsSpec?.title) || 'Stack principal'}</Badge>
-        <DsSectionHeader title={sectionTitle} subtitle={sectionSubtitle} />
-      </div>
-
+    <SectionLayout
+      id="skills"
+      data-dev-id="3100"
+      eyebrow={stripBraces(skillsSpec?.title) || (data.lang === 'en' ? 'Core stack' : 'Stack principal')}
+      title={sectionTitle}
+    >
       <div className="page-section__body" data-dev-id="3103">
         <HorizontalScroller
           itemCount={data.sections.skills.categories.length}
@@ -57,7 +57,7 @@ export default function Skills() {
             >
               <Card as="div">
                 <div className="skill-card__icon" aria-hidden="true">
-                  {iconMap[cat.icon] ?? <Cpu size={32} />}
+                  {iconMap[cat.icon] ?? <Icon name="cpu" size={32} aria-hidden />}
                 </div>
                 <h3 className="text-lg font-bold mb-4">{cat.title}</h3>
                 <ul className="skill-card__chips" aria-label={`Habilidades de ${cat.title}`}>
@@ -72,7 +72,7 @@ export default function Skills() {
           ))}
         </HorizontalScroller>
       </div>
-    </SectionWrapper>
+    </SectionLayout>
   );
 }
 

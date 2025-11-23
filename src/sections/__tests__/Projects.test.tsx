@@ -3,6 +3,7 @@ import '@testing-library/jest-dom/vitest';
 import { describe, it, expect, vi } from 'vitest';
 
 import { NavigationProvider } from '../../contexts/NavigationContext';
+import { TelemetryProvider } from '../../contexts/TelemetryContext';
 import { ThemeProvider } from '../../contexts/ThemeContext';
 import { getSafeUrl } from '../../utils/urlValidation';
 import Projects from '../Projects';
@@ -45,26 +46,26 @@ const mockData = {
 
 // Mock useLanguage hook
 vi.mock('../../contexts/LanguageContext', async () => {
-    const actual = await vi.importActual('../../contexts/LanguageContext');
-    return {
-        ...actual as object,
-        useLanguage: () => ({
-            data: mockData,
-            currentLang: 'es',
-            toggleLanguage: () => {},
-        }),
-    };
+  const actual = await vi.importActual('../../contexts/LanguageContext');
+  return {
+    ...(actual as object),
+    useLanguage: () => ({
+      data: mockData,
+      currentLang: 'es',
+      toggleLanguage: () => {},
+      t: (_key: string, defaultValue?: string) => defaultValue ?? _key
+    })
+  };
 });
 
-const renderWithProviders = (ui: React.ReactElement) => {
-  return render(
-    <ThemeProvider>
-        <NavigationProvider>
-            {ui}
-        </NavigationProvider>
-    </ThemeProvider>
+const renderWithProviders = (ui: React.ReactElement) =>
+  render(
+    <TelemetryProvider>
+      <ThemeProvider>
+        <NavigationProvider>{ui}</NavigationProvider>
+      </ThemeProvider>
+    </TelemetryProvider>
   );
-};
 
 describe('Projects Section', () => {
   it('should render a link for a project with a valid http/https url', () => {

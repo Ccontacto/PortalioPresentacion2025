@@ -1,18 +1,16 @@
 
 import HorizontalScroller from '@components/HorizontalScroller';
+import Icon from '@components/icons/VectorIcon';
 import SearchBar from '@components/SearchBar';
+import { SectionLayout } from '@components/SectionLayout';
 import { useLanguage } from '@contexts/LanguageContext';
 import { usePortfolioContent } from '@contexts/PortfolioSpecContext';
-import { Badge } from '@design-system/primitives/Badge';
 import { Card } from '@design-system/primitives/Card';
 import { Chip } from '@design-system/primitives/Chip';
-import { SectionHeader as DsSectionHeader } from '@design-system/primitives/SectionHeader';
-import { SectionWrapper } from '@design-system/primitives/SectionWrapper';
 import { useSectionTelemetry } from '@telemetry/useSectionTelemetry';
 import { getSafeUrl } from '@utils/urlValidation';
 import { m } from 'framer-motion';
-import { ExternalLink, Rocket } from 'lucide-react';
-import { useMemo, useRef, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import type { ProjectItem } from '@portfolio-types';
 
@@ -20,7 +18,6 @@ export default function Projects() {
   const { data } = useLanguage();
   const projectsSpec = usePortfolioContent('featuredProjects');
   const [currentSearchTerm, setCurrentSearchTerm] = useState('');
-  const sectionRef = useRef<HTMLElement | null>(null);
   useSectionTelemetry('projects');
 
   const filteredProjects = useMemo(() => {
@@ -34,21 +31,14 @@ export default function Projects() {
   }, [currentSearchTerm, data.sections.projects.items]) as readonly ProjectItem[];
 
   return (
-    <SectionWrapper ref={sectionRef} id="projects" aria-labelledby="projects-heading" data-dev-id="5000">
-      <div className="ds-stack">
-        <Badge>{projectsSpec?.title ? stripBraces(projectsSpec.title) : 'Casos reales'}</Badge>
-        <DsSectionHeader
-          title={data.sections.projects.title}
-          subtitle="Lanzamientos y prototipos donde combiné iOS, liderazgo técnico e IA aplicada."
-        />
-      </div>
-
+    <SectionLayout
+      id="projects"
+      data-dev-id="5000"
+      eyebrow={projectsSpec?.title ? stripBraces(projectsSpec.title) : data.lang === 'en' ? 'Case studies' : 'Casos reales'}
+      title={data.sections.projects.title}
+    >
       <div className="page-section__body" data-dev-id="5003">
-        <SearchBar
-          projectItems={data.sections.projects.items}
-          onSearch={setCurrentSearchTerm}
-          resultCount={filteredProjects.length}
-        />
+        <SearchBar projectItems={data.sections.projects.items} onSearch={setCurrentSearchTerm} resultCount={filteredProjects.length} />
 
         <HorizontalScroller
           itemCount={filteredProjects.length}
@@ -73,7 +63,7 @@ export default function Projects() {
               >
                 <Card as="div">
                   <div className="project-thumb" aria-hidden="true">
-                    <Rocket size={56} />
+                    <Icon name="rocket" size={56} aria-hidden />
                   </div>
                   <h3 className="text-xl font-bold mb-3">{proj.title}</h3>
                   <p className="text-sm mb-4">{proj.description}</p>
@@ -86,7 +76,7 @@ export default function Projects() {
                   </ul>
                   {safeLink ? (
                     <a href={safeLink} target="_blank" rel="noopener noreferrer" className="project-card__link">
-                      <ExternalLink size={24} aria-hidden="true" />
+                      <Icon name="externalLink" size={24} aria-hidden />
                       {data.lang === 'en' ? 'View project' : 'Ver proyecto'}
                     </a>
                   ) : null}
@@ -96,7 +86,7 @@ export default function Projects() {
           })}
         </HorizontalScroller>
       </div>
-    </SectionWrapper>
+    </SectionLayout>
   );
 }
 

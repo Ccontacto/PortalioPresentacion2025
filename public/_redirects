@@ -1,1 +1,5 @@
+http://www.administracion.ai/*     https://administracion.ai/:splat     301
+http://administracion.ai/*         https://administracion.ai/:splat      301
+https://www.administracion.ai/*    https://administracion.ai/:splat      301
+
 /*    /index.html   200

@@ -51,11 +51,32 @@
   color: var(--dt-color-fg-primary);
 }
 
+html[data-theme='dark'] .ds-button--primary,
+[data-theme='dark'] .ds-button--primary {
+  background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent-hover) 80%, transparent));
+  color: var(--text-primary);
+  box-shadow: 0 18px 32px rgba(0, 0, 0, 0.55);
+}
+
+html[data-theme='dark'] .ds-button--primary:hover,
+[data-theme='dark'] .ds-button--primary:focus-visible {
+  background: color-mix(in srgb, var(--accent-hover) 80%, rgba(255, 255, 255, 0.15));
+  box-shadow: 0 22px 36px rgba(0, 0, 0, 0.6);
+}
+
 .ds-section-header {
   display: flex;
   flex-direction: column;
-  gap: var(--dt-components-section-header-gap, 0.5rem);
+  gap: var(--dt-components-section-header-gap, 0.55rem);
   text-align: left;
+  max-width: min(68ch, 920px);
+}
+
+@supports (text-wrap: balance) {
+  .ds-section-header__title,
+  .ds-section-header__subtitle {
+    text-wrap: balance;
+  }
 }
 
 .ds-section-header__eyebrow {
@@ -63,28 +84,100 @@
   align-items: center;
   justify-content: flex-start;
   gap: 0.35rem;
-  padding: 0.25rem 0.75rem;
+  padding: 0.35rem 0.85rem;
   border-radius: var(--dt-component-badge-highlight-radius, var(--dt-radius-pill));
-  border: var(--dt-component-badge-highlight-border, 1px solid currentColor);
-  font-size: 0.75rem;
-  letter-spacing: 0.18em;
+  border: 1px solid color-mix(in srgb, var(--accent, var(--dt-color-accent-primary, #2563eb)) 45%, transparent);
+  font-size: 0.72rem;
+  letter-spacing: 0.28em;
   text-transform: uppercase;
-  font-weight: 700;
+  font-weight: 800;
+  color: var(--accent, var(--dt-color-accent-primary, #2563eb));
+  background: color-mix(in srgb, var(--accent, var(--dt-color-accent-primary, #2563eb)) 18%, transparent);
 }
 
 .ds-section-header__title {
-  font-size: var(--dt-components-section-header-titlesize, clamp(2.2rem, 4vw, 3.4rem));
-  line-height: 1.15;
-  font-weight: var(--dt-components-section-header-titleweight, 600);
+  font-size: var(--dt-components-section-header-titlesize, clamp(2.1rem, 4vw, 3.3rem));
+  line-height: 1.05;
+  font-weight: var(--dt-components-section-header-titleweight, 700);
   margin: 0;
   color: var(--dt-color-fg-primary);
+  letter-spacing: -0.01em;
+  position: relative;
+}
+
+.ds-section-header__title-display {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  align-items: baseline;
+}
+
+.ds-section-header__title-primary {
+  position: relative;
+}
+
+.ds-section-header__title-plaintext {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.ds-section-header__title-accent {
+  background: var(--hero-cta-gradient, linear-gradient(130deg, #0ea5e9 0%, #a855f7 100%));
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  font-weight: 800;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.ds-section-header__title-accent::after {
+  content: '';
+  position: absolute;
+  inset: auto auto -4px 0;
+  width: 100%;
+  height: 6px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent, #2563eb) 30%, transparent);
+  opacity: 0.4;
+  pointer-events: none;
 }
 
 .ds-section-header__subtitle {
-  font-size: var(--dt-components-section-header-subtitlesize, 1.125rem);
-  color: var(--dt-components-section-header-subtitlecolor, var(--dt-color-fg-muted));
-  line-height: 1.65;
+  font-size: var(--dt-components-section-header-subtitlesize, clamp(1rem, 1.3vw, 1.2rem));
+  color: var(--dt-components-section-header-subtitlecolor, color-mix(in srgb, var(--dt-color-fg-muted) 85%, transparent));
+  line-height: 1.6;
   margin: 0;
+  position: relative;
+}
+
+.ds-section-header__subtitle-display {
+  display: inline;
+}
+
+.ds-section-header__subtitle-plaintext {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.ds-section-header__subtitle-lede {
+  font-weight: 700;
+  color: var(--accent, var(--dt-color-accent-primary, #2563eb));
 }
 
 .ds-section {

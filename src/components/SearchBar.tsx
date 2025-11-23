@@ -1,5 +1,5 @@
+import Icon from '@components/icons/VectorIcon';
 import { m } from 'framer-motion';
-import { ArrowRight, Eraser, Search, Sparkles, X } from 'lucide-react';
 import {
   useCallback,
   useEffect,
@@ -89,6 +89,22 @@ export default function SearchBar({
   }, [searchTerm, sortedTags]);
 
   const triggerText = triggerLabel ?? (data.lang === 'es' ? 'Abrir buscador de proyectos' : 'Open projects search');
+  const eyebrowText = data.ui?.searchEyebrow ?? (data.lang === 'es' ? 'Buscador IA' : 'Project finder');
+  const helperText = data.ui?.searchHelper ?? (data.lang === 'es' ? 'Filtra por skills, tags y lanzamientos' : 'Filter by skills, tags & launches');
+  const keyboardHint = data.ui?.searchShortcut ?? '⌘K / Ctrl+K';
+  const resultsLabel =
+    typeof resultCount === 'number'
+      ? data.lang === 'es'
+        ? `${resultCount} ${resultCount === 1 ? 'proyecto' : 'proyectos'} listos`
+        : `${resultCount} ${resultCount === 1 ? 'project' : 'projects'} ready`
+      : data.lang === 'es'
+        ? 'Resultados dinámicos'
+        : 'Dynamic results';
+  const suggestionsTitle = data.ui?.searchSuggestionsTitle ?? (data.lang === 'es' ? 'Sugerencias curadas' : 'Curated picks');
+  const suggestionsCaption = data.ui?.searchSuggestionsCaption ?? (data.lang === 'es' ? 'Selecciona una tecnología destacada' : 'Tap a highlighted technology');
+  const tagsTitle = data.ui?.searchTagsTitle ?? (data.lang === 'es' ? 'Explorar por tags' : 'Browse by tags');
+  const tagsCaption = data.ui?.searchTagsCaption ?? (data.lang === 'es' ? 'Ordenados por frecuencia en los proyectos' : 'Sorted by project frequency');
+
   const isIconVariant = variant === 'icon';
 
   useEffect(() => {
@@ -205,6 +221,15 @@ export default function SearchBar({
             <p id={descriptionId} className="search-modal__subtitle">
               {data.ui?.searchFilterSubtitle ?? (data.lang === 'es' ? 'Escribe una tecnología o selecciona una de las sugerencias.' : 'Type a technology or pick one of the suggestions.')}
             </p>
+            <div className="search-modal__meta">
+              <span className="search-modal__pill" role="status" aria-live="polite">
+                <Icon name="sparkles" size={16} aria-hidden />
+                {resultsLabel}
+              </span>
+              <span className="search-modal__pill search-modal__pill--ghost" aria-hidden="true">
+                {keyboardHint}
+              </span>
+            </div>
           </div>
           <button
             type="button"
@@ -212,12 +237,12 @@ export default function SearchBar({
             onClick={() => handleCloseModal()}
             aria-label="Cerrar buscador"
           >
-            <X size={20} aria-hidden="true" />
+            <Icon name="close" size={20} aria-hidden />
           </button>
         </header>
 
         <div className="search-modal__input-group">
-          <Search size={20} aria-hidden="true" className="search-modal__input-icon" />
+          <Icon name="search" size={20} aria-hidden className="search-modal__input-icon" />
           <input
             ref={inputRef}
             type="search"
@@ -236,43 +261,55 @@ export default function SearchBar({
               onClick={() => handleSearchInput('')}
               aria-label={data.ui?.searchClearLabel ?? (data.lang === 'es' ? 'Limpiar búsqueda' : 'Clear search')}
             >
-              <Eraser size={16} aria-hidden="true" />
+              <Icon name="eraser" size={16} aria-hidden />
             </button>
           )}
         </div>
 
         {suggestedTags.length > 0 && (
-          <div className="search-modal__suggestions" aria-label={data.ui?.searchSuggestionsAria ?? (data.lang === 'es' ? 'Sugerencias destacadas' : 'Featured suggestions')}>
-            {suggestedTags.map(tag => (
-              <button
-                key={tag}
-                type="button"
-                className="search-modal__chip"
-                onMouseDown={(event) => event.preventDefault()}
-                onClick={(event) => handleSuggestionClick(tag, event)}
-              >
-                {tag}
-              </button>
-            ))}
-          </div>
+          <section className="search-modal__section">
+            <div className="search-modal__section-heading">
+              <p className="search-modal__section-title">{suggestionsTitle}</p>
+              <span className="search-modal__section-caption">{suggestionsCaption}</span>
+            </div>
+            <div className="search-modal__suggestions" aria-label={data.ui?.searchSuggestionsAria ?? (data.lang === 'es' ? 'Sugerencias destacadas' : 'Featured suggestions')}>
+              {suggestedTags.map(tag => (
+                <button
+                  key={tag}
+                  type="button"
+                  className="search-modal__chip"
+                  onMouseDown={(event) => event.preventDefault()}
+                  onClick={(event) => handleSuggestionClick(tag, event)}
+                >
+                  {tag}
+                </button>
+              ))}
+            </div>
+          </section>
         )}
 
-        <div className="search-modal__tag-list" role="list">
-          {filteredTags.length > 0 ? (
-            filteredTags.map(tag => (
-              <button
-                type="button"
-                key={tag}
-                className={`search-modal__tag ${searchTerm.trim().toLowerCase() === tag.toLowerCase() ? 'search-modal__tag--active' : ''}`}
-                onClick={(event) => handleSuggestionClick(tag, event)}
-              >
-                {tag}
-              </button>
-            ))
-          ) : (
-            <p className="search-modal__empty">{data.ui?.searchNoMatches ?? (data.lang === 'es' ? 'Sin coincidencias. Ajusta la búsqueda o lanza confetti.' : 'No matches. Adjust your query or launch confetti.')}</p>
-          )}
-        </div>
+        <section className="search-modal__section">
+          <div className="search-modal__section-heading">
+            <p className="search-modal__section-title">{tagsTitle}</p>
+            <span className="search-modal__section-caption">{tagsCaption}</span>
+          </div>
+          <div className="search-modal__tag-list" role="list">
+            {filteredTags.length > 0 ? (
+              filteredTags.map(tag => (
+                <button
+                  type="button"
+                  key={tag}
+                  className={`search-modal__tag ${searchTerm.trim().toLowerCase() === tag.toLowerCase() ? 'search-modal__tag--active' : ''}`}
+                  onClick={(event) => handleSuggestionClick(tag, event)}
+                >
+                  {tag}
+                </button>
+              ))
+            ) : (
+              <p className="search-modal__empty">{data.ui?.searchNoMatches ?? (data.lang === 'es' ? 'Sin coincidencias. Ajusta la búsqueda o lanza confetti.' : 'No matches. Adjust your query or launch confetti.')}</p>
+            )}
+          </div>
+        </section>
 
         <div className="search-modal__actions">
           <button
@@ -281,7 +318,7 @@ export default function SearchBar({
             onClick={handleNavigateProjects}
             data-retro-sfx
           >
-            <ArrowRight size={18} aria-hidden="true" />
+            <Icon name="arrowRight" size={18} aria-hidden />
             {data.ui?.viewProjects ?? (data.lang === 'es' ? 'Ver proyectos' : 'View projects')}
           </button>
         </div>
@@ -292,7 +329,7 @@ export default function SearchBar({
             className="search-modal__confetti"
             onClick={handleConfetti}
           >
-            <Sparkles size={18} aria-hidden="true" />
+            <Icon name="sparkles" size={18} aria-hidden />
             confetti
           </button>
         )}
@@ -315,11 +352,25 @@ export default function SearchBar({
         data-retro-sfx
         data-dev-id="6000"
       >
-        <Search size={22} aria-hidden="true" />
         {isIconVariant ? (
-          <span className="sr-only">{triggerText}</span>
+          <>
+            <Icon name="search" size={22} aria-hidden />
+            <span className="sr-only">{triggerText}</span>
+          </>
         ) : (
-          <span>{triggerText}</span>
+          <>
+            <span className="search-trigger__icon" aria-hidden>
+              <Icon name="search" size={24} aria-hidden />
+            </span>
+            <span className="search-trigger__label">
+              <span className="search-trigger__eyebrow">{eyebrowText}</span>
+              <span className="search-trigger__text">{triggerText}</span>
+              {helperText ? <span className="search-trigger__hint">{helperText}</span> : null}
+            </span>
+            <span className="search-trigger__kbd" aria-hidden="true">
+              {keyboardHint}
+            </span>
+          </>
         )}
       </m.button>
       {renderModal()}
