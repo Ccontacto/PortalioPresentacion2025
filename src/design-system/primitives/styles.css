@@ -98,7 +98,7 @@ html[data-theme='dark'] .ds-button--primary:hover,
 .ds-section-header__title {
   font-size: var(--dt-components-section-header-titlesize, clamp(2.1rem, 4vw, 3.3rem));
   line-height: 1.05;
-  font-weight: var(--dt-components-section-header-titleweight, 700);
+  font-weight: var(--dt-components-section-header-titleweight, 900);
   margin: 0;
   color: var(--dt-color-fg-primary);
   letter-spacing: -0.01em;
@@ -110,6 +110,15 @@ html[data-theme='dark'] .ds-button--primary:hover,
   flex-wrap: wrap;
   gap: 0.3rem;
   align-items: baseline;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--dt-color-fg-primary) 100%, transparent) 0%,
+    color-mix(in srgb, var(--dt-color-fg-primary) 85%, transparent) 50%,
+    color-mix(in srgb, var(--dt-color-fg-primary) 65%, transparent) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .ds-section-header__title-primary {

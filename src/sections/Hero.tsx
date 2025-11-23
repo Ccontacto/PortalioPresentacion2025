@@ -35,16 +35,17 @@ export default function Hero() {
 
   const heroCopy = data.hero;
 
-  const resolvedMeta = (heroCopy.meta ?? []).reduce<{ label: string; value: string }[]>(
+  const resolvedMeta = (heroCopy.meta ?? []).reduce<{ label: string; value: string; field?: string }[]>(
     (acc, metaItem: HeroMetaItem) => {
+      const fieldName = 'field' in metaItem ? metaItem.field : undefined;
       const value =
-        'field' in metaItem && metaItem.field
-          ? data[metaItem.field]
+        fieldName && data[fieldName as keyof typeof data]
+          ? (data[fieldName as keyof typeof data] as string)
           : 'value' in metaItem
           ? metaItem.value
           : undefined;
       if (value) {
-        acc.push({ label: metaItem.label, value });
+        acc.push({ label: metaItem.label, value, field: fieldName });
       }
       return acc;
     },
@@ -159,12 +160,31 @@ export default function Hero() {
               </Button>
             </div>
             <ul className="hero-meta-bar">
-              {resolvedMeta.length ? (
-                <li className="hero-meta-chip">
-                  <Icon name="mapPin" size={16} aria-hidden />
-                  {resolvedMeta[0].value}
-                </li>
-              ) : null}
+              {resolvedMeta.map(meta => {
+                const isLocation = meta.field === 'location';
+                const iconName = isLocation ? 'mapPin' : 'sparkles';
+                const locationHref = isLocation
+                  ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(meta.value)}`
+                  : null;
+                return (
+                  <li key={`${meta.label}-${meta.value}`} className="hero-meta-chip">
+                    <Icon name={iconName} size={16} aria-hidden />
+                    {locationHref ? (
+                      <a
+                        href={locationHref}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="hero-meta-link"
+                        aria-label={`${meta.label}: ${meta.value}`}
+                      >
+                        {meta.value}
+                      </a>
+                    ) : (
+                      meta.value
+                    )}
+                  </li>
+                );
+              })}
               {domainHint ? <li className="hero-meta-chip">{domainHint}</li> : null}
             </ul>
           </div>

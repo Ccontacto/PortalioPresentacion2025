@@ -80,7 +80,6 @@ export default function Contact() {
     <SectionWrapper id="contact" aria-labelledby="contact-heading">
       <div className="contact-mosaic">
         <Card className="contact-panel contact-panel--info" as="section">
-          <div className="contact-panel__tab">{data.lang === 'en' ? 'Contact sheet' : 'Ficha de contacto'}</div>
           <header className="contact-panel__header">
             <span className="contact-panel__eyebrow">{data.lang === 'en' ? 'Let’s connect' : 'Conectemos'}</span>
             <h2 id="contact-heading" className="contact-panel__title">
