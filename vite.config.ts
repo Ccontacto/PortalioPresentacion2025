@@ -2,8 +2,40 @@ import path from 'node:path';
 
 import tailwindcss from '@tailwindcss/postcss';
 import react from '@vitejs/plugin-react';
-import autoprefixer from 'autoprefixer';
 import { defineConfig } from 'vite';
+import autoprefixer from 'autoprefixer';
+
+const fixOldRadialSyntax = () => {
+  return {
+    postcssPlugin: 'fix-old-radial-syntax',
+    Declaration(decl: { value?: string }) {
+      if (!decl.value || !decl.value.includes('radial-gradient')) return;
+      const updated = decl.value.replace(
+        /radial-gradient\(\s*([^)]+?)\s*,\s*(closest-[^,\s]+|farthest-[^,\s]+|contain|cover)([^)]*)\)/gi,
+        (_match, position, shape, rest) => `radial-gradient(${shape} at ${position}${rest})`
+      );
+      if (updated !== decl.value) {
+        decl.value = updated;
+      }
+    }
+  };
+};
+fixOldRadialSyntax.postcss = true;
+
+const suppressGradientWarnings = () => ({
+  postcssPlugin: 'suppress-gradient-warnings',
+  OnceExit(_root: unknown, { result }: { result: { messages: Array<{ type?: string; text?: string }> } }) {
+    result.messages = result.messages.filter(
+      message =>
+        !(
+          message.type === 'warning' &&
+          typeof message.text === 'string' &&
+          message.text.includes('Gradient has outdated direction syntax')
+        )
+    );
+  }
+});
+suppressGradientWarnings.postcss = true;
 
 const normalizeBasePath = (value?: string | null) => {
   if (!value || value === '/') {
@@ -26,7 +58,7 @@ export default defineConfig({
   plugins: [react()],
   css: {
     postcss: {
-      plugins: [tailwindcss(), autoprefixer()]
+      plugins: [tailwindcss(), fixOldRadialSyntax(), autoprefixer(), suppressGradientWarnings()]
     }
   },
   build: {
